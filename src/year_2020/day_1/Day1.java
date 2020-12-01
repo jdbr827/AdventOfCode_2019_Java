@@ -1,27 +1,13 @@
-package year_2020;
+package year_2020.day_1;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
+import static utils.ReadIn.readInNumbers;
 
 public class Day1 {
-    public static final String INPUT_FILENAME = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\input_aoc_2020_1.txt";
+    public static final String INPUT_FILENAME = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\year_2020\\day_1\\input_aoc_2020_1.txt";
     public static final int TARGET = 2020;
-
-    public static List<Integer> readIn(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
-
-        List<Integer> arr = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            arr.add(Integer.valueOf(data));
-        }
-        return arr;
-    }
 
     /**
      * Solves Part 1
@@ -64,7 +50,7 @@ public class Day1 {
 
     public static void main(String[] args) throws FileNotFoundException {
         List<Integer> testArr = Arrays.asList(1721, 979, 366, 299, 675, 1456);
-        List<Integer> realArr = readIn(INPUT_FILENAME);
+        List<Integer> realArr = readInNumbers(INPUT_FILENAME);
 
         /* Part 1 */
         System.out.println(find2Expenses(testArr) == 514579);
@@ -72,7 +58,7 @@ public class Day1 {
 
         /* Part 2 */
         System.out.println(find3Expenses(testArr) == 241861950);
-        System.out.println(find3Expenses(realArr));
+        System.out.println(find3Expenses(realArr) == 92643264); // Solved
 
     }
 }
