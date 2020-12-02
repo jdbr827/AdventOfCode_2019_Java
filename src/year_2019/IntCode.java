@@ -1,9 +1,10 @@
 package year_2019;
 
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
-
-
 
 public class IntCode {
 
@@ -26,8 +27,29 @@ public class IntCode {
         return program;
     }
 
-    public static final int POSITION_MODE = 0;
-    public static final int IMMEDIATE_MODE = 1;
+    enum ParameterMode {
+        POSITION_MODE(0),
+        IMMEDIATE_MODE(1);
+
+
+
+        private final static Map<Integer, ParameterMode> map = new HashMap<>();
+        private final int pCode;
+
+        ParameterMode(int pCode) {
+            this.pCode = pCode;
+        }
+
+         static {
+            for (ParameterMode mode : ParameterMode.values()) {
+                map.put(mode.pCode, mode);
+            }
+        }
+
+        public static ParameterMode valueOf(int pCode) {
+            return map.get(pCode);
+        }
+    }
 
     /**
      * Returns the parameter mode of the paramNum^th parameter given the opcode
@@ -35,8 +57,8 @@ public class IntCode {
      * @param paramNum denotes which parameter we are looking at [1-indexed]
      * @return The parameter mode for the operation
      */
-    private static int getParameterMode(int opcode, int paramNum) {
-        return ((opcode / (int) Math.pow(10, paramNum+1)) % 10);
+    private static ParameterMode getParameterMode(int opcode, int paramNum) {
+        return ParameterMode.valueOf((opcode / (int) Math.pow(10, paramNum+1)) % 10);
     }
 
     /**
@@ -45,10 +67,15 @@ public class IntCode {
      * @param mode the parameter mode of the read
      * @return the output of the read
      */
-    private int memRead(int addr, int mode) {
-        return (mode == POSITION_MODE)
-                ? memory[memory[addr]]
-                : memory[addr];
+    private int memRead(int addr, ParameterMode mode) {
+        switch (mode) {
+            case POSITION_MODE:
+                return memory[memory[addr]];
+            case IMMEDIATE_MODE:
+                return memory[addr];
+            default:
+                throw new Error("Unrecognized ParameterMode");
+        }
     }
 
 
