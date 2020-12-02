@@ -1,4 +1,4 @@
-package year_2020.day_1;
+package year_2020;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.List;
 import static utils.ReadIn.readInNumbers;
 
 public class Day1 {
-    public static final String INPUT_FILENAME = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\year_2020\\day_1\\input_aoc_2020_1.txt";
+    public static final String INPUT_FILENAME = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\year_2020\\input_aoc_2020_1.txt";
     public static final int TARGET = 2020;
 
     /**
