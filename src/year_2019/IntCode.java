@@ -1,6 +1,5 @@
 package year_2019;
 
-import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +30,6 @@ public class IntCode {
         POSITION_MODE(0),
         IMMEDIATE_MODE(1);
 
-
-
         private final static Map<Integer, ParameterMode> map = new HashMap<>();
         private final int pCode;
 
@@ -52,6 +49,15 @@ public class IntCode {
     }
 
     /**
+     * Returns the ith parameter of the instruction
+     * @param paramNum 1-indexed parameter of the current instruction
+     * @return the value of the parameter (accounting for ParameterMode)
+     */
+    int readParameter(int paramNum) {
+        return memRead(instructionPointer + paramNum, getParameterMode(memory[instructionPointer], paramNum));
+    }
+
+    /**
      * Returns the parameter mode of the paramNum^th parameter given the opcode
      * @param opcode the opcode for the instruction
      * @param paramNum denotes which parameter we are looking at [1-indexed]
@@ -62,7 +68,7 @@ public class IntCode {
     }
 
     /**
-     * Performs a read into memory based on the pararmeter mode and desired address
+     * Performs a read into memory based on the parameter mode and desired address
      * @param addr the address of the read
      * @param mode the parameter mode of the read
      * @return the output of the read
@@ -79,38 +85,40 @@ public class IntCode {
     }
 
 
-
     public void run() {
         run(null);
     }
-     /**
+
+    /**
      * Runs the Intcode program MUTATES MEMORY
      */
     public void run(Supplier<Integer> input) {
         instructionPointer = 0;
         int opcode;
-        while ((opcode = memory[instructionPointer++]) != 99) {
+        while ((opcode = memory[instructionPointer]) != 99) {
             InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
             switch (instructionCode) {
-                case ADD_INSTRUCTION_CODE:
-                    int addend1 = memRead(instructionPointer++, getParameterMode(opcode, 1));
-                    int addend2 = memRead(instructionPointer++, getParameterMode(opcode, 2));
-                    memory[memory[instructionPointer++]] = addend1 + addend2;
+                case ADD:
+                    int addend1 = readParameter(1);
+                    int addend2 = readParameter(2);
+                    memory[memory[instructionPointer + 3]] = addend1 + addend2;
+                    instructionPointer += 4;
                     break;
-                case MULTIPLY_INSTRUCTION_CODE:
-                    int mult1 = memRead(instructionPointer++, getParameterMode(opcode, 1));
-                    int mult2 = memRead(instructionPointer++, getParameterMode(opcode, 2));
-                    memory[memory[instructionPointer++]] = mult1 * mult2;
+                case MULTIPLY:
+                    int mult1 = readParameter(1);
+                    int mult2 = readParameter(2);
+                    memory[memory[instructionPointer + 3]] = mult1 * mult2;
+                    instructionPointer += 4;
                     break;
-                case INPUT_INSTRUCTION_CODE:
-                    int writeAddr = memory[instructionPointer++];
+                case INPUT:
+                    int writeAddr = memory[instructionPointer + 1];
                     memory[writeAddr] = input.get();
+                    instructionPointer += 2;
                     break;
-                case OUTPUT_INSTRUCTION_CODE:
-                    System.out.println(memRead(instructionPointer++, getParameterMode(opcode, 1))); // Or some other form of output
+                case OUTPUT:
+                    System.out.println(readParameter(1)); // Or some other form of output
+                    instructionPointer += 2;
                     break;
-                case HALT_INSTRUCTION_CODE:
-                    return;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);
             }
