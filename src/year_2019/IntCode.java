@@ -1,9 +1,8 @@
 package year_2019;
 
-import org.junit.platform.commons.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.function.Supplier;
+
 
 
 public class IntCode {
@@ -34,14 +33,32 @@ public class IntCode {
         return program;
     }
 
-    public static final int PARAMETER_MODE = 0;
+    public static final int POSITION_MODE = 0;
     public static final int IMMEDIATE_MODE = 1;
 
+    /**
+     * Returns the parameter mode of the paramNum^th parameter given the opcode
+     * @param opcode the opcode for the instruction
+     * @param paramNum denotes which parameter we are looking at [1-indexed]
+     * @return The parameter mode for the operation
+     */
+    private static int getParameterMode(int opcode, int paramNum) {
+        return ((opcode / (int) Math.pow(10, paramNum+1)) % 10);
+    }
+
+    /**
+     * Performs a read into memory based on the pararmeter mode and desired address
+     * @param addr the address of the read
+     * @param mode the parameter mode of the read
+     * @return the output of the read
+     */
     private int memRead(int addr, int mode) {
-        return (mode == PARAMETER_MODE)
+        return (mode == POSITION_MODE)
                 ? memory[memory[addr]]
                 : memory[addr];
     }
+
+
 
     public void run() {
         run(null);
@@ -50,28 +67,27 @@ public class IntCode {
      * Runs the Intcode program MUTATES MEMORY
      */
     public void run(Supplier<Integer> input) {
-        int inputPointer = 0;
         instructionPointer = 0;
         int opcode;
         while ((opcode = memory[instructionPointer++]) != HALT_INSTRUCTION_CODE) {
             int instructionCode = opcode % 100;
             switch (instructionCode) {
                 case ADD_INSTRUCTION_CODE:
-                    int addend1 = memRead(instructionPointer++, (opcode/100) % 10);
-                    int addend2 = memRead(instructionPointer++, (opcode/1000) % 10);
+                    int addend1 = memRead(instructionPointer++, getParameterMode(opcode, 1));
+                    int addend2 = memRead(instructionPointer++, getParameterMode(opcode, 2));
                     memory[memory[instructionPointer++]] = addend1 + addend2;
                     break;
                 case MULTIPLY_INSTRUCTION_CODE:
-                    int mult1 = memRead(instructionPointer++, (opcode/100) % 10);
-                    int mult2 = memRead(instructionPointer++, (opcode/1000) % 10);
+                    int mult1 = memRead(instructionPointer++, getParameterMode(opcode, 1));
+                    int mult2 = memRead(instructionPointer++, getParameterMode(opcode, 2));
                     memory[memory[instructionPointer++]] = mult1 * mult2;
                     break;
                 case INPUT_INSTRUCTION_CODE:
                     int writeAddr = memory[instructionPointer++];
-                    memory[writeAddr] = input.get(); // or some form of a getInput
+                    memory[writeAddr] = input.get();
                     break;
                 case OUTPUT_INSTRUCTION_CODE:
-                    System.out.println(memRead(instructionPointer++, (opcode/100) % 10)); // Or some other form of output
+                    System.out.println(memRead(instructionPointer++, getParameterMode(opcode, 1))); // Or some other form of output
                     break;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);
