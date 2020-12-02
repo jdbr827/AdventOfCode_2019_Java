@@ -42,6 +42,10 @@ public class Day2 {
         return (count >= pData.i1 && count <= pData.i2);
     }
 
+    public static boolean isValidPassword2(PasswordData pData) {
+        return (pData.code[pData.i1 - 1] == pData.magicChar) ^ (pData.code[pData.i2 - 1] == pData.magicChar);
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         final String INPUT_FILE = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\year_2020\\input_aoc_2020_2.txt";
         File file = new File(INPUT_FILE);
@@ -52,7 +56,9 @@ public class Day2 {
             while (scanner.hasNextLine()) {
                 PasswordData pdata = new PasswordData(scanner.nextLine());
                 validPasswords1 += isValidPassword1(pdata) ? 1 : 0;
+                validPasswords2 += isValidPassword2(pdata) ? 1 : 0;
             }
         System.out.println(validPasswords1 == 378);
+        System.out.println(validPasswords2 == 280);
     }
 }
