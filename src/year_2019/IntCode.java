@@ -13,33 +13,8 @@ public class IntCode {
     public static final int OUTPUT_INSTRUCTION_CODE = 4;
     public static final int HALT_INSTRUCTION_CODE = 99;
 
-//    private interface IntCodeInstruction {
-//
-//        IntCodeInstruction make(int opcode);
-//
-//        int[] execute(int[] memory);
-//
-//
-//        public class AddIntCodeInstruction implements IntCodeInstruction {
-//
-//            public AddIntCodeInstruction(int opcode, Integer... params) {
-//
-//            }
-//
-//            @Override
-//            public IntCodeInstruction make(int opcode, Integer... params) {
-//                return null;
-//            }
-//
-//            @Override
-//            public int[] execute(int[] memory) {
-//                return new int[0];
-//            }
-//        }
-//    }
 
-
-    int[] memory;
+    public int[] memory;
     int instructionPointer = 0;
 
     public IntCode(int[] memory) {
@@ -58,40 +33,44 @@ public class IntCode {
         return program;
     }
 
+    public static final int PARAMETER_MODE = 0;
+    public static final int IMMEDIATE_MODE = 1;
+
+    private int memRead(int addr, int mode) {
+        return (mode == PARAMETER_MODE)
+                ? memory[memory[addr]]
+                : memory[addr];
+    }
+
     public void run() {
         run(null);
     }
-
-    /**
+     /**
      * Runs the Intcode program MUTATES MEMORY
      */
     public void run(int[] input) {
         int inputPointer = 0;
         instructionPointer = 0;
         int opcode;
-        while ((opcode = memory[instructionPointer]) != HALT_INSTRUCTION_CODE) {
-            switch (opcode) {
+        while ((opcode = memory[instructionPointer++]) != HALT_INSTRUCTION_CODE) {
+            int instructionCode = opcode % 100;
+            switch (instructionCode) {
                 case ADD_INSTRUCTION_CODE:
-                    int addend1 = memory[memory[instructionPointer + 1]];
-                    int addend2 = memory[memory[instructionPointer + 2]];
-                    memory[memory[instructionPointer + 3]] = addend1 + addend2;
-                    instructionPointer += 4;
+                    int addend1 = memRead(instructionPointer++, (opcode/100) % 10);
+                    int addend2 = memRead(instructionPointer++, (opcode/1000) % 10);
+                    memory[memory[instructionPointer++]] = addend1 + addend2;
                     break;
                 case MULTIPLY_INSTRUCTION_CODE:
-                    int mult1 = memory[memory[instructionPointer + 1]];
-                    int mult2 = memory[memory[instructionPointer + 2]];
-                    memory[memory[instructionPointer + 3]] = mult1 * mult2;
-                    instructionPointer += 4;
+                    int mult1 = memRead(instructionPointer++, (opcode/100) % 10);
+                    int mult2 = memRead(instructionPointer++, (opcode/1000) % 10);
+                    memory[memory[instructionPointer++]] = mult1 * mult2;
                     break;
                 case INPUT_INSTRUCTION_CODE:
-                    int writeAddr = memory[instructionPointer + 1];
+                    int writeAddr = memory[instructionPointer++];
                     memory[writeAddr] = input[inputPointer]; // or some form of a getInput
-                    instructionPointer += 2;
                     break;
                 case OUTPUT_INSTRUCTION_CODE:
-                    int readAddr = memory[instructionPointer + 1];
-                    System.out.println(memory[readAddr]); // Or some other form of output
-                    instructionPointer += 2;
+                    System.out.println(memRead(instructionPointer++, (opcode/100) % 10)); // Or some other form of output
                     break;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);
