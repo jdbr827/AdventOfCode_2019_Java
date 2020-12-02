@@ -7,13 +7,6 @@ import java.util.function.Supplier;
 
 public class IntCode {
 
-    public static final int ADD_INSTRUCTION_CODE = 1;
-    public static final int MULTIPLY_INSTRUCTION_CODE = 2;
-    public static final int INPUT_INSTRUCTION_CODE = 3;
-    public static final int OUTPUT_INSTRUCTION_CODE = 4;
-    public static final int HALT_INSTRUCTION_CODE = 99;
-
-
     public int[] memory;
     int instructionPointer = 0;
 
@@ -69,8 +62,8 @@ public class IntCode {
     public void run(Supplier<Integer> input) {
         instructionPointer = 0;
         int opcode;
-        while ((opcode = memory[instructionPointer++]) != HALT_INSTRUCTION_CODE) {
-            int instructionCode = opcode % 100;
+        while ((opcode = memory[instructionPointer++]) != 99) {
+            InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
             switch (instructionCode) {
                 case ADD_INSTRUCTION_CODE:
                     int addend1 = memRead(instructionPointer++, getParameterMode(opcode, 1));
@@ -89,6 +82,8 @@ public class IntCode {
                 case OUTPUT_INSTRUCTION_CODE:
                     System.out.println(memRead(instructionPointer++, getParameterMode(opcode, 1))); // Or some other form of output
                     break;
+                case HALT_INSTRUCTION_CODE:
+                    return;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);
             }
