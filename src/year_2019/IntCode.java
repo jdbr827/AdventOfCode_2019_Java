@@ -3,6 +3,7 @@ package year_2019;
 import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 
 public class IntCode {
@@ -48,7 +49,7 @@ public class IntCode {
      /**
      * Runs the Intcode program MUTATES MEMORY
      */
-    public void run(int[] input) {
+    public void run(Supplier<Integer> input) {
         int inputPointer = 0;
         instructionPointer = 0;
         int opcode;
@@ -67,7 +68,7 @@ public class IntCode {
                     break;
                 case INPUT_INSTRUCTION_CODE:
                     int writeAddr = memory[instructionPointer++];
-                    memory[writeAddr] = input[inputPointer]; // or some form of a getInput
+                    memory[writeAddr] = input.get(); // or some form of a getInput
                     break;
                 case OUTPUT_INSTRUCTION_CODE:
                     System.out.println(memRead(instructionPointer++, (opcode/100) % 10)); // Or some other form of output
