@@ -119,6 +119,24 @@ public class IntCode {
                     System.out.println(readParameter(1)); // Or some other form of output
                     instructionPointer += 2;
                     break;
+                case JUMP_IF_TRUE:
+                    instructionPointer = (readParameter(1) != 0)
+                            ? readParameter(2)
+                            : instructionPointer + 3;
+                    break;
+                case JUMP_IF_FALSE:
+                    instructionPointer = (readParameter(1) == 0)
+                            ? readParameter(2)
+                            : instructionPointer + 3;
+                    break;
+                case LESS_THAN:
+                    memory[memory[instructionPointer+3]] = (readParameter(1) < readParameter(2)) ? 1 : 0;
+                    instructionPointer += 4;
+                    break;
+                case EQUALS:
+                    memory[memory[instructionPointer+3]] = (readParameter(1) == readParameter(2)) ? 1 : 0;
+                    instructionPointer += 4;
+                    break;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);
             }
