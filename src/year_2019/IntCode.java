@@ -98,7 +98,6 @@ public class IntCode {
      * Runs the Intcode program MUTATES MEMORY
      */
     public List<Integer> run(Supplier<Integer> input) {
-
         instructionPointer = 0;
         List<Integer> output = new ArrayList<>();
         int opcode;
