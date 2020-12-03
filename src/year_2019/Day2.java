@@ -13,7 +13,7 @@ public class Day2 {
         int[] p1 = real.clone();
         p1[1] = 12;
         p1[2] = 2;
-        System.out.println(IntCode.createAndRun(p1).getMemory()[0] == 2846248);
+        System.out.println(IntCode.createAndRun(p1).getMemory()[0] == 2842648);
 
 
         /* Part 2 */

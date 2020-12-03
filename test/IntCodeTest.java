@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.Test;
 import year_2019.IntCode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class IntCodeTest {
 
@@ -45,12 +47,12 @@ public class IntCodeTest {
     @Test
     void test_IntCode_JUMP() {
         int[] m1 = {3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9};
-        new IntCode(m1).run(() -> 0); // 0
-        new IntCode(m1).run(() -> 7); // 1
+        assert (new IntCode(m1)).run(() -> 0).equals(List.of(0)); // 0
+        assert (new IntCode(m1)).run(() -> 7).equals(List.of(1)); // 1
 
         int[] m2 = {3,3,1105,-1,9,1101,0,0,12,4,12,99,1};
-        new IntCode(m1).run(() -> 0); // 0
-        new IntCode(m2).run(() -> 7); // 1
+        assert (new IntCode(m1)).run(() -> 0).equals(List.of(0)); // 0
+        assert (new IntCode(m2)).run(() -> 7).equals(List.of(1)); // 1
     }
 
     @Test
@@ -58,16 +60,17 @@ public class IntCodeTest {
 
         /* is equal to 8 simple */
         int[] m1 = {3,9,8,9,10,9,4,9,99,-1,8};
-        new IntCode(m1).run(() -> 5); // should return 0
-        new IntCode(m1).run(() -> 8); // should return 1
+        assert (new IntCode(m1)).run(() -> 5).equals(List.of(0)); // should return 0
+        assert (new IntCode(m1)).run(() -> 8).equals(List.of(1)); // should return 1
 
         /* <8 = 999; =8 = 1000; >8 = 1001 */
         int[] m2 = {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
 1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
 999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
-        new IntCode(m2).run(() -> 5); // should print 999
-        new IntCode(m2).run(() -> 8); // should print 1000
-        new IntCode(m2).run(() -> 10); // should print 1001
+
+        assert (new IntCode(m2)).run(() -> 5).equals(List.of(999)); // should print 999
+        assert (new IntCode(m2)).run(() -> 8).equals(List.of(1000)); // should print 1000
+        assert (new IntCode(m2)).run(() -> 10).equals(List.of(1001)); // should print 1001
 
 
 

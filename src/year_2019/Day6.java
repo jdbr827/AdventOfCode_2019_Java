@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Day6 {
 
-
     public static Map<String, Planet> map = new HashMap<>();
 
     static class Planet {
@@ -17,25 +16,22 @@ public class Day6 {
         Planet() {
         }
 
-        /*
-        If a planet has nothing orbiting it, 0
-        Otherwise, each planet directly orbiting a planet directly orbiting this planet is indirectly orbiting this planet
-        and all planets directly orbiting this planet need to count too
-         */
-
         /**
-         * Returns the number of planets in direct or indirect orbit of Planet
-         * @return
+         * The total number of planets orbiting this planet
+         * @return the number of planets in orbit (direct or indirect) of this planet
          */
         public int getOrbitTotal() {
-            return orbiters.isEmpty()
-                    ? 0
-                    : orbiters.stream().mapToInt(Planet::getOrbitTotal).sum() + orbiters.size();
+            int total = 0;
+            for (Planet orbiter : orbiters) {
+                total += orbiter.getOrbitTotal(); // every planet orbiting orbiter indirectly orbits this planet
+                total += 1; // orbiter directly orbits this planet
+            }
+            return total;
         }
 
         /**
          * Returns the number of orbits of Planet or any planet in direct or indirect orbit of Planet
-         * @return
+         * @return the number of orbits (direct or indirect) between two planets
          */
         public int getTotalOrbitTotal() {
             return orbiters.isEmpty()

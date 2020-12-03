@@ -1,8 +1,8 @@
 package year_2019;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Supplier;
 
 public class IntCode {
@@ -24,6 +24,11 @@ public class IntCode {
         IntCode program = new IntCode(startingMemory);
         program.run();
         return program;
+    }
+
+    public static List<Integer> createAndRunOutput(int[] startingMemory, Supplier<Integer> input) {
+        IntCode program = new IntCode(startingMemory);
+        return program.run(input);
     }
 
     enum ParameterMode {
@@ -85,15 +90,17 @@ public class IntCode {
     }
 
 
-    public void run() {
-        run(null);
+    public List<Integer> run() {
+        return run( null);
     }
 
     /**
      * Runs the Intcode program MUTATES MEMORY
      */
-    public void run(Supplier<Integer> input) {
+    public List<Integer> run(Supplier<Integer> input) {
+
         instructionPointer = 0;
+        List<Integer> output = new ArrayList<>();
         int opcode;
         while ((opcode = memory[instructionPointer]) != 99) {
             InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
@@ -116,7 +123,8 @@ public class IntCode {
                     instructionPointer += 2;
                     break;
                 case OUTPUT:
-                    System.out.println(readParameter(1)); // Or some other form of output
+                    output.add(readParameter(1));
+                    //System.out.println(readParameter(1)); // Or some other form of output
                     instructionPointer += 2;
                     break;
                 case JUMP_IF_TRUE:
@@ -141,6 +149,7 @@ public class IntCode {
                     throw new Error("Unexpected Opcode: " + opcode);
             }
         }
+        return output;
     }
 
     @Override
