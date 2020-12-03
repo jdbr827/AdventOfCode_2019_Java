@@ -8,6 +8,13 @@ import java.util.Scanner;
 
 public class Day3 {
 
+    /**
+     * Determines the number of trees you would run into for a given slope
+     * @param right the delta-x of the slope
+     * @param down the delta-y of the slope
+     * @param data the terrain, as described in a list of strings, so terrain at (x, y) is represented as data.get(y).charAt(x)
+     * @return the number of trees you would run into in the given slope
+     */
     public static int checkSlopes(int right, int down, List<String> data) {
         int count = 0;
         int x = 0;
@@ -33,7 +40,7 @@ public class Day3 {
         }
 
         long a = checkSlopes(1, 1, arr);
-        long b = checkSlopes(3, 1, arr);
+        long b = checkSlopes(3, 1, arr); // Part 1
         long c = checkSlopes(5, 1, arr);
         long d = checkSlopes(7, 1, arr);
         long e = checkSlopes(1, 2, arr);
@@ -43,7 +50,7 @@ public class Day3 {
         System.out.println(d);
         System.out.println(e);
 
-        System.out.println(a*b*c*d*e);
+        System.out.println(a*b*c*d*e); // Part 2
 
     }
 }
