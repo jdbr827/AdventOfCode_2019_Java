@@ -17,13 +17,11 @@ public class Day3 {
      */
     public static int checkSlopes(int right, int down, List<String> data) {
         int count = 0;
-        int x = 0;
         int xMax = data.get(0).length();
-        for (int y=0; y<data.size();y+=down) {
+        for (int x=0,y=0;   y<data.size();  x=(x+right)%xMax, y+=down) {
             if (data.get(y).charAt(x) == '#') {
                 count += 1;
             }
-            x = (x + right) % xMax;
         }
         return count;
     }
