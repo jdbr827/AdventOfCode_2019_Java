@@ -1,17 +1,8 @@
 package year_2019;
 
-import guru.nidi.graphviz.attribute.Font;
-import guru.nidi.graphviz.attribute.Rank;
-import guru.nidi.graphviz.model.Graph;
-
-import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static guru.nidi.graphviz.attribute.Rank.RankDir.LEFT_TO_RIGHT;
-import static guru.nidi.graphviz.model.Factory.graph;
 
 public class Day6 {
 
@@ -72,12 +63,42 @@ public class Day6 {
         }
 
 
+        System.out.println(map.get("COM").getTotalOrbitTotal() == 621125);
 
-//        System.out.println(map.get("K").getTotalOrbitTotal());
-//        System.out.println(map.get("J").getTotalOrbitTotal());
-        System.out.println(map.get("COM").getTotalOrbitTotal());
+        /* Part 2 */
+        Collection<Planet> planets = map.values();
 
 
+        Map<Planet, Integer> distanceFromYou = new HashMap<>();
+        for (Planet p : planets) {
+            distanceFromYou.put(p, Integer.MAX_VALUE);
+        }
+
+        Queue<Planet> old_bfs = new LinkedList<>();
+        old_bfs.add(map.get("YOU"));
+        distanceFromYou.put(map.get("YOU"), 0);
+
+        while (distanceFromYou.get(map.get("SAN")) == Integer.MAX_VALUE) {
+            Planet thisPlanet = old_bfs.remove();
+            for (Planet orbiter : thisPlanet.orbiters) {
+                if (distanceFromYou.get(orbiter) == Integer.MAX_VALUE) {
+                    distanceFromYou.put(orbiter, distanceFromYou.get(thisPlanet) + 1);
+                    old_bfs.add(orbiter);
+                }
+            }
+            if (thisPlanet.parent != null) {
+                if (distanceFromYou.get(thisPlanet.parent) == Integer.MAX_VALUE) {
+                    distanceFromYou.put(thisPlanet.parent, distanceFromYou.get(thisPlanet) + 1);
+                    old_bfs.add(thisPlanet.parent);
+                }
+            }
+        }
+
+        /*
+        You start at the object you are orbiting so you don't need to "move" to that one
+        and Santa is on the object he is orbiting so you don't need to move to that one either.
+         */
+        System.out.println(distanceFromYou.get(map.get("SAN")) - 2 == 550);
     }
 
 }
