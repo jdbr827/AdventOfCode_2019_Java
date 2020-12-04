@@ -12,6 +12,7 @@ enum InstructionCode {
         JUMP_IF_FALSE(6),
         LESS_THAN(7),
         EQUALS(8),
+        ADJUST_RELATIVE_BASE(9),
         HALT_INSTRUCTION_CODE(99);
 
         private static final Map<Integer, InstructionCode> map = new HashMap<>();

@@ -1,8 +1,10 @@
 package year_2019;
 
+import com.google.common.primitives.Ints;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -163,6 +165,20 @@ class IntCodeTest {
         phaseSettings = List.of(6,7,9,5,8);
         assertEquals(79846026, feedbackLoopThrusterPower(phaseSettings, DAY_7_PUZZLE_INPUT));
         assertEquals(phaseSettings, optimizeThrusters2(DAY_7_PUZZLE_INPUT));
+    }
+
+    @Test
+    void test_IntCode_Day9() throws InterruptedException {
+
+        int[] mem1 = {109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99};
+        BlockingQueue<Integer> output = new LinkedBlockingQueue<>();
+        IntCode.createAndRun(mem1, (BlockingQueue<Integer>) null, output);
+        List<Integer> outputFull = new ArrayList<>();
+        System.out.println(output.size());
+        output.drainTo(outputFull);
+        System.out.println(outputFull.size());
+        assertArrayEquals(mem1, (int[]) Ints.toArray(outputFull));
+
     }
 
 }

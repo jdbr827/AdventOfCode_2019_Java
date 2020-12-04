@@ -9,8 +9,41 @@ import static year_2019.ParameterMode.getParameterMode;
 
 public class IntCode extends Thread {
 
+    class Memory {
+
+        HashMap<Integer, Integer> memMap = new HashMap<>();
+
+        public Memory(int[] initial_memory) {
+            for (int i=0; i<initial_memory.length; i++) {
+                memMap.put(i, initial_memory[i]);
+            }
+        }
+
+        /**
+         * Performs a read into memory based on the parameter mode and desired address
+         * @param addr the address of the read
+         * @param mode the parameter mode of the read
+         * @return the output of the read
+         */
+        private int memRead(int addr, ParameterMode mode) {
+            switch (mode) {
+                case POSITION_MODE:
+                    return memMap.get(memMap.get(addr));
+                case IMMEDIATE_MODE:
+                    return memMap.get(addr);
+                case RELATIVE_MODE:
+                    return memMap.get(memMap.get(addr + relativeBase);
+                default:
+                    throw new Error("Unrecognized ParameterMode");
+            }
+    }
+
+
+    }
+
     public int[] memory;
     int instructionPointer = 0;
+    int relativeBase = 0;
     BlockingQueue<Integer> input;
     BlockingQueue<Integer> output;
 
@@ -62,6 +95,15 @@ public class IntCode extends Thread {
     }
 
     /**
+     * Writes to the ith parameter of the instruction
+     * @param paramNum 1-indexed parameter of the current instruction
+     * @param value the value being written
+     */
+    void writeParameter(int paramNum, int value) {
+        memWrite(instructionPointer + paramNum, getParameterMode(memory[instructionPointer], paramNum), value);
+    }
+
+    /**
      * Performs a read into memory based on the parameter mode and desired address
      * @param addr the address of the read
      * @param mode the parameter mode of the read
@@ -73,6 +115,27 @@ public class IntCode extends Thread {
                 return memory[memory[addr]];
             case IMMEDIATE_MODE:
                 return memory[addr];
+            case RELATIVE_MODE:
+                return memory[addr + relativeBase];
+            default:
+                throw new Error("Unrecognized ParameterMode");
+        }
+    }
+
+    /**
+     * Performs a write into memory based on the parameter mode and desired addres
+     * @param addr the address of the write
+     * @param mode the parameter mode of the write
+     * @param val the value being written
+     */
+    private void memWrite(int addr, ParameterMode mode, int val) {
+        switch(mode) {
+            case POSITION_MODE:
+                memory[memory[addr]] = val;
+                break;
+            case RELATIVE_MODE:
+                memory[memory[addr + relativeBase]] = val;
+                break;
             default:
                 throw new Error("Unrecognized ParameterMode");
         }
@@ -91,19 +154,18 @@ public class IntCode extends Thread {
                 case ADD:
                     int addend1 = readParameter(1);
                     int addend2 = readParameter(2);
-                    memory[memory[instructionPointer + 3]] = addend1 + addend2;
+                    writeParameter(3, addend1 + addend2);
                     instructionPointer += 4;
                     break;
                 case MULTIPLY:
                     int mult1 = readParameter(1);
                     int mult2 = readParameter(2);
-                    memory[memory[instructionPointer + 3]] = mult1 * mult2;
+                    writeParameter(3, mult1 * mult2);
                     instructionPointer += 4;
                     break;
                 case INPUT:
-                    int writeAddr = memory[instructionPointer + 1];
                     try {
-                        memory[writeAddr] = input.take();
+                        writeParameter(1, input.take());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         throw new Error("Interrupted during input.take()");
@@ -112,7 +174,6 @@ public class IntCode extends Thread {
                     break;
                 case OUTPUT:
                     output.add(readParameter(1));
-                    //System.out.println(readParameter(1)); // Or some other form of output
                     instructionPointer += 2;
                     break;
                 case JUMP_IF_TRUE:
@@ -126,12 +187,16 @@ public class IntCode extends Thread {
                             : instructionPointer + 3;
                     break;
                 case LESS_THAN:
-                    memory[memory[instructionPointer+3]] = (readParameter(1) < readParameter(2)) ? 1 : 0;
+                    writeParameter(3, readParameter(1) < readParameter(2) ? 1 : 0);
                     instructionPointer += 4;
                     break;
                 case EQUALS:
-                    memory[memory[instructionPointer+3]] = (readParameter(1) == readParameter(2)) ? 1 : 0;
+                    writeParameter(3, readParameter(1) == readParameter(2) ? 1 : 0);
                     instructionPointer += 4;
+                    break;
+                case ADJUST_RELATIVE_BASE:
+                    relativeBase += readParameter(1);
+                    instructionPointer += 2;
                     break;
                 default:
                     throw new Error("Unexpected Opcode: " + opcode);

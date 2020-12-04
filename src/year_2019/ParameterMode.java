@@ -5,7 +5,8 @@ import java.util.Map;
 
 enum ParameterMode {
     POSITION_MODE(0),
-    IMMEDIATE_MODE(1);
+    IMMEDIATE_MODE(1),
+    RELATIVE_MODE(2);
 
     private final static Map<Integer, ParameterMode> map = new HashMap<>();
     private final int pCode;
