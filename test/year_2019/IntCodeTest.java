@@ -177,7 +177,7 @@ class IntCodeTest {
         System.out.println(output.size());
         output.drainTo(outputFull);
         System.out.println(outputFull.size());
-        assertArrayEquals(mem1, (int[]) Ints.toArray(outputFull));
+        assertArrayEquals(mem1, Ints.toArray(outputFull));
 
     }
 

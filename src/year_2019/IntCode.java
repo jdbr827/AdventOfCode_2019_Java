@@ -1,5 +1,7 @@
 package year_2019;
 
+import com.google.common.primitives.Ints;
+
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -19,36 +21,32 @@ public class IntCode extends Thread {
             }
         }
 
-        /**
-         * Performs a read into memory based on the parameter mode and desired address
-         * @param addr the address of the read
-         * @param mode the parameter mode of the read
-         * @return the output of the read
-         */
-        private int memRead(int addr, ParameterMode mode) {
-            switch (mode) {
-                case POSITION_MODE:
-                    return memMap.get(memMap.get(addr));
-                case IMMEDIATE_MODE:
-                    return memMap.get(addr);
-                case RELATIVE_MODE:
-                    return memMap.get(memMap.get(addr + relativeBase);
-                default:
-                    throw new Error("Unrecognized ParameterMode");
+        public int read(int addr) {
+            return memMap.getOrDefault(addr, 0);
+        }
+
+        public void write(int addr, int val) {
+            memMap.put(addr, val);
+        }
+
+        public int[] toArray() {
+            int mx = memMap.keySet().stream().max(Comparator.naturalOrder()).orElseGet(() -> 0);
+            List<Integer> lst = new ArrayList<>();
+            for (int i=0; i<=mx; i++) {
+                lst.add(read(i));
             }
+            return Ints.toArray(lst);
+        }
     }
 
-
-    }
-
-    public int[] memory;
+    public Memory memory;
     int instructionPointer = 0;
     int relativeBase = 0;
     BlockingQueue<Integer> input;
     BlockingQueue<Integer> output;
 
     public IntCode(int[] memory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) {
-        this.memory = memory.clone();
+        this.memory = new Memory(memory.clone());
         this.input = input;
         this.output = output;
     }
@@ -58,7 +56,7 @@ public class IntCode extends Thread {
 
 
     public int[] getMemory() {
-        return memory;
+        return memory.toArray();
     }
 
     public void setInput(BlockingQueue<Integer> input) {
@@ -91,7 +89,7 @@ public class IntCode extends Thread {
      * @return the value of the parameter (accounting for ParameterMode)
      */
     int readParameter(int paramNum) {
-        return memRead(instructionPointer + paramNum, getParameterMode(memory[instructionPointer], paramNum));
+        return memRead(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum));
     }
 
     /**
@@ -100,7 +98,7 @@ public class IntCode extends Thread {
      * @param value the value being written
      */
     void writeParameter(int paramNum, int value) {
-        memWrite(instructionPointer + paramNum, getParameterMode(memory[instructionPointer], paramNum), value);
+        memWrite(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum), value);
     }
 
     /**
@@ -112,11 +110,11 @@ public class IntCode extends Thread {
     private int memRead(int addr, ParameterMode mode) {
         switch (mode) {
             case POSITION_MODE:
-                return memory[memory[addr]];
+                return memory.read(memory.read(addr));
             case IMMEDIATE_MODE:
-                return memory[addr];
+                return memory.read(addr);
             case RELATIVE_MODE:
-                return memory[addr + relativeBase];
+                return memory.read(memory.read(addr) +  relativeBase);
             default:
                 throw new Error("Unrecognized ParameterMode");
         }
@@ -131,10 +129,10 @@ public class IntCode extends Thread {
     private void memWrite(int addr, ParameterMode mode, int val) {
         switch(mode) {
             case POSITION_MODE:
-                memory[memory[addr]] = val;
+                memory.write(memory.read(addr), val);
                 break;
             case RELATIVE_MODE:
-                memory[memory[addr + relativeBase]] = val;
+                memory.write(memory.read(addr + relativeBase), val);
                 break;
             default:
                 throw new Error("Unrecognized ParameterMode");
@@ -148,7 +146,7 @@ public class IntCode extends Thread {
     public void run() {
         instructionPointer = 0;
         int opcode;
-        while ((opcode = memory[instructionPointer]) != 99) {
+        while ((opcode = memory.read(instructionPointer)) != 99) {
             InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
             switch (instructionCode) {
                 case ADD:
@@ -173,7 +171,8 @@ public class IntCode extends Thread {
                     instructionPointer += 2;
                     break;
                 case OUTPUT:
-                    output.add(readParameter(1));
+                    int toOutput = readParameter(1);
+                    output.add(toOutput);
                     instructionPointer += 2;
                     break;
                 case JUMP_IF_TRUE:
@@ -202,25 +201,5 @@ public class IntCode extends Thread {
                     throw new Error("Unexpected Opcode: " + opcode);
             }
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IntCode intCode = (IntCode) o;
-        return Arrays.equals(getMemory(), intCode.getMemory());
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(getMemory());
-    }
-
-    @Override
-    public String toString() {
-        return "IntCode{" +
-                "memory=" + Arrays.toString(memory) +
-                '}';
     }
 }
