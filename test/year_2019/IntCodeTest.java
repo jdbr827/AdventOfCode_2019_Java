@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static year_2019.Day7.computeThrusterPower;
-import static year_2019.Day7.optimizeThrusters;
+import static year_2019.Day7.*;
 
 class IntCodeTest {
 
@@ -133,25 +131,41 @@ class IntCodeTest {
 
     @Test
     public void testOptimizeThrusters1() throws InterruptedException {
-        int[] mem = {3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0};
+        int[] mem1 = {3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0};
         List<Integer> phaseSettings = List.of(4, 3, 2, 1, 0);
-        assertEquals(43210, computeThrusterPower(phaseSettings, mem));
-        assertEquals(phaseSettings, optimizeThrusters(mem));
+        assertEquals(43210, computeThrusterPower(phaseSettings, mem1));
+        assertEquals(phaseSettings, optimizeThrusters1(mem1));
+
+        int[] mem2 = {3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0};
+        phaseSettings = List.of(0, 1, 2, 3, 4);
+        assertEquals(54321, computeThrusterPower(phaseSettings, mem2));
+        assertEquals(phaseSettings, optimizeThrusters1(mem2));
+
+        // Day 7 Part 1
+        phaseSettings = List.of(0, 3, 4, 2, 1);
+        assertEquals(75228, computeThrusterPower(phaseSettings, DAY_7_PUZZLE_INPUT));
+        assertEquals(phaseSettings, optimizeThrusters1(DAY_7_PUZZLE_INPUT));
     }
 
     @Test
     public void testOptimizeThrusters2() throws InterruptedException {
-        int[] mem = {3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0};
-        List<Integer> phaseSettings = List.of(0, 1, 2, 3, 4);
-        assertEquals(54321, computeThrusterPower(phaseSettings, mem));
-        assertEquals(phaseSettings, optimizeThrusters(mem));
-    }
+        int[] mem1 = {3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5};
+        List<Integer> phaseSettings = List.of(9,8,7,6,5);
+        assertEquals(139629729, feedbackLoopThrusterPower(phaseSettings, mem1));
+        assertEquals(phaseSettings, optimizeThrusters2(mem1));
 
-    @Test
-    public void testPart1() throws InterruptedException {
-        List<Integer> phaseSettings = List.of(0, 3, 4, 2, 1);
-        assertEquals(75228, computeThrusterPower(phaseSettings, DAY_7_PUZZLE_INPUT));
-        assertEquals(phaseSettings, optimizeThrusters(DAY_7_PUZZLE_INPUT));
+        int[] mem2 = {3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10};
+        phaseSettings = List.of(9, 7, 8, 5, 6);
+        assertEquals(18216, feedbackLoopThrusterPower(phaseSettings, mem2));
+        assertEquals(phaseSettings, optimizeThrusters2(mem2));
+
+        // Day 7 Part 2
+        phaseSettings = List.of(6,7,9,5,8);
+        assertEquals(79846026, feedbackLoopThrusterPower(phaseSettings, DAY_7_PUZZLE_INPUT));
+        assertEquals(phaseSettings, optimizeThrusters2(DAY_7_PUZZLE_INPUT));
+
+
+
     }
 
 }

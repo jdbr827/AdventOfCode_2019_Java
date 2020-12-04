@@ -3,11 +3,9 @@ package year_2019;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-public class IntCode {
+public class IntCode extends Thread {
 
     public int[] memory;
     int instructionPointer = 0;
@@ -59,13 +57,13 @@ public class IntCode {
         }
 
         @Override
-        public V take() throws InterruptedException {
+        public V take() {
             return supplier.get();
         }
     }
 
     public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input) throws InterruptedException {
-        return createAndRun(startingMemory, new SupplierQueue<Integer>(input), null);
+        return createAndRun(startingMemory, new SupplierQueue<>(input), null);
 
     }
 
@@ -144,7 +142,7 @@ public class IntCode {
     /**
      * Runs the Intcode program MUTATES MEMORY
      */
-    public void run() throws InterruptedException {
+    public void run() {
         instructionPointer = 0;
         int opcode;
         while ((opcode = memory[instructionPointer]) != 99) {
@@ -164,7 +162,12 @@ public class IntCode {
                     break;
                 case INPUT:
                     int writeAddr = memory[instructionPointer + 1];
-                    memory[writeAddr] = input.take();
+                    try {
+                        memory[writeAddr] = input.take();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        throw new Error("Interrupted during input.take()");
+                    }
                     instructionPointer += 2;
                     break;
                 case OUTPUT:
@@ -194,7 +197,6 @@ public class IntCode {
                     throw new Error("Unexpected Opcode: " + opcode);
             }
         }
-        return;
     }
 
     @Override
