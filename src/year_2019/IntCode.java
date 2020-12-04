@@ -1,34 +1,85 @@
 package year_2019;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class IntCode {
 
     public int[] memory;
     int instructionPointer = 0;
+    BlockingQueue<Integer> input;
+    BlockingQueue<Integer> output;
 
-    public IntCode(int[] memory) {
+    public IntCode(int[] memory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) {
         this.memory = memory.clone();
+        this.input = input;
+        this.output = output;
     }
+    public IntCode(int[] memory) {
+        this(memory, null, null);
+    }
+
 
     public int[] getMemory() {
         return memory;
     }
 
-
-
-    public static IntCode createAndRun(int[] startingMemory) {
-        IntCode program = new IntCode(startingMemory);
-        program.run();
-        return program;
+    public void setInput(Supplier<Integer> supplier) {
+        input = new SupplierQueue<>(supplier);
     }
 
-    public static List<Integer> createAndRunOutput(int[] startingMemory, Supplier<Integer> input) {
-        IntCode program = new IntCode(startingMemory);
-        return program.run(input);
+    public void setInput(BlockingQueue<Integer> input) {
+        this.input = input;
+    }
+
+    public void setOutput(BlockingQueue<Integer> output) {
+        this.output = output;
+    }
+
+
+    public static IntCode createAndRun(int[] startingMemory) throws InterruptedException {
+        return createAndRun(startingMemory, (BlockingQueue<Integer>) null, null);
+    }
+
+    /**
+     * Uses a supplier to implement the blockingqueue "take" functionality
+     * @param <V>
+     */
+    static class SupplierQueue<V> extends ArrayBlockingQueue<V> {
+
+        private Supplier<V> supplier;
+
+        public SupplierQueue(Supplier<V> supplier) {
+            super(1);
+            this.supplier = supplier;
+        }
+
+        @Override
+        public V take() throws InterruptedException {
+            return supplier.get();
+        }
+    }
+
+    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input) throws InterruptedException {
+        return createAndRun(startingMemory, new SupplierQueue<Integer>(input), null);
+
+    }
+
+    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input, BlockingQueue<Integer> output)
+          throws InterruptedException {
+      return createAndRun(startingMemory, new SupplierQueue<>(input), output);
+    }
+
+    public static IntCode createAndRun(int[] startingMemory, BlockingQueue<Integer> input, BlockingQueue<Integer> output)
+            throws InterruptedException {
+        IntCode program = new IntCode(startingMemory, input, output);
+        program.run();
+        return program;
+
     }
 
     enum ParameterMode {
@@ -90,16 +141,11 @@ public class IntCode {
     }
 
 
-    public List<Integer> run() {
-        return run( null);
-    }
-
     /**
      * Runs the Intcode program MUTATES MEMORY
      */
-    public List<Integer> run(Supplier<Integer> input) {
+    public void run() throws InterruptedException {
         instructionPointer = 0;
-        List<Integer> output = new ArrayList<>();
         int opcode;
         while ((opcode = memory[instructionPointer]) != 99) {
             InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
@@ -118,7 +164,7 @@ public class IntCode {
                     break;
                 case INPUT:
                     int writeAddr = memory[instructionPointer + 1];
-                    memory[writeAddr] = input.get();
+                    memory[writeAddr] = input.take();
                     instructionPointer += 2;
                     break;
                 case OUTPUT:
@@ -148,7 +194,7 @@ public class IntCode {
                     throw new Error("Unexpected Opcode: " + opcode);
             }
         }
-        return output;
+        return;
     }
 
     @Override
