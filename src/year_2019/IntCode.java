@@ -5,6 +5,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
+import static year_2019.ParameterMode.getParameterMode;
+
 public class IntCode extends Thread {
 
     public int[] memory;
@@ -26,10 +28,6 @@ public class IntCode extends Thread {
         return memory;
     }
 
-    public void setInput(Supplier<Integer> supplier) {
-        input = new SupplierQueue<>(supplier);
-    }
-
     public void setInput(BlockingQueue<Integer> input) {
         this.input = input;
     }
@@ -43,63 +41,15 @@ public class IntCode extends Thread {
         return createAndRun(startingMemory, (BlockingQueue<Integer>) null, null);
     }
 
-    /**
-     * Uses a supplier to implement the blockingqueue "take" functionality
-     * @param <V>
-     */
-    static class SupplierQueue<V> extends ArrayBlockingQueue<V> {
-
-        private Supplier<V> supplier;
-
-        public SupplierQueue(Supplier<V> supplier) {
-            super(1);
-            this.supplier = supplier;
-        }
-
-        @Override
-        public V take() {
-            return supplier.get();
-        }
-    }
-
-    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input) throws InterruptedException {
-        return createAndRun(startingMemory, new SupplierQueue<>(input), null);
-
-    }
-
-    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input, BlockingQueue<Integer> output)
-          throws InterruptedException {
+    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input, BlockingQueue<Integer> output) throws InterruptedException {
       return createAndRun(startingMemory, new SupplierQueue<>(input), output);
     }
 
-    public static IntCode createAndRun(int[] startingMemory, BlockingQueue<Integer> input, BlockingQueue<Integer> output)
-            throws InterruptedException {
+    public static IntCode createAndRun(int[] startingMemory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) throws InterruptedException {
         IntCode program = new IntCode(startingMemory, input, output);
-        program.run();
+        program.start();
+        program.join();
         return program;
-
-    }
-
-    enum ParameterMode {
-        POSITION_MODE(0),
-        IMMEDIATE_MODE(1);
-
-        private final static Map<Integer, ParameterMode> map = new HashMap<>();
-        private final int pCode;
-
-        ParameterMode(int pCode) {
-            this.pCode = pCode;
-        }
-
-         static {
-            for (ParameterMode mode : ParameterMode.values()) {
-                map.put(mode.pCode, mode);
-            }
-        }
-
-        public static ParameterMode valueOf(int pCode) {
-            return map.get(pCode);
-        }
     }
 
     /**
@@ -109,16 +59,6 @@ public class IntCode extends Thread {
      */
     int readParameter(int paramNum) {
         return memRead(instructionPointer + paramNum, getParameterMode(memory[instructionPointer], paramNum));
-    }
-
-    /**
-     * Returns the parameter mode of the paramNum^th parameter given the opcode
-     * @param opcode the opcode for the instruction
-     * @param paramNum denotes which parameter we are looking at [1-indexed]
-     * @return The parameter mode for the operation
-     */
-    private static ParameterMode getParameterMode(int opcode, int paramNum) {
-        return ParameterMode.valueOf((opcode / (int) Math.pow(10, paramNum+1)) % 10);
     }
 
     /**

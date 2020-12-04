@@ -163,9 +163,6 @@ class IntCodeTest {
         phaseSettings = List.of(6,7,9,5,8);
         assertEquals(79846026, feedbackLoopThrusterPower(phaseSettings, DAY_7_PUZZLE_INPUT));
         assertEquals(phaseSettings, optimizeThrusters2(DAY_7_PUZZLE_INPUT));
-
-
-
     }
 
 }
