@@ -69,6 +69,12 @@ public class IntCode extends Thread {
         memWrite(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum), value);
     }
 
+    /**
+     * Determines the "true" address in memory to use based on the parameter mode
+     * @param addr the "given" address
+     * @param mode the parameter mode
+     * @return the "true" address in memory to use
+     */
     private int getMemoryAddressFromParameterMode(int addr, ParameterMode mode) {
         switch (mode) {
             case POSITION_MODE:
