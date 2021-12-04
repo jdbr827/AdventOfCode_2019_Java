@@ -16,16 +16,16 @@ public class IntCode extends Thread {
     BlockingQueue<Integer> input;
     BlockingQueue<Integer> output;
 
-    private final Map<InstructionCode, Runnable> instructionMap = Map.ofEntries(
-            entry(InstructionCode.ADD, this::add),
-            entry(InstructionCode.MULTIPLY, this::multiply),
-            entry(InstructionCode.INPUT, this::input),
-            entry(InstructionCode.OUTPUT, this::output),
-            entry(InstructionCode.JUMP_IF_TRUE, this::jumpIfTrue),
-            entry(InstructionCode.JUMP_IF_FALSE, this::jumpIfFalse),
-            entry(InstructionCode.LESS_THAN, this::lessThan),
-            entry(InstructionCode.EQUALS, this::equals),
-            entry(InstructionCode.ADJUST_RELATIVE_BASE, this::adjustRelativeBase)
+    private final Map<Integer, Runnable> instructionMap = Map.ofEntries(
+            entry(1, this::add),
+            entry(2, this::multiply),
+            entry(3, this::input),
+            entry(4, this::output),
+            entry(5, this::jumpIfTrue),
+            entry(6, this::jumpIfFalse),
+            entry(7, this::lessThan),
+            entry(8, this::equals),
+            entry(9, this::adjustRelativeBase)
     );
 
 
@@ -132,15 +132,14 @@ public class IntCode extends Thread {
         instructionPointer = 0;
         int opcode;
         while ((opcode = memory.read(instructionPointer)) != 99) {
-            InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
-            int finalOpcode = opcode;
-            Runnable instruction = instructionMap.getOrDefault(instructionCode, () -> throw_error_unrecognized_opcode(finalOpcode));
+            int instructionCode = opcode % 100;
+            Runnable instruction = instructionMap.getOrDefault(instructionCode, this::throw_error_unrecognized_opcode);
             instruction.run();
         }
     }
 
-    private void throw_error_unrecognized_opcode(int opcode) {
-        throw new Error("Unexpected Opcode: " + opcode);
+    private void throw_error_unrecognized_opcode() {
+        throw new Error("Unexpected Opcode: " + memory.read(instructionPointer));
     }
 
     private void adjustRelativeBase() {
