@@ -1,8 +1,11 @@
 package year_2019;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
+import static java.util.Map.entry;
 import static year_2019.ParameterMode.getParameterMode;
 
 public class IntCode extends Thread {
@@ -12,6 +15,19 @@ public class IntCode extends Thread {
     int relativeBase = 0;
     BlockingQueue<Integer> input;
     BlockingQueue<Integer> output;
+
+    private final Map<InstructionCode, Runnable> instructionMap = Map.ofEntries(
+            entry(InstructionCode.ADD, this::add),
+            entry(InstructionCode.MULTIPLY, this::multiply),
+            entry(InstructionCode.INPUT, this::input),
+            entry(InstructionCode.OUTPUT, this::output),
+            entry(InstructionCode.JUMP_IF_TRUE, this::jumpIfTrue),
+            entry(InstructionCode.JUMP_IF_FALSE, this::jumpIfFalse),
+            entry(InstructionCode.LESS_THAN, this::lessThan),
+            entry(InstructionCode.EQUALS, this::equals),
+            entry(InstructionCode.ADJUST_RELATIVE_BASE, this::adjustRelativeBase)
+    );
+
 
     public IntCode(int[] memory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) {
         this.memory = new Memory(memory.clone());
@@ -117,58 +133,70 @@ public class IntCode extends Thread {
         int opcode;
         while ((opcode = memory.read(instructionPointer)) != 99) {
             InstructionCode instructionCode = InstructionCode.valueOf(opcode % 100);
-            switch (instructionCode) {
-                case ADD:
-                    int addend1 = readParameter(1);
-                    int addend2 = readParameter(2);
-                    writeParameter(3, addend1 + addend2);
-                    instructionPointer += 4;
-                    break;
-                case MULTIPLY:
-                    int mult1 = readParameter(1);
-                    int mult2 = readParameter(2);
-                    writeParameter(3, mult1 * mult2);
-                    instructionPointer += 4;
-                    break;
-                case INPUT:
-                    try {
-                        writeParameter(1, input.take());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        throw new Error("Interrupted during input.take()");
-                    }
-                    instructionPointer += 2;
-                    break;
-                case OUTPUT:
-                    int toOutput = readParameter(1);
-                    output.add(toOutput);
-                    instructionPointer += 2;
-                    break;
-                case JUMP_IF_TRUE:
-                    instructionPointer = (readParameter(1) != 0)
-                            ? readParameter(2)
-                            : instructionPointer + 3;
-                    break;
-                case JUMP_IF_FALSE:
-                    instructionPointer = (readParameter(1) == 0)
-                            ? readParameter(2)
-                            : instructionPointer + 3;
-                    break;
-                case LESS_THAN:
-                    writeParameter(3, readParameter(1) < readParameter(2) ? 1 : 0);
-                    instructionPointer += 4;
-                    break;
-                case EQUALS:
-                    writeParameter(3, readParameter(1) == readParameter(2) ? 1 : 0);
-                    instructionPointer += 4;
-                    break;
-                case ADJUST_RELATIVE_BASE:
-                    relativeBase += readParameter(1);
-                    instructionPointer += 2;
-                    break;
-                default:
-                    throw new Error("Unexpected Opcode: " + opcode);
-            }
+            int finalOpcode = opcode;
+            Runnable instruction = instructionMap.getOrDefault(instructionCode, () -> throw_error_unrecognized_opcode(finalOpcode));
+            instruction.run();
         }
+    }
+
+    private void throw_error_unrecognized_opcode(int opcode) {
+        throw new Error("Unexpected Opcode: " + opcode);
+    }
+
+    private void adjustRelativeBase() {
+        relativeBase += readParameter(1);
+        instructionPointer += 2;
+    }
+
+    private void equals() {
+        writeParameter(3, readParameter(1) == readParameter(2) ? 1 : 0);
+        instructionPointer += 4;
+    }
+
+    private void lessThan() {
+        writeParameter(3, readParameter(1) < readParameter(2) ? 1 : 0);
+        instructionPointer += 4;
+    }
+
+    private void jumpIfFalse() {
+        instructionPointer = (readParameter(1) == 0)
+                ? readParameter(2)
+                : instructionPointer + 3;
+    }
+
+    private void jumpIfTrue() {
+        instructionPointer = (readParameter(1) != 0)
+                ? readParameter(2)
+                : instructionPointer + 3;
+    }
+
+    private void output() {
+        int toOutput = readParameter(1);
+        output.add(toOutput);
+        instructionPointer += 2;
+    }
+
+    private void input() {
+        try {
+            writeParameter(1, input.take());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new Error("Interrupted during input.take()");
+        }
+        instructionPointer += 2;
+    }
+
+    private void multiply() {
+        int mult1 = readParameter(1);
+        int mult2 = readParameter(2);
+        writeParameter(3, mult1 * mult2);
+        instructionPointer += 4;
+    }
+
+    private void add() {
+        int addend1 = readParameter(1);
+        int addend2 = readParameter(2);
+        writeParameter(3, addend1 + addend2);
+        instructionPointer += 4;
     }
 }
