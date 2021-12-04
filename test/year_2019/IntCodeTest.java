@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.lang.Math.pow;
 import static org.junit.jupiter.api.Assertions.*;
 import static year_2019.Day7.*;
 
@@ -184,9 +185,17 @@ class IntCodeTest {
         output = new LinkedBlockingQueue<>();
         IntCode.createAndRun(mem2, (BlockingQueue<Long>) null, output);
         outputFull = new ArrayList<>();
-        System.out.println(output);
         output.drainTo(outputFull);
-        System.out.println(outputFull.size());
+        System.out.println(outputFull);
+        assertTrue(outputFull.get(0) > pow(10, 15));
+
+        long[] mem3 = {104,1125899906842624L ,99};
+        output = new LinkedBlockingQueue<>();
+        IntCode.createAndRun(mem3, (BlockingQueue<Long>) null, output);
+        outputFull = new ArrayList<>();
+        output.drainTo(outputFull);
+        System.out.println(outputFull);
+        assertEquals((long) outputFull.get(0), 1125899906842624L);
 
     }
 
