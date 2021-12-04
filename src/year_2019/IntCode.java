@@ -69,6 +69,19 @@ public class IntCode extends Thread {
         memWrite(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum), value);
     }
 
+    private int getMemoryAddressFromParameterMode(int addr, ParameterMode mode) {
+        switch (mode) {
+            case POSITION_MODE:
+                return memory.read(addr);
+            case IMMEDIATE_MODE:
+                return addr;
+            case RELATIVE_MODE:
+                return memory.read(addr) +  relativeBase;
+            default:
+                throw new Error("Unrecognized ParameterMode");
+        }
+    }
+
     /**
      * Performs a read into memory based on the parameter mode and desired address
      * @param addr the address of the read
@@ -76,16 +89,7 @@ public class IntCode extends Thread {
      * @return the output of the read
      */
     private int memRead(int addr, ParameterMode mode) {
-        switch (mode) {
-            case POSITION_MODE:
-                return memory.read(memory.read(addr));
-            case IMMEDIATE_MODE:
-                return memory.read(addr);
-            case RELATIVE_MODE:
-                return memory.read(memory.read(addr) +  relativeBase);
-            default:
-                throw new Error("Unrecognized ParameterMode");
-        }
+        return memory.read(getMemoryAddressFromParameterMode(addr, mode));
     }
 
     /**
@@ -95,16 +99,7 @@ public class IntCode extends Thread {
      * @param val the value being written
      */
     private void memWrite(int addr, ParameterMode mode, int val) {
-        switch(mode) {
-            case POSITION_MODE:
-                memory.write(memory.read(addr), val);
-                break;
-            case RELATIVE_MODE:
-                memory.write(memory.read(addr + relativeBase), val);
-                break;
-            default:
-                throw new Error("Unrecognized ParameterMode");
-        }
+        memory.write(getMemoryAddressFromParameterMode(addr, mode), val);
     }
 
 
