@@ -75,7 +75,7 @@ public class Day8 {
         }
 
         for (int[] row: image){
-            System.out.println(Arrays.toString(row));
+            System.out.println(Arrays.toString(row)); // makes YEHEF
         }
 
 
