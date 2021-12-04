@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 public class Day7 {
 
-    public static int computeThrusterPower(List<Integer> phaseSettings, int[] mem) {
-        BlockingQueue<Integer> rollingInputs = new LinkedBlockingQueue<>();
-        int rollingResult = 0;
+    public static long computeThrusterPower(List<Long> phaseSettings, long[] mem) {
+        BlockingQueue<Long> rollingInputs = new LinkedBlockingQueue<>();
+        long rollingResult = 0;
         for (int i=0; i<5; i++) {
             rollingInputs.add(phaseSettings.get(i));
             rollingInputs.add(rollingResult);
@@ -29,8 +29,8 @@ public class Day7 {
         return rollingResult;
     }
 
-    public static int feedbackLoopThrusterPower(List<Integer> phaseSettings, int[] mem) throws InterruptedException {
-        List<BlockingQueue<Integer>> wires = new ArrayList<>();
+    public static long feedbackLoopThrusterPower(List<Long> phaseSettings, long[] mem) throws InterruptedException {
+        List<BlockingQueue<Long>> wires = new ArrayList<>();
         List<IntCode> amps = new ArrayList<>();
         for (int i=0; i<5; i++) {
             wires.add(new LinkedBlockingQueue<>());
@@ -42,7 +42,7 @@ public class Day7 {
             wires.get(i).add(phaseSettings.get(i));
             amps.get(i).start();
         }
-        wires.get(0).add(0); // Starting input
+        wires.get(0).add(0L); // Starting input
 
         for (IntCode amp : amps) { amp.join(); } // Wait for all the amps to finish
 
@@ -51,23 +51,23 @@ public class Day7 {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static List<Integer> optimizeThrusters1(int[] mem) {
+    public static List<Long> optimizeThrusters1(long[] mem) {
         //noinspection OptionalGetWithoutIsPresent
-        return Collections2.orderedPermutations(List.of(0, 1, 2, 3, 4)).stream()
+        return Collections2.orderedPermutations(List.of(0L, 1L, 2L, 3L, 4L)).stream()
                 .max(Comparator.comparing((l) -> computeThrusterPower(l, mem)))
                 .get();
 
     }
 
-    public static List<Integer> optimizeThrusters2(int[] mem) {
+    public static List<Long> optimizeThrusters2(long[] mem) {
         //noinspection OptionalGetWithoutIsPresent
-        return Collections2.orderedPermutations(List.of(5, 6, 7, 8, 9)).stream()
+        return Collections2.orderedPermutations(List.of(5L, 6L, 7L, 8L, 9L)).stream()
                 .max(Comparator.comparing((l) -> {
                     try {
                         return feedbackLoopThrusterPower(l, mem);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        return 0;
+                        return 0L;
                     }
                 }))
                 .get();

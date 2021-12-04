@@ -1,33 +1,34 @@
 package year_2019;
 
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 
 import java.util.*;
 
 class Memory {
 
-    Map<Integer, Integer> memMap = new HashMap<>();
+    Map<Long, Long> memMap = new HashMap<>();
 
-    public Memory(int[] initial_memory) {
-        for (int i=0; i<initial_memory.length; i++) {
-            memMap.put(i, initial_memory[i]);
+    public Memory(long[] initial_memory) {
+        for (long i=0; i<initial_memory.length; i++) {
+            memMap.put(i, initial_memory[(int) i]);
         }
     }
 
-    public int read(int addr) {
-        return memMap.getOrDefault(addr, 0);
+    public long read(long addr) {
+        return memMap.getOrDefault(addr, 0L);
     }
 
-    public void write(int addr, int val) {
+    public void write(long addr, long val) {
         memMap.put(addr, val);
     }
 
-    public int[] toArray() {
-        int mx = memMap.keySet().stream().max(Comparator.naturalOrder()).orElse(0);
-        List<Integer> lst = new ArrayList<>();
+    public long[] toArray() {
+        long mx = memMap.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
+        List<Long> lst = new ArrayList<>();
         for (int i=0; i<=mx; i++) {
             lst.add(read(i));
         }
-        return Ints.toArray(lst);
+        return Longs.toArray(lst);
     }
     }

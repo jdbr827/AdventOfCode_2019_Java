@@ -8,10 +8,10 @@ enum ParameterMode {
     IMMEDIATE_MODE(1),
     RELATIVE_MODE(2);
 
-    private final static Map<Integer, ParameterMode> map = new HashMap<>();
-    private final int pCode;
+    private final static Map<Long, ParameterMode> map = new HashMap<>();
+    private final long pCode;
 
-    ParameterMode(int pCode) {
+    ParameterMode(long pCode) {
         this.pCode = pCode;
     }
 
@@ -21,7 +21,7 @@ enum ParameterMode {
         }
     }
 
-    public static ParameterMode valueOf(int pCode) {
+    public static ParameterMode valueOf(long pCode) {
         return map.get(pCode);
     }
 
@@ -31,8 +31,8 @@ enum ParameterMode {
      * @param paramNum denotes which parameter we are looking at [1-indexed]
      * @return The parameter mode for the operation
      */
-    public static ParameterMode getParameterMode(int opcode, int paramNum) {
-        return ParameterMode.valueOf((opcode / (int) Math.pow(10, paramNum+1)) % 10);
+    public static ParameterMode getParameterMode(long opcode, int paramNum) {
+        return ParameterMode.valueOf((opcode / (long) Math.pow(10, paramNum+1)) % 10);
     }
 
 }

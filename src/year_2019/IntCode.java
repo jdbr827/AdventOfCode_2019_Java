@@ -11,10 +11,10 @@ import static year_2019.ParameterMode.getParameterMode;
 public class IntCode extends Thread {
 
     public Memory memory;
-    int instructionPointer = 0;
+    long instructionPointer = 0;
     int relativeBase = 0;
-    BlockingQueue<Integer> input;
-    BlockingQueue<Integer> output;
+    BlockingQueue<Long> input;
+    BlockingQueue<Long> output;
 
     private final Map<Integer, Runnable> instructionMap = Map.ofEntries(
             entry(1, this::add),
@@ -29,38 +29,38 @@ public class IntCode extends Thread {
     );
 
 
-    public IntCode(int[] memory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) {
+    public IntCode(long[] memory, BlockingQueue<Long> input, BlockingQueue<Long> output) {
         this.memory = new Memory(memory.clone());
         this.input = input;
         this.output = output;
     }
-    public IntCode(int[] memory) {
+    public IntCode(long[] memory) {
         this(memory, null, null);
     }
 
 
-    public int[] getMemory() {
+    public long[] getMemory() {
         return memory.toArray();
     }
 
-    public void setInput(BlockingQueue<Integer> input) {
+    public void setInput(BlockingQueue<Long> input) {
         this.input = input;
     }
 
-    public void setOutput(BlockingQueue<Integer> output) {
+    public void setOutput(BlockingQueue<Long> output) {
         this.output = output;
     }
 
 
-    public static IntCode createAndRun(int[] startingMemory) throws InterruptedException {
-        return createAndRun(startingMemory, (BlockingQueue<Integer>) null, null);
+    public static IntCode createAndRun(long[] startingMemory) throws InterruptedException {
+        return createAndRun(startingMemory, (BlockingQueue<Long>) null, null);
     }
 
-    public static IntCode createAndRun(int[] startingMemory, Supplier<Integer> input, BlockingQueue<Integer> output) throws InterruptedException {
+    public static IntCode createAndRun(long[] startingMemory, Supplier<Long> input, BlockingQueue<Long> output) throws InterruptedException {
       return createAndRun(startingMemory, new SupplierQueue<>(input), output);
     }
 
-    public static IntCode createAndRun(int[] startingMemory, BlockingQueue<Integer> input, BlockingQueue<Integer> output) throws InterruptedException {
+    public static IntCode createAndRun(long[] startingMemory, BlockingQueue<Long> input, BlockingQueue<Long> output) throws InterruptedException {
         IntCode program = new IntCode(startingMemory, input, output);
         program.start();
         program.join();
@@ -72,7 +72,7 @@ public class IntCode extends Thread {
      * @param paramNum 1-indexed parameter of the current instruction
      * @return the value of the parameter (accounting for ParameterMode)
      */
-    int readParameter(int paramNum) {
+    long readParameter(int paramNum) {
         return memRead(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum));
     }
 
@@ -81,7 +81,7 @@ public class IntCode extends Thread {
      * @param paramNum 1-indexed parameter of the current instruction
      * @param value the value being written
      */
-    void writeParameter(int paramNum, int value) {
+    void writeParameter(int paramNum, long value) {
         memWrite(instructionPointer + paramNum, getParameterMode(memory.read(instructionPointer), paramNum), value);
     }
 
@@ -91,7 +91,7 @@ public class IntCode extends Thread {
      * @param mode the parameter mode
      * @return the "true" address in memory to use
      */
-    private int getMemoryAddressFromParameterMode(int addr, ParameterMode mode) {
+    private long getMemoryAddressFromParameterMode(long addr, ParameterMode mode) {
         switch (mode) {
             case POSITION_MODE:
                 return memory.read(addr);
@@ -110,7 +110,7 @@ public class IntCode extends Thread {
      * @param mode the parameter mode of the read
      * @return the output of the read
      */
-    private int memRead(int addr, ParameterMode mode) {
+    private long memRead(long addr, ParameterMode mode) {
         return memory.read(getMemoryAddressFromParameterMode(addr, mode));
     }
 
@@ -120,7 +120,7 @@ public class IntCode extends Thread {
      * @param mode the parameter mode of the write
      * @param val the value being written
      */
-    private void memWrite(int addr, ParameterMode mode, int val) {
+    private void memWrite(long addr, ParameterMode mode, long val) {
         memory.write(getMemoryAddressFromParameterMode(addr, mode), val);
     }
 
@@ -130,9 +130,9 @@ public class IntCode extends Thread {
      */
     public void run() {
         instructionPointer = 0;
-        int opcode;
+        long opcode;
         while ((opcode = memory.read(instructionPointer)) != 99) {
-            int instructionCode = opcode % 100;
+            int instructionCode = (int) opcode % 100;
             Runnable instruction = instructionMap.getOrDefault(instructionCode, this::throw_error_unrecognized_opcode);
             instruction.run();
         }
@@ -170,7 +170,7 @@ public class IntCode extends Thread {
     }
 
     private void output() {
-        int toOutput = readParameter(1);
+        long toOutput = readParameter(1);
         output.add(toOutput);
         instructionPointer += 2;
     }
@@ -186,15 +186,15 @@ public class IntCode extends Thread {
     }
 
     private void multiply() {
-        int mult1 = readParameter(1);
-        int mult2 = readParameter(2);
+        long mult1 = readParameter(1);
+        long mult2 = readParameter(2);
         writeParameter(3, mult1 * mult2);
         instructionPointer += 4;
     }
 
     private void add() {
-        int addend1 = readParameter(1);
-        int addend2 = readParameter(2);
+        long addend1 = readParameter(1);
+        long addend2 = readParameter(2);
         writeParameter(3, addend1 + addend2);
         instructionPointer += 4;
     }
