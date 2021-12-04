@@ -203,8 +203,15 @@ class IntCodeTest {
         IntCode.createAndRun(DAY_9_PUZZLE_INPUT, () -> 1L, output);
         outputFull = new ArrayList<>();
         output.drainTo(outputFull);
-        System.out.println(outputFull);
         assertEquals((long) outputFull.get(0), 3989758265L);
+
+        // Day 9 Part 2
+        output = new LinkedBlockingQueue<>();
+        IntCode.createAndRun(DAY_9_PUZZLE_INPUT, () -> 2L, output);
+        outputFull = new ArrayList<>();
+        output.drainTo(outputFull);
+        assertEquals((long) outputFull.get(0), 76791L);
+
 
 
 
