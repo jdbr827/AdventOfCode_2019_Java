@@ -77,26 +77,28 @@ public class Day11 {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Map<Point, Long> paintedHull = paintHull();
-        System.out.println(paintedHull);
-        System.out.println(paintedHull.size());
-        int n = 1909;
+        Day11Hull view = new Day11Hull();
 
-        int hullxMax = paintedHull.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
-        int hullxMin = paintedHull.keySet().stream().map((Point p) -> (int) p.x).min(Comparator.naturalOrder()).get();
-        int hullyMax = paintedHull.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
-        int hullyMin = paintedHull.keySet().stream().map((Point p) -> (int) p.y).min(Comparator.naturalOrder()).get();
-        int[][] hull = new int[(hullxMax-hullxMin)*2][(hullyMax-hullyMin)*2];
-        for (Point pt : paintedHull.keySet()) {
-            hull[pt.x - hullxMin][pt.y - hullyMin] = paintedHull.get(pt) == 1L ? 1 : 0;
-        }
-        for (int i=0; i<(hullxMax-hullxMin)*2; i++) {
-            char[] row = new char[2*n];
-            for (int j=0; j<(hullyMax-hullyMin)*2;j++) {
-                row[j] = hull[i][j] == 1L ? 'X' : ' ';
-            }
-            System.out.println(row);
-        }
+//        Map<Point, Long> paintedHull = paintHull();
+//        System.out.println(paintedHull);
+//        System.out.println(paintedHull.size());
+//        int n = 1909;
+//
+//        int hullxMax = paintedHull.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
+//        int hullxMin = paintedHull.keySet().stream().map((Point p) -> (int) p.x).min(Comparator.naturalOrder()).get();
+//        int hullyMax = paintedHull.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
+//        int hullyMin = paintedHull.keySet().stream().map((Point p) -> (int) p.y).min(Comparator.naturalOrder()).get();
+//        int[][] hull = new int[(hullxMax-hullxMin)*2][(hullyMax-hullyMin)*2];
+//        for (Point pt : paintedHull.keySet()) {
+//            hull[pt.x - hullxMin][pt.y - hullyMin] = paintedHull.get(pt) == 1L ? 1 : 0;
+//        }
+//        for (int i=0; i<(hullxMax-hullxMin)*2; i++) {
+//            char[] row = new char[2*n];
+//            for (int j=0; j<(hullyMax-hullyMin)*2;j++) {
+//                row[j] = hull[i][j] == 1L ? 'X' : ' ';
+//            }
+//            System.out.println(row);
+//        }
         //System.out.println(Arrays.deepToString(hull));
     }
 }
