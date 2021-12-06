@@ -35,6 +35,13 @@ public class Day13 {
 
 
     public static void main(String[] args) throws InterruptedException {
+//        Map<Point, Integer> gameGrid = createGameGrid();
+//        System.out.println(gameGrid.values().stream().filter((id) -> id == 2).count());
+        BrickBreaker view = new BrickBreaker();
+
+    }
+
+    static Map<Point, Integer> createGameGrid() throws InterruptedException {
         BlockingQueue<Long> inputs = new LinkedBlockingQueue<>();
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
         IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT, inputs, outputs);
@@ -46,9 +53,8 @@ public class Day13 {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
             int obj_id = outputs.take().intValue();
-            gameGrid.put(new Point(x, y), obj_id);
+            gameGrid.put(new Point(y, x), obj_id);
         }
-        System.out.println(gameGrid.values().stream().filter((id) -> id == 2).count());
-
+        return gameGrid;
     }
 }

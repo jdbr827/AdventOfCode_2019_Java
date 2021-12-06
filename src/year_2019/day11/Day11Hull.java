@@ -21,7 +21,7 @@ public class Day11Hull {
     private DefaultTableModel dtm;
     int height; int width;
 
-    public static Color hullPaintingColorFunction(Object value) {
+    public static <T> Color hullPaintingColorFunction(T value) {
         if (value != null) {
             //System.out.println(row + " , " + col + " , " + val + " , " + value.equals(1L));
             if (value.equals(1L)) {
@@ -46,7 +46,7 @@ public class Day11Hull {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Map<Point, Long> paintedHull = Day11.paintHull();
-                    renderTable(paintedHull, Day11Hull::hullPaintingColorFunction);
+                    renderTable(table1, paintedHull, Day11Hull::hullPaintingColorFunction);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -54,7 +54,7 @@ public class Day11Hull {
         });
     }
 
-    private void renderTable(Map<Point, Long> objectsInTable, Function<Object, Color> colorFunction) {
+    public static <T> void renderTable(JTable table, Map<Point, T> objectsInTable, Function<T, Color> colorFunction) {
         int hullxMax = objectsInTable.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
         int hullyMax = objectsInTable.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
 
@@ -62,21 +62,21 @@ public class Day11Hull {
         for (Point p : objectsInTable.keySet()) {
             ndtm.setValueAt(objectsInTable.get(p),  p.x, p.y);
         }
-        table1.setModel(ndtm);
+        table.setModel(ndtm);
 
         DefaultTableCellRenderer renderer = createRenderer(colorFunction);
-        table1.setDefaultRenderer(Object.class, renderer);
-        table1.prepareRenderer(renderer, 0, 0);
+        table.setDefaultRenderer(Object.class, renderer);
+        table.prepareRenderer(renderer, 0, 0);
     }
 
-    public static DefaultTableCellRenderer createRenderer(Function<Object, Color> colorFunction) {
+    public static <T> DefaultTableCellRenderer createRenderer(Function<T, Color> colorFunction) {
         return new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
                 //Cells are by default rendered as a JLabel.
                 Component l = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-                l.setBackground(colorFunction.apply(value));
+                l.setBackground(colorFunction.apply((T) value));
 
                 //Return the JLabel which renders the cell.
                 return l;
