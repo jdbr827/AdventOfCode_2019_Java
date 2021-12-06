@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.IntCodeComputer;
 
 import java.util.HashMap;
 import java.util.Map;

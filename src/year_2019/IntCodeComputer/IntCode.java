@@ -1,12 +1,11 @@
-package year_2019;
+package year_2019.IntCodeComputer;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
 import static java.util.Map.entry;
-import static year_2019.ParameterMode.getParameterMode;
+import static year_2019.IntCodeComputer.ParameterMode.getParameterMode;
 
 public class IntCode extends Thread {
 

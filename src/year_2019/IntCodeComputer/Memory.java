@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.IntCodeComputer;
 
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;

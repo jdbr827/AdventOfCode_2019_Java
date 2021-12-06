@@ -1,7 +1,6 @@
 package year_2019.day11;
 
-import javafx.util.Pair;
-import year_2019.IntCode;
+import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;
 import java.io.IOException;

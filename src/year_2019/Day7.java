@@ -2,12 +2,11 @@ package year_2019;
 
 
 import com.google.common.collect.Collections2;
+import year_2019.IntCodeComputer.IntCode;
 
 import java.util.*;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Supplier;
 
 public class Day7 {
 

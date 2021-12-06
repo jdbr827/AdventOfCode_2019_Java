@@ -1,8 +1,8 @@
 package year_2019;
 
-import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import org.junit.jupiter.api.Test;
+import year_2019.IntCodeComputer.IntCode;
 
 
 import java.util.ArrayList;
