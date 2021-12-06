@@ -11,8 +11,14 @@ import java.util.Map;
 public class Day11Hull {
     private JPanel panel1;
     private JTable table1;
-    private JButton button1;
-    private DefaultTableModel dtm = new DefaultTableModel(0, 0);
+    private JButton doEverythingButton;
+    private JButton button2;
+    private JTextField heightTextField;
+    private JTextField widthTextField;
+    private JButton createGridButton;
+    private JButton placeRobotButton;
+    private DefaultTableModel dtm;
+    int height; int width;
 
     public static class StatusColumnCellRenderer extends DefaultTableCellRenderer {
         @Override
@@ -20,12 +26,18 @@ public class Day11Hull {
 
             //Cells are by default rendered as a JLabel.
             Component l = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-            System.out.println(row + " , " + col);
-            System.out.println(table.getValueAt(row, col));
-
-//            if (table.getValueAt(row, col).equals(1)) {
-//                l.setBackground(Color.BLACK);
-//            }
+            //System.out.println(row + " , " + col);
+            Object val = table.getValueAt(row, col);
+            if (val != null) {
+                 System.out.println(row + " , " + col + " , " + val + " , " + value.equals(1L));
+                if (value.equals(1L)) {
+                    l.setBackground(Color.GRAY);
+                } else {
+                    l.setBackground(Color.WHITE);
+                }
+            } else {
+                l.setBackground(Color.WHITE);
+            }
             //Return the JLabel which renders the cell.
             return l;
         }
@@ -36,7 +48,7 @@ public class Day11Hull {
 
 
     public Day11Hull() {
-        button1.addActionListener(new ActionListener() {
+        doEverythingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -54,7 +66,7 @@ public class Day11Hull {
 
                     int[][] hull = new int[(hullxMax-hullxMin)*2][(hullyMax-hullyMin)*2];
 
-                    button1.setBackground(Color.RED);
+                    doEverythingButton.setBackground(Color.RED);
                     DefaultTableModel dtm = (DefaultTableModel) table1.getModel();
                     DefaultTableModel ndtm = new DefaultTableModel(xdiff + 1, ydiff + 1);
                     for (Point p : paintedHull.keySet()) {
@@ -84,6 +96,21 @@ public class Day11Hull {
             }
         });
 
+        createGridButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                height = Integer.parseInt(heightTextField.getText());
+                width = Integer.parseInt(widthTextField.getText());
+                dtm = new DefaultTableModel(height, width);
+                table1.setModel(dtm);
+            }
+        });
+        placeRobotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dtm.setValueAt("^", (height - 1) / 2, (width - 1) / 2);
+            }
+        });
     }
 
     public static void main(String[] args) {
