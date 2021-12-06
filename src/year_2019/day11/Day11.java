@@ -73,10 +73,13 @@ public class Day11 {
         Map<Point, Long> hull = new HashMap<>();
         BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
+        HullPaintingRobot robot = new HullPaintingRobot();
+
         IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
         brain.start();
-        HullPaintingRobot robot = new HullPaintingRobot();
+
         statusAtPoint.add(hull.getOrDefault(robot.position, WHITE));
+
         Optional<Long> paint;
         while (!(paint = takeOrConfirmDeath(brain, outputs)).equals(Optional.empty())) {
             hull.put(robot.position, paint.get());
