@@ -85,6 +85,13 @@ public class Day11Hull {
                 table1.prepareRenderer(new StatusColumnCellRenderer(), 0, 0);
             }
         });
+
+        oneStepButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     private void renderTable(Map<Point, Long> objectsInTable, Function<Object, Color> colorFunction) {
