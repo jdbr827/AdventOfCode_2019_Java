@@ -50,44 +50,48 @@ public class Day11 {
     final static long WHITE = 1L;
     final static long BLACK = 0L;
 
-
-    public static Map<Point, Long> paintHull() throws InterruptedException {
-        Map<Point, Long> hull = new HashMap<>();
-        Direction currentlyFacing = Direction.UP;
-
-        BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
-        BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-        IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
-        brain.start();
-        HullPaintingRobot robot = new HullPaintingRobot();
-        int instructions = 0;
-        long current_color = hull.getOrDefault(robot.position, WHITE);
-        statusAtPoint.add(current_color);
-        while (true) {
-            Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
-            while(!paint.isPresent()) {
+    /**
+     * Helper function to ensure no deadlock when brain halts
+     * @param brain
+     * @param outputs
+     * @return
+     * @throws InterruptedException
+     */
+    public static Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
+        Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
+        while(!paint.isPresent()) {
                 if (!brain.isAlive()) {
                     System.out.println("LOCK!");
-                    System.out.println(hull);
-                    return convertCartesianToJavaCoordinates(hull);
+                    return Optional.empty();
+
                 }
                 paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
             }
+        return paint;
+    }
 
+    public static Map<Point, Long> paintHull() throws InterruptedException {
+        Map<Point, Long> hull = new HashMap<>();
+        BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
+        BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
+        IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
+
+
+        brain.start();
+        HullPaintingRobot robot = new HullPaintingRobot();
+        statusAtPoint.add(hull.getOrDefault(robot.position, WHITE));
+        Optional<Long> paint;
+        while (!(paint = takeOrConfirmDeath(brain, outputs)).equals(Optional.empty())) {
             hull.put(robot.position, paint.get());
 
             long rotationDirection = outputs.take();
             if (rotationDirection == 1L) {robot.rotateClockwise();} else {robot.rotateCounterclockwise();}
             robot.moveForward();
 
-
-            current_color = hull.getOrDefault(robot.position, BLACK);
-            statusAtPoint.add(current_color);
-
-            if (++instructions % 50 == 0) {
-                System.out.println(instructions);
-            }
+            statusAtPoint.add(hull.getOrDefault(robot.position, BLACK));
         }
+        System.out.println(hull);
+        return convertCartesianToJavaCoordinates(hull);
         //return hull;
     }
 
