@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.day11;
 
 import javax.swing.*;
 import javax.swing.table.*;
