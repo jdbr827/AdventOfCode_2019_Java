@@ -56,17 +56,11 @@ public class Day11Hull {
                 try {
                     Map<Point, Long> paintedHull = Day11.paintHull();
                     int hullxMax = paintedHull.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
-                    int hullxMin = paintedHull.keySet().stream().map((Point p) -> (int) p.x).min(Comparator.naturalOrder()).get();
                     int hullyMax = paintedHull.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
-                    int hullyMin = paintedHull.keySet().stream().map((Point p) -> (int) p.y).min(Comparator.naturalOrder()).get();
-                    int xdiff = hullxMax-hullxMin;
-                    int ydiff = hullyMax-hullyMin;
-                    System.out.println(xdiff);
-                    System.out.println(ydiff);
 
-                    DefaultTableModel ndtm = new DefaultTableModel(ydiff + 1, xdiff + 1);
+                    DefaultTableModel ndtm = new DefaultTableModel(hullxMax + 1, hullyMax + 1);
                     for (Point p : paintedHull.keySet()) {
-                        ndtm.setValueAt(paintedHull.get(p),  hullyMax-p.y, p.x - hullxMin);
+                        ndtm.setValueAt(paintedHull.get(p),  p.x, p.y);
                     }
                     table1.setModel(ndtm);
                     table1.setDefaultRenderer(Object.class, new StatusColumnCellRenderer());
@@ -77,5 +71,14 @@ public class Day11Hull {
             }
         });
 
+        placeRobotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dtm = new DefaultTableModel(1, 1);
+                dtm.setValueAt("^", 0, 0);
+                table1.setModel(dtm);
+                table1.prepareRenderer(new StatusColumnCellRenderer(), 0, 0);
+            }
+        });
     }
 }
