@@ -12,7 +12,7 @@ public class Day11Hull {
     private JPanel panel1;
     private JTable table1;
     private JButton doEverythingButton;
-    private JButton button2;
+    private JButton oneStepButton;
     private JTextField heightTextField;
     private JTextField widthTextField;
     private JButton createGridButton;
@@ -29,14 +29,14 @@ public class Day11Hull {
             //System.out.println(row + " , " + col);
             Object val = table.getValueAt(row, col);
             if (val != null) {
-                 System.out.println(row + " , " + col + " , " + val + " , " + value.equals(1L));
+                 //System.out.println(row + " , " + col + " , " + val + " , " + value.equals(1L));
                 if (value.equals(1L)) {
-                    l.setBackground(Color.GRAY);
-                } else {
                     l.setBackground(Color.WHITE);
+                } else {
+                    l.setBackground(Color.GRAY);
                 }
             } else {
-                l.setBackground(Color.WHITE);
+                l.setBackground(Color.GRAY);
             }
             //Return the JLabel which renders the cell.
             return l;
@@ -68,13 +68,17 @@ public class Day11Hull {
 
                     doEverythingButton.setBackground(Color.RED);
                     DefaultTableModel dtm = (DefaultTableModel) table1.getModel();
-                    DefaultTableModel ndtm = new DefaultTableModel(xdiff + 1, ydiff + 1);
+                    DefaultTableModel ndtm = new DefaultTableModel(ydiff + 1, xdiff + 1);
                     for (Point p : paintedHull.keySet()) {
-                        ndtm.setValueAt(paintedHull.get(p), p.x - hullxMin, p.y - hullyMin);
+                        ndtm.setValueAt(paintedHull.get(p),  hullyMax-p.y, p.x - hullxMin);
                     }
+//                    DefaultTableModel ndtm = new DefaultTableModel(xdiff + 1, ydiff + 1);
+//                    for (Point p : paintedHull.keySet()) {
+//                        ndtm.setValueAt(paintedHull.get(p), p.x - hullxMin, p.y - hullyMin);
+//                    }
 
-                    System.out.println(ndtm.getValueAt(xdiff, ydiff));
-                    System.out.println(ndtm.getValueAt(xdiff - 2, ydiff));
+//                    System.out.println(ndtm.getValueAt(xdiff, ydiff));
+//                    System.out.println(ndtm.getValueAt(xdiff - 2, ydiff));
                     table1.setModel(ndtm);
                     table1.setDefaultRenderer(Object.class, new StatusColumnCellRenderer());
                     table1.prepareRenderer(new StatusColumnCellRenderer(), 0, 0);

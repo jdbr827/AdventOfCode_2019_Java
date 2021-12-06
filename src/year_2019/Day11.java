@@ -1,5 +1,7 @@
 package year_2019;
 
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
@@ -14,8 +16,11 @@ public class Day11 {
     final static Point RIGHT = new Point(1, 0);
     final static Point DOWN = new Point(0, -1);
     final static Point LEFT = new Point(-1, 0);
+    final static long WHITE = 1L;
+    final static long BLACK = 0L;
 
     final static Point[] CLOCKWISE = {UP, RIGHT, DOWN, LEFT};
+
 
     public static Map<Point, Long> paintHull() throws InterruptedException {
         Map<Point, Long> hull = new HashMap<>();
@@ -27,7 +32,7 @@ public class Day11 {
         int currentDirectionIdx = 0;
         Point currentPoint = new Point(0, 0);
         int instructions = 0;
-        long current_color = hull.getOrDefault(currentPoint, 0L);
+        long current_color = hull.getOrDefault(currentPoint, WHITE);
         statusAtPoint.add(current_color);
         while (true) {
             Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
@@ -42,6 +47,7 @@ public class Day11 {
 
             hull.put(currentPoint, paint.get());
 
+
             long direction = outputs.take();
             currentDirectionIdx = updateCurrentDirectionIdx(currentDirectionIdx, direction);
 
@@ -50,7 +56,7 @@ public class Day11 {
                     currentPoint.y + CLOCKWISE[currentDirectionIdx].y
             );
 
-            current_color = hull.getOrDefault(currentPoint, 0L);
+            current_color = hull.getOrDefault(currentPoint, BLACK);
             statusAtPoint.add(current_color);
 
             if (++instructions % 50 == 0) {
