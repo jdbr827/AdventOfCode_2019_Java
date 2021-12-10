@@ -1,13 +1,17 @@
 package year_2019.day13;
 
+import year_2019.day11.Day11Hull;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import static year_2019.day11.Day11Hull.renderTable;
 import static year_2019.day13.Day13.createGameGrid;
 import static year_2019.day13.Day13.playGame;
 
@@ -38,17 +42,34 @@ public class BrickBreaker {
         }
     }
     public void renderBrickBreakerTable(Map<Point, Integer> gameGrid) {
-        renderTable(table1, gameGrid, BrickBreaker::brickBreakerColorFunction);
-//        table1.repaint();
-//        table1.revalidate();
+       for (Point p: gameGrid.keySet()) {
+           table1.setValueAt(gameGrid.get(p), p.x, p.y);
+       }
+
     }
 
-    public BrickBreaker() {
+    private void setup_table_model(Map<Point, Integer> gameGrid) {
+        int hullxMax = gameGrid.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
+        int hullyMax = gameGrid.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
+
+        DefaultTableModel ndtm = new DefaultTableModel(hullxMax + 1, hullyMax + 1);
+        for (Point p : gameGrid.keySet()) {
+            ndtm.setValueAt(gameGrid.get(p),  p.x, p.y);
+        }
+        table1.setModel(ndtm);
+        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(BrickBreaker::brickBreakerColorFunction);
+        table1.setDefaultRenderer(Object.class, renderer);
+        table1.prepareRenderer(renderer, 0, 0);
+    }
+
+    public BrickBreaker(BlockingQueue<Long> joystickInputs) {
         JFrame frame = new JFrame("Day13");
+        panel1.setOpaque(true);
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
 
         showInitialStateButton.addActionListener(new ActionListener() {
             @Override
@@ -64,6 +85,12 @@ public class BrickBreaker {
         playGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    setup_table_model(createGameGrid());
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
                 Thread game = new Thread(() -> {
                     try {
                         playGame();
@@ -77,7 +104,23 @@ public class BrickBreaker {
         a0Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                joystickInputs.add(0);
+
+                System.out.println("ADDED INPUT 0");
+                joystickInputs.add(0L);
+            }
+        });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 System.out.println("ADDED INPUT -1");
+                joystickInputs.add(-1L);
+            }
+        });
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ADDED INPUT 1");
+                joystickInputs.add(1L);
             }
         });
     }

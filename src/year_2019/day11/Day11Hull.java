@@ -75,7 +75,7 @@ public class Day11Hull {
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
                 //Cells are by default rendered as a JLabel.
-                Component l = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
                 l.setBackground(colorFunction.apply((T) value));
 
                 //Return the JLabel which renders the cell.
