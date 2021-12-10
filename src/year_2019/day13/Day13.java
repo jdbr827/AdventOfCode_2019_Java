@@ -21,12 +21,10 @@ public class Day13 {
     static void doNextJoystickInput() {
         if (ballX < paddleX) {
             joystickInputs.add(-1L);
-            paddleX -= 1;
         } else if (ballX == paddleX) {
             joystickInputs.add(0L);
         } else {
             joystickInputs.add(1L);
-            paddleX += 1;
         }
     }
     /**
@@ -84,7 +82,6 @@ public class Day13 {
                     ballX = x;
                 }
                 view.table1.setValueAt(obj_id, y, x);
-                //System.out.println(y + "  " + x + "  " + obj_id);
             }
             if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
                 System.out.println(ballX + " " + paddleX);
