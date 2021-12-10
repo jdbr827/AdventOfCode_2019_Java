@@ -23,6 +23,7 @@ public class BrickBreaker {
     private JButton button1;
     private JButton a0Button;
     private JButton button3;
+    JTextPane scoreTextPane;
     BlockingQueue<Integer> joystickInputs;
 
     public static Color brickBreakerColorFunction(int value) {

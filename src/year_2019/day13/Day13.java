@@ -43,9 +43,8 @@ public class Day13 {
     }
 
     static Map<Point, Integer> playGame() throws InterruptedException {
-        BlockingQueue<Long> inputs = new LinkedBlockingQueue<>();
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-        IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT_PART_2, inputs, outputs);
+        IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT_PART_2, joystickInputs, outputs);
         Map<Point, Integer> gameGrid = new HashMap<>();
         int score = 0;
         brain.start();
@@ -56,24 +55,16 @@ public class Day13 {
             int obj_id = outputs.take().intValue();
             if (x == -1 && y == 0) {
                 score = obj_id;
-                System.out.println(score);
+                view.scoreTextPane.setText(String.valueOf(score));
             }
             else {
                 gameGrid.put(new Point(y, x), obj_id);
+                view.table1.setValueAt(obj_id, y, x);
                 System.out.println(y + "  " + x + "  " + obj_id);
             }
             if (obj_id == 4) {
                 System.out.println("BALL IS AT" + String.valueOf(x) +  String.valueOf(y));
             }
-
-            if (brain.getState() == Thread.State.WAITING && outputs.isEmpty()) {
-                view.renderBrickBreakerTable(gameGrid);
-                inputs.put(joystickInputs.take());
-
-            }
-            System.out.println(brain.getState());
-//            System.out.println(outputs.size());
-            System.out.println(joystickInputs.size());
         }
 
         return gameGrid;
