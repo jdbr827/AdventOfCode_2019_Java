@@ -16,6 +16,17 @@ public class Day13 {
     public static BlockingQueue<Long> joystickInputs = new LinkedBlockingQueue<>();
     static BrickBreaker view = new BrickBreaker(joystickInputs);
 
+    static void doNextJoystickInput() {
+        if (view.ballX < view.paddleX) {
+                    joystickInputs.add(-1L);
+                    view.paddleX -= 1;
+                } else if (view.ballX == view.paddleX) {
+                    joystickInputs.add(0L);
+                } else {
+                    joystickInputs.add(1L);
+                    view.paddleX += 1;
+                }
+    }
     /**
      * Helper function to ensure no deadlock when brain halts
      *
@@ -26,29 +37,17 @@ public class Day13 {
      */
     public static Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
         Optional<Long> optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
-        if (!optVal.isPresent()) {
-            /* First attempt to add new input from view */
+        while (!optVal.isPresent()) {
+            if (!brain.isAlive()) {
+                System.out.println("LOCK!");
+                return Optional.empty();
+            }
             if (joystickInputs.isEmpty() && outputs.isEmpty() && view.useAutopilot) {
                 System.out.println(view.ballX + " " + view.paddleX);
                 outputs.poll(40, TimeUnit.MILLISECONDS);
-                if (view.ballX < view.paddleX) {
-                    joystickInputs.add(-1L);
-                    view.paddleX -= 1;
-                } else if (view.ballX == view.paddleX) {
-                    joystickInputs.add(0L);
-                } else {
-                    joystickInputs.add(1L);
-                    view.paddleX += 1;
-                }
+                doNextJoystickInput();
             }
-
-            while (!optVal.isPresent()) {
-                if (!brain.isAlive()) {
-                    System.out.println("LOCK!");
-                    return Optional.empty();
-                }
-                optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
-            }
+            optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
         }
         return optVal;
     }
