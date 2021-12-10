@@ -24,7 +24,12 @@ public class BrickBreaker {
     private JButton a0Button;
     private JButton button3;
     JTextPane scoreTextPane;
-    BlockingQueue<Integer> joystickInputs;
+    private JButton autopickButton;
+    private JButton autopilotButton;
+    BlockingQueue<Integer> Inputs;
+    boolean useAutopilot = false;
+    static int paddleX;
+    static int ballX;
 
     public static Color brickBreakerColorFunction(int value) {
         switch(value) {
@@ -122,6 +127,29 @@ public class BrickBreaker {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("ADDED INPUT 1");
                 joystickInputs.add(1L);
+            }
+        });
+        autopickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(ballX + " " + paddleX);
+                if (ballX < paddleX) {
+                    joystickInputs.add(-1L);
+                    paddleX -= 1;
+                }
+                else if (ballX == paddleX) {
+                    joystickInputs.add(0L);
+                }
+                else {
+                    joystickInputs.add(1L);
+                    paddleX += 1;
+                }
+            }
+        });
+        autopilotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                useAutopilot = !useAutopilot;
             }
         });
     }
