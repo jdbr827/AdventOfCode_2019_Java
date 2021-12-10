@@ -130,7 +130,7 @@ public class BrickBreaker {
         autopickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(ballX + " " + paddleX);
+
                 doNextJoystickInput();
             }
         });
