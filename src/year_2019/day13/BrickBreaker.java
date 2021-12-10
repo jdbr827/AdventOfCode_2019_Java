@@ -66,7 +66,7 @@ public class BrickBreaker {
         table1.prepareRenderer(renderer, 0, 0);
     }
 
-    public BrickBreaker(BlockingQueue<Long> joystickInputs) {
+    public BrickBreaker() {
         JFrame frame = new JFrame("Day13");
         panel1.setOpaque(true);
         frame.setContentPane(panel1);
@@ -108,30 +108,26 @@ public class BrickBreaker {
         a0Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                System.out.println("ADDED INPUT 0");
-                joystickInputs.add(0L);
+                joystick.keepJoystickCenter();
             }
         });
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 System.out.println("ADDED INPUT -1");
-                joystickInputs.add(-1L);
+                joystick.moveJoystickLeft();
             }
         });
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ADDED INPUT 1");
-                joystickInputs.add(1L);
+                joystick.moveJoystickRight();
             }
         });
         autopickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                doNextJoystickInput();
+                joystick.doNextJoystickInput();
             }
         });
         autopilotButton.addActionListener(new ActionListener() {
