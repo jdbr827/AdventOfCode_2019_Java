@@ -50,13 +50,12 @@ public class Day13 {
     }
 
 
-    static Map<Point, Integer> playGame() throws InterruptedException {
+    static int playGame() throws InterruptedException {
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
         IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT_PART_2, joystickInputs, outputs);
-        Map<Point, Integer> gameGrid = new HashMap<>();
         brain.start();
         Optional<Long> optX;
-        while (!(optX = takeOrConfirmDeath(brain, outputs)).equals(Optional.empty())) {
+        while ((optX = takeOrConfirmDeath(brain, outputs)).isPresent()) {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
             int obj_id = outputs.take().intValue();
@@ -67,7 +66,7 @@ public class Day13 {
             }
         }
 
-        return gameGrid;
+        return score;
     }
 
     private static void processOneOutput(int x, int y, int obj_id) {
