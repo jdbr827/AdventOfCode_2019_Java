@@ -45,12 +45,6 @@ public class BrickBreakerView {
                 return Color.WHITE;
         }
     }
-    public void renderBrickBreakerTable(Map<Point, Integer> gameGrid) {
-       for (Point p: gameGrid.keySet()) {
-           table1.setValueAt(gameGrid.get(p), p.x, p.y);
-       }
-
-    }
 
     private void setup_table_model(Map<Point, Integer> gameGrid) {
         int hullxMax = gameGrid.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
@@ -79,7 +73,7 @@ public class BrickBreakerView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    renderBrickBreakerTable(createGameGrid());
+                    setup_table_model(createGameGrid());
 
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
