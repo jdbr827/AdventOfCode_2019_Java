@@ -87,15 +87,7 @@ public class Day13 {
             if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
                 System.out.println(view.ballX + " " + view.paddleX);
                 outputs.poll(40, TimeUnit.MILLISECONDS);
-                if (view.ballX < view.paddleX) {
-                    joystickInputs.add(-1L);
-                    view.paddleX -= 1;
-                } else if (view.ballX == view.paddleX) {
-                    joystickInputs.add(0L);
-                } else {
-                    joystickInputs.add(1L);
-                    view.paddleX += 1;
-                }
+                doNextJoystickInput();
             }
         }
 

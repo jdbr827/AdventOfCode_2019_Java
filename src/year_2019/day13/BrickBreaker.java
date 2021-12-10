@@ -12,8 +12,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import static year_2019.day13.Day13.createGameGrid;
-import static year_2019.day13.Day13.playGame;
+import static year_2019.day13.Day13.*;
 
 public class BrickBreaker {
     JTable table1;
@@ -133,17 +132,7 @@ public class BrickBreaker {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(ballX + " " + paddleX);
-                if (ballX < paddleX) {
-                    joystickInputs.add(-1L);
-                    paddleX -= 1;
-                }
-                else if (ballX == paddleX) {
-                    joystickInputs.add(0L);
-                }
-                else {
-                    joystickInputs.add(1L);
-                    paddleX += 1;
-                }
+                doNextJoystickInput();
             }
         });
         autopilotButton.addActionListener(new ActionListener() {
