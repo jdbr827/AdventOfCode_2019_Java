@@ -79,6 +79,8 @@ public class Day13 {
                     joystickInputs.add(1L);
                     view.paddleX += 1;
                 }
+            } else if (outputs.isEmpty() && view.useAutopilot) {
+                System.out.println("HI");
             }
             if (obj_id == 4) {
                 System.out.println("BALL IS AT" + String.valueOf(x) +  String.valueOf(y));
