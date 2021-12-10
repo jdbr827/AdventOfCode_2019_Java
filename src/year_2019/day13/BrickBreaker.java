@@ -27,8 +27,7 @@ public class BrickBreaker {
     private JButton autopilotButton;
     BlockingQueue<Integer> Inputs;
     boolean useAutopilot = false;
-    static int paddleX;
-    static int ballX;
+
 
     public static Color brickBreakerColorFunction(int value) {
         switch(value) {
