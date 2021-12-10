@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static year_2019.day13.Day13.*;
 
-public class BrickBreaker {
+public class BrickBreakerView {
     JTable table1;
     private JButton showInitialStateButton;
     private JPanel panel1;
@@ -61,12 +61,12 @@ public class BrickBreaker {
             ndtm.setValueAt(gameGrid.get(p),  p.x, p.y);
         }
         table1.setModel(ndtm);
-        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(BrickBreaker::brickBreakerColorFunction);
+        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(BrickBreakerView::brickBreakerColorFunction);
         table1.setDefaultRenderer(Object.class, renderer);
         table1.prepareRenderer(renderer, 0, 0);
     }
 
-    public BrickBreaker() {
+    public BrickBreakerView() {
         JFrame frame = new JFrame("Day13");
         panel1.setOpaque(true);
         frame.setContentPane(panel1);
