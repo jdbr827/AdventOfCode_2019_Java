@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Joystick {
     int paddleX;
     int ballX;
-    public static BlockingQueue<Long> joystickInputs = new LinkedBlockingQueue<>();
+    public BlockingQueue<Long> joystickInputs = new LinkedBlockingQueue<>();
 
     void doNextJoystickInput() {
          System.out.println(ballX + " " + paddleX);

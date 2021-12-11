@@ -47,10 +47,10 @@ public class BrickBreakerView {
     }
 
     private void setup_table_model(Map<Point, Integer> gameGrid) {
-        int hullxMax = gameGrid.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
-        int hullyMax = gameGrid.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
+        int xMax = gameGrid.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
+        int yMax = gameGrid.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
 
-        DefaultTableModel ndtm = new DefaultTableModel(hullxMax + 1, hullyMax + 1);
+        DefaultTableModel ndtm = new DefaultTableModel(xMax + 1, yMax + 1);
         for (Point p : gameGrid.keySet()) {
             ndtm.setValueAt(gameGrid.get(p),  p.x, p.y);
         }
@@ -130,5 +130,10 @@ public class BrickBreakerView {
                 useAutopilot = !useAutopilot;
             }
         });
+    }
+
+    public void populatePoint(int x, int y, int obj_id) {
+        // Switching around because of where the origin is in Java
+        table1.setValueAt(obj_id, y, x);
     }
 }
