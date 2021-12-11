@@ -1,12 +1,16 @@
 package year_2019.day15;
 
+import year_2019.day11.Day11Hull;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import static year_2019.day11.Day11Hull.createRenderer;
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
 public class DroidMazeView {
@@ -22,9 +26,26 @@ public class DroidMazeView {
     DroidMazeController controller;
     DefaultTableModel ndtm = new DefaultTableModel(1, 1);
 
+    public static Color backgroundColorFunction(int input) {
+        switch(input) {
+            case 0:
+                return Color.BLACK;
+            case 1:
+                return Color.WHITE;
+            case 2:
+                return Color.GREEN;
+            default:
+                return Color.GRAY;
+        }
+    }
+
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
         table1.setModel(ndtm);
+        ndtm.setValueAt( 1, 0, 0);
+//        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
+//        table1.setDefaultRenderer(Object.class, renderer);
+//        table1.prepareRenderer(renderer, 0, 0);
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
@@ -84,32 +105,37 @@ public class DroidMazeView {
         });
     }
 
-    public void paintPoint(Point desiredPointCartesian, Color color) {
-        Point desiredPointJava = new Point(desiredPointCartesian.x + cartesianOrigin.x, desiredPointCartesian.y - cartesianOrigin.y);
+    public void paintPoint(Point desiredPointCartesian, int result) {
+        Point desiredPointJava = new Point(desiredPointCartesian.x + cartesianOrigin.x, cartesianOrigin.y - desiredPointCartesian.y);
         while (desiredPointJava.x < 0) {
-            ndtm.addColumn(null, new Vector<>());
+            Vector<Integer> newCol = new Vector<>();
+            for (int i=0; i<ndtm.getRowCount(); i++){ newCol.add(-1);}
+            ndtm.addColumn(newCol);
             table1.moveColumn(ndtm.getColumnCount() - 1, 0);
             desiredPointJava.translate(1, 0);
             cartesianOrigin.translate(-1, 0);
         }
         while (desiredPointJava.x >= ndtm.getColumnCount()) {
-            ndtm.addColumn(new Vector<>());
-            desiredPointJava.translate(-1, 0);
-            cartesianOrigin.translate(1, 0);
+            Vector<Integer> newCol = new Vector<>();
+            for (int i=0; i<ndtm.getRowCount(); i++){ newCol.add(-1);}
+            ndtm.addColumn(0, newCol);
         }
         while(desiredPointJava.y < 0) {
-            ndtm.insertRow(0, new Vector<>());
+            Vector<Integer> newRow = new Vector<>();
+            for (int i=0; i<ndtm.getColumnCount(); i++){ newRow.add(-1);}
+            ndtm.insertRow(0, newRow);
             desiredPointJava.translate(0, 1);
             cartesianOrigin.translate(0, 1);
         }
         while(desiredPointJava.y >= ndtm.getRowCount()) {
-            ndtm.addRow(new Vector<>());
-            desiredPointJava.translate(0, -1);
-            cartesianOrigin.translate(0, -1);
+            Vector<Integer> newRow = new Vector<>();
+            for (int i=0; i<ndtm.getColumnCount(); i++){ newRow.add(-1);}
+            ndtm.addRow(newRow);
         }
         System.out.println(desiredPointJava);
         System.out.println(ndtm.getRowCount());
         System.out.println(ndtm.getColumnCount());
+        ndtm.setValueAt(result, desiredPointJava.y, desiredPointJava.x);
 
     }
 }
