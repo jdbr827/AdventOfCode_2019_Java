@@ -110,10 +110,19 @@ public class DroidMazeView {
         while (desiredPointJava.x < 0) {
             Vector<Integer> newCol = new Vector<>();
             for (int i=0; i<ndtm.getRowCount(); i++){ newCol.add(-1);}
-            ndtm.addColumn(newCol);
-            table1.moveColumn(ndtm.getColumnCount() - 1, 0);
+//            ndtm.addColumn(0, newCol);
+            DefaultTableModel newDTM = new DefaultTableModel(ndtm.getRowCount(), ndtm.getColumnCount() + 1);
+            Vector<Vector> oldDataVector = ndtm.getDataVector();
+            for (Vector v : oldDataVector) {
+                v.insertElementAt(-1, 0);
+            }
+//            oldDataVector.insertElementAt(newCol, 0);
+            Vector<Integer> newIdentifiers = new Vector<>();
+            for (int i=0; i<newDTM.getColumnCount(); i++) { newIdentifiers.add(i);}
+            ndtm.setDataVector(oldDataVector, newIdentifiers);
+//            table1.moveColumn(ndtm.getColumnCount() - 1, 0);
             desiredPointJava.translate(1, 0);
-            cartesianOrigin.translate(-1, 0);
+            cartesianOrigin.translate(1, 0);
         }
         while (desiredPointJava.x >= ndtm.getColumnCount()) {
             Vector<Integer> newCol = new Vector<>();
