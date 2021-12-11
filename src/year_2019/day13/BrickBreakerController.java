@@ -19,6 +19,7 @@ public class BrickBreakerController {
     public static final Point SCORE_OUTPUTS = new Point(-1, 0);
     private final long[] gameTape;
     private final BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
+
     Joystick joystick = new Joystick();
     BrickBreakerView view = new BrickBreakerView();
     int score = 0;
