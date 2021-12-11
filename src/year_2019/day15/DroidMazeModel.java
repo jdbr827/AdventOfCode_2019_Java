@@ -11,6 +11,6 @@ public class DroidMazeModel {
     Point droidLocation = new Point(0, 0);
 
     void moveDroid(CardinalDirection direction) {
-        droidLocation = new Point(droidLocation.x + direction.velocity.x, droidLocation.y + direction.velocity.y);
+        droidLocation.translate(direction.velocity.x, direction.velocity.y);
     }
 }
