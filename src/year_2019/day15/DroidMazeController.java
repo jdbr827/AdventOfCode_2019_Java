@@ -22,9 +22,11 @@ public class DroidMazeController {
     public void moveDroid(CardinalDirection direction) throws InterruptedException {
         inputs.put(direction.inputInstruction);
         int outputInstruction = outputs.take().intValue();
+        Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
             System.out.println(model.droidLocation);
+            view.paintPoint(desiredPoint, Color.BLACK);
         }
         System.out.println(outputInstruction);
     }

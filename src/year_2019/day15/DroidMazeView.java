@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
@@ -16,12 +17,14 @@ public class DroidMazeView {
     private JButton westButton;
     private JButton eastButton;
     private JButton resetButton;
-    Point cartesianOrigin;
+    Point cartesianOrigin = new Point(0, 0);
     Point droidLocation;
     DroidMazeController controller;
+    DefaultTableModel ndtm = new DefaultTableModel(1, 1);
 
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
+        table1.setModel(ndtm);
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
@@ -30,7 +33,7 @@ public class DroidMazeView {
         frame.pack();
         frame.setVisible(true);
 
-        DefaultTableModel ndtm = new DefaultTableModel(1, 1);
+
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,5 +82,34 @@ public class DroidMazeView {
                 }
             }
         });
+    }
+
+    public void paintPoint(Point desiredPointCartesian, Color color) {
+        Point desiredPointJava = new Point(desiredPointCartesian.x + cartesianOrigin.x, desiredPointCartesian.y - cartesianOrigin.y);
+        while (desiredPointJava.x < 0) {
+            ndtm.addColumn(null, new Vector<>());
+            table1.moveColumn(ndtm.getColumnCount() - 1, 0);
+            desiredPointJava.translate(1, 0);
+            cartesianOrigin.translate(-1, 0);
+        }
+        while (desiredPointJava.x >= ndtm.getColumnCount()) {
+            ndtm.addColumn(new Vector<>());
+            desiredPointJava.translate(-1, 0);
+            cartesianOrigin.translate(1, 0);
+        }
+        while(desiredPointJava.y < 0) {
+            ndtm.insertRow(0, new Vector<>());
+            desiredPointJava.translate(0, 1);
+            cartesianOrigin.translate(0, 1);
+        }
+        while(desiredPointJava.y >= ndtm.getRowCount()) {
+            ndtm.addRow(new Vector<>());
+            desiredPointJava.translate(0, -1);
+            cartesianOrigin.translate(0, -1);
+        }
+        System.out.println(desiredPointJava);
+        System.out.println(ndtm.getRowCount());
+        System.out.println(ndtm.getColumnCount());
+
     }
 }
