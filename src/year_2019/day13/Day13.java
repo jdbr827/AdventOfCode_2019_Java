@@ -1,5 +1,6 @@
 package year_2019.day13;
 
+import javafx.util.Pair;
 import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;
@@ -48,17 +49,25 @@ public class Day13 {
 //        System.out.println(gameGrid.values().stream().filter((id) -> id == 2).count());
     }
 
+    static Optional<Pair<Point, Integer>> getNextOutput(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
+        Optional<Long> optX = takeOrConfirmDeath(brain, outputs);
+        if (optX.isPresent()) {
+            int x = optX.get().intValue();
+            int y = outputs.take().intValue();
+            int obj_id = outputs.take().intValue();
+            return Optional.of(new Pair<>(new Point(x, y), obj_id));
+        }
+        return Optional.empty();
+    }
+
 
     static int playGame() throws InterruptedException {
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
         IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT_PART_2, joystick.joystickInputs, outputs);
         brain.start();
-        Optional<Long> optX;
-        while ((optX = takeOrConfirmDeath(brain, outputs)).isPresent()) {
-            int x = optX.get().intValue();
-            int y = outputs.take().intValue();
-            int obj_id = outputs.take().intValue();
-            processOneOutput(x, y, obj_id);
+        Optional<Pair<Point, Integer>> nxt;
+        while ((nxt = getNextOutput(brain, outputs)).isPresent()) {
+            processOneOutput(nxt.get());
             if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
                 outputs.poll(40, TimeUnit.MILLISECONDS);
                 joystick.doNextJoystickInput();
@@ -68,7 +77,11 @@ public class Day13 {
         return score;
     }
 
-    private static void processOneOutput(int x, int y, int obj_id) {
+    private static void processOneOutput(Pair<Point, Integer> nxt) {
+        int obj_id = nxt.getValue();
+        int x = nxt.getKey().x;
+        int y = nxt.getKey().y;
+
         if (x == -1 && y == 0) {
             score = obj_id;
             view.scoreTextPane.setText(String.valueOf(score));
