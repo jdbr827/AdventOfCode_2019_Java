@@ -73,7 +73,7 @@ public class BrickBreakerView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    setup_table_model(createGameGrid());
+                    setup_table_model(controller.createGameGrid());
 
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
@@ -84,14 +84,14 @@ public class BrickBreakerView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    setup_table_model(createGameGrid());
+                    setup_table_model(controller.createGameGrid());
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
 
                 Thread game = new Thread(() -> {
                     try {
-                        playGame();
+                        controller.playGame();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
