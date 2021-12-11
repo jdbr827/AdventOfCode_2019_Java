@@ -9,7 +9,6 @@ public class Joystick {
     BlockingQueue<Long> joystickInputs = new LinkedBlockingQueue<>();
 
     void doNextJoystickInput() {
-         System.out.println(ballX + " " + paddleX);
         if (ballX < paddleX) {
             moveJoystickLeft();
         } else if (ballX == paddleX) {
