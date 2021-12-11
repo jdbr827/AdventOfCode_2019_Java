@@ -43,9 +43,9 @@ public class DroidMazeView {
         this.controller = droidMazeController;
         table1.setModel(ndtm);
         ndtm.setValueAt( 1, 0, 0);
-//        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
-//        table1.setDefaultRenderer(Object.class, renderer);
-//        table1.prepareRenderer(renderer, 0, 0);
+        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
+        table1.setDefaultRenderer(Object.class, renderer);
+        table1.prepareRenderer(renderer, 0, 0);
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
@@ -145,6 +145,7 @@ public class DroidMazeView {
         System.out.println(ndtm.getRowCount());
         System.out.println(ndtm.getColumnCount());
         ndtm.setValueAt(result, desiredPointJava.y, desiredPointJava.x);
+
 
     }
 }
