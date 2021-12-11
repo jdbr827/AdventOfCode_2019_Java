@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import static year_2019.day11.Day11Hull.createRenderer;
@@ -25,7 +27,7 @@ public class DroidMazeView {
     Point droidLocation;
     DroidMazeController controller;
     DefaultTableModel ndtm = new DefaultTableModel(1, 1);
-
+    Map<Point, Color> cartesianColorMap = new HashMap<>();
     public static Color backgroundColorFunction(int input) {
         switch(input) {
             case 0:
@@ -105,9 +107,13 @@ public class DroidMazeView {
         });
     }
 
-    public void paintPoint(Point desiredPointCartesian, int result) {
-        Point desiredPointJava = new Point(desiredPointCartesian.x + cartesianOrigin.x, cartesianOrigin.y - desiredPointCartesian.y);
-        while (desiredPointJava.x < 0) {
+    public void paintPoint(Point desiredPointCartesian, Color color) {
+        Point desiredPointJava = convertCartesianToJava(desiredPointCartesian);
+        //assert(convertJavaToCartesian(desiredPointJava).equals(desiredPointCartesian));
+
+        int Y = desiredPointJava.y;
+        int X = desiredPointJava.x;
+        while (Y < 0) {
             Vector<Integer> newCol = new Vector<>();
             for (int i=0; i<ndtm.getRowCount(); i++){ newCol.add(-1);}
 //            ndtm.addColumn(0, newCol);
@@ -121,22 +127,23 @@ public class DroidMazeView {
             for (int i=0; i<newDTM.getColumnCount(); i++) { newIdentifiers.add(i);}
             ndtm.setDataVector(oldDataVector, newIdentifiers);
 //            table1.moveColumn(ndtm.getColumnCount() - 1, 0);
-            desiredPointJava.translate(1, 0);
+            Y += 1;
             cartesianOrigin.translate(1, 0);
         }
-        while (desiredPointJava.x >= ndtm.getColumnCount()) {
+        while (Y >= ndtm.getColumnCount()) {
             Vector<Integer> newCol = new Vector<>();
             for (int i=0; i<ndtm.getRowCount(); i++){ newCol.add(-1);}
             ndtm.addColumn(0, newCol);
         }
-        while(desiredPointJava.y < 0) {
+
+        while(X < 0) {
             Vector<Integer> newRow = new Vector<>();
             for (int i=0; i<ndtm.getColumnCount(); i++){ newRow.add(-1);}
             ndtm.insertRow(0, newRow);
-            desiredPointJava.translate(0, 1);
+            X += 1;
             cartesianOrigin.translate(0, 1);
         }
-        while(desiredPointJava.y >= ndtm.getRowCount()) {
+        while(X >= ndtm.getRowCount()) {
             Vector<Integer> newRow = new Vector<>();
             for (int i=0; i<ndtm.getColumnCount(); i++){ newRow.add(-1);}
             ndtm.addRow(newRow);
@@ -144,8 +151,16 @@ public class DroidMazeView {
         System.out.println(desiredPointJava);
         System.out.println(ndtm.getRowCount());
         System.out.println(ndtm.getColumnCount());
-        ndtm.setValueAt(result, desiredPointJava.y, desiredPointJava.x);
+        cartesianColorMap.put(desiredPointCartesian, color);
+        ndtm.setValueAt(-1, X, Y);
 
+    }
 
+    private Point convertCartesianToJava(Point cartesianPoint) {
+        return new Point( cartesianOrigin.y - cartesianPoint.y, cartesianPoint.x + cartesianOrigin.x);
+    }
+
+      private Point convertJavaToCartesian(Point javaPoint) {
+          return new Point(  javaPoint.y - cartesianOrigin.y, javaPoint.x - cartesianOrigin.x);
     }
 }

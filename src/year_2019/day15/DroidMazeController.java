@@ -25,13 +25,16 @@ public class DroidMazeController {
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
+            view.paintPoint(desiredPoint, Color.WHITE);
+        } else {
+            view.paintPoint(desiredPoint, Color.BLACK);
         }
 
 
         System.out.println(desiredPoint);
         System.out.println(outputInstruction);
         System.out.println(model.droidLocation);
-        view.paintPoint(desiredPoint, outputInstruction);
+//        view.paintPoint(desiredPoint, outputInstruction);
         System.out.println("-----");
     }
 
