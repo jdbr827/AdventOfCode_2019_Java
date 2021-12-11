@@ -23,6 +23,5 @@ public class Day13 {
 
         // Part 2
         // In the UI, click Play Game! (use autopilot to go faster)
-        // Now play the game! (Or play it on autopilot to go faster)
     }
 }

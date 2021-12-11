@@ -6,6 +6,7 @@ import year_2019.IntCodeComputer.IntCode;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,24 +16,20 @@ import static year_2019.day13.Day13.DAY_13_PUZZLE_INPUT;
 
 public class BrickBreakerController {
 
+    public static final Point SCORE_OUTPUTS = new Point(-1, 0);
     private final long[] gameTape;
+    private final BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
     Joystick joystick = new Joystick();
     BrickBreakerView view = new BrickBreakerView();
     int score = 0;
+    private IntCode brain;
 
     BrickBreakerController(long[] gameTape) {
         this.gameTape = gameTape;
     }
 
-       /**
-     * Helper function to ensure no deadlock when brain halts
-     *
-     * @param brain
-     * @param outputs
-     * @return
-     * @throws InterruptedException
-     */
-    public Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
+
+    public Optional<Long> takeOrConfirmDeath() throws InterruptedException {
         Optional<Long> optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
         while (!optVal.isPresent()) {
             if (!brain.isAlive()) {
@@ -49,8 +46,8 @@ public class BrickBreakerController {
     }
 
 
-    Optional<Pair<Point, Integer>> getNextOutput(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
-        Optional<Long> optX = takeOrConfirmDeath(brain, outputs);
+    Optional<Pair<Point, Integer>> getNextOutput() throws InterruptedException {
+        Optional<Long> optX = takeOrConfirmDeath();
         if (optX.isPresent()) {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
@@ -62,11 +59,10 @@ public class BrickBreakerController {
 
 
     public int playGame() throws InterruptedException {
-        BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-        IntCode brain = new IntCode(gameTape, joystick.joystickInputs, outputs);
+        brain = new IntCode(gameTape, joystick.joystickInputs, outputs);
         brain.start();
         Optional<Pair<Point, Integer>> nxt;
-        while ((nxt = getNextOutput(brain, outputs)).isPresent()) {
+        while ((nxt = getNextOutput()).isPresent()) {
             processOneOutput(nxt.get());
             if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
                 outputs.poll(40, TimeUnit.MILLISECONDS);
@@ -79,20 +75,19 @@ public class BrickBreakerController {
 
     private void processOneOutput(Pair<Point, Integer> nxt) {
         int obj_id = nxt.getValue();
-        int x = nxt.getKey().x;
-        int y = nxt.getKey().y;
+        Point p = nxt.getKey();
 
-        if (x == -1 && y == 0) {
+        if (Objects.equals(p, SCORE_OUTPUTS)) {
             score = obj_id;
             view.scoreTextPane.setText(String.valueOf(score));
         } else {
             if (obj_id == 3) {
-                joystick.paddleX = x;
+                joystick.paddleX = p.x;
             }
             if (obj_id == 4) {
-                joystick.ballX = x;
+                joystick.ballX = p.x;
             }
-            view.populatePoint(x, y, obj_id);
+            view.populatePoint(p.x, p.y, obj_id);
         }
     }
 
@@ -105,7 +100,7 @@ public class BrickBreakerController {
 
         brain.start();
         Optional<Long> optX;
-        while ((optX = takeOrConfirmDeath(brain, outputs)).isPresent()) {
+        while ((optX = takeOrConfirmDeath()).isPresent()) {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
             int obj_id = outputs.take().intValue();
