@@ -12,6 +12,7 @@ public class DroidMazeController {
     BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
     IntCode brain;
     DroidMazeView view = new DroidMazeView(this);
+    DroidMazeModel model = new DroidMazeModel();
 
     public DroidMazeController(long[] brainTape) {
         brain = new IntCode(brainTape, inputs, outputs);
@@ -21,6 +22,10 @@ public class DroidMazeController {
     public void moveDroid(CardinalDirection direction) throws InterruptedException {
         inputs.put(direction.inputInstruction);
         int outputInstruction = outputs.take().intValue();
+        if (outputInstruction != 0) {
+            model.moveDroid(direction);
+            System.out.println(model.droidLocation);
+        }
         System.out.println(outputInstruction);
     }
 
