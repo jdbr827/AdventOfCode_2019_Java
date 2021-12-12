@@ -11,9 +11,11 @@ public class DroidMazeModel {
     public Map<Point,Boolean> isOpen = new HashMap<>();
     Point droidLocation = new Point(0, 0);
     Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+    Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
     private Stack<CardinalDirection> directionStack;
     private CardinalDirection attemptDirection;
     DroidMazeController controller;
+    private final CardinalDirection startDirection = CardinalDirection.NORTH;
 
     DroidMazeModel(DroidMazeController controller) {
         this.controller = controller;
@@ -24,31 +26,37 @@ public class DroidMazeModel {
 
 
 
-    public void droidBrain() throws InterruptedException {
-        CardinalDirection startDirection = CardinalDirection.NORTH;
+    public void findOxygenTank() throws InterruptedException {
         attemptDirection = startDirection;
         directionStack = new Stack<>();
         int result;
-        while ((result = controller.moveDroid(attemptDirection)) != 2) {
+        while ((result = controller.moveDroidFindingTank(attemptDirection)) != 2) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
             if (result == 1) {
                 directionStack.push(attemptDirection);
                 attemptDirection = attemptDirection.counterclockwise();
+
             } else {
                 attemptDirection = attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
                     CardinalDirection prevDir = directionStack.pop();
-                    controller.moveDroid(prevDir.opposite());
+                    controller.moveDroidFindingTank(prevDir.opposite());
                     attemptDirection = prevDir.clockwise();
                 }
             }
         }
         directionStack.push(attemptDirection);
         attemptDirection = attemptDirection.counterclockwise();
+        oxygenDistance.put((Point) droidLocation.clone(), 0);
+    }
 
+    public void oxygenTankDFS() throws InterruptedException {
+        int result;
+        directionStack.clear();
+        attemptDirection = startDirection;
         while (!directionStack.isEmpty() || !attemptDirection.equals(startDirection.counterclockwise())) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
-            result = controller.moveDroid(attemptDirection);
+            result = controller.moveDroidFromTank(attemptDirection);
             if (result != 0) {
                 directionStack.push(attemptDirection);
                 attemptDirection = attemptDirection.counterclockwise();
@@ -56,7 +64,7 @@ public class DroidMazeModel {
                 attemptDirection = attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
                     CardinalDirection prevDir = directionStack.pop();
-                    controller.moveDroid(prevDir.opposite());
+                    controller.moveDroidFromTank(prevDir.opposite());
                     attemptDirection = prevDir.clockwise();
                 }
             }

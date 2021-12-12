@@ -23,11 +23,14 @@ public class DroidMazeView {
     private JButton westButton;
     private JButton eastButton;
     private JButton autopilotButton;
+    private JButton oxygenTankDistanceButton;
     Point cartesianOrigin = new Point(0, 0);
     Point droidLocation;
     DroidMazeController controller;
     DefaultTableModel ndtm = new DefaultTableModel(1, 1);
     Map<Point, Color> cartesianColorMap = new HashMap<>();
+    private Map<Point,Boolean> usingOxygenDistance = new HashMap<>();
+    private boolean findingOxygenTankDistance = false;
 
     public static Color backgroundColorFunction(int input) {
         switch (input) {
@@ -40,6 +43,15 @@ public class DroidMazeView {
             default:
                 return Color.GRAY;
         }
+    }
+
+    private void moveDroid(CardinalDirection direction) throws InterruptedException {
+        if (!findingOxygenTankDistance) {
+            controller.moveDroidFindingTank(direction);
+        } else {
+            controller.moveDroidFromTank(direction);
+        }
+
     }
 
     public DroidMazeView(DroidMazeController droidMazeController) {
@@ -69,7 +81,7 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.moveDroid(CardinalDirection.SOUTH);
+                    moveDroid(CardinalDirection.SOUTH);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -80,7 +92,7 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.moveDroid(CardinalDirection.NORTH);
+                    moveDroid(CardinalDirection.NORTH);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -90,7 +102,7 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.moveDroid(CardinalDirection.EAST);
+                    moveDroid(CardinalDirection.EAST);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -100,7 +112,7 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.moveDroid(CardinalDirection.WEST);
+                    moveDroid(CardinalDirection.WEST);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -111,12 +123,27 @@ public class DroidMazeView {
             public void actionPerformed(ActionEvent e) {
                 Thread runDroid = new Thread(() -> {
                     try {
-                        controller.model.droidBrain();
+                        controller.findOxygenTank();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 });
                 runDroid.start();
+            }
+        });
+        oxygenTankDistanceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                findingOxygenTankDistance = true;
+                Thread runDroid = new Thread(() -> {
+                    try {
+                        controller.computeOxygenTankDistances();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+                runDroid.start();
+
             }
         });
     }
@@ -191,10 +218,13 @@ public class DroidMazeView {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                         Point p = convertJavaToCartesian(new Point(column, row));
                         Point q = new Point(p.y, -p.x);
-                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
+//                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
                         l.setBackground(cartesianColorMap.getOrDefault(q, Color.GRAY));
                         if (q.equals(controller.model.droidLocation)) {
                             l.setBackground(Color.PINK);
+                        }
+                        if (usingOxygenDistance.getOrDefault(q, false)) {
+                            l.setForeground(Color.BLUE);
                         }
                         //Return the JLabel which renders the cell.
                         return l;
@@ -202,6 +232,13 @@ public class DroidMazeView {
                 };
             }
         };
+    }
+
+    public void setOxygenDistance(Point droidLocation, int distance) {
+        usingOxygenDistance.put((Point) droidLocation.clone(), true);
+        Point javaPoint = convertCartesianToJava(droidLocation);
+        ndtm.setValueAt(distance, javaPoint.x, javaPoint.y);
+
     }
 
 

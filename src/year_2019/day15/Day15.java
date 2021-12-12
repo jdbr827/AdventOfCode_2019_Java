@@ -6,5 +6,7 @@ public class Day15 {
 
     public static void main(String[] args) {
         DroidMazeController controller = new DroidMazeController(DAY_15_PUZZLE_INPUT);
+
+        //System.out.println(controller.findOxygenTank());
     }
 }
