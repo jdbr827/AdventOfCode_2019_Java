@@ -24,11 +24,8 @@ public class DroidMazeController {
     }
 
     public void droidBrain() throws InterruptedException {
-        CardinalDirection lastDirection = CardinalDirection.EAST;
-        CardinalDirection attemptDirection = CardinalDirection.EAST;
-        CardinalDirection rightOfLast = CardinalDirection.SOUTH;
-        CardinalDirection backTrack = CardinalDirection.WEST;
-        CardinalDirection leftOfLast = CardinalDirection.NORTH;
+        CardinalDirection startDirection = CardinalDirection.NORTH;
+        CardinalDirection attemptDirection = startDirection;
         Stack<CardinalDirection> directionStack = new Stack<>();
         int result;
         while ((result = moveDroid(attemptDirection)) != 2) {
@@ -38,7 +35,24 @@ public class DroidMazeController {
                 attemptDirection = attemptDirection.counterclockwise();
             } else {
                 attemptDirection = attemptDirection.clockwise();
-                while (attemptDirection.equals(directionStack.peek().opposite())) {
+                while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
+                    CardinalDirection prevDir = directionStack.pop();
+                    moveDroid(prevDir.opposite());
+                    attemptDirection = prevDir.clockwise();
+                }
+            }
+        }
+        directionStack.push(attemptDirection);
+        attemptDirection = attemptDirection.counterclockwise();
+        while (!directionStack.isEmpty() || !attemptDirection.equals(startDirection.counterclockwise())) {
+//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
+            result = moveDroid(attemptDirection);
+            if (result != 0) {
+                directionStack.push(attemptDirection);
+                attemptDirection = attemptDirection.counterclockwise();
+            } else {
+                attemptDirection = attemptDirection.clockwise();
+                while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
                     CardinalDirection prevDir = directionStack.pop();
                     moveDroid(prevDir.opposite());
                     attemptDirection = prevDir.clockwise();
