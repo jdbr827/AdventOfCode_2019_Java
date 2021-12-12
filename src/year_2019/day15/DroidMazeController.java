@@ -3,6 +3,7 @@ package year_2019.day15;
 import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;
+import java.util.Stack;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,6 +14,7 @@ public class DroidMazeController {
     IntCode brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel();
+
 
     public DroidMazeController(long[] brainTape) {
         brain = new IntCode(brainTape, inputs, outputs);
@@ -27,22 +29,19 @@ public class DroidMazeController {
         CardinalDirection rightOfLast = CardinalDirection.SOUTH;
         CardinalDirection backTrack = CardinalDirection.WEST;
         CardinalDirection leftOfLast = CardinalDirection.NORTH;
+        Stack<CardinalDirection> directionStack = new Stack<>();
         int result;
         while ((result = moveDroid(attemptDirection)) != 2) {
-
+//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
             if (result == 1) {
-                lastDirection = attemptDirection;
-                rightOfLast = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 1, 4)];
-                backTrack = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 2, 4)];
-                leftOfLast = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 3, 4)];
+                directionStack.push(attemptDirection);
+                attemptDirection = attemptDirection.counterclockwise();
             } else {
-                if (attemptDirection.equals(lastDirection)){
-                    attemptDirection = rightOfLast;
-                } else if (attemptDirection.equals(rightOfLast)) {
-                    attemptDirection = leftOfLast;
-                } else {
-                    moveDroid(backTrack);
-                    attemptDirection = rightOfLast;
+                attemptDirection = attemptDirection.clockwise();
+                while (attemptDirection.equals(directionStack.peek().opposite())) {
+                    CardinalDirection prevDir = directionStack.pop();
+                    moveDroid(prevDir.opposite());
+                    attemptDirection = prevDir.clockwise();
                 }
             }
         }
@@ -62,10 +61,12 @@ public class DroidMazeController {
             }
 //            view.paintDroid(model.droidLocation);
             distance = Math.min(distance + 1, model.dfsDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
-            model.dfsDistance.put((Point) model.droidLocation.clone(), distance);
+            model.dfsDistance.put(desiredPoint, distance);
+            model.isOpen.put(desiredPoint, true);
             view.setDistance(model.droidLocation, distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
+             model.isOpen.put(desiredPoint, false);
         }
         view.table1.repaint();
 
@@ -91,7 +92,18 @@ public class DroidMazeController {
         CardinalDirection(long inputInstruction, Point velocity) {
             this.inputInstruction = inputInstruction;
             this.velocity = velocity;
+        }
 
+        CardinalDirection opposite() {
+            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 2, 4)];
+        }
+
+        CardinalDirection clockwise() {
+            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 1, 4)];
+        }
+
+        CardinalDirection counterclockwise() {
+            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 3, 4)];
         }
     }
 }
