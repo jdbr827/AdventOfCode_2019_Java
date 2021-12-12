@@ -111,7 +111,7 @@ public class DroidMazeView {
             public void actionPerformed(ActionEvent e) {
                 Thread runDroid = new Thread(() -> {
                     try {
-                        controller.droidBrain();
+                        controller.model.droidBrain();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }

@@ -3,8 +3,6 @@ package year_2019.day15;
 import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;
-import java.util.Stack;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +11,7 @@ public class DroidMazeController {
     BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
     IntCode brain;
     DroidMazeView view = new DroidMazeView(this);
-    DroidMazeModel model = new DroidMazeModel();
+    DroidMazeModel model = new DroidMazeModel(this);
 
 
     public DroidMazeController(long[] brainTape) {
@@ -21,44 +19,6 @@ public class DroidMazeController {
         brain.start();
         model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
         view.setDistance(model.droidLocation, 0);
-    }
-
-    public void droidBrain() throws InterruptedException {
-        CardinalDirection startDirection = CardinalDirection.NORTH;
-        CardinalDirection attemptDirection = startDirection;
-        Stack<CardinalDirection> directionStack = new Stack<>();
-        int result;
-        while ((result = moveDroid(attemptDirection)) != 2) {
-//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
-            if (result == 1) {
-                directionStack.push(attemptDirection);
-                attemptDirection = attemptDirection.counterclockwise();
-            } else {
-                attemptDirection = attemptDirection.clockwise();
-                while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.pop();
-                    moveDroid(prevDir.opposite());
-                    attemptDirection = prevDir.clockwise();
-                }
-            }
-        }
-        directionStack.push(attemptDirection);
-        attemptDirection = attemptDirection.counterclockwise();
-        while (!directionStack.isEmpty() || !attemptDirection.equals(startDirection.counterclockwise())) {
-//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
-            result = moveDroid(attemptDirection);
-            if (result != 0) {
-                directionStack.push(attemptDirection);
-                attemptDirection = attemptDirection.counterclockwise();
-            } else {
-                attemptDirection = attemptDirection.clockwise();
-                while (!directionStack.isEmpty() && attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.pop();
-                    moveDroid(prevDir.opposite());
-                    attemptDirection = prevDir.clockwise();
-                }
-            }
-        }
     }
 
     public int moveDroid(CardinalDirection direction) throws InterruptedException {
