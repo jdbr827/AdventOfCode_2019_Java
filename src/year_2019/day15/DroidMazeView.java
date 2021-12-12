@@ -192,7 +192,9 @@ public class DroidMazeView {
         };
     }
 
-    public void paintDroid(Point droidLocation) {
 
+    public void setDistance(Point droidLocation, int distance) {
+        Point javaPoint = convertCartesianToJava(droidLocation);
+        ndtm.setValueAt(distance, javaPoint.x, javaPoint.y);
     }
 };

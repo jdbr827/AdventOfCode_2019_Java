@@ -17,16 +17,22 @@ public class DroidMazeController {
     public DroidMazeController(long[] brainTape) {
         brain = new IntCode(brainTape, inputs, outputs);
         brain.start();
+        model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
+        view.setDistance(model.droidLocation, 0);
     }
 
     public void moveDroid(CardinalDirection direction) throws InterruptedException {
         inputs.put(direction.inputInstruction);
         int outputInstruction = outputs.take().intValue();
+        int distance = model.dfsDistance.get(model.droidLocation);
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
             view.paintPoint(desiredPoint, Color.WHITE);
-            view.paintDroid(model.droidLocation);
+//            view.paintDroid(model.droidLocation);
+            distance = Math.min(distance + 1, model.dfsDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
+            model.dfsDistance.put((Point) model.droidLocation.clone(), distance);
+            view.setDistance(model.droidLocation, distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
         }
