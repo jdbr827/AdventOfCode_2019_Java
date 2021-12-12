@@ -120,19 +120,16 @@ public class DroidMazeView {
             for (int i = 0; i < ndtm.getRowCount(); i++) {
                 newCol.add(-1);
             }
-//            ndtm.addColumn(0, newCol);
             DefaultTableModel newDTM = new DefaultTableModel(ndtm.getRowCount(), ndtm.getColumnCount() + 1);
             Vector<Vector> oldDataVector = ndtm.getDataVector();
             for (Vector v : oldDataVector) {
                 v.insertElementAt(-1, 0);
             }
-//            oldDataVector.insertElementAt(newCol, 0);
             Vector<Integer> newIdentifiers = new Vector<>();
             for (int i = 0; i < newDTM.getColumnCount(); i++) {
                 newIdentifiers.add(i);
             }
             ndtm.setDataVector(oldDataVector, newIdentifiers);
-//            table1.moveColumn(ndtm.getColumnCount() - 1, 0);
             Y += 1;
             cartesianOrigin.translate(1, 0);
         }
@@ -160,11 +157,8 @@ public class DroidMazeView {
             }
             ndtm.addRow(newRow);
         }
-//        System.out.println(desiredPointJava);
-//        System.out.println(ndtm.getRowCount());
-//        System.out.println(ndtm.getColumnCount());
         cartesianColorMap.put(desiredPointCartesian, color);
-        ndtm.setValueAt(-1, X, Y);
+        table1.repaint();
 
     }
 
