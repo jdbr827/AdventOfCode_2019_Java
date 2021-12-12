@@ -28,7 +28,11 @@ public class DroidMazeController {
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
-            view.paintPoint(desiredPoint, Color.WHITE);
+            if (outputInstruction == 2) {
+                view.paintPoint(desiredPoint, Color.GREEN);
+            } else {
+                view.paintPoint(desiredPoint, Color.WHITE);
+            }
 //            view.paintDroid(model.droidLocation);
             distance = Math.min(distance + 1, model.dfsDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
             model.dfsDistance.put((Point) model.droidLocation.clone(), distance);
