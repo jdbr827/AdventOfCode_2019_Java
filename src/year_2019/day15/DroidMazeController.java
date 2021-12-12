@@ -26,6 +26,7 @@ public class DroidMazeController {
         if (outputInstruction != 0) {
             model.moveDroid(direction);
             view.paintPoint(desiredPoint, Color.WHITE);
+            view.paintDroid(model.droidLocation);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
         }

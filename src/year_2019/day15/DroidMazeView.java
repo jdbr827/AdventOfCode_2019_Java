@@ -178,13 +178,21 @@ public class DroidMazeView {
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                         Point p = convertJavaToCartesian(new Point(column, row));
-                        System.out.println(row + " " + column + " " + new Point(p.y, -p.x));
-                        l.setBackground(cartesianColorMap.getOrDefault(new Point(p.y, -p.x), Color.GRAY));
+                        Point q = new Point(p.y, -p.x);
+                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
+                        l.setBackground(cartesianColorMap.getOrDefault(q, Color.GRAY));
+                        if (q.equals(controller.model.droidLocation)) {
+                            l.setBackground(Color.PINK);
+                        }
                         //Return the JLabel which renders the cell.
                         return l;
                     }
                 };
             }
         };
+    }
+
+    public void paintDroid(Point droidLocation) {
+
     }
 };
