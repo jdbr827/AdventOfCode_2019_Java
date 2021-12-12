@@ -21,7 +21,34 @@ public class DroidMazeController {
         view.setDistance(model.droidLocation, 0);
     }
 
-    public void moveDroid(CardinalDirection direction) throws InterruptedException {
+    public void droidBrain() throws InterruptedException {
+        CardinalDirection lastDirection = CardinalDirection.EAST;
+        CardinalDirection attemptDirection = CardinalDirection.EAST;
+        CardinalDirection rightOfLast = CardinalDirection.SOUTH;
+        CardinalDirection backTrack = CardinalDirection.WEST;
+        CardinalDirection leftOfLast = CardinalDirection.NORTH;
+        int result;
+        while ((result = moveDroid(attemptDirection)) != 2) {
+
+            if (result == 1) {
+                lastDirection = attemptDirection;
+                rightOfLast = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 1, 4)];
+                backTrack = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 2, 4)];
+                leftOfLast = CardinalDirection.values()[Math.floorMod(lastDirection.ordinal() + 3, 4)];
+            } else {
+                if (attemptDirection.equals(lastDirection)){
+                    attemptDirection = rightOfLast;
+                } else if (attemptDirection.equals(rightOfLast)) {
+                    attemptDirection = leftOfLast;
+                } else {
+                    moveDroid(backTrack);
+                    attemptDirection = rightOfLast;
+                }
+            }
+        }
+    }
+
+    public int moveDroid(CardinalDirection direction) throws InterruptedException {
         inputs.put(direction.inputInstruction);
         int outputInstruction = outputs.take().intValue();
         int distance = model.dfsDistance.get(model.droidLocation);
@@ -40,6 +67,7 @@ public class DroidMazeController {
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
         }
+        view.table1.repaint();
 
 
         System.out.println(desiredPoint);
@@ -47,12 +75,13 @@ public class DroidMazeController {
         System.out.println(model.droidLocation);
 //        view.paintPoint(desiredPoint, outputInstruction);
         System.out.println("-----");
+        return outputInstruction;
     }
 
     enum CardinalDirection {
         NORTH(1L, new Point(0, 1)),
-        SOUTH(2L, new Point(0, -1)),
         EAST(3L, new Point(1, 0)),
+        SOUTH(2L, new Point(0, -1)),
         WEST(4L, new Point(-1, 0));
 
         final long inputInstruction;

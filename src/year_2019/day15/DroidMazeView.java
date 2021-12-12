@@ -13,17 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import static year_2019.day11.Day11Hull.createRenderer;
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
 public class DroidMazeView {
     private JPanel panel1;
-    private JTable table1;
+    JTable table1;
     private JButton northButton;
     private JButton southButton;
     private JButton westButton;
     private JButton eastButton;
-    private JButton resetButton;
+    private JButton autopilotButton;
     Point cartesianOrigin = new Point(0, 0);
     Point droidLocation;
     DroidMazeController controller;
@@ -59,7 +58,7 @@ public class DroidMazeView {
         frame.setVisible(true);
 
 
-        resetButton.addActionListener(new ActionListener() {
+        autopilotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cartesianOrigin = new Point(0, 0);
@@ -105,6 +104,19 @@ public class DroidMazeView {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        autopilotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread runDroid = new Thread(() -> {
+                    try {
+                        controller.droidBrain();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+                runDroid.start();
             }
         });
     }
