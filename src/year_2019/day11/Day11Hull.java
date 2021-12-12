@@ -45,7 +45,7 @@ public class Day11Hull {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Map<Point, Long> paintedHull = Day11.paintHull();
+                    Map<Point, Long> paintedHull = new Day11().paintHull();
                     renderTable(table1, paintedHull, Day11Hull::hullPaintingColorFunction);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();

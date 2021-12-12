@@ -25,7 +25,7 @@ public class Day11 {
         }
     }
 
-    static class HullPaintingRobot{
+    class HullPaintingRobot{
         Point position = new Point(0, 0);
         Direction facing = Direction.UP;
 
@@ -69,7 +69,7 @@ public class Day11 {
         return paint;
     }
 
-    public static Map<Point, Long> paintHull() throws InterruptedException {
+    public Map<Point, Long> paintHull() throws InterruptedException {
         Map<Point, Long> hull = new HashMap<>();
         BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
