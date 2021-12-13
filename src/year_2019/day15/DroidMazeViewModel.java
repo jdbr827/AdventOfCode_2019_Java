@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 
 public class DroidMazeViewModel extends CartesianViewModel {
-    Point droidLocation;
+    Point droidLocation = new Point(0, 0);
     DefaultTableModel dtm = new DefaultTableModel(1, 1);
     Map<Point, Color> cartesianColorMap = new HashMap<Point, Color>();
 

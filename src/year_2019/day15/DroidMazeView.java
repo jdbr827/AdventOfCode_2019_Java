@@ -52,7 +52,7 @@ public class DroidMazeView {
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
         table1.setModel(droidMazeViewModel.dtm);
-        droidMazeViewModel.dtm.setValueAt(1, 0, 0);
+        droidMazeViewModel.setValueAtCartesian(new Point(0, 0), 0);
         DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
         table1.setDefaultRenderer(Object.class, renderer);
         table1.prepareRenderer(renderer, 0, 0);
@@ -66,16 +66,14 @@ public class DroidMazeView {
 
 
         autopilotButton.addActionListener(e -> droidMazeViewModel.droidLocation = new Point(0, 0));
-        southButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    moveDroid(CardinalDirection.SOUTH);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
 
+        southButton.addActionListener(e -> {
+            try {
+                moveDroid(CardinalDirection.SOUTH);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
+
         });
         northButton.addActionListener(new ActionListener() {
             @Override
