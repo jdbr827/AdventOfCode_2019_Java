@@ -25,19 +25,6 @@ public class DroidMazeView {
     private Map<Point,Boolean> usingOxygenDistance = new HashMap<>();
     private boolean findingOxygenTankDistance = false;
 
-    public static Color backgroundColorFunction(int input) {
-        switch (input) {
-            case 0:
-                return Color.BLACK;
-            case 1:
-                return Color.WHITE;
-            case 2:
-                return Color.GREEN;
-            default:
-                return Color.GRAY;
-        }
-    }
-
     private void moveDroid(CardinalDirection direction) throws InterruptedException {
         if (!findingOxygenTankDistance) {
             controller.moveDroidFindingTank(direction);

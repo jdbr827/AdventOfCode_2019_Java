@@ -20,6 +20,7 @@ public class DroidMazeController {
         brain.start();
         model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
         view.setDistance(model.droidLocation, 0);
+        view.paintPoint(new Point(0, 0), Color.WHITE);
     }
 
     public int findOxygenTank() throws InterruptedException {
