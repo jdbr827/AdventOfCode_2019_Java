@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
@@ -49,6 +50,7 @@ public class DroidMazeView {
 
     }
 
+
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
         table1.setModel(droidMazeViewModel.dtm);
@@ -67,44 +69,12 @@ public class DroidMazeView {
 
         autopilotButton.addActionListener(e -> droidMazeViewModel.droidLocation = new Point(0, 0));
 
-        southButton.addActionListener(e -> {
-            try {
-                moveDroid(CardinalDirection.SOUTH);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+        southButton.addActionListener(e -> tryMoveDroid(CardinalDirection.SOUTH));
+        northButton.addActionListener(e -> tryMoveDroid(CardinalDirection.NORTH));
+        eastButton.addActionListener(e -> tryMoveDroid(CardinalDirection.EAST));
+        westButton.addActionListener(e -> tryMoveDroid(CardinalDirection.WEST));
 
-        });
-        northButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    moveDroid(CardinalDirection.NORTH);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        eastButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    moveDroid(CardinalDirection.EAST);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        westButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    moveDroid(CardinalDirection.WEST);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+
         autopilotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,6 +103,14 @@ public class DroidMazeView {
 
             }
         });
+    }
+
+    private void tryMoveDroid(CardinalDirection direction) {
+        try {
+            moveDroid(direction);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void paintPoint(Point desiredPointCartesian, Color color) {
