@@ -65,13 +65,7 @@ public class DroidMazeView {
         frame.setVisible(true);
 
 
-        autopilotButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                droidMazeViewModel.cartesianOrigin = new Point(0, 0);
-                droidMazeViewModel.droidLocation = new Point(0, 0);
-            }
-        });
+        autopilotButton.addActionListener(e -> droidMazeViewModel.droidLocation = new Point(0, 0));
         southButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,7 +154,7 @@ public class DroidMazeView {
                         Point q = new Point(p.y, -p.x);
 //                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
                         l.setBackground(droidMazeViewModel.cartesianColorMap.getOrDefault(q, Color.GRAY));
-                        if (q.equals(controller.model.droidLocation)) {
+                        if (q.equals(droidMazeViewModel.droidLocation)) {
                             l.setBackground(Color.PINK);
                         }
                         if (usingOxygenDistance.getOrDefault(q, false)) {
@@ -184,5 +178,9 @@ public class DroidMazeView {
 
     public void setDistance(Point droidLocation, int distance) {
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
+    }
+
+    public void setDroidLocation(Point droidLocation) {
+        droidMazeViewModel.droidLocation = (Point) droidLocation.clone();
     }
 };

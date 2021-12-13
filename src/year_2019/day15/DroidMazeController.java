@@ -34,6 +34,7 @@ public class DroidMazeController {
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
+            view.setDroidLocation(model.droidLocation);
             if (outputInstruction == 2) {
                 view.paintPoint(desiredPoint, Color.GREEN);
             } else {
@@ -66,6 +67,7 @@ public class DroidMazeController {
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
+            view.setDroidLocation(model.droidLocation);
             if (outputInstruction == 2) {
                 view.paintPoint(desiredPoint, Color.GREEN);
             } else {

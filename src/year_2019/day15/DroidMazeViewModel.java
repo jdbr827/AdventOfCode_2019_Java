@@ -1,17 +1,17 @@
 package year_2019.day15;
 
+import year_2019.CartesianViewModel;
+
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class DroidMazeViewModel {
-    Point cartesianOrigin = new Point(0, 0);
+public class DroidMazeViewModel extends CartesianViewModel {
     Point droidLocation;
     DefaultTableModel dtm = new DefaultTableModel(1, 1);
     Map<Point, Color> cartesianColorMap = new HashMap<Point, Color>();
-    DroidMazeView view;
 
     public DroidMazeViewModel() {
     }
@@ -64,14 +64,6 @@ public class DroidMazeViewModel {
             }
             this.dtm.addRow(newRow);
         }
-    }
-
-    Point convertCartesianToJava(Point cartesianPoint) {
-        return new Point(cartesianOrigin.y - cartesianPoint.y, cartesianPoint.x + cartesianOrigin.x);
-    }
-
-    Point convertJavaToCartesian(Point javaPoint) {
-        return new Point(javaPoint.y - cartesianOrigin.y, javaPoint.x - cartesianOrigin.x);
     }
 
     void setColor(Point desiredPointCartesian, Color color) {
