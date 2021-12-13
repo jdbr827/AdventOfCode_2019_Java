@@ -4,18 +4,17 @@ import year_2019.day11.Day11Hull;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
 public class DroidMazeView {
+    final DroidMazeViewModel droidMazeViewModel = new DroidMazeViewModel();
     private JPanel panel1;
     JTable table1;
     private JButton northButton;
@@ -24,11 +23,7 @@ public class DroidMazeView {
     private JButton eastButton;
     private JButton autopilotButton;
     private JButton oxygenTankDistanceButton;
-    Point cartesianOrigin = new Point(0, 0);
-    Point droidLocation;
     DroidMazeController controller;
-    DefaultTableModel ndtm = new DefaultTableModel(1, 1);
-    Map<Point, Color> cartesianColorMap = new HashMap<>();
     private Map<Point,Boolean> usingOxygenDistance = new HashMap<>();
     private boolean findingOxygenTankDistance = false;
 
@@ -56,8 +51,8 @@ public class DroidMazeView {
 
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
-        table1.setModel(ndtm);
-        ndtm.setValueAt(1, 0, 0);
+        table1.setModel(droidMazeViewModel.dtm);
+        droidMazeViewModel.dtm.setValueAt(1, 0, 0);
         DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
         table1.setDefaultRenderer(Object.class, renderer);
         table1.prepareRenderer(renderer, 0, 0);
@@ -73,8 +68,8 @@ public class DroidMazeView {
         autopilotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cartesianOrigin = new Point(0, 0);
-                droidLocation = new Point(0, 0);
+                droidMazeViewModel.cartesianOrigin = new Point(0, 0);
+                droidMazeViewModel.droidLocation = new Point(0, 0);
             }
         });
         southButton.addActionListener(new ActionListener() {
@@ -149,64 +144,9 @@ public class DroidMazeView {
     }
 
     public void paintPoint(Point desiredPointCartesian, Color color) {
-        Point desiredPointJava = convertCartesianToJava(desiredPointCartesian);
-        //assert(convertJavaToCartesian(desiredPointJava).equals(desiredPointCartesian));
-
-        int Y = desiredPointJava.y;
-        int X = desiredPointJava.x;
-        while (Y < 0) {
-            Vector<Integer> newCol = new Vector<>();
-            for (int i = 0; i < ndtm.getRowCount(); i++) {
-                newCol.add(-1);
-            }
-            DefaultTableModel newDTM = new DefaultTableModel(ndtm.getRowCount(), ndtm.getColumnCount() + 1);
-            Vector<Vector> oldDataVector = ndtm.getDataVector();
-            for (Vector v : oldDataVector) {
-                v.insertElementAt(-1, 0);
-            }
-            Vector<Integer> newIdentifiers = new Vector<>();
-            for (int i = 0; i < newDTM.getColumnCount(); i++) {
-                newIdentifiers.add(i);
-            }
-            ndtm.setDataVector(oldDataVector, newIdentifiers);
-            Y += 1;
-            cartesianOrigin.translate(1, 0);
-        }
-        while (Y >= ndtm.getColumnCount()) {
-            Vector<Integer> newCol = new Vector<>();
-            for (int i = 0; i < ndtm.getRowCount(); i++) {
-                newCol.add(-1);
-            }
-            ndtm.addColumn(0, newCol);
-        }
-
-        while (X < 0) {
-            Vector<Integer> newRow = new Vector<>();
-            for (int i = 0; i < ndtm.getColumnCount(); i++) {
-                newRow.add(-1);
-            }
-            ndtm.insertRow(0, newRow);
-            X += 1;
-            cartesianOrigin.translate(0, 1);
-        }
-        while (X >= ndtm.getRowCount()) {
-            Vector<Integer> newRow = new Vector<>();
-            for (int i = 0; i < ndtm.getColumnCount(); i++) {
-                newRow.add(-1);
-            }
-            ndtm.addRow(newRow);
-        }
-        cartesianColorMap.put(desiredPointCartesian, color);
+        droidMazeViewModel.setColor(desiredPointCartesian, color);
         table1.repaint();
 
-    }
-
-    private Point convertCartesianToJava(Point cartesianPoint) {
-        return new Point(cartesianOrigin.y - cartesianPoint.y, cartesianPoint.x + cartesianOrigin.x);
-    }
-
-    private Point convertJavaToCartesian(Point javaPoint) {
-        return new Point(javaPoint.y - cartesianOrigin.y, javaPoint.x - cartesianOrigin.x);
     }
 
     private void createUIComponents() {
@@ -216,10 +156,10 @@ public class DroidMazeView {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        Point p = convertJavaToCartesian(new Point(column, row));
+                        Point p = droidMazeViewModel.convertJavaToCartesian(new Point(column, row));
                         Point q = new Point(p.y, -p.x);
 //                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
-                        l.setBackground(cartesianColorMap.getOrDefault(q, Color.GRAY));
+                        l.setBackground(droidMazeViewModel.cartesianColorMap.getOrDefault(q, Color.GRAY));
                         if (q.equals(controller.model.droidLocation)) {
                             l.setBackground(Color.PINK);
                         }
@@ -236,14 +176,13 @@ public class DroidMazeView {
 
     public void setOxygenDistance(Point droidLocation, int distance) {
         usingOxygenDistance.put((Point) droidLocation.clone(), true);
-        Point javaPoint = convertCartesianToJava(droidLocation);
-        ndtm.setValueAt(distance, javaPoint.x, javaPoint.y);
-
+        droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 
 
+
+
     public void setDistance(Point droidLocation, int distance) {
-        Point javaPoint = convertCartesianToJava(droidLocation);
-        ndtm.setValueAt(distance, javaPoint.x, javaPoint.y);
+        droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 };
