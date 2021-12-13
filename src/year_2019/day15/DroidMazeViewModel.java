@@ -12,11 +12,12 @@ public class DroidMazeViewModel extends CartesianViewModel {
     Point droidLocation = new Point(0, 0);
     DefaultTableModel dtm = new DefaultTableModel(1, 1);
     Map<Point, Color> cartesianColorMap = new HashMap<Point, Color>();
+    Map<Point,Boolean> usingOxygenDistance = new HashMap<>();
 
     public DroidMazeViewModel() {
     }
 
-    void addNewPointIfNecessary(DefaultTableModel dtm, Point desiredPointCartesian) {
+    private void addNewPointIfNecessary(DefaultTableModel dtm, Point desiredPointCartesian) {
         Point desiredPointJava = convertCartesianToJava(desiredPointCartesian);
         //assert(convertJavaToCartesian(desiredPointJava).equals(desiredPointCartesian));
 
@@ -66,13 +67,28 @@ public class DroidMazeViewModel extends CartesianViewModel {
         }
     }
 
-    void setColor(Point desiredPointCartesian, Color color) {
+    public void setColorAtCartesian(Point desiredPointCartesian, Color color) {
         addNewPointIfNecessary(dtm, desiredPointCartesian);
         cartesianColorMap.put(desiredPointCartesian, color);
     }
 
-    void setValueAtCartesian(Point droidLocation, int distance) {
+    public void setValueAtCartesian(Point droidLocation, int distance) {
         Point javaPoint = convertCartesianToJava(droidLocation);
         dtm.setValueAt(distance, javaPoint.x, javaPoint.y);
+    }
+    public Color getBackgroundColorAtCartesian(Point q) {
+        Color color = cartesianColorMap.getOrDefault(q, Color.GRAY);
+        if (q.equals(droidLocation)) {
+            color = Color.PINK;
+        }
+        return color;
+    }
+
+    public Color getForegroundColorAtCartesian(Point q) {
+        Color color = Color.BLACK;
+        if (usingOxygenDistance.getOrDefault(q, false)) {
+            color = Color.BLUE;
+        }
+        return color;
     }
 }

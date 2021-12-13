@@ -3,7 +3,6 @@ package year_2019.day15;
 import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;
-import java.util.Comparator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -44,20 +43,11 @@ public class DroidMazeController {
 //            view.paintDroid(model.droidLocation);
             distance = Math.min(distance + 1, model.dfsDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
             model.dfsDistance.put(desiredPoint, distance);
-            model.isOpen.put(desiredPoint, true);
             view.setDistance(model.droidLocation, distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
-             model.isOpen.put(desiredPoint, false);
         }
-        view.table1.repaint();
-
-
-        System.out.println(desiredPoint);
-        System.out.println(outputInstruction);
-        System.out.println(model.droidLocation);
-//        view.paintPoint(desiredPoint, outputInstruction);
-        System.out.println("-----");
+        view.repaint();
         return outputInstruction;
     }
 
@@ -77,20 +67,12 @@ public class DroidMazeController {
 //            view.paintDroid(model.droidLocation);
             distance = Math.min(distance + 1, model.oxygenDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
             model.oxygenDistance.put(desiredPoint, distance);
-            model.isOpen.put(desiredPoint, true);
             view.setOxygenDistance(model.droidLocation, distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
-            model.isOpen.put(desiredPoint, false);
         }
-        view.table1.repaint();
+        view.repaint();
 
-
-        System.out.println(desiredPoint);
-        System.out.println(outputInstruction);
-        System.out.println(model.droidLocation);
-//        view.paintPoint(desiredPoint, outputInstruction);
-        System.out.println("-----");
         return outputInstruction;
     }
 
@@ -98,31 +80,4 @@ public class DroidMazeController {
         model.oxygenTankDFS();
     }
 
-    enum CardinalDirection {
-        NORTH(1L, new Point(0, 1)),
-        EAST(3L, new Point(1, 0)),
-        SOUTH(2L, new Point(0, -1)),
-        WEST(4L, new Point(-1, 0));
-
-        final long inputInstruction;
-        final Point velocity;
-
-
-        CardinalDirection(long inputInstruction, Point velocity) {
-            this.inputInstruction = inputInstruction;
-            this.velocity = velocity;
-        }
-
-        CardinalDirection opposite() {
-            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 2, 4)];
-        }
-
-        CardinalDirection clockwise() {
-            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 1, 4)];
-        }
-
-        CardinalDirection counterclockwise() {
-            return CardinalDirection.values()[Math.floorMod(this.ordinal() + 3, 4)];
-        }
-    }
 }

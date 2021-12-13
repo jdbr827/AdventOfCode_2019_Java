@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static year_2019.day15.DroidMazeController.CardinalDirection;
-
 public class DroidMazeModel {
-    public Map<Point,Boolean> isOpen = new HashMap<>();
     Point droidLocation = new Point(0, 0);
     Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
     Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point

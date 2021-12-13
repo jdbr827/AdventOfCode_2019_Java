@@ -6,10 +6,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
-
-import static year_2019.day15.DroidMazeController.CardinalDirection;
 
 public class DroidMazeView {
     final DroidMazeViewModel droidMazeViewModel = new DroidMazeViewModel();
@@ -22,7 +18,7 @@ public class DroidMazeView {
     private JButton autopilotButton;
     private JButton oxygenTankDistanceButton;
     DroidMazeController controller;
-    private Map<Point,Boolean> usingOxygenDistance = new HashMap<>();
+
     private boolean findingOxygenTankDistance = false;
 
     private void moveDroid(CardinalDirection direction) throws InterruptedException {
@@ -93,7 +89,7 @@ public class DroidMazeView {
     }
 
     public void paintPoint(Point desiredPointCartesian, Color color) {
-        droidMazeViewModel.setColor(desiredPointCartesian, color);
+        droidMazeViewModel.setColorAtCartesian(desiredPointCartesian, color);
         table1.repaint();
 
     }
@@ -115,23 +111,15 @@ public class DroidMazeView {
     }
 
     private JLabel colorJLabel(JLabel l, Point q) {
-        l.setBackground(droidMazeViewModel.cartesianColorMap.getOrDefault(q, Color.GRAY));
-        if (q.equals(droidMazeViewModel.droidLocation)) {
-            l.setBackground(Color.PINK);
-        }
-        if (usingOxygenDistance.getOrDefault(q, false)) {
-            l.setForeground(Color.BLUE);
-        }
-        //Return the JLabel which renders the cell.
+        l.setBackground(droidMazeViewModel.getBackgroundColorAtCartesian(q));
+        l.setForeground(droidMazeViewModel.getForegroundColorAtCartesian(q));
         return l;
     }
 
     public void setOxygenDistance(Point droidLocation, int distance) {
-        usingOxygenDistance.put((Point) droidLocation.clone(), true);
+        droidMazeViewModel.usingOxygenDistance.put((Point) droidLocation.clone(), true);
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
-
-
 
 
     public void setDistance(Point droidLocation, int distance) {
@@ -140,5 +128,9 @@ public class DroidMazeView {
 
     public void setDroidLocation(Point droidLocation) {
         droidMazeViewModel.droidLocation = (Point) droidLocation.clone();
+    }
+
+    public void repaint() {
+        table1.repaint();
     }
 };
