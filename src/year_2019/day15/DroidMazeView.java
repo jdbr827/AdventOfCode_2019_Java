@@ -66,18 +66,16 @@ public class DroidMazeView {
         frame.pack();
         frame.setVisible(true);
 
-
-        autopilotButton.addActionListener(e -> droidMazeViewModel.droidLocation = new Point(0, 0));
-
         southButton.addActionListener(e -> tryMoveDroid(CardinalDirection.SOUTH));
         northButton.addActionListener(e -> tryMoveDroid(CardinalDirection.NORTH));
         eastButton.addActionListener(e -> tryMoveDroid(CardinalDirection.EAST));
         westButton.addActionListener(e -> tryMoveDroid(CardinalDirection.WEST));
 
 
-        autopilotButton.addActionListener(new ActionListener() {
+        autopilotButton.addActionListener(new ActionListener() {;
             @Override
             public void actionPerformed(ActionEvent e) {
+                droidMazeViewModel.droidLocation = new Point(0, 0);
                 Thread runDroid = new Thread(() -> {
                     try {
                         controller.findOxygenTank();
