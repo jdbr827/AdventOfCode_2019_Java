@@ -1,7 +1,5 @@
 package year_2019.day15;
 
-import year_2019.day11.Day11Hull;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -10,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static year_2019.day15.DroidMazeController.CardinalDirection;
 
@@ -55,9 +52,6 @@ public class DroidMazeView {
         this.controller = droidMazeController;
         table1.setModel(droidMazeViewModel.dtm);
         droidMazeViewModel.setValueAtCartesian(new Point(0, 0), 0);
-        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(DroidMazeView::backgroundColorFunction);
-        table1.setDefaultRenderer(Object.class, renderer);
-        table1.prepareRenderer(renderer, 0, 0);
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
