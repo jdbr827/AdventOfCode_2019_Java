@@ -120,20 +120,23 @@ public class DroidMazeView {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                         Point p = droidMazeViewModel.convertJavaToCartesian(new Point(column, row));
                         Point q = new Point(p.y, -p.x);
-//                        System.out.println(row + " " + column + " " + q + controller.model.droidLocation);
-                        l.setBackground(droidMazeViewModel.cartesianColorMap.getOrDefault(q, Color.GRAY));
-                        if (q.equals(droidMazeViewModel.droidLocation)) {
-                            l.setBackground(Color.PINK);
-                        }
-                        if (usingOxygenDistance.getOrDefault(q, false)) {
-                            l.setForeground(Color.BLUE);
-                        }
-                        //Return the JLabel which renders the cell.
-                        return l;
+                        return colorJLabel(l, q);
                     }
                 };
             }
         };
+    }
+
+    private JLabel colorJLabel(JLabel l, Point q) {
+        l.setBackground(droidMazeViewModel.cartesianColorMap.getOrDefault(q, Color.GRAY));
+        if (q.equals(droidMazeViewModel.droidLocation)) {
+            l.setBackground(Color.PINK);
+        }
+        if (usingOxygenDistance.getOrDefault(q, false)) {
+            l.setForeground(Color.BLUE);
+        }
+        //Return the JLabel which renders the cell.
+        return l;
     }
 
     public void setOxygenDistance(Point droidLocation, int distance) {
