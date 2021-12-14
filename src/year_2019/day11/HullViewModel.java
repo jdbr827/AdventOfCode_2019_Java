@@ -12,6 +12,6 @@ public class HullViewModel extends CartesianColorViewModel {
 
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
-        return Color.BLACK;
+        return getBackgroundColorAtCartesian(q);
     }
 }

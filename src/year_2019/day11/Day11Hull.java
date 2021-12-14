@@ -101,7 +101,6 @@ public class Day11Hull {
 
     public void setValue(Point position, Long aLong) {
         viewModel.setColorAtCartesian(position, hullPaintingColorFunction(aLong));
-
     }
 
     public void repaint() {
