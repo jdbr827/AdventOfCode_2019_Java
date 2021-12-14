@@ -27,14 +27,7 @@ public class Day11 {
         statusAtPoint.add(hull.getOrDefault(robot.position, WHITE));
     }
 
-    /**
-     * Helper function to ensure no deadlock when brain halts
-     * @param brain
-     * @param outputs
-     * @return
-     * @throws InterruptedException
-     */
-    public static Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
+    public Optional<Long> takeOrConfirmDeath() throws InterruptedException {
         Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
         while(!paint.isPresent()) {
                 if (!brain.isAlive()) {
@@ -52,22 +45,31 @@ public class Day11 {
      * @return whether or not a paint-rotate pair was remaining
      */
     public boolean executeOneStep() throws InterruptedException {
-        Optional<Long> paint;
-        if ((paint = takeOrConfirmDeath(brain, outputs)).isPresent()) {
+        Optional<Long> paintInstruction;
+        if ((paintInstruction = takeOrConfirmDeath()).isPresent()) {
+            colorPoint(paintInstruction.get());
 
-            hull.put(robot.position, paint.get());
-            view.setColor(robot.position, paint.get());
+            // rotate the robot
+            long rotationInstruction = outputs.take();
+            if (rotationInstruction == 1L) {robot.rotateClockwise();} else {robot.rotateCounterclockwise();}
 
-            long rotationDirection = outputs.take();
-            if (rotationDirection == 1L) {robot.rotateClockwise();} else {robot.rotateCounterclockwise();}
-            robot.moveForward();
-            view.setRobotPosition(robot);
+            moveRobotForward();
 
             statusAtPoint.add(hull.getOrDefault(robot.position, BLACK));
 
         }
-        return paint.isPresent();
+        return paintInstruction.isPresent();
 
+    }
+
+    private void moveRobotForward() {
+        robot.moveForward();
+        view.setRobotPosition(robot);
+    }
+
+    private void colorPoint(Long paint) {
+        hull.put(robot.position, paint);
+        view.setColor(robot.position, paint);
     }
 
     public void autopilot() throws InterruptedException {
@@ -78,5 +80,6 @@ public class Day11 {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new Day11();
+
     }
 }
