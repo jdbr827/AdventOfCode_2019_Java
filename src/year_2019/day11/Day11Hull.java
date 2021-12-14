@@ -105,6 +105,7 @@ public class Day11Hull {
 
     public void setColor(Point position, Long aLong) {
         viewModel.setColorAtCartesian(position, hullPaintingColorFunction(aLong));
+        table1.repaint();
     }
 
     public void repaint() {
@@ -114,9 +115,11 @@ public class Day11Hull {
     public void setDroid(HullPaintingRobot robot) {
         viewModel.setDroid(robot);
         viewModel.updateRobot();
+        table1.repaint();
     }
 
     public void updateRobot() {
         viewModel.updateRobot();
+        table1.repaint();
     }
 }

@@ -22,11 +22,11 @@ public class Day11 {
     Day11(){
         view.setDroid(hullPainterModel.robot);
         colorPoint(WHITE);
-        readCurrentPoint();
+        inputCurrentColor();
         brain.start();
     }
 
-    private void readCurrentPoint() {
+    private void inputCurrentColor() {
         statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
     }
 
@@ -50,7 +50,7 @@ public class Day11 {
             long rotationInstruction = outputs.take();
             rotateRobot(rotationInstruction);
             moveRobotForward();
-            readCurrentPoint();
+            inputCurrentColor();
         }
         return paintInstruction.isPresent();
 
