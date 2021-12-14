@@ -25,14 +25,10 @@ public class Day11 {
         statusAtPoint.add(hullPainterModel.hull.getOrDefault(hullPainterModel.robot.position, WHITE));
     }
 
-    public Optional<Long> takeOrConfirmDeath() throws InterruptedException {
+    private Optional<Long> takeOrConfirmDeath() throws InterruptedException {
         Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
         while(!paint.isPresent()) {
-                if (!brain.isAlive()) {
-                    System.out.println("LOCK!");
-                    return Optional.empty();
-
-                }
+                if (!brain.isAlive()) {return Optional.empty();}
                 paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
             }
         return paint;
@@ -40,7 +36,7 @@ public class Day11 {
 
     /**
      * Executes one paint-rotate pair of steps if one is remaining.
-     * @return whether or not a paint-rotate pair was remaining
+     * @return whether a paint-rotate pair was remaining
      */
     public boolean executeOneStep() throws InterruptedException {
         Optional<Long> paintInstruction;
@@ -50,7 +46,6 @@ public class Day11 {
             rotateRobot(rotationInstruction);
             moveRobotForward();
             statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
-
         }
         return paintInstruction.isPresent();
 

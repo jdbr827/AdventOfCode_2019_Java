@@ -13,11 +13,11 @@ public class HullPainterModel {
     public HullPainterModel() {
     }
 
-    public void rotateRobotClockwise() {
+    private void rotateRobotClockwise() {
         robot.rotateClockwise();
     }
 
-    public void rotateRobotCounterclockwise() {
+    private void rotateRobotCounterclockwise() {
         robot.rotateCounterclockwise();
     }
 
