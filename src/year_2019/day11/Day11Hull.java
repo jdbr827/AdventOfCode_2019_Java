@@ -21,6 +21,7 @@ public class Day11Hull {
     private DefaultTableModel dtm;
     private HullViewModel viewModel = new HullViewModel();
     int height; int width;
+    Day11 controller;
 
     public static <T> Color hullPaintingColorFunction(T value) {
         if (value != null) {
@@ -35,19 +36,20 @@ public class Day11Hull {
         }
     }
 
-    public Day11Hull() {
+    public Day11Hull(Day11 controller) {
         JFrame frame = new JFrame("Day11Hull");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        this.controller = controller;
 
         doEverythingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    Map<Point, Long> paintedHull = new Day11().paintHull();
+                    Map<Point, Long> paintedHull = controller.paintHull();
                     viewModel.setModelToTable(table1);
                     for (Point p: paintedHull.keySet()) {
                         viewModel.setColorAtCartesian(p, hullPaintingColorFunction(paintedHull.get(p)));
@@ -61,22 +63,6 @@ public class Day11Hull {
         });
     }
 
-
-
-    public static <T> void renderTable(JTable table, Map<Point, T> objectsInTable, Function<T, Color> colorFunction) {
-        int hullxMax = objectsInTable.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
-        int hullyMax = objectsInTable.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
-
-        DefaultTableModel ndtm = new DefaultTableModel(hullxMax + 1, hullyMax + 1);
-        for (Point p : objectsInTable.keySet()) {
-            ndtm.setValueAt(objectsInTable.get(p),  p.x, p.y);
-        }
-        table.setModel(ndtm);
-
-        DefaultTableCellRenderer renderer = createRenderer(colorFunction);
-        table.setDefaultRenderer(Object.class, renderer);
-        table.prepareRenderer(renderer, 0, 0);
-    }
 
     public static <T> DefaultTableCellRenderer createRenderer(Function<T, Color> colorFunction) {
         return new DefaultTableCellRenderer() {
