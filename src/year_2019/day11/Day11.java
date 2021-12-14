@@ -2,6 +2,7 @@ package year_2019.day11;
 
 import year_2019.IntCodeComputer.IntCode;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -24,6 +25,18 @@ public class Day11 {
         colorPoint(WHITE);
         inputCurrentColor();
         brain.start();
+    }
+
+    public static <T> Color hullPaintingColorFunction(T value) {
+        if (value != null) {
+            if (value.equals(1L)) {
+                return Color.WHITE;
+            } else {
+                return Color.GRAY;
+            }
+        } else {
+            return Color.GRAY;
+        }
     }
 
     private void inputCurrentColor() {
@@ -69,7 +82,7 @@ public class Day11 {
 
     private void colorPoint(Long paint) {
         hullPainterModel.hull.put(hullPainterModel.robot.position, paint);
-        view.setColor(hullPainterModel.robot.position, paint);
+        view.setColor(hullPainterModel.robot.position, hullPaintingColorFunction(paint));
     }
 
     public void autopilot() throws InterruptedException {
