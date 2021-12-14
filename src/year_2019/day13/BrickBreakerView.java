@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.function.Function;
 
 import static year_2019.day13.Day13.*;
 
@@ -46,6 +47,19 @@ public class BrickBreakerView {
         }
     }
 
+    public static <T> DefaultTableCellRenderer createRenderer(Function<T, Color> colorFunction) {
+        return new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                //Cells are by default rendered as a JLabel.
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                l.setBackground(colorFunction.apply((T) value));
+                //Return the JLabel which renders the cell.
+                return l;
+            }
+        };
+    }
+
     private void setup_table_model(Map<Point, Integer> gameGrid) {
         int xMax = gameGrid.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
         int yMax = gameGrid.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
@@ -55,7 +69,7 @@ public class BrickBreakerView {
             ndtm.setValueAt(gameGrid.get(p),  p.x, p.y);
         }
         table1.setModel(ndtm);
-        DefaultTableCellRenderer renderer = Day11Hull.createRenderer(BrickBreakerView::brickBreakerColorFunction);
+        DefaultTableCellRenderer renderer = createRenderer(BrickBreakerView::brickBreakerColorFunction);
         table1.setDefaultRenderer(Object.class, renderer);
         table1.prepareRenderer(renderer, 0, 0);
     }

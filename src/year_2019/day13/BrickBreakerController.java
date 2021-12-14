@@ -30,7 +30,7 @@ public class BrickBreakerController {
     }
 
 
-    public Optional<Long> takeOrConfirmDeath() throws InterruptedException {
+    public Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
         Optional<Long> optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
         while (!optVal.isPresent()) {
             if (!brain.isAlive()) {
@@ -48,7 +48,7 @@ public class BrickBreakerController {
 
 
     Optional<Pair<Point, Integer>> getNextOutput() throws InterruptedException {
-        Optional<Long> optX = takeOrConfirmDeath();
+        Optional<Long> optX = takeOrConfirmDeath(brain, outputs);
         if (optX.isPresent()) {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
@@ -101,7 +101,7 @@ public class BrickBreakerController {
 
         brain.start();
         Optional<Long> optX;
-        while ((optX = takeOrConfirmDeath()).isPresent()) {
+        while ((optX = takeOrConfirmDeath(brain, outputs)).isPresent()) {
             int x = optX.get().intValue();
             int y = outputs.take().intValue();
             int obj_id = outputs.take().intValue();
