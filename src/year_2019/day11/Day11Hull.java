@@ -20,7 +20,8 @@ public class Day11Hull {
     private JButton placeRobotButton;
     private DefaultTableModel dtm;
     private HullViewModel viewModel = new HullViewModel();
-    int height; int width;
+    int height;
+    int width;
     Day11 controller;
 
     public static <T> Color hullPaintingColorFunction(T value) {
@@ -43,22 +44,19 @@ public class Day11Hull {
         frame.pack();
         frame.setVisible(true);
         this.controller = controller;
+        viewModel.setModelToTable(table1);
 
         doEverythingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-
-                    Map<Point, Long> paintedHull = controller.paintHull();
-                    viewModel.setModelToTable(table1);
-                    for (Point p: paintedHull.keySet()) {
-                        viewModel.setColorAtCartesian(p, hullPaintingColorFunction(paintedHull.get(p)));
-
+                Thread runDroid = new Thread(() -> {
+                    try {
+                        controller.paintHull();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
-                    //renderTable(table1, paintedHull, Day11Hull::hullPaintingColorFunction);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+                });
+                runDroid.start();
             }
         });
     }
@@ -79,7 +77,7 @@ public class Day11Hull {
         };
     }
 
-     private void createUIComponents() {
+    private void createUIComponents() {
         table1 = new JTable() {
             public TableCellRenderer getCellRenderer(int row, int column) {
                 return new DefaultTableCellRenderer() {
@@ -101,4 +99,12 @@ public class Day11Hull {
         return l;
     }
 
+    public void setValue(Point position, Long aLong) {
+        viewModel.setColorAtCartesian(position, hullPaintingColorFunction(aLong));
+
+    }
+
+    public void repaint() {
+        table1.repaint();
+    }
 }
