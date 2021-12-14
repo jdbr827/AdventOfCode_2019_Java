@@ -8,13 +8,14 @@ public class Day11Hull {
     private JTable table1;
     private JButton doEverythingButton;
     private JButton oneStepButton;
-    private JTextArea uniquePanelsPaintedTextArea;
+    private JTextField textField1;
 
     private HullViewModel viewModel;
     Day11 controller;
 
     public Day11Hull(Day11 controller) {
         JFrame frame = new JFrame("Day11Hull");
+        textField1.setEditable(false);
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -64,6 +65,6 @@ public class Day11Hull {
     }
 
     public void setUniquePanelsPainted(int unique_panels_painted) {
-        uniquePanelsPaintedTextArea.setText(String.valueOf(unique_panels_painted));
+        textField1.setText(String.valueOf(unique_panels_painted));
     }
 }
