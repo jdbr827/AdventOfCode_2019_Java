@@ -1,5 +1,6 @@
 package year_2019;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class CartesianViewModel {

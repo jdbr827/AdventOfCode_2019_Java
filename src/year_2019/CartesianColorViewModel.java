@@ -1,5 +1,6 @@
 package year_2019;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.HashMap;
@@ -62,6 +63,10 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
     public void setColorAtCartesian(Point desiredPointCartesian, Color color) {
         addNewPointIfNecessary(dtm, desiredPointCartesian);
         cartesianColorMap.put(desiredPointCartesian, color);
+    }
+
+     public void setModelToTable(JTable table1) {
+        table1.setModel(dtm);
     }
 
     public abstract Color getBackgroundColorAtCartesian(Point q);

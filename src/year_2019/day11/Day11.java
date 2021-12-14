@@ -61,7 +61,7 @@ public class Day11 {
             statusAtPoint.add(hull.getOrDefault(robot.position, BLACK));
         }
         System.out.println(hull);
-        return convertCartesianToJavaCoordinates(hull);
+        return hull;
         //return hull;
     }
 
@@ -72,19 +72,19 @@ public class Day11 {
         return currentDirectionIdx;
     }
 
-    public static <T> Map<Point, T> convertCartesianToJavaCoordinates(Map<Point, T> cMap) {
-        int cXMax = cMap.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
-        int cXMin = cMap.keySet().stream().map((Point p) -> (int) p.x).min(Comparator.naturalOrder()).get();
-        int cYMax = cMap.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
-        int cYMin = cMap.keySet().stream().map((Point p) -> (int) p.y).min(Comparator.naturalOrder()).get();
-        int xdiff = cXMax-cXMin;
-        int ydiff = cYMax-cYMin;
-        Map<Point, T> jMap = new HashMap<>(Map.of());
-        for (Point p : cMap.keySet()) {
-            jMap.put(new Point(cYMax-p.y, p.x - cXMin), cMap.get(p));
-        }
-        return jMap;
-    }
+//    public static <T> Map<Point, T> convertCartesianToJavaCoordinates(Map<Point, T> cMap) {
+//        int cXMax = cMap.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
+//        int cXMin = cMap.keySet().stream().map((Point p) -> (int) p.x).min(Comparator.naturalOrder()).get();
+//        int cYMax = cMap.keySet().stream().map((Point p) -> (int) p.y).max(Comparator.naturalOrder()).get();
+//        int cYMin = cMap.keySet().stream().map((Point p) -> (int) p.y).min(Comparator.naturalOrder()).get();
+//        int xdiff = cXMax-cXMin;
+//        int ydiff = cYMax-cYMin;
+//        Map<Point, T> jMap = new HashMap<>(Map.of());
+//        for (Point p : cMap.keySet()) {
+//            jMap.put(new Point(cYMax-p.y, p.x - cXMin), cMap.get(p));
+//        }
+//        return jMap;
+//    }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Day11Hull view = new Day11Hull();

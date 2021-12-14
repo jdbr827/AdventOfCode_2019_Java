@@ -19,6 +19,7 @@ public class Day11Hull {
     private JButton createGridButton;
     private JButton placeRobotButton;
     private DefaultTableModel dtm;
+    private HullViewModel viewModel = new HullViewModel();
     int height; int width;
 
     public static <T> Color hullPaintingColorFunction(T value) {
@@ -45,14 +46,22 @@ public class Day11Hull {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
                     Map<Point, Long> paintedHull = new Day11().paintHull();
-                    renderTable(table1, paintedHull, Day11Hull::hullPaintingColorFunction);
+                    viewModel.setModelToTable(table1);
+                    for (Point p: paintedHull.keySet()) {
+                        viewModel.setColorAtCartesian(p, hullPaintingColorFunction(paintedHull.get(p)));
+
+                    }
+                    //renderTable(table1, paintedHull, Day11Hull::hullPaintingColorFunction);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
         });
     }
+
+
 
     public static <T> void renderTable(JTable table, Map<Point, T> objectsInTable, Function<T, Color> colorFunction) {
         int hullxMax = objectsInTable.keySet().stream().map((Point p) -> (int) p.x).max(Comparator.naturalOrder()).get();
@@ -83,4 +92,27 @@ public class Day11Hull {
             }
         };
     }
+
+     private void createUIComponents() {
+        table1 = new JTable() {
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                return new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                        Point p = viewModel.convertJavaToCartesian(new Point(column, row));
+                        Point q = new Point(p.y, -p.x);
+                        return colorJLabel(l, q);
+                    }
+                };
+            }
+        };
+    }
+
+    private JLabel colorJLabel(JLabel l, Point q) {
+        l.setBackground(viewModel.getBackgroundColorAtCartesian(q));
+        l.setForeground(viewModel.getForegroundColorAtCartesian(q));
+        return l;
+    }
+
 }

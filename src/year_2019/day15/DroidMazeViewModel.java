@@ -36,7 +36,5 @@ public class DroidMazeViewModel extends CartesianColorViewModel {
         return color;
     }
 
-    public void setModelToTable(JTable table1) {
-        table1.setModel(dtm);
-    }
+
 }
