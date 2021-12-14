@@ -19,6 +19,7 @@ public class Day11 {
     BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
     BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
     IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
+    int unique_panels_painted = 0;
 
     Day11(){
         view.setDroid(hullPainterModel.robot);
@@ -66,7 +67,6 @@ public class Day11 {
             inputCurrentColor();
         }
         return paintInstruction.isPresent();
-
     }
 
     private void rotateRobot(long rotationInstruction) {
@@ -74,15 +74,19 @@ public class Day11 {
         view.updateRobot();
     }
 
-
     private void moveRobotForward() {
         hullPainterModel.robot.moveForward();
         view.updateRobot();
     }
 
     private void colorPoint(Long paint) {
-        hullPainterModel.hull.put(hullPainterModel.robot.position, paint);
+        if (!(hullPainterModel.painted.getOrDefault(hullPainterModel.robot.position, false))) {
+            unique_panels_painted += 1;
+        }
+        hullPainterModel.paintPoint(paint);
+        view.setUniquePanelsPainted(unique_panels_painted);
         view.setColor(hullPainterModel.robot.position, hullPaintingColorFunction(paint));
+
     }
 
     public void autopilot() throws InterruptedException {

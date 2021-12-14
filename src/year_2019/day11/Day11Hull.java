@@ -8,6 +8,7 @@ public class Day11Hull {
     private JTable table1;
     private JButton doEverythingButton;
     private JButton oneStepButton;
+    private JTextArea uniquePanelsPaintedTextArea;
 
     private HullViewModel viewModel;
     Day11 controller;
@@ -60,5 +61,9 @@ public class Day11Hull {
     public void updateRobot() {
         viewModel.updateRobot();
         table1.repaint();
+    }
+
+    public void setUniquePanelsPainted(int unique_panels_painted) {
+        uniquePanelsPaintedTextArea.setText(String.valueOf(unique_panels_painted));
     }
 }

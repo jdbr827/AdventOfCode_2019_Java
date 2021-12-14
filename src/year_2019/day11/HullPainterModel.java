@@ -9,6 +9,7 @@ import static year_2019.day11.Day11.BLACK;
 public class HullPainterModel {
     Map<Point, Long> hull = new HashMap<Point, Long>();
     HullPaintingRobot robot = new HullPaintingRobot();
+    Map<Point, Boolean> painted = new HashMap<>();
 
     public HullPainterModel() {
     }
@@ -27,6 +28,11 @@ public class HullPainterModel {
 
     public Long getColorAtCurrentPoint() {
         return hull.getOrDefault(robot.position, BLACK);
+    }
+
+    public void paintPoint(Long paint) {
+        hull.put(robot.position, paint);
+        painted.put(robot.position, true);
 
     }
 }
