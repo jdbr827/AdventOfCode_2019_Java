@@ -113,6 +113,7 @@ public class Day11Hull {
 
     public void setDroid(HullPaintingRobot robot) {
         viewModel.setDroid(robot);
+        viewModel.updateRobot();
     }
 
     public void updateRobot() {

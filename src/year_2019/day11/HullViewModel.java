@@ -21,18 +21,6 @@ public class HullViewModel extends CartesianColorViewModel {
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
         if (droid != null && q.equals(droid.position)) {
-            if (droid.facing == Direction.UP) {
-               setValueAtCartesian(q, "^");
-            }
-            if (droid.facing == Direction.DOWN) {
-               setValueAtCartesian(q, "v");
-            }
-            if (droid.facing == Direction.RIGHT) {
-               setValueAtCartesian(q, ">");
-            }
-            if (droid.facing == Direction.LEFT) {
-               setValueAtCartesian(q, "<");
-            }
             return Color.BLACK;
         } else {
             return getBackgroundColorAtCartesian(q);
@@ -42,8 +30,8 @@ public class HullViewModel extends CartesianColorViewModel {
     public static Map<Direction, Character> droidFacingMap = Map.of(
         Direction.UP, '^',
         Direction.DOWN, 'v',
-        Direction.LEFT, '>',
-        Direction.RIGHT, '<'
+        Direction.LEFT, '<',
+        Direction.RIGHT, '>'
     );
 
     public void updateRobot() {

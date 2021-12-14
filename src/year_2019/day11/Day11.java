@@ -21,8 +21,9 @@ public class Day11 {
 
     Day11(){
         view.setDroid(hullPainterModel.robot);
+        colorPoint(WHITE);
+        statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
         brain.start();
-        statusAtPoint.add(hullPainterModel.hull.getOrDefault(hullPainterModel.robot.position, WHITE));
     }
 
     private Optional<Long> takeOrConfirmDeath() throws InterruptedException {
