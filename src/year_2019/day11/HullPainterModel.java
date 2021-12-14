@@ -10,6 +10,7 @@ public class HullPainterModel {
     Map<Point, Long> hull = new HashMap<Point, Long>();
     HullPaintingRobot robot = new HullPaintingRobot();
     Map<Point, Boolean> painted = new HashMap<>();
+    private int uniquePanelsPainted = 0;
 
     public HullPainterModel() {
     }
@@ -27,12 +28,29 @@ public class HullPainterModel {
     }
 
     public Long getColorAtCurrentPoint() {
-        return hull.getOrDefault(robot.position, BLACK);
+        return hull.getOrDefault(robot.getPosition(), BLACK);
     }
 
     public void paintPoint(Long paint) {
-        hull.put(robot.position, paint);
-        painted.put(robot.position, true);
+        if (!currentPointHasBeenPainted()) {uniquePanelsPainted++;}
+        hull.put(robot.getPosition(), paint);
+        painted.put(robot.getPosition(), true);
 
+    }
+
+    Boolean currentPointHasBeenPainted() {
+        return painted.getOrDefault(robot.getPosition(), false);
+    }
+
+    public int getUniquePanelsPainted() {
+        return uniquePanelsPainted;
+    }
+
+    public void moveRobotForward() {
+        robot.moveForward();
+    }
+
+    public Point getCurrentRobotPosition() {
+        return robot.getPosition();
     }
 }

@@ -20,7 +20,7 @@ public class HullViewModel extends CartesianColorViewModel {
 
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
-        if (droid != null && q.equals(droid.position)) {
+        if (droid != null && q.equals(droid.getPosition())) {
             return Color.BLACK;
         } else {
             return getBackgroundColorAtCartesian(q);
@@ -35,6 +35,6 @@ public class HullViewModel extends CartesianColorViewModel {
     );
 
     public void updateRobot() {
-        setValueAtCartesian(droid.position, droidFacingMap.get(droid.facing));
+        setValueAtCartesian(droid.getPosition(), droidFacingMap.get(droid.facing));
     }
 }

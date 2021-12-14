@@ -15,16 +15,12 @@ public class Day11 {
     final HullPainterModel hullPainterModel = new HullPainterModel();
     Day11Hull view = new Day11Hull(this);
     IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT);
-    int unique_panels_painted = 0;
+
 
     Day11(){
         view.setDroid(hullPainterModel.robot);
-        setCurrentColor();
-        brainApi.startProgram();
-    }
-
-    private void setCurrentColor() {
         colorPoint(WHITE);
+        brainApi.startProgram();
     }
 
     public static <T> Color hullPaintingColorFunction(T value) {
@@ -65,17 +61,14 @@ public class Day11 {
     }
 
     private void moveRobotForward() {
-        hullPainterModel.robot.moveForward();
+        hullPainterModel.moveRobotForward();
         view.updateRobot();
     }
 
     void colorPoint(Long paint) {
-        if (!(hullPainterModel.painted.getOrDefault(hullPainterModel.robot.position, false))) {
-            unique_panels_painted += 1;
-        }
         hullPainterModel.paintPoint(paint);
-        view.setUniquePanelsPainted(unique_panels_painted);
-        view.setColor(hullPainterModel.robot.position, hullPaintingColorFunction(paint));
+        view.setUniquePanelsPainted(hullPainterModel.getUniquePanelsPainted());
+        view.setColor(hullPainterModel.getCurrentRobotPosition(), hullPaintingColorFunction(paint));
 
     }
 
