@@ -1,8 +1,10 @@
 package year_2019.day11;
 
 import year_2019.CartesianColorViewModel;
+import static year_2019.day11.HullPaintingRobot.Direction;
 
 import java.awt.*;
+import java.util.Map;
 
 public class HullViewModel extends CartesianColorViewModel {
     HullPaintingRobot droid;
@@ -19,21 +21,32 @@ public class HullViewModel extends CartesianColorViewModel {
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
         if (droid != null && q.equals(droid.position)) {
-            if (droid.facing == HullPaintingRobot.Direction.UP) {
+            if (droid.facing == Direction.UP) {
                setValueAtCartesian(q, "^");
             }
-            if (droid.facing == HullPaintingRobot.Direction.DOWN) {
+            if (droid.facing == Direction.DOWN) {
                setValueAtCartesian(q, "v");
             }
-            if (droid.facing == HullPaintingRobot.Direction.RIGHT) {
+            if (droid.facing == Direction.RIGHT) {
                setValueAtCartesian(q, ">");
             }
-            if (droid.facing == HullPaintingRobot.Direction.LEFT) {
+            if (droid.facing == Direction.LEFT) {
                setValueAtCartesian(q, "<");
             }
             return Color.BLACK;
         } else {
             return getBackgroundColorAtCartesian(q);
         }
+    }
+
+    public static Map<Direction, Character> droidFacingMap = Map.of(
+        Direction.UP, '^',
+        Direction.DOWN, 'v',
+        Direction.LEFT, '>',
+        Direction.RIGHT, '<'
+    );
+
+    public void updateRobot() {
+        setValueAtCartesian(droid.position, droidFacingMap.get(droid.facing));
     }
 }

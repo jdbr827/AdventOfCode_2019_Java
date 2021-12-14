@@ -117,14 +117,8 @@ public class Day11Hull {
         viewModel.setDroid(robot);
     }
 
-    public static Map<Direction, Character> droidFacingMap = Map.of(
-            Direction.UP, '^',
-            Direction.DOWN, 'v',
-            Direction.LEFT, '>',
-            Direction.RIGHT, '<'
-    );
 
-    public void setRobotPosition(HullPaintingRobot robot) {
-        viewModel.setValueAtCartesian(robot.position, droidFacingMap.get(robot.facing));
+    public void moveRobotForward() {
+        viewModel.updateRobot();
     }
 }

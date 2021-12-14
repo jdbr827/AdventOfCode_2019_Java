@@ -64,7 +64,7 @@ public class Day11 {
 
     private void moveRobotForward() {
         robot.moveForward();
-        view.setRobotPosition(robot);
+        view.moveRobotForward();
     }
 
     private void colorPoint(Long paint) {
