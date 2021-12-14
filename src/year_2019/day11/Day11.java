@@ -15,6 +15,17 @@ public class Day11 {
     final static long WHITE = 1L;
     final static long BLACK = 0L;
     Day11Hull view = new Day11Hull(this);
+    private Map<Point, Long> hull = new HashMap<>();
+    BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
+    BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
+    HullPaintingRobot robot = new HullPaintingRobot();
+    IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
+
+    Day11(){
+        view.setDroid(robot);
+        brain.start();
+        statusAtPoint.add(hull.getOrDefault(robot.position, WHITE));
+    }
 
     /**
      * Helper function to ensure no deadlock when brain halts
@@ -36,33 +47,33 @@ public class Day11 {
         return paint;
     }
 
-    public Map<Point, Long> paintHull() throws InterruptedException {
-        Map<Point, Long> hull = new HashMap<>();
-        BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
-        BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-        HullPaintingRobot robot = new HullPaintingRobot();
-        view.setDroid(robot);
-
-        IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
-        brain.start();
-
-        statusAtPoint.add(hull.getOrDefault(robot.position, WHITE));
-
+    /**
+     * Executes one paint-rotate pair of steps if one is remaining.
+     * @return whether or not a paint-rotate pair was remaining
+     */
+    public boolean executeOneStep() throws InterruptedException {
         Optional<Long> paint;
-        while ((paint = takeOrConfirmDeath(brain, outputs)).isPresent()) {
+        if ((paint = takeOrConfirmDeath(brain, outputs)).isPresent()) {
 
             hull.put(robot.position, paint.get());
-            view.setValue(robot.position, paint.get());
-            view.repaint();
+            view.setColor(robot.position, paint.get());
 
             long rotationDirection = outputs.take();
             if (rotationDirection == 1L) {robot.rotateClockwise();} else {robot.rotateCounterclockwise();}
             robot.moveForward();
+            view.setRobotPosition(robot);
 
             statusAtPoint.add(hull.getOrDefault(robot.position, BLACK));
+
+        }
+        return paint.isPresent();
+
+    }
+
+    public void autopilot() throws InterruptedException {
+        while (executeOneStep()){
             TimeUnit.MILLISECONDS.sleep(20); // for visual only
         }
-        return hull;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

@@ -5,19 +5,15 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
+import static year_2019.day11.HullPaintingRobot.Direction;
 
 public class Day11Hull {
     private JPanel panel1;
     private JTable table1;
     private JButton doEverythingButton;
     private JButton oneStepButton;
-    private JTextField heightTextField;
-    private JTextField widthTextField;
-    private JButton createGridButton;
-    private JButton placeRobotButton;
     private DefaultTableModel dtm;
     private HullViewModel viewModel = new HullViewModel();
     int height;
@@ -51,12 +47,22 @@ public class Day11Hull {
             public void actionPerformed(ActionEvent e) {
                 Thread runDroid = new Thread(() -> {
                     try {
-                        controller.paintHull();
+                        controller.autopilot();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 });
                 runDroid.start();
+            }
+        });
+        oneStepButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.executeOneStep();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -99,7 +105,7 @@ public class Day11Hull {
         return l;
     }
 
-    public void setValue(Point position, Long aLong) {
+    public void setColor(Point position, Long aLong) {
         viewModel.setColorAtCartesian(position, hullPaintingColorFunction(aLong));
     }
 
@@ -109,5 +115,16 @@ public class Day11Hull {
 
     public void setDroid(HullPaintingRobot robot) {
         viewModel.setDroid(robot);
+    }
+
+    public static Map<Direction, Character> droidFacingMap = Map.of(
+            Direction.UP, '^',
+            Direction.DOWN, 'v',
+            Direction.LEFT, '>',
+            Direction.RIGHT, '<'
+    );
+
+    public void setRobotPosition(HullPaintingRobot robot) {
+        viewModel.setValueAtCartesian(robot.position, droidFacingMap.get(robot.facing));
     }
 }
