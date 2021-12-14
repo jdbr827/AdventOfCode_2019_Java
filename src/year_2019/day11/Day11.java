@@ -1,13 +1,13 @@
 package year_2019.day11;
 
 import year_2019.IntCodeComputer.IntCode;
+import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 
 public class Day11 {
@@ -18,14 +18,14 @@ public class Day11 {
     Day11Hull view = new Day11Hull(this);
     BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
     BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-    IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
+    IntCodeAPI brainApi = new IntCodeAPI(new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs), statusAtPoint, outputs);
     int unique_panels_painted = 0;
 
     Day11(){
         view.setDroid(hullPainterModel.robot);
         colorPoint(WHITE);
         inputCurrentColor();
-        brain.start();
+        brainApi.startProgram();
     }
 
     public static <T> Color hullPaintingColorFunction(T value) {
@@ -41,16 +41,7 @@ public class Day11 {
     }
 
     private void inputCurrentColor() {
-        statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
-    }
-
-    private Optional<Long> takeOrConfirmDeath() throws InterruptedException {
-        Optional<Long> paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
-        while(!paint.isPresent()) {
-                if (!brain.isAlive()) {return Optional.empty();}
-                paint = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
-            }
-        return paint;
+        brainApi.sendInput(hullPainterModel.getColorAtCurrentPoint());
     }
 
     /**
@@ -59,7 +50,7 @@ public class Day11 {
      */
     public boolean executeOneStep() throws InterruptedException {
         Optional<Long> paintInstruction;
-        if ((paintInstruction = takeOrConfirmDeath()).isPresent()) {
+        if ((paintInstruction = brainApi.waitForOutput()).isPresent()) {
             colorPoint(paintInstruction.get());
             long rotationInstruction = outputs.take();
             rotateRobot(rotationInstruction);
