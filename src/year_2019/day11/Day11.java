@@ -1,6 +1,5 @@
 package year_2019.day11;
 
-import year_2019.IntCodeComputer.IntCode;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
@@ -16,9 +15,7 @@ public class Day11 {
     final static long BLACK = 0L;
     final HullPainterModel hullPainterModel = new HullPainterModel();
     Day11Hull view = new Day11Hull(this);
-    BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
-    BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-    IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
+    IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT);
     int unique_panels_painted = 0;
 
     Day11(){
@@ -50,9 +47,9 @@ public class Day11 {
      */
     public boolean executeOneStep() throws InterruptedException {
         Optional<Long> paintInstruction;
-        if ((paintInstruction = brainApi.waitForOutput()).isPresent()) {
+        if ((paintInstruction = brainApi.waitForOutputOptional()).isPresent()) {
             colorPoint(paintInstruction.get());
-            long rotationInstruction = outputs.take();
+            long rotationInstruction = brainApi.waitForOutputKnown();
             rotateRobot(rotationInstruction);
             moveRobotForward();
             inputCurrentColor();

@@ -2,6 +2,7 @@ package year_2019.IntCodeComputer;
 
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class IntCodeAPI {
@@ -18,6 +19,11 @@ public class IntCodeAPI {
     }
 
 
+    public IntCodeAPI(long[] tape) {
+        this(tape, new LinkedBlockingQueue<>(), new LinkedBlockingQueue<>());
+    }
+
+
     public void startProgram() {
         brain.start();
     }
@@ -26,12 +32,16 @@ public class IntCodeAPI {
         inputs.add(input);
     }
 
-    public Optional<Long> waitForOutput() throws InterruptedException {
+    public Optional<Long> waitForOutputOptional() throws InterruptedException {
         Optional<Long> result = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
         while(!result.isPresent()) {
                 if (!brain.isAlive()) {return Optional.empty();}
                result = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
             }
         return result;
+    }
+
+    public Long waitForOutputKnown() throws InterruptedException {
+        return outputs.take();
     }
 }
