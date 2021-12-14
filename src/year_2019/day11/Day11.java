@@ -22,8 +22,12 @@ public class Day11 {
     Day11(){
         view.setDroid(hullPainterModel.robot);
         colorPoint(WHITE);
-        statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
+        readCurrentPoint();
         brain.start();
+    }
+
+    private void readCurrentPoint() {
+        statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
     }
 
     private Optional<Long> takeOrConfirmDeath() throws InterruptedException {
@@ -46,7 +50,7 @@ public class Day11 {
             long rotationInstruction = outputs.take();
             rotateRobot(rotationInstruction);
             moveRobotForward();
-            statusAtPoint.add(hullPainterModel.getColorAtCurrentPoint());
+            readCurrentPoint();
         }
         return paintInstruction.isPresent();
 
