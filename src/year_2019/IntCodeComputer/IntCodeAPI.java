@@ -11,10 +11,10 @@ public class IntCodeAPI {
     BlockingQueue<Long> outputs;
 
 
-    public IntCodeAPI(IntCode brain, BlockingQueue<Long> inputs, BlockingQueue<Long> outputs) {
+    public IntCodeAPI(IntCode brain) {
         this.brain = brain;
-        this.inputs = inputs;
-        this.outputs = outputs;
+        this.inputs = brain.input;
+        this.outputs = brain.output;
     }
 
 
