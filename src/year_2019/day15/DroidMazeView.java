@@ -33,7 +33,8 @@ public class DroidMazeView {
 
     public DroidMazeView(DroidMazeController droidMazeController) {
         this.controller = droidMazeController;
-        table1.setModel(droidMazeViewModel.dtm);
+        droidMazeViewModel.setModelToTable(table1);
+        //table1.setModel(droidMazeViewModel.dtm);
         droidMazeViewModel.setValueAtCartesian(new Point(0, 0), 0);
 
         JFrame frame = new JFrame("Day15");
