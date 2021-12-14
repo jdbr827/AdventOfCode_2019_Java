@@ -41,6 +41,7 @@ public class Day11 {
         BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
         BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
         HullPaintingRobot robot = new HullPaintingRobot();
+        view.setDroid(robot);
 
         IntCode brain = new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
         brain.start();

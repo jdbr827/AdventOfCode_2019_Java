@@ -106,4 +106,8 @@ public class Day11Hull {
     public void repaint() {
         table1.repaint();
     }
+
+    public void setDroid(HullPaintingRobot robot) {
+        viewModel.setDroid(robot);
+    }
 }
