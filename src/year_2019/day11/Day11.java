@@ -18,7 +18,7 @@ public class Day11 {
     Day11Hull view = new Day11Hull(this);
     BlockingQueue<Long> statusAtPoint = new LinkedBlockingQueue<>();
     BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-    IntCodeAPI brainApi = new IntCodeAPI(new IntCode(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs));
+    IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT, statusAtPoint, outputs);
     int unique_panels_painted = 0;
 
     Day11(){

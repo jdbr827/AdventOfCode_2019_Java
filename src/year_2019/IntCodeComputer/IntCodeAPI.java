@@ -6,13 +6,13 @@ import java.util.concurrent.TimeUnit;
 
 public class IntCodeAPI {
 
-    IntCode brain;
-    BlockingQueue<Long> inputs;
-    BlockingQueue<Long> outputs;
+    private IntCode brain;
+    private BlockingQueue<Long> inputs;
+    private BlockingQueue<Long> outputs;
 
 
-    public IntCodeAPI(IntCode brain) {
-        this.brain = brain;
+    public IntCodeAPI(long[] tape, BlockingQueue<Long> inputs, BlockingQueue<Long> outputs) {
+        this.brain = new IntCode(tape, inputs, outputs);
         this.inputs = brain.input;
         this.outputs = brain.output;
     }
