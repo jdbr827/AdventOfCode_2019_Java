@@ -2,6 +2,8 @@ package year_2019.day11;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Day11Hull {
     private JPanel panel1;
@@ -9,6 +11,8 @@ public class Day11Hull {
     private JButton doEverythingButton;
     private JButton oneStepButton;
     private JTextField textField1;
+    private JButton setCurrentPanelToButton;
+    private JButton setCurrentPanelToButton1;
 
     private HullViewModel viewModel;
     Day11 controller;
@@ -38,6 +42,18 @@ public class Day11Hull {
                 controller.executeOneStep();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
+            }
+        });
+        setCurrentPanelToButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.colorPoint(0L);
+            }
+        });
+        setCurrentPanelToButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.colorPoint(1L);
             }
         });
     }
