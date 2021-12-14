@@ -52,6 +52,7 @@ public class Day11 {
             // rotate the robot
             long rotationInstruction = outputs.take();
             if (rotationInstruction == 1L) {robot.rotateClockwise();} else {robot.rotateCounterclockwise();}
+            view.updateRobot();
 
             moveRobotForward();
 
@@ -64,7 +65,7 @@ public class Day11 {
 
     private void moveRobotForward() {
         robot.moveForward();
-        view.moveRobotForward();
+        view.updateRobot();
     }
 
     private void colorPoint(Long paint) {

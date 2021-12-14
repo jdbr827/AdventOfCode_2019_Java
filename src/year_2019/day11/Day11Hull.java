@@ -5,9 +5,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 import java.util.function.Function;
-import static year_2019.day11.HullPaintingRobot.Direction;
 
 public class Day11Hull {
     private JPanel panel1;
@@ -117,8 +115,7 @@ public class Day11Hull {
         viewModel.setDroid(robot);
     }
 
-
-    public void moveRobotForward() {
+    public void updateRobot() {
         viewModel.updateRobot();
     }
 }
