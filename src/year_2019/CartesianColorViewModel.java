@@ -65,6 +65,11 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
         cartesianColorMap.put(desiredPointCartesian, color);
     }
 
+    public void setValueAtCartesian(Point droidLocation, Object value) {
+        Point javaPoint = convertCartesianToJava(droidLocation);
+        dtm.setValueAt(value, javaPoint.x, javaPoint.y);
+    }
+
      public void setModelToTable(JTable table1) {
         table1.setModel(dtm);
     }

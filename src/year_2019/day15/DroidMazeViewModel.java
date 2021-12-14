@@ -14,10 +14,6 @@ public class DroidMazeViewModel extends CartesianColorViewModel {
     public DroidMazeViewModel() {
     }
 
-    public void setValueAtCartesian(Point droidLocation, int distance) {
-        Point javaPoint = convertCartesianToJava(droidLocation);
-        dtm.setValueAt(distance, javaPoint.x, javaPoint.y);
-    }
     @Override
     public Color getBackgroundColorAtCartesian(Point q) {
         Color color = cartesianColorMap.getOrDefault(q, Color.GRAY);

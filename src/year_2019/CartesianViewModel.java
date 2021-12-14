@@ -14,4 +14,6 @@ public class CartesianViewModel {
         return new Point(javaPoint.y - cartesianOrigin.y, javaPoint.x - cartesianOrigin.x);
     }
 
+
+
 }
