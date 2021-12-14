@@ -13,7 +13,7 @@ public class Day11Hull {
     private JButton doEverythingButton;
     private JButton oneStepButton;
     private DefaultTableModel dtm;
-    private HullViewModel viewModel = new HullViewModel();
+    private HullViewModel viewModel;
     int height;
     int width;
     Day11 controller;
@@ -82,25 +82,8 @@ public class Day11Hull {
     }
 
     private void createUIComponents() {
-        table1 = new JTable() {
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        Point p = viewModel.convertJavaToCartesian(new Point(column, row));
-                        Point q = new Point(p.y, -p.x);
-                        return colorJLabel(l, q);
-                    }
-                };
-            }
-        };
-    }
-
-    private JLabel colorJLabel(JLabel l, Point q) {
-        l.setBackground(viewModel.getBackgroundColorAtCartesian(q));
-        l.setForeground(viewModel.getForegroundColorAtCartesian(q));
-        return l;
+        viewModel = new HullViewModel();
+        table1 = viewModel.createCartesianColorJTable();
     }
 
     public void setColor(Point position, Long aLong) {
@@ -108,9 +91,6 @@ public class Day11Hull {
         table1.repaint();
     }
 
-    public void repaint() {
-        table1.repaint();
-    }
 
     public void setDroid(HullPaintingRobot robot) {
         viewModel.setDroid(robot);

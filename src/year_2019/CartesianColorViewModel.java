@@ -1,7 +1,9 @@
 package year_2019;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,4 +80,26 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
     public abstract Color getBackgroundColorAtCartesian(Point q);
 
     public abstract Color getForegroundColorAtCartesian(Point q);
+
+    public JTable createCartesianColorJTable() {
+        return new JTable() {
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                return new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                        Point p = convertJavaToCartesian(new Point(column, row));
+                        Point q = new Point(p.y, -p.x);
+                        return colorJLabel(l, q);
+                    }
+                };
+            }
+        };
+    }
+
+    public JLabel colorJLabel(JLabel l, Point q) {
+        l.setBackground(getBackgroundColorAtCartesian(q));
+        l.setForeground(getForegroundColorAtCartesian(q));
+        return l;
+    }
 }
