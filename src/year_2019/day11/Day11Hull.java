@@ -1,8 +1,6 @@
 package year_2019.day11;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class Day11Hull {
@@ -13,8 +11,6 @@ public class Day11Hull {
     private JTextField textField1;
     private JButton setCurrentPanelToButton;
     private JButton setCurrentPanelToButton1;
-    private JButton inputCurrentColorButton;
-    private JTextField textField2;
 
     private HullViewModel viewModel;
     Day11 controller;
@@ -29,35 +25,31 @@ public class Day11Hull {
         viewModel.setModelToTable(table1);
         controller = new Day11(viewModel);
 
-        doEverythingButton.addActionListener(e -> {
-            Thread runDroid = new Thread(() -> {
-                try {
-                    controller.autopilot();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            runDroid.start();
-        });
-        oneStepButton.addActionListener(e -> {
-            try {
-                controller.executeOneStep();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        });
-        setCurrentPanelToButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.colorPoint(0L);
-            }
-        });
-        setCurrentPanelToButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.colorPoint(1L);
-            }
-        });
+        doEverythingButton.addActionListener(e -> tryAutopilotThread());
+        oneStepButton.addActionListener(e -> tryExecuteOneStep());
+        setCurrentPanelToButton.addActionListener(e -> controller.colorPoint(0L));
+        setCurrentPanelToButton1.addActionListener(e -> controller.colorPoint(1L));
+    }
+
+    private void tryAutopilotThread() {
+        Thread runDroid = new Thread(this::tryAutopilot);
+        runDroid.start();
+    }
+
+    private void tryAutopilot() {
+        try {
+            controller.autopilot();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void tryExecuteOneStep() {
+        try {
+            controller.executeOneStep();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void createUIComponents() {
