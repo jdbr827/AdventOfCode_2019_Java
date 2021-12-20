@@ -122,26 +122,26 @@ public class BrickBreakerView {
         a0Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.joystick.keepJoystickCenter();
+                controller.model.joystick.keepJoystickCenter();
             }
         });
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.joystick.moveJoystickLeft();
+                controller.model.joystick.moveJoystickLeft();
             }
         });
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.joystick.moveJoystickRight();
+                controller.model.joystick.moveJoystickRight();
             }
         });
         autopickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                controller.joystick.doNextJoystickInput();
+                controller.model.joystick.doNextJoystickInput();
             }
         });
         autopilotButton.addActionListener(new ActionListener() {

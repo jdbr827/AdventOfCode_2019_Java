@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import static year_2019.day13.Day13.DAY_13_PUZZLE_INPUT;
 
@@ -19,11 +16,9 @@ public class BrickBreakerController {
 
     public static final Point SCORE_OUTPUTS = new Point(-1, 0);
     private final long[] gameTape;
-
-
-    Joystick joystick = new Joystick();
+    BrickBreakerModel model = new BrickBreakerModel();
     BrickBreakerView view = new BrickBreakerView();
-    int score = 0;
+
     private IntCodeAPI brain;
 
     BrickBreakerController(long[] gameTape) {
@@ -33,7 +28,7 @@ public class BrickBreakerController {
     Optional<Pair<Point, Integer>> getNextOutput() throws Exception {
         Optional<Long> optX = brain.waitForOutputOptional(() -> {
             if (view.useAutopilot) {
-                joystick.doNextJoystickInput();
+                model.joystick.doNextJoystickInput();
             }
         });
         if (optX.isPresent()) {
@@ -47,13 +42,13 @@ public class BrickBreakerController {
 
 
     public int playGame() throws Exception {
-        brain = new IntCodeAPI(gameTape, joystick.joystickInputs);
+        brain = new IntCodeAPI(gameTape, model.joystick.joystickInputs);
         brain.startProgram();
         Optional<Pair<Point, Integer>> nxt;
         while ((nxt = getNextOutput()).isPresent()) {
             processOneOutput(nxt.get());
         }
-        return score;
+        return model.score;
     }
 
     private void processOneOutput(Pair<Point, Integer> nxt) {
@@ -61,31 +56,30 @@ public class BrickBreakerController {
         Point p = nxt.getKey();
 
         if (Objects.equals(p, SCORE_OUTPUTS)) {
-            score = obj_id;
-            view.scoreTextPane.setText(String.valueOf(score));
+            setScore(obj_id);
         } else {
-            if (obj_id == 3) {
-                joystick.paddleX = p.x;
-            }
-            if (obj_id == 4) {
-                joystick.ballX = p.x;
-            }
-            view.populatePoint(p.x, p.y, obj_id);
+            populatePoint(obj_id, p);
         }
+    }
+
+    private void populatePoint(int obj_id, Point p) {
+        model.populatePoint(p, obj_id);
+        view.populatePoint(p.x, p.y, obj_id);
+    }
+
+
+    private void setScore(int score) {
+        model.score = score;
+        view.scoreTextPane.setText(String.valueOf(model.score));
     }
 
 
     Map<Point, Integer> createGameGrid() throws Exception {
         IntCodeAPI brain = new IntCodeAPI(DAY_13_PUZZLE_INPUT);
         Map<Point, Integer> gameGrid = new HashMap<>();
-
         brain.startProgram();
         Optional<Long> optX;
-        while ((optX = brain.waitForOutputOptional(() -> {
-            if (view.useAutopilot) {
-                    joystick.doNextJoystickInput();
-            }
-        })).isPresent()) {
+        while ((optX = brain.waitForOutputOptional()).isPresent()) {
             int x = optX.get().intValue();
             int y = brain.waitForOutputKnown().intValue();
             int obj_id = brain.waitForOutputKnown().intValue();
