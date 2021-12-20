@@ -15,16 +15,8 @@ public class HullPainterModel {
     public HullPainterModel() {
     }
 
-    private void rotateRobotClockwise() {
-        robot.rotateClockwise();
-    }
-
-    private void rotateRobotCounterclockwise() {
-        robot.rotateCounterclockwise();
-    }
-
     public void rotateRobot(long rotationInstruction) {
-        if (rotationInstruction == 1L) {rotateRobotClockwise();} else {rotateRobotCounterclockwise();}
+        robot.rotate(rotationInstruction);
     }
 
     public Long getColorAtCurrentPoint() {
@@ -38,7 +30,7 @@ public class HullPainterModel {
 
     }
 
-    Boolean currentPointHasBeenPainted() {
+    private Boolean currentPointHasBeenPainted() {
         return painted.getOrDefault(robot.getPosition(), false);
     }
 

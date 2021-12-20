@@ -25,11 +25,15 @@ public class HullPaintingRobot{
         return position;
     }
 
-    public void rotateClockwise() {
+    public void rotate(long rotationInstruction) {
+        if (rotationInstruction == 1L) {rotateClockwise();} else {rotateCounterclockwise();}
+    }
+
+    private void rotateClockwise() {
         facing = Direction.values()[Math.floorMod(facing.ordinal() + 1, 4)];
     }
 
-    public void rotateCounterclockwise() {
+    private void rotateCounterclockwise() {
         facing = Direction.values()[Math.floorMod(facing.ordinal() - 1, 4)];
     }
 

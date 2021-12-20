@@ -69,6 +69,5 @@ public class Day11 {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new Day11();
-
     }
 }
