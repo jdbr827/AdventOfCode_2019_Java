@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Day11Hull {
     private JPanel panel1;
@@ -15,16 +16,15 @@ public class Day11Hull {
     private JButton setCurrentPanelToButton1;
 
     private HullViewModel viewModel;
-    Day11 controller;
+    Day11 controller = new Day11(this);
 
-    public Day11Hull(Day11 controller) {
+    public Day11Hull() {
         JFrame frame = new JFrame("Day11Hull");
         textField1.setEditable(false);
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        this.controller = controller;
         viewModel.setModelToTable(table1);
 
         doEverythingButton.addActionListener(e -> {
@@ -82,5 +82,9 @@ public class Day11Hull {
 
     public void setNumberOfUniquePanelsPainted(int uniquePanelsPainted) {
         textField1.setText(String.valueOf(uniquePanelsPainted));
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        new Day11Hull();
     }
 }

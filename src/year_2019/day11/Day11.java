@@ -2,7 +2,6 @@ package year_2019.day11;
 
 import year_2019.IntCodeComputer.IntCodeAPI;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -13,11 +12,12 @@ public class Day11 {
     final static long BLACK = 0L;
 
     final HullPainterModel model = new HullPainterModel();
-    Day11Hull view = new Day11Hull(this);
+    Day11Hull view;
     IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT);
 
 
-    Day11(){
+    Day11(Day11Hull day11Hull){
+        this.view = day11Hull;
         view.setModel(model);
         colorPoint(WHITE);
         brainApi.startProgram();
@@ -66,7 +66,5 @@ public class Day11 {
         }
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        new Day11();
-    }
+
 }
