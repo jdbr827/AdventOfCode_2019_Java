@@ -2,6 +2,7 @@ package year_2019.day13;
 
 import javafx.util.Pair;
 import year_2019.IntCodeComputer.IntCode;
+import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -18,12 +19,12 @@ public class BrickBreakerController {
 
     public static final Point SCORE_OUTPUTS = new Point(-1, 0);
     private final long[] gameTape;
-    private final BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
+
 
     Joystick joystick = new Joystick();
     BrickBreakerView view = new BrickBreakerView();
     int score = 0;
-    private IntCode brain;
+    private IntCodeAPI brain;
 
     BrickBreakerController(long[] gameTape) {
         this.gameTape = gameTape;
@@ -47,28 +48,28 @@ public class BrickBreakerController {
     }
 
 
-    Optional<Pair<Point, Integer>> getNextOutput() throws InterruptedException {
-        Optional<Long> optX = takeOrConfirmDeath(brain, outputs);
+    Optional<Pair<Point, Integer>> getNextOutput() throws Exception {
+        Optional<Long> optX = brain.waitForOutputOptional(() -> {
+            if (view.useAutopilot) {
+                joystick.doNextJoystickInput();
+            }
+        });
         if (optX.isPresent()) {
             int x = optX.get().intValue();
-            int y = outputs.take().intValue();
-            int obj_id = outputs.take().intValue();
+            int y = brain.waitForOutputKnown().intValue();
+            int obj_id = brain.waitForOutputKnown().intValue();
             return Optional.of(new Pair<>(new Point(x, y), obj_id));
         }
         return Optional.empty();
     }
 
 
-    public int playGame() throws InterruptedException {
-        brain = new IntCode(gameTape, joystick.joystickInputs, outputs);
-        brain.start();
+    public int playGame() throws Exception {
+        brain = new IntCodeAPI(gameTape, joystick.joystickInputs);
+        brain.startProgram();
         Optional<Pair<Point, Integer>> nxt;
         while ((nxt = getNextOutput()).isPresent()) {
             processOneOutput(nxt.get());
-            if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
-                outputs.poll(40, TimeUnit.MILLISECONDS);
-                joystick.doNextJoystickInput();
-            }
         }
 
         return score;

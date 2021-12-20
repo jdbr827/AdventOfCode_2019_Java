@@ -108,6 +108,8 @@ public class BrickBreakerView {
                         controller.playGame();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 });
                 game.start();
