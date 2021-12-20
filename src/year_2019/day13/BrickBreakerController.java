@@ -30,24 +30,6 @@ public class BrickBreakerController {
         this.gameTape = gameTape;
     }
 
-
-    public Optional<Long> takeOrConfirmDeath(IntCode brain, BlockingQueue<Long> outputs) throws InterruptedException {
-        Optional<Long> optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
-        while (!optVal.isPresent()) {
-            if (!brain.isAlive()) {
-                System.out.println("LOCK!");
-                return Optional.empty();
-            }
-            if (brain.getState() == Thread.State.WAITING && outputs.isEmpty() && view.useAutopilot) {
-                outputs.poll(40, TimeUnit.MILLISECONDS);
-                joystick.doNextJoystickInput();
-            }
-            optVal = Optional.ofNullable(outputs.poll(40, TimeUnit.MILLISECONDS));
-        }
-        return optVal;
-    }
-
-
     Optional<Pair<Point, Integer>> getNextOutput() throws Exception {
         Optional<Long> optX = brain.waitForOutputOptional(() -> {
             if (view.useAutopilot) {
@@ -71,7 +53,6 @@ public class BrickBreakerController {
         while ((nxt = getNextOutput()).isPresent()) {
             processOneOutput(nxt.get());
         }
-
         return score;
     }
 
@@ -94,18 +75,20 @@ public class BrickBreakerController {
     }
 
 
-    Map<Point, Integer> createGameGrid() throws InterruptedException {
-        BlockingQueue<Long> inputs = new LinkedBlockingQueue<>();
-        BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-        IntCode brain = new IntCode(DAY_13_PUZZLE_INPUT, inputs, outputs);
+    Map<Point, Integer> createGameGrid() throws Exception {
+        IntCodeAPI brain = new IntCodeAPI(DAY_13_PUZZLE_INPUT);
         Map<Point, Integer> gameGrid = new HashMap<>();
 
-        brain.start();
+        brain.startProgram();
         Optional<Long> optX;
-        while ((optX = takeOrConfirmDeath(brain, outputs)).isPresent()) {
+        while ((optX = brain.waitForOutputOptional(() -> {
+            if (view.useAutopilot) {
+                    joystick.doNextJoystickInput();
+            }
+        })).isPresent()) {
             int x = optX.get().intValue();
-            int y = outputs.take().intValue();
-            int obj_id = outputs.take().intValue();
+            int y = brain.waitForOutputKnown().intValue();
+            int obj_id = brain.waitForOutputKnown().intValue();
             gameGrid.put(new Point(y, x), obj_id);
         }
         return gameGrid;

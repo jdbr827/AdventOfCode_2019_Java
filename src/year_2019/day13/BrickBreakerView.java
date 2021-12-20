@@ -91,6 +91,8 @@ public class BrickBreakerView {
 
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -100,6 +102,8 @@ public class BrickBreakerView {
                 try {
                     setup_table_model(controller.createGameGrid());
                 } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
