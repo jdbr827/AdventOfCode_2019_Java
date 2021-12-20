@@ -52,10 +52,10 @@ public class DroidMazeController {
 
     public int moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
-        int outputInstruction = brain.waitForOutputKnown().intValue();
-        int distance = model.oxygenDistance.get(model.droidLocation);
+        int outputInstruction;
+        int distance = getDroidOxygenDistance();
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
-        if (outputInstruction != 0) {
+        if ((outputInstruction = brain.waitForOutputKnown().intValue()) != 0) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidLocation);
             if (outputInstruction == 2) {
@@ -63,8 +63,7 @@ public class DroidMazeController {
             } else {
                 view.paintPoint(desiredPoint, Color.WHITE);
             }
-//            view.paintDroid(model.droidLocation);
-            distance = Math.min(distance + 1, model.oxygenDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE));
+            distance = Math.min(distance + 1, getDroidOxygenDistance());
             model.oxygenDistance.put(desiredPoint, distance);
             view.setOxygenDistance(model.droidLocation, distance);
         } else {
@@ -73,6 +72,10 @@ public class DroidMazeController {
         view.repaint();
 
         return outputInstruction;
+    }
+
+    private Integer getDroidOxygenDistance() {
+        return model.oxygenDistance.getOrDefault(model.droidLocation, Integer.MAX_VALUE);
     }
 
     public void computeOxygenTankDistances() throws InterruptedException {
