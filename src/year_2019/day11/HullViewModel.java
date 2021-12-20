@@ -7,10 +7,10 @@ import java.awt.*;
 import java.util.Map;
 
 public class HullViewModel extends CartesianColorViewModel {
-    HullPaintingRobot droid;
+    HullPainterModel model;
 
-    public void setDroid(HullPaintingRobot droid) {
-        this.droid = droid;
+    public void setModel(HullPainterModel model) {
+        this.model = model;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class HullViewModel extends CartesianColorViewModel {
 
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
-        if (droid != null && q.equals(droid.getPosition())) {
+        if (q.equals(model.getCurrentRobotPosition())) {
             return Color.BLACK;
         } else {
             return getBackgroundColorAtCartesian(q);
@@ -35,7 +35,7 @@ public class HullViewModel extends CartesianColorViewModel {
     );
 
     public void updateRobot() {
-        setValueAtCartesian(droid.getPosition(), droidFacingMap.get(droid.facing));
+        setValueAtCartesian(model.getCurrentRobotPosition(), droidFacingMap.get(model.getCurrentRobotFacing()));
     }
 
     public static <T> Color hullPaintingColorFunction(T value) {

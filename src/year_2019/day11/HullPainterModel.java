@@ -15,20 +15,16 @@ public class HullPainterModel {
     public HullPainterModel() {
     }
 
-    public void rotateRobot(long rotationInstruction) {
-        robot.rotate(rotationInstruction);
+    public void paintPoint(Long paint) {
+        if (!currentPointHasBeenPainted()) {uniquePanelsPainted++;}
+        hull.put(robot.getPosition(), paint);
+        painted.put(robot.getPosition(), true);
     }
 
     public Long getColorAtCurrentPoint() {
         return hull.getOrDefault(robot.getPosition(), BLACK);
     }
 
-    public void paintPoint(Long paint) {
-        if (!currentPointHasBeenPainted()) {uniquePanelsPainted++;}
-        hull.put(robot.getPosition(), paint);
-        painted.put(robot.getPosition(), true);
-
-    }
 
     private Boolean currentPointHasBeenPainted() {
         return painted.getOrDefault(robot.getPosition(), false);
@@ -38,11 +34,19 @@ public class HullPainterModel {
         return uniquePanelsPainted;
     }
 
+    public void rotateRobot(long rotationInstruction) {
+        robot.rotate(rotationInstruction);
+    }
+
     public void moveRobotForward() {
         robot.moveForward();
     }
 
     public Point getCurrentRobotPosition() {
         return robot.getPosition();
+    }
+
+    public HullPaintingRobot.Direction getCurrentRobotFacing() {
+        return robot.getFacing();
     }
 }

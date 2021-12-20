@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class HullPaintingRobot{
 
-
     public enum Direction{
         UP(new Point(0, 1)),
         RIGHT(new Point(1, 0)),
@@ -19,10 +18,14 @@ public class HullPaintingRobot{
     }
 
     private Point position = new Point(0, 0);
-    Direction facing = Direction.UP;
+    private Direction facing = Direction.UP;
 
     public Point getPosition() {
-        return position;
+        return (Point) position.clone();
+    }
+
+    public Direction getFacing() {
+        return facing;
     }
 
     public void rotate(long rotationInstruction) {
@@ -30,17 +33,18 @@ public class HullPaintingRobot{
     }
 
     private void rotateClockwise() {
-        facing = Direction.values()[Math.floorMod(facing.ordinal() + 1, 4)];
+        setFacing(Direction.values()[Math.floorMod(getFacing().ordinal() + 1, 4)]);
     }
 
     private void rotateCounterclockwise() {
-        facing = Direction.values()[Math.floorMod(facing.ordinal() - 1, 4)];
+        setFacing(Direction.values()[Math.floorMod(getFacing().ordinal() - 1, 4)]);
+    }
+
+    private void setFacing(Direction value) {
+        facing = value;
     }
 
     public void moveForward() {
-        position = new Point(
-                getPosition().x + facing.velocity.x,
-                getPosition().y + facing.velocity.y
-        );
+        position.translate(getFacing().velocity.x, getFacing().velocity.y);
     }
 }

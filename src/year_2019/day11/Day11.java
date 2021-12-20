@@ -2,7 +2,6 @@ package year_2019.day11;
 
 import year_2019.IntCodeComputer.IntCodeAPI;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -13,20 +12,20 @@ public class Day11 {
     final static long WHITE = 1L;
     final static long BLACK = 0L;
 
-    final HullPainterModel hullPainterModel = new HullPainterModel();
+    final HullPainterModel model = new HullPainterModel();
     Day11Hull view = new Day11Hull(this);
     IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT);
 
 
     Day11(){
-        view.setDroid(hullPainterModel.robot);
+        view.setModel(model);
         colorPoint(WHITE);
         brainApi.startProgram();
     }
 
 
     private void inputCurrentColor() {
-        brainApi.sendInput(hullPainterModel.getColorAtCurrentPoint());
+        brainApi.sendInput(model.getColorAtCurrentPoint());
     }
 
     /**
@@ -46,19 +45,19 @@ public class Day11 {
     }
 
     private void rotateRobot(long rotationInstruction) {
-        hullPainterModel.rotateRobot(rotationInstruction);
+        model.rotateRobot(rotationInstruction);
         view.updateRobot();
     }
 
     private void moveRobotForward() {
-        hullPainterModel.moveRobotForward();
+        model.moveRobotForward();
         view.updateRobot();
     }
 
     void colorPoint(Long paint) {
-        hullPainterModel.paintPoint(paint);
-        view.setNumberOfUniquePanelsPainted(hullPainterModel.getNumberOfUniquePanelsPainted());
-        view.setColor(hullPainterModel.getCurrentRobotPosition(), paint);
+        model.paintPoint(paint);
+        view.setNumberOfUniquePanelsPainted(model.getNumberOfUniquePanelsPainted());
+        view.setColor(model.getCurrentRobotPosition(), paint);
     }
 
     public void autopilot() throws InterruptedException {
