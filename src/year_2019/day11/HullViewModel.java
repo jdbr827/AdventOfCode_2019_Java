@@ -37,4 +37,21 @@ public class HullViewModel extends CartesianColorViewModel {
     public void updateRobot() {
         setValueAtCartesian(droid.getPosition(), droidFacingMap.get(droid.facing));
     }
+
+    public static <T> Color hullPaintingColorFunction(T value) {
+        if (value != null) {
+            if (value.equals(1L)) {
+                return Color.WHITE;
+            } else {
+                return Color.GRAY;
+            }
+        } else {
+            return Color.GRAY;
+        }
+    }
+
+
+    public void paintAtCartesian(Point position, Long paint) {
+        setColorAtCartesian(position, hullPaintingColorFunction(paint));
+    }
 }

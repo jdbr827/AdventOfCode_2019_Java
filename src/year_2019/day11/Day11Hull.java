@@ -63,8 +63,8 @@ public class Day11Hull {
         table1 = viewModel.createCartesianColorJTable();
     }
 
-    public void setColor(Point position, Color color) {
-        viewModel.setColorAtCartesian(position, color);
+    public void setColor(Point position, Long paint) {
+        viewModel.paintAtCartesian(position, paint);
         table1.repaint();
     }
 

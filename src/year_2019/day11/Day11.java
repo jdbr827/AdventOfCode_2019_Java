@@ -24,17 +24,6 @@ public class Day11 {
         brainApi.startProgram();
     }
 
-    public static <T> Color hullPaintingColorFunction(T value) {
-        if (value != null) {
-            if (value.equals(1L)) {
-                return Color.WHITE;
-            } else {
-                return Color.GRAY;
-            }
-        } else {
-            return Color.GRAY;
-        }
-    }
 
     private void inputCurrentColor() {
         brainApi.sendInput(hullPainterModel.getColorAtCurrentPoint());
@@ -69,7 +58,7 @@ public class Day11 {
     void colorPoint(Long paint) {
         hullPainterModel.paintPoint(paint);
         view.setNumberOfUniquePanelsPainted(hullPainterModel.getNumberOfUniquePanelsPainted());
-        view.setColor(hullPainterModel.getCurrentRobotPosition(), hullPaintingColorFunction(paint));
+        view.setColor(hullPainterModel.getCurrentRobotPosition(), paint);
     }
 
     public void autopilot() throws InterruptedException {
