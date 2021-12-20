@@ -12,13 +12,13 @@ public class Day11 {
     final static long BLACK = 0L;
 
     final HullPainterModel model = new HullPainterModel();
-    Day11Hull view;
+    HullViewModel viewModel;
     IntCodeAPI brainApi = new IntCodeAPI(DAY_10_PUZZLE_INPUT);
 
 
-    Day11(Day11Hull day11Hull){
-        this.view = day11Hull;
-        view.setModel(model);
+    Day11(HullViewModel viewModel){
+        this.viewModel = viewModel;
+        viewModel.setModel(model);
         colorPoint(WHITE);
         brainApi.startProgram();
     }
@@ -46,18 +46,18 @@ public class Day11 {
 
     private void rotateRobot(long rotationInstruction) {
         model.rotateRobot(rotationInstruction);
-        view.updateRobot();
+        viewModel.updateRobot();
     }
 
     private void moveRobotForward() {
         model.moveRobotForward();
-        view.updateRobot();
+        viewModel.updateRobot();
     }
 
     void colorPoint(Long paint) {
         model.paintPoint(paint);
-        view.setNumberOfUniquePanelsPainted(model.getNumberOfUniquePanelsPainted());
-        view.setColor(model.getCurrentRobotPosition(), paint);
+        viewModel.setNumberOfUniquePanelsPainted(model.getNumberOfUniquePanelsPainted());
+        viewModel.paintAtCartesian(model.getCurrentRobotPosition(), paint);
     }
 
     public void autopilot() throws InterruptedException {

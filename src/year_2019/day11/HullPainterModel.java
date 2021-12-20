@@ -9,7 +9,7 @@ import static year_2019.day11.Day11.BLACK;
 public class HullPainterModel {
     Map<Point, Long> hull = new HashMap<Point, Long>();
     HullPaintingRobot robot = new HullPaintingRobot();
-    Map<Point, Boolean> painted = new HashMap<>();
+    Map<Point, Boolean> isPainted = new HashMap<>();
     private int uniquePanelsPainted = 0;
 
     public HullPainterModel() {
@@ -18,20 +18,11 @@ public class HullPainterModel {
     public void paintPoint(Long paint) {
         if (!currentPointHasBeenPainted()) {uniquePanelsPainted++;}
         hull.put(robot.getPosition(), paint);
-        painted.put(robot.getPosition(), true);
+        isPainted.put(robot.getPosition(), true);
     }
 
     public Long getColorAtCurrentPoint() {
         return hull.getOrDefault(robot.getPosition(), BLACK);
-    }
-
-
-    private Boolean currentPointHasBeenPainted() {
-        return painted.getOrDefault(robot.getPosition(), false);
-    }
-
-    public int getNumberOfUniquePanelsPainted() {
-        return uniquePanelsPainted;
     }
 
     public void rotateRobot(long rotationInstruction) {
@@ -49,4 +40,13 @@ public class HullPainterModel {
     public HullPaintingRobot.Direction getCurrentRobotFacing() {
         return robot.getFacing();
     }
+
+    private Boolean currentPointHasBeenPainted() {
+        return isPainted.getOrDefault(robot.getPosition(), false);
+    }
+
+    public int getNumberOfUniquePanelsPainted() {
+        return uniquePanelsPainted;
+    }
+
 }

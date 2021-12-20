@@ -8,6 +8,12 @@ import java.util.Map;
 
 public class HullViewModel extends CartesianColorViewModel {
     HullPainterModel model;
+    Day11Hull view;
+
+    public HullViewModel(Day11Hull day11Hull) {
+        super();
+        this.view = day11Hull;
+    }
 
     public void setModel(HullPainterModel model) {
         this.model = model;
@@ -36,6 +42,7 @@ public class HullViewModel extends CartesianColorViewModel {
 
     public void updateRobot() {
         setValueAtCartesian(model.getCurrentRobotPosition(), droidFacingMap.get(model.getCurrentRobotFacing()));
+        view.repaint();
     }
 
     public static <T> Color hullPaintingColorFunction(T value) {
@@ -53,5 +60,11 @@ public class HullViewModel extends CartesianColorViewModel {
 
     public void paintAtCartesian(Point position, Long paint) {
         setColorAtCartesian(position, hullPaintingColorFunction(paint));
+        view.repaint();
+    }
+
+    public void setNumberOfUniquePanelsPainted(int numberOfUniquePanelsPainted) {
+        view.setNumberOfUniquePanelsPainted(numberOfUniquePanelsPainted);
+        view.repaint();
     }
 }
