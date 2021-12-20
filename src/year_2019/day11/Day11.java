@@ -5,6 +5,7 @@ import year_2019.IntCodeComputer.IntCodeAPI;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class Day11 {
@@ -74,7 +75,7 @@ public class Day11 {
 
     public void autopilot() throws InterruptedException {
         while (executeOneStep()){
-            //TimeUnit.MILLISECONDS.sleep(20); // for visual only
+            TimeUnit.MILLISECONDS.sleep(20); // for visual only
         }
     }
 
