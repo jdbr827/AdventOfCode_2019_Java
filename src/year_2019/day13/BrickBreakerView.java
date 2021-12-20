@@ -27,7 +27,7 @@ public class BrickBreakerView {
     private JButton autopickButton;
     private JButton autopilotButton;
     BlockingQueue<Integer> Inputs;
-    boolean useAutopilot = false;
+
 
 
     public static Color brickBreakerColorFunction(int value) {
@@ -147,7 +147,8 @@ public class BrickBreakerView {
         autopilotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                useAutopilot = !useAutopilot;
+
+                controller.flipUseAutopilot(); //useAutopilot = !useAutopilot;
             }
         });
     }

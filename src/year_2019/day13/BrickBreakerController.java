@@ -1,7 +1,6 @@
 package year_2019.day13;
 
 import javafx.util.Pair;
-import year_2019.IntCodeComputer.IntCode;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
@@ -18,37 +17,21 @@ public class BrickBreakerController {
     private final long[] gameTape;
     BrickBreakerModel model = new BrickBreakerModel();
     BrickBreakerView view = new BrickBreakerView();
-
-    private IntCodeAPI brain;
+    private BrickBreakerBrain brain;
 
     BrickBreakerController(long[] gameTape) {
         this.gameTape = gameTape;
     }
 
-    Optional<Pair<Point, Integer>> getNextOutput() throws Exception {
-        Optional<Long> optX = brain.waitForOutputOptional(() -> {
-            if (view.useAutopilot) {
-                model.joystick.doNextJoystickInput();
-            }
-        });
-        if (optX.isPresent()) {
-            int x = optX.get().intValue();
-            int y = brain.waitForOutputKnown().intValue();
-            int obj_id = brain.waitForOutputKnown().intValue();
-            return Optional.of(new Pair<>(new Point(x, y), obj_id));
-        }
-        return Optional.empty();
-    }
-
 
     public int playGame() throws Exception {
-        brain = new IntCodeAPI(gameTape, model.joystick.joystickInputs);
+        brain = new BrickBreakerBrain(gameTape, model.joystick);
         brain.startProgram();
         Optional<Pair<Point, Integer>> nxt;
-        while ((nxt = getNextOutput()).isPresent()) {
+        while ((nxt = brain.getNextOutput()).isPresent()) {
             processOneOutput(nxt.get());
         }
-        return model.score;
+        return model.getScore();
     }
 
     private void processOneOutput(Pair<Point, Integer> nxt) {
@@ -69,22 +52,25 @@ public class BrickBreakerController {
 
 
     private void setScore(int score) {
-        model.score = score;
-        view.scoreTextPane.setText(String.valueOf(model.score));
+        model.setScore(score);
+        view.scoreTextPane.setText(String.valueOf(model.getScore()));
     }
 
 
     Map<Point, Integer> createGameGrid() throws Exception {
-        IntCodeAPI brain = new IntCodeAPI(DAY_13_PUZZLE_INPUT);
+        BrickBreakerBrain brain = new BrickBreakerBrain(DAY_13_PUZZLE_INPUT);
         Map<Point, Integer> gameGrid = new HashMap<>();
         brain.startProgram();
-        Optional<Long> optX;
-        while ((optX = brain.waitForOutputOptional()).isPresent()) {
-            int x = optX.get().intValue();
-            int y = brain.waitForOutputKnown().intValue();
-            int obj_id = brain.waitForOutputKnown().intValue();
-            gameGrid.put(new Point(y, x), obj_id);
+        Optional<Pair<Point, Integer>> nxt;
+        while ((nxt = brain.getNextOutput()).isPresent()) {
+            int obj_id = nxt.get().getValue();
+            Point p = nxt.get().getKey();
+            gameGrid.put(new Point(p.y, p.x), obj_id);
         }
         return gameGrid;
+    }
+
+    public void flipUseAutopilot() {
+        brain.setUseAutopilot(!brain.isUsingAutopilot());
     }
 }

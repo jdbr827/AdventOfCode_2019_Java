@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class BrickBreakerModel {
     Joystick joystick = new Joystick();
-    int score = 0;
+    private int score = 0;
 
 
      public void populatePoint(Point p, int obj_id) {
@@ -14,5 +14,13 @@ public class BrickBreakerModel {
         if (obj_id == 4) {
             joystick.ballX = p.x;
         }
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }
