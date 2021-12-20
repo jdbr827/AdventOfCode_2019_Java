@@ -1,22 +1,21 @@
 package year_2019.day15;
 
 import year_2019.IntCodeComputer.IntCode;
+import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class DroidMazeController {
-    BlockingQueue<Long> inputs = new LinkedBlockingQueue<>();
-    BlockingQueue<Long> outputs = new LinkedBlockingQueue<>();
-    IntCode brain;
+    IntCodeAPI brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
 
 
     public DroidMazeController(long[] brainTape) {
-        brain = new IntCode(brainTape, inputs, outputs);
-        brain.start();
+        brain = new IntCodeAPI(brainTape);
+        brain.startProgram();
         model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
         view.setDistance(model.droidLocation, 0);
         view.paintPoint(new Point(0, 0), Color.WHITE);
@@ -28,8 +27,8 @@ public class DroidMazeController {
     }
 
     public int moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
-        inputs.put(direction.inputInstruction);
-        int outputInstruction = outputs.take().intValue();
+        brain.sendInput(direction.inputInstruction);
+        int outputInstruction = brain.waitForOutputKnown().intValue();
         int distance = model.dfsDistance.get(model.droidLocation);
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
@@ -52,8 +51,8 @@ public class DroidMazeController {
     }
 
     public int moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
-        inputs.put(direction.inputInstruction);
-        int outputInstruction = outputs.take().intValue();
+        brain.sendInput(direction.inputInstruction);
+        int outputInstruction = brain.waitForOutputKnown().intValue();
         int distance = model.oxygenDistance.get(model.droidLocation);
         Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
