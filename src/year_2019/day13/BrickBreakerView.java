@@ -157,4 +157,8 @@ public class BrickBreakerView {
         // Switching around because of where the origin is in Java
         table1.setValueAt(obj_id, y, x);
     }
+
+    public void setScore(int score) {
+        scoreTextPane.setText(String.valueOf(score));
+    }
 }

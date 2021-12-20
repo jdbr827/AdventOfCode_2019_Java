@@ -2,6 +2,7 @@ package year_2019.day11;
 
 import year_2019.IntCodeComputer.IntCodeAPI;
 
+import java.awt.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +19,7 @@ public class Day11 {
 
     Day11(HullViewModel viewModel){
         this.viewModel = viewModel;
-        viewModel.setModel(model);
+        viewModel.setController(this);
         colorPoint(WHITE);
         brainApi.startProgram();
     }
@@ -67,4 +68,11 @@ public class Day11 {
     }
 
 
+    public Point getCurrentRobotPosition() {
+        return model.getCurrentRobotPosition();
+    }
+
+    public HullPaintingRobot.Direction getCurrentRobotFacing() {
+        return model.getCurrentRobotFacing();
+    }
 }

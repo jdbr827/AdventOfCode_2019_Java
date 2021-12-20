@@ -53,7 +53,7 @@ public class BrickBreakerController {
 
     private void setScore(int score) {
         model.setScore(score);
-        view.scoreTextPane.setText(String.valueOf(model.getScore()));
+        view.setScore(score);
     }
 
 
