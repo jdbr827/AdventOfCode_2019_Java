@@ -42,7 +42,7 @@ public class HullPainterModel {
         return painted.getOrDefault(robot.getPosition(), false);
     }
 
-    public int getUniquePanelsPainted() {
+    public int getNumberOfUniquePanelsPainted() {
         return uniquePanelsPainted;
     }
 

@@ -68,9 +68,8 @@ public class Day11 {
 
     void colorPoint(Long paint) {
         hullPainterModel.paintPoint(paint);
-        view.setUniquePanelsPainted(hullPainterModel.getUniquePanelsPainted());
+        view.setNumberOfUniquePanelsPainted(hullPainterModel.getNumberOfUniquePanelsPainted());
         view.setColor(hullPainterModel.getCurrentRobotPosition(), hullPaintingColorFunction(paint));
-
     }
 
     public void autopilot() throws InterruptedException {

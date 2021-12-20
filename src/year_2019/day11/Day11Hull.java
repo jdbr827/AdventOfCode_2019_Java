@@ -80,7 +80,7 @@ public class Day11Hull {
         table1.repaint();
     }
 
-    public void setUniquePanelsPainted(int unique_panels_painted) {
-        textField1.setText(String.valueOf(unique_panels_painted));
+    public void setNumberOfUniquePanelsPainted(int uniquePanelsPainted) {
+        textField1.setText(String.valueOf(uniquePanelsPainted));
     }
 }
