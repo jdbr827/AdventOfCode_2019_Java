@@ -53,15 +53,15 @@ public class DroidMazeController {
         return outputInstruction;
     }
 
-    public int moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
+    public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
-        int outputInstruction;
+        DroidMazeOutputInstruction outputInstruction;
         int distance = getDroidOxygenDistance();
         CartesianPoint desiredPoint = new CartesianPoint(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
-        if ((outputInstruction = brain.waitForOutputKnown().intValue()) != 0) {
+        if ((outputInstruction = brain.getNextOutputInstruction()) != WALL) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidLocation);
-            if (outputInstruction == 2) {
+            if (outputInstruction == TANK) {
                 view.paintPoint(desiredPoint, Color.GREEN);
             } else {
                 view.paintPoint(desiredPoint, Color.WHITE);

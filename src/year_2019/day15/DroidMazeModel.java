@@ -52,13 +52,13 @@ public class DroidMazeModel {
     }
 
     public void oxygenTankDFS() throws InterruptedException {
-        int result;
+        DroidMazeOutputInstruction result;
         directionStack.clear();
         attemptDirection = startDirection;
         while (!directionStack.isEmpty() || !attemptDirection.equals(startDirection.counterclockwise())) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
             result = controller.moveDroidFromTank(attemptDirection);
-            if (result != 0) {
+            if (result != WALL) {
                 directionStack.push(attemptDirection);
                 attemptDirection = attemptDirection.counterclockwise();
             } else {
