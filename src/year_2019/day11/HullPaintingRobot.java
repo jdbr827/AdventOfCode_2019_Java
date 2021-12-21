@@ -1,5 +1,7 @@
 package year_2019.day11;
 
+import year_2019.CartesianPoint;
+
 import java.awt.*;
 
 public class HullPaintingRobot{
@@ -17,11 +19,11 @@ public class HullPaintingRobot{
         }
     }
 
-    private Point position = new Point(0, 0);
+    private CartesianPoint position = new CartesianPoint(0, 0);
     private Direction facing = Direction.UP;
 
-    public Point getPosition() {
-        return (Point) position.clone();
+    public CartesianPoint getPosition() {
+        return (CartesianPoint) position.clone();
     }
 
     public Direction getFacing() {

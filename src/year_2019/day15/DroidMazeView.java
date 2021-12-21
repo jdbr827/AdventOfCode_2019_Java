@@ -1,5 +1,8 @@
 package year_2019.day15;
 
+import year_2019.CartesianPoint;
+import year_2019.JavaPoint;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -35,7 +38,7 @@ public class DroidMazeView {
         this.controller = droidMazeController;
         droidMazeViewModel.setModelToTable(table1);
         //table1.setModel(droidMazeViewModel.dtm);
-        droidMazeViewModel.setValueAtCartesian(new Point(0, 0), 0);
+        droidMazeViewModel.setValueAtCartesian(new CartesianPoint(0, 0), 0);
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
@@ -89,7 +92,7 @@ public class DroidMazeView {
         }
     }
 
-    public void paintPoint(Point desiredPointCartesian, Color color) {
+    public void paintPoint(CartesianPoint desiredPointCartesian, Color color) {
         droidMazeViewModel.setColorAtCartesian(desiredPointCartesian, color);
         table1.repaint();
 
@@ -102,7 +105,7 @@ public class DroidMazeView {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        Point p = droidMazeViewModel.convertJavaToCartesian(new Point(column, row));
+                        CartesianPoint p = droidMazeViewModel.convertJavaToCartesian(new JavaPoint(column, row));
                         Point q = new Point(p.y, -p.x);
                         return colorJLabel(l, q);
                     }
@@ -117,13 +120,13 @@ public class DroidMazeView {
         return l;
     }
 
-    public void setOxygenDistance(Point droidLocation, int distance) {
+    public void setOxygenDistance(CartesianPoint droidLocation, int distance) {
         droidMazeViewModel.usingOxygenDistance.put((Point) droidLocation.clone(), true);
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 
 
-    public void setDistance(Point droidLocation, int distance) {
+    public void setDistance(CartesianPoint droidLocation, int distance) {
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 

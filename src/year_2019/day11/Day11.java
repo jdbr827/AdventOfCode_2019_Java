@@ -1,8 +1,8 @@
 package year_2019.day11;
 
+import year_2019.CartesianPoint;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
-import java.awt.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -68,7 +68,7 @@ public class Day11 {
     }
 
 
-    public Point getCurrentRobotPosition() {
+    public CartesianPoint getCurrentRobotPosition() {
         return model.getCurrentRobotPosition();
     }
 

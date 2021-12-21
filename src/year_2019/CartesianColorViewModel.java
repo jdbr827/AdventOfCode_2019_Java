@@ -13,7 +13,7 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
     protected DefaultTableModel dtm = new DefaultTableModel(1, 1);
     protected Map<Point, Color> cartesianColorMap = new HashMap<Point, Color>();
 
-    private void addNewPointIfNecessary(DefaultTableModel dtm, Point desiredPointCartesian) {
+    private void addNewPointIfNecessary(DefaultTableModel dtm, CartesianPoint desiredPointCartesian) {
         Point desiredPointJava = convertCartesianToJava(desiredPointCartesian);
 
         int Y = desiredPointJava.y;
@@ -62,14 +62,14 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
         }
     }
 
-    public void setColorAtCartesian(Point desiredPointCartesian, Color color) {
+    public void setColorAtCartesian(CartesianPoint desiredPointCartesian, Color color) {
         addNewPointIfNecessary(dtm, desiredPointCartesian);
         cartesianColorMap.put(desiredPointCartesian, color);
     }
 
-    public void setValueAtCartesian(Point droidLocation, Object value) {
+    public void setValueAtCartesian(CartesianPoint droidLocation, Object value) {
         addNewPointIfNecessary(dtm, droidLocation);
-        Point javaPoint = convertCartesianToJava(droidLocation);
+        JavaPoint javaPoint = convertCartesianToJava(droidLocation);
         dtm.setValueAt(value, javaPoint.x, javaPoint.y);
     }
 
@@ -88,7 +88,7 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        Point p = convertJavaToCartesian(new Point(column, row));
+                        CartesianPoint p = convertJavaToCartesian(new JavaPoint(column, row));
                         Point q = new Point(p.y, -p.x);
                         return colorJLabel(l, q);
                     }

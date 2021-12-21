@@ -1,5 +1,6 @@
 package year_2019.day15;
 
+import year_2019.CartesianPoint;
 import year_2019.IntCodeComputer.IntCode;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
@@ -18,7 +19,7 @@ public class DroidMazeController {
         brain.startProgram();
         model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
         view.setDistance(model.droidLocation, 0);
-        view.paintPoint(new Point(0, 0), Color.WHITE);
+        view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
     public int findOxygenTank() throws InterruptedException {
@@ -30,7 +31,7 @@ public class DroidMazeController {
         brain.sendInput(direction.inputInstruction);
         int outputInstruction = brain.waitForOutputKnown().intValue();
         int distance = model.dfsDistance.get(model.droidLocation);
-        Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
+        CartesianPoint desiredPoint = new CartesianPoint(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if (outputInstruction != 0) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidLocation);
@@ -54,7 +55,7 @@ public class DroidMazeController {
         brain.sendInput(direction.inputInstruction);
         int outputInstruction;
         int distance = getDroidOxygenDistance();
-        Point desiredPoint = new Point(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
+        CartesianPoint desiredPoint = new CartesianPoint(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
         if ((outputInstruction = brain.waitForOutputKnown().intValue()) != 0) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidLocation);

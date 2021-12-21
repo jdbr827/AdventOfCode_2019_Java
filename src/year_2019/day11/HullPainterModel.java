@@ -1,5 +1,7 @@
 package year_2019.day11;
 
+import year_2019.CartesianPoint;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +35,7 @@ public class HullPainterModel {
         robot.moveForward();
     }
 
-    public Point getCurrentRobotPosition() {
+    public CartesianPoint getCurrentRobotPosition() {
         return robot.getPosition();
     }
 

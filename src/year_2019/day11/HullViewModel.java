@@ -1,6 +1,8 @@
 package year_2019.day11;
 
 import year_2019.CartesianColorViewModel;
+import year_2019.CartesianPoint;
+
 import static year_2019.day11.HullPaintingRobot.Direction;
 
 import java.awt.*;
@@ -58,7 +60,7 @@ public class HullViewModel extends CartesianColorViewModel {
     }
 
 
-    public void paintAtCartesian(Point position, Long paint) {
+    public void paintAtCartesian(CartesianPoint position, Long paint) {
         setColorAtCartesian(position, hullPaintingColorFunction(paint));
         view.repaint();
     }

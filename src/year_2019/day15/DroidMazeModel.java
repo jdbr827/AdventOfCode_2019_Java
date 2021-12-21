@@ -1,12 +1,14 @@
 package year_2019.day15;
 
+import year_2019.CartesianPoint;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
 public class DroidMazeModel {
-    Point droidLocation = new Point(0, 0);
+    CartesianPoint droidLocation = new CartesianPoint(0, 0);
     Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
     Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
     private Stack<CardinalDirection> directionStack;
