@@ -35,11 +35,8 @@ public class DroidMazeView {
 
 
     public DroidMazeView(DroidMazeController droidMazeController) {
-        System.out.println(droidMazeViewModel);
         this.controller = droidMazeController;
-        droidMazeViewModel.setModelToTable(table1);
-        //table1.setModel(droidMazeViewModel.dtm);
-        droidMazeViewModel.setValueAtCartesian(new CartesianPoint(0, 0), 0);
+
 
         JFrame frame = new JFrame("Day15");
         panel1.setOpaque(true);
@@ -47,6 +44,10 @@ public class DroidMazeView {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+        droidMazeViewModel.setModelToTable(table1);
+        droidMazeViewModel.setValueAtCartesian(new CartesianPoint(0, 0), 0);
+
 
         southButton.addActionListener(e -> tryMoveDroid(CardinalDirection.SOUTH));
         northButton.addActionListener(e -> tryMoveDroid(CardinalDirection.NORTH));
@@ -101,7 +102,6 @@ public class DroidMazeView {
 
     private void createUIComponents() {
         this.droidMazeViewModel = new DroidMazeViewModel();
-        System.out.println(droidMazeViewModel);
         table1 = droidMazeViewModel.createCartesianColorJTable();
     }
 
