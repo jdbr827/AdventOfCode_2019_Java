@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DroidMazeView {
-    final DroidMazeViewModel droidMazeViewModel = new DroidMazeViewModel();
+    DroidMazeViewModel droidMazeViewModel;
     private JPanel panel1;
     JTable table1;
     private JButton northButton;
@@ -35,6 +35,7 @@ public class DroidMazeView {
 
 
     public DroidMazeView(DroidMazeController droidMazeController) {
+        System.out.println(droidMazeViewModel);
         this.controller = droidMazeController;
         droidMazeViewModel.setModelToTable(table1);
         //table1.setModel(droidMazeViewModel.dtm);
@@ -99,19 +100,9 @@ public class DroidMazeView {
     }
 
     private void createUIComponents() {
-        table1 = new JTable() {
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        CartesianPoint p = droidMazeViewModel.convertJavaToCartesian(new JavaPoint(column, row));
-                        Point q = new Point(p.y, -p.x);
-                        return colorJLabel(l, q);
-                    }
-                };
-            }
-        };
+        this.droidMazeViewModel = new DroidMazeViewModel();
+        System.out.println(droidMazeViewModel);
+        table1 = droidMazeViewModel.createCartesianColorJTable();
     }
 
     private JLabel colorJLabel(JLabel l, Point q) {
