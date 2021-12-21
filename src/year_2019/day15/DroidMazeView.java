@@ -105,12 +105,6 @@ public class DroidMazeView {
         table1 = droidMazeViewModel.createCartesianColorJTable();
     }
 
-    private JLabel colorJLabel(JLabel l, Point q) {
-        l.setBackground(droidMazeViewModel.getBackgroundColorAtCartesian(q));
-        l.setForeground(droidMazeViewModel.getForegroundColorAtCartesian(q));
-        return l;
-    }
-
     public void setOxygenDistance(CartesianPoint droidLocation, int distance) {
         droidMazeViewModel.usingOxygenDistance.put((Point) droidLocation.clone(), true);
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
