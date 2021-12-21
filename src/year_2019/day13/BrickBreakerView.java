@@ -1,7 +1,5 @@
 package year_2019.day13;
 
-import year_2019.day11.Day11Hull;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;

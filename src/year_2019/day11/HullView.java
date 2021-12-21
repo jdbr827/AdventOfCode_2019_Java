@@ -1,9 +1,11 @@
 package year_2019.day11;
 
+import year_2019.CartesianPoint;
+
 import javax.swing.*;
 import java.io.IOException;
 
-public class Day11Hull {
+public class HullView {
     private JPanel panel1;
     private JTable table1;
     private JButton doEverythingButton;
@@ -15,7 +17,9 @@ public class Day11Hull {
     private HullViewModel viewModel;
     Day11 controller;
 
-    public Day11Hull() {
+    public HullView() {
+        controller = new Day11(this);
+        viewModel.setController(controller);
         JFrame frame = new JFrame("Day11Hull");
         textField1.setEditable(false);
         frame.setContentPane(panel1);
@@ -23,12 +27,13 @@ public class Day11Hull {
         frame.pack();
         frame.setVisible(true);
         viewModel.setModelToTable(table1);
-        controller = new Day11(viewModel);
+
 
         doEverythingButton.addActionListener(e -> tryAutopilotThread());
         oneStepButton.addActionListener(e -> tryExecuteOneStep());
         setCurrentPanelToButton.addActionListener(e -> controller.colorPoint(0L));
         setCurrentPanelToButton1.addActionListener(e -> controller.colorPoint(1L));
+        repaint();
     }
 
     private void tryAutopilotThread() {
@@ -65,7 +70,17 @@ public class Day11Hull {
         textField1.setText(String.valueOf(uniquePanelsPainted));
     }
 
+    public void updateRobot() {
+        viewModel.updateRobot();
+        repaint();
+    }
+
+    public void paintAtCartesian(CartesianPoint currentRobotPosition, Long paint) {
+        viewModel.paintAtCartesian(currentRobotPosition, paint);
+        repaint();
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
-        new Day11Hull();
+        new HullView();
     }
 }
