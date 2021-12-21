@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import static year_2019.day15.DroidMazeOutputInstruction.*;
+
 public class DroidMazeModel {
     CartesianPoint droidLocation = new CartesianPoint(0, 0);
     Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
@@ -28,10 +30,10 @@ public class DroidMazeModel {
     public void findOxygenTank() throws InterruptedException {
         attemptDirection = startDirection;
         directionStack = new Stack<>();
-        int result;
-        while ((result = controller.moveDroidFindingTank(attemptDirection)) != 2) {
+        DroidMazeOutputInstruction result;
+        while ((result = controller.moveDroidFindingTank(attemptDirection)) != TANK) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
-            if (result == 1) {
+            if (result == SPACE) {
                 directionStack.push(attemptDirection);
                 attemptDirection = attemptDirection.counterclockwise();
 

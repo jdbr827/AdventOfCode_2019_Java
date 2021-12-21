@@ -8,14 +8,16 @@ import java.awt.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static year_2019.day15.DroidMazeOutputInstruction.*;
+
 public class DroidMazeController {
-    IntCodeAPI brain;
+    DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
 
 
     public DroidMazeController(long[] brainTape) {
-        brain = new IntCodeAPI(brainTape);
+        brain = new DroidMazeBrain(brainTape);
         brain.startProgram();
         model.dfsDistance.put((Point) model.droidLocation.clone(), 0);
         view.setDistance(model.droidLocation, 0);
@@ -27,15 +29,15 @@ public class DroidMazeController {
         return model.dfsDistance.get((Point) model.droidLocation.clone());
     }
 
-    public int moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
+    public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
-        int outputInstruction = brain.waitForOutputKnown().intValue();
+        DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
         int distance = model.dfsDistance.get(model.droidLocation);
         CartesianPoint desiredPoint = new CartesianPoint(model.droidLocation.x + direction.velocity.x, model.droidLocation.y + direction.velocity.y);
-        if (outputInstruction != 0) {
+        if (outputInstruction != WALL) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidLocation);
-            if (outputInstruction == 2) {
+            if (outputInstruction == TANK) {
                 view.paintPoint(desiredPoint, Color.GREEN);
             } else {
                 view.paintPoint(desiredPoint, Color.WHITE);
