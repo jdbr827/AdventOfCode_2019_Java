@@ -4,7 +4,10 @@ import year_2019.CartesianPoint;
 
 import java.awt.*;
 
-public class HullPaintingRobot{
+/**
+ * Data Structure for the position and direction of the robot
+ */
+public class HullPaintingRobot {
 
     public enum Direction{
         UP(new Point(0, 1)),
