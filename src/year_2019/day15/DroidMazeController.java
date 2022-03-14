@@ -3,6 +3,8 @@ package year_2019.day15;
 import year_2019.CartesianPoint;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
@@ -14,17 +16,18 @@ public class DroidMazeController {
     OxygenDistanceTracker oxygenTracker = new OxygenDistanceTracker();
 
 
+
     public DroidMazeController(long[] brainTape) {
         brain = new DroidMazeBrain(brainTape);
+        findingTracker.setDistanceAtCurrentLocation(0);
         brain.startProgram();
-        model.dfsDistance.put((Point) model.getDroidLocation().clone(), 0);
         view.setDistance(model.getDroidLocation(), 0);
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
     public int findOxygenTank() throws InterruptedException {
         model.findOxygenTank();
-        return model.dfsDistance.get((Point) model.getDroidLocation().clone());
+        return findingTracker.getDistanceAtCurrentLocation();
     }
 
     public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
@@ -64,15 +67,16 @@ public class DroidMazeController {
     }
 
     class FindingTankDistanceTracker implements DistanceTracker {
+        Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
 
         @Override
         public Integer getDistanceAtCurrentLocation() {
-            return model.dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
+            return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
         }
 
         @Override
         public void setDistanceAtCurrentLocation(Integer distance) {
-             model.dfsDistance.put(model.getDroidLocation(), distance);
+             dfsDistance.put(model.getDroidLocation(), distance);
              view.setDistance(model.getDroidLocation(), distance);
         }
     }

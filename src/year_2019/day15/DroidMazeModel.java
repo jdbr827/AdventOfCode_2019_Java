@@ -11,7 +11,6 @@ import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
     private final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
-    Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
     Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
     DroidMazeController controller;
 
@@ -24,6 +23,7 @@ public class DroidMazeModel {
 
 
 
+    // Stop when we have found the tank
     public void findOxygenTank() throws InterruptedException {
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         droidMazeRobot.directionStack = new Stack<>();
