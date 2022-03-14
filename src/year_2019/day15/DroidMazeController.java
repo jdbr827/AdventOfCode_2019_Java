@@ -43,16 +43,10 @@ public class DroidMazeController {
         if (outputInstruction != WALL) {
             model.moveDroid(direction);
             view.setDroidLocation(model.droidMazeRobot.getDroidLocation());
-            if (outputInstruction == TANK) {
-                view.paintPoint(desiredPoint, Color.GREEN);
-            } else {
-                view.paintPoint(desiredPoint, Color.WHITE);
-            }
             distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
             distanceTracker.setDistanceAtCurrentLocation(distance);
-        } else {
-            view.paintPoint(desiredPoint, Color.BLACK);
         }
+        view.paintPoint(desiredPoint, outputInstruction.getPaintColor());
         view.repaint();
         return outputInstruction;
     }
