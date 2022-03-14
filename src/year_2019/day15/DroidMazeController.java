@@ -10,6 +10,8 @@ public class DroidMazeController {
     DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
+    FindingTankDistanceTracker findingTracker = new FindingTankDistanceTracker();
+    OxygenDistanceTracker oxygenTracker = new OxygenDistanceTracker();
 
 
     public DroidMazeController(long[] brainTape) {
@@ -26,19 +28,17 @@ public class DroidMazeController {
     }
 
     public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
-        return moveDroid(direction, true);
+        return moveDroid(direction, findingTracker);
     }
 
     public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
-        return moveDroid(direction, false);
+        return moveDroid(direction, oxygenTracker);
     }
 
-    private DroidMazeOutputInstruction moveDroid(CardinalDirection direction, boolean isFindingTank) throws InterruptedException {
+    private DroidMazeOutputInstruction moveDroid(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
         DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
-        int distance = isFindingTank
-                ? model.dfsDistance.get(model.droidMazeRobot.getDroidLocation())
-                : getDroidOxygenDistance();
+        int distance = distanceTracker.getDistanceAtCurrentLocation();
         CartesianPoint desiredPoint = new CartesianPoint(model.droidMazeRobot.getDroidLocation().x + direction.velocity.x, model.droidMazeRobot.getDroidLocation().y + direction.velocity.y);
         if (outputInstruction != WALL) {
             model.moveDroid(direction);
@@ -48,15 +48,8 @@ public class DroidMazeController {
             } else {
                 view.paintPoint(desiredPoint, Color.WHITE);
             }
-            distance = Math.min(distance + 1, isFindingTank ? model.dfsDistance.getOrDefault(model.droidMazeRobot.getDroidLocation(), Integer.MAX_VALUE) : getDroidOxygenDistance());
-
-            if (isFindingTank) {
-                model.dfsDistance.put(model.droidMazeRobot.getDroidLocation(), distance);
-                view.setDistance(model.droidMazeRobot.getDroidLocation(), distance);
-            } else {
-                model.oxygenDistance.put(desiredPoint, distance);
-                view.setOxygenDistance(model.droidMazeRobot.getDroidLocation(), distance);
-            }
+            distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
+            distanceTracker.setDistanceAtCurrentLocation(distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
         }
@@ -70,6 +63,35 @@ public class DroidMazeController {
 
     public void computeOxygenTankDistances() throws InterruptedException {
         model.oxygenTankDFS();
+    }
+
+    class FindingTankDistanceTracker implements DistanceTracker {
+
+        @Override
+        public Integer getDistanceAtCurrentLocation() {
+            return model.dfsDistance.getOrDefault(model.droidMazeRobot.getDroidLocation(), Integer.MAX_VALUE);
+        }
+
+        @Override
+        public void setDistanceAtCurrentLocation(Integer distance) {
+             model.dfsDistance.put(model.droidMazeRobot.getDroidLocation(), distance);
+             view.setDistance(model.droidMazeRobot.getDroidLocation(), distance);
+        }
+    }
+
+    class OxygenDistanceTracker implements DistanceTracker {
+
+        @Override
+        public Integer getDistanceAtCurrentLocation() {
+            return getDroidOxygenDistance();
+        }
+
+        @Override
+        public void setDistanceAtCurrentLocation(Integer distance) {
+            model.oxygenDistance.put(model.droidMazeRobot.getDroidLocation(), distance);
+            view.setOxygenDistance(model.droidMazeRobot.getDroidLocation(), distance);
+
+        }
     }
 
 }
