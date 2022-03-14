@@ -11,7 +11,6 @@ import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
     private final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
-    Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
     DroidMazeController controller;
 
     DroidMazeModel(DroidMazeController controller) {
@@ -44,7 +43,6 @@ public class DroidMazeModel {
         }
         droidMazeRobot.directionStack.push(droidMazeRobot.attemptDirection);
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
-        oxygenDistance.put((Point) droidMazeRobot.getDroidLocation().clone(), 0);
     }
 
     public CartesianPoint getDroidLocation() {

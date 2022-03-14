@@ -58,11 +58,9 @@ public class DroidMazeController {
         view.setDroidLocation(model.getDroidLocation());
     }
 
-    private Integer getDroidOxygenDistance() {
-        return model.oxygenDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
-    }
-
+    //only works if current droid location is at oxygen tank
     public void computeOxygenTankDistances() throws InterruptedException {
+        oxygenTracker.setDistanceAtCurrentLocation(0);
         model.oxygenTankDFS();
     }
 
@@ -82,15 +80,16 @@ public class DroidMazeController {
     }
 
     class OxygenDistanceTracker implements DistanceTracker {
+        private final Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
 
         @Override
         public Integer getDistanceAtCurrentLocation() {
-            return getDroidOxygenDistance();
+            return oxygenDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
         }
 
         @Override
         public void setDistanceAtCurrentLocation(Integer distance) {
-            model.oxygenDistance.put(model.getDroidLocation(), distance);
+            oxygenDistance.put(model.getDroidLocation(), distance);
             view.setOxygenDistance(model.getDroidLocation(), distance);
 
         }
