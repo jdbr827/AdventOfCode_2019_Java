@@ -14,16 +14,15 @@ public class DroidMazeController {
     DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
-    FindingTankDistanceTracker findingTracker = new FindingTankDistanceTracker();
-    OxygenDistanceTracker oxygenTracker = new OxygenDistanceTracker();
+    MapDistanceTracker findingTracker = new MapDistanceTracker(Color.BLACK);
+    MapDistanceTracker oxygenTracker = new MapDistanceTracker(Color.BLUE);
 
 
 
     public DroidMazeController(long[] brainTape) {
         brain = new DroidMazeBrain(brainTape);
-        findingTracker.setDistanceAtCurrentLocation(0);
         brain.startProgram();
-        view.setDistance(model.getDroidLocation(), 0);
+        findingTracker.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
@@ -63,6 +62,10 @@ public class DroidMazeController {
         } else {
             model.directionStack.push(direction);
         }
+        updateStackInView();
+    }
+
+    private void updateStackInView() {
         view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
             StringBuilder::new,
             StringBuilder::append,
@@ -79,9 +82,25 @@ public class DroidMazeController {
         model.allPointsDFS();
     }
 
-    class FindingTankDistanceTracker implements DistanceTracker {
-        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+    public void resetOrigin() {
+        view.resetOrigin(model.getDroidLocation());
+        model.resetOrigin(model.getDroidLocation());
+        findingTracker.resetOrigin();
+        updateStackInView();
+        view.repaint();
+    }
 
+    class MapDistanceTracker implements DistanceTracker {
+        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+        Color viewColor;
+
+        public MapDistanceTracker(Color color) {
+            setViewColor(color);
+        }
+
+        public void setViewColor(Color color) {
+            viewColor = color;
+        }
         @Override
         public Integer getDistanceAtCurrentLocation() {
             return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
@@ -90,24 +109,44 @@ public class DroidMazeController {
         @Override
         public void setDistanceAtCurrentLocation(Integer distance) {
              dfsDistance.put(model.getDroidLocation(), distance);
-             view.setDistance(model.getDroidLocation(), distance);
+             view.setDistance(model.getDroidLocation(), distance, viewColor);
+        }
+
+        public void resetOrigin() {
+            dfsDistance.clear();
+            setDistanceAtCurrentLocation(0);
         }
     }
 
-    class OxygenDistanceTracker implements DistanceTracker {
-        private final Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
-
-        @Override
-        public Integer getDistanceAtCurrentLocation() {
-            return oxygenDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
-        }
-
-        @Override
-        public void setDistanceAtCurrentLocation(Integer distance) {
-            oxygenDistance.put(model.getDroidLocation(), distance);
-            view.setOxygenDistance(model.getDroidLocation(), distance);
-
-        }
-    }
+//    class FindingTankDistanceTracker implements DistanceTracker {
+//        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+//
+//        @Override
+//        public Integer getDistanceAtCurrentLocation() {
+//            return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
+//        }
+//
+//        @Override
+//        public void setDistanceAtCurrentLocation(Integer distance) {
+//             dfsDistance.put(model.getDroidLocation(), distance);
+//             view.setDistance(model.getDroidLocation(), distance);
+//        }
+//    }
+//
+//    class OxygenDistanceTracker implements DistanceTracker {
+//        private final Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
+//
+//        @Override
+//        public Integer getDistanceAtCurrentLocation() {
+//            return oxygenDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
+//        }
+//
+//        @Override
+//        public void setDistanceAtCurrentLocation(Integer distance) {
+//            oxygenDistance.put(model.getDroidLocation(), distance);
+//            view.setOxygenDistance(model.getDroidLocation(), distance);
+//
+//        }
+//    }
 
 }

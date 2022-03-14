@@ -29,12 +29,12 @@ public class DroidMazeModel {
         while ((result = controller.moveDroidFindingTank(droidMazeRobot.attemptDirection)) != TANK) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
             if (result == SPACE) {
-                directionStack.push(droidMazeRobot.attemptDirection);
+                //directionStack.push(droidMazeRobot.attemptDirection);
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.pop();
+                    CardinalDirection prevDir = directionStack.peek(); // we will pop when we move
                     controller.moveDroidFindingTank(prevDir.opposite());
                     droidMazeRobot.attemptDirection = prevDir.clockwise();
                 }
@@ -57,12 +57,12 @@ public class DroidMazeModel {
             System.out.println(getDroidLocation() + " " + droidMazeRobot.attemptDirection);
             result = controller.moveDroidFromTank(droidMazeRobot.attemptDirection);
             if (result != WALL) {
-                directionStack.push(droidMazeRobot.attemptDirection);
+                //directionStack.push(droidMazeRobot.attemptDirection);
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.pop();
+                    CardinalDirection prevDir = directionStack.peek(); // we will pop on move
                     controller.moveDroidFromTank(prevDir.opposite());
                     droidMazeRobot.attemptDirection = prevDir.clockwise();
                 }
@@ -72,5 +72,10 @@ public class DroidMazeModel {
 
     public Stack<CardinalDirection> getDirectionStack() {
         return directionStack;
+    }
+
+    public void resetOrigin(CartesianPoint droidLocation) {
+        directionStack.clear();
+
     }
 }

@@ -18,6 +18,7 @@ public class DroidMazeView {
     private JButton autopilotButton;
     private JButton oxygenTankDistanceButton;
     private JTextField directionStackTextField;
+    private JButton resetOriginButton;
     DroidMazeController controller;
 
     private boolean findingOxygenTankDistance = false;
@@ -86,6 +87,12 @@ public class DroidMazeView {
 
             }
         });
+        resetOriginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.resetOrigin();
+            }
+        });
     }
 
     private void tryMoveDroid(CardinalDirection direction) {
@@ -108,12 +115,13 @@ public class DroidMazeView {
     }
 
     public void setOxygenDistance(CartesianPoint droidLocation, int distance) {
-        droidMazeViewModel.usingOxygenDistance.put((Point) droidLocation.clone(), true);
+        droidMazeViewModel.foregroundColor.put((Point) droidLocation.clone(), Color.BLUE);
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 
 
-    public void setDistance(CartesianPoint droidLocation, int distance) {
+    public void setDistance(CartesianPoint droidLocation, int distance, Color color) {
+        droidMazeViewModel.foregroundColor.put((Point) droidLocation.clone(), color);
         droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
     }
 
@@ -123,5 +131,9 @@ public class DroidMazeView {
 
     public void repaint() {
         table1.repaint();
+    }
+
+    public void resetOrigin(CartesianPoint droidLocation) {
+        droidMazeViewModel.foregroundColor.clear();
     }
 };
