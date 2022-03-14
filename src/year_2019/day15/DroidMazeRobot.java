@@ -15,7 +15,7 @@ public class DroidMazeRobot {
     }
 
     void moveDroid(CardinalDirection direction) {
-        getDroidLocation().translate(direction.velocity.x, direction.velocity.y);
+        droidLocation.translate(direction.velocity.x, direction.velocity.y);
     }
 
     public CartesianPoint getDroidLocation() {
