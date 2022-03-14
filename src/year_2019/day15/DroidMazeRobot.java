@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class DroidMazeRobot {
     private CartesianPoint droidLocation = new CartesianPoint(0, 0);
-    Stack<CardinalDirection> directionStack;
+    Stack<CardinalDirection> directionStack = new Stack<>();
     CardinalDirection attemptDirection;
     final CardinalDirection startDirection;
 

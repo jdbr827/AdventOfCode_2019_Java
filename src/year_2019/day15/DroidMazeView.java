@@ -17,6 +17,7 @@ public class DroidMazeView {
     private JButton eastButton;
     private JButton autopilotButton;
     private JButton oxygenTankDistanceButton;
+    private JTextField directionStackTextField;
     DroidMazeController controller;
 
     private boolean findingOxygenTankDistance = false;
@@ -28,6 +29,10 @@ public class DroidMazeView {
             controller.moveDroidFromTank(direction);
         }
 
+    }
+
+    public void setDirectionStack(String txt) {
+        directionStackTextField.setText(txt);
     }
 
 

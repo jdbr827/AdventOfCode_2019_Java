@@ -5,6 +5,8 @@ import year_2019.CartesianPoint;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
@@ -56,6 +58,11 @@ public class DroidMazeController {
     private void moveDroid(CardinalDirection direction) {
         model.moveDroid(direction);
         view.setDroidLocation(model.getDroidLocation());
+        view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
+            StringBuilder::new,
+            StringBuilder::append,
+            StringBuilder::append,
+            StringBuilder::toString)));
     }
 
     /**

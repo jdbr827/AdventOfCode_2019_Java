@@ -2,6 +2,7 @@ package year_2019.day15;
 
 import year_2019.CartesianPoint;
 
+import javax.swing.*;
 import java.util.Stack;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
@@ -66,5 +67,9 @@ public class DroidMazeModel {
                 }
             }
         }
+    }
+
+    public Stack<CardinalDirection> getDirectionStack() {
+        return droidMazeRobot.directionStack;
     }
 }
