@@ -58,10 +58,13 @@ public class DroidMazeController {
         view.setDroidLocation(model.getDroidLocation());
     }
 
-    //only works if current droid location is at oxygen tank
-    public void computeOxygenTankDistances() throws InterruptedException {
+    /**
+     * Searches the entire maze space and records distances from the starting point
+     * @throws InterruptedException
+     */
+    public void computeAllDistancesFromPoint() throws InterruptedException {
         oxygenTracker.setDistanceAtCurrentLocation(0);
-        model.oxygenTankDFS();
+        model.allPointsDFS();
     }
 
     class FindingTankDistanceTracker implements DistanceTracker {

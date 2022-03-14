@@ -1,11 +1,8 @@
 package year_2019.day15;
 
 import year_2019.CartesianPoint;
-import year_2019.JavaPoint;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -75,7 +72,7 @@ public class DroidMazeView {
                 findingOxygenTankDistance = true;
                 Thread runDroid = new Thread(() -> {
                     try {
-                        controller.computeOxygenTankDistances();
+                        controller.computeAllDistancesFromPoint();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }

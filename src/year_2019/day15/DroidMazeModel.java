@@ -2,9 +2,6 @@ package year_2019.day15;
 
 import year_2019.CartesianPoint;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
@@ -49,12 +46,13 @@ public class DroidMazeModel {
         return droidMazeRobot.getDroidLocation();
     }
 
-    public void oxygenTankDFS() throws InterruptedException {
+    public void allPointsDFS() throws InterruptedException {
         DroidMazeOutputInstruction result;
-        droidMazeRobot.directionStack.clear();
+        droidMazeRobot.directionStack = new Stack<>();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!droidMazeRobot.directionStack.isEmpty() || !droidMazeRobot.attemptDirection.equals(droidMazeRobot.startDirection.counterclockwise())) {
 //            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
+            System.out.println(getDroidLocation() + " " + droidMazeRobot.attemptDirection);
             result = controller.moveDroidFromTank(droidMazeRobot.attemptDirection);
             if (result != WALL) {
                 droidMazeRobot.directionStack.push(droidMazeRobot.attemptDirection);
