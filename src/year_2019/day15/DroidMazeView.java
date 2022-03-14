@@ -15,8 +15,8 @@ public class DroidMazeView {
     private JButton southButton;
     private JButton westButton;
     private JButton eastButton;
-    private JButton autopilotButton;
-    private JButton oxygenTankDistanceButton;
+    private JButton findTank;
+    private JButton AllDistancesButton;
     private JTextField directionStackTextField;
     private JButton resetOriginButton;
     DroidMazeController controller;
@@ -58,7 +58,7 @@ public class DroidMazeView {
         westButton.addActionListener(e -> tryMoveDroid(CardinalDirection.WEST));
 
 
-        autopilotButton.addActionListener(new ActionListener() {;
+        findTank.addActionListener(new ActionListener() {;
             @Override
             public void actionPerformed(ActionEvent e) {
                 droidMazeViewModel.droidLocation = new Point(0, 0);
@@ -72,7 +72,7 @@ public class DroidMazeView {
                 runDroid.start();
             }
         });
-        oxygenTankDistanceButton.addActionListener(new ActionListener() {
+        AllDistancesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findingOxygenTankDistance = true;
