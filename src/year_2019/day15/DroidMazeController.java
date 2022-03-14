@@ -28,27 +28,31 @@ public class DroidMazeController {
     }
 
     public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
-        return moveDroid(direction, findingTracker);
+        return attemptDroidMove(direction, findingTracker);
     }
 
     public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
-        return moveDroid(direction, oxygenTracker);
+        return attemptDroidMove(direction, oxygenTracker);
     }
 
-    private DroidMazeOutputInstruction moveDroid(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
+    private DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
         DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
         int distance = distanceTracker.getDistanceAtCurrentLocation();
         CartesianPoint desiredPoint = new CartesianPoint(model.droidMazeRobot.getDroidLocation().x + direction.velocity.x, model.droidMazeRobot.getDroidLocation().y + direction.velocity.y);
         if (outputInstruction != WALL) {
-            model.moveDroid(direction);
-            view.setDroidLocation(model.droidMazeRobot.getDroidLocation());
+            moveDroid(direction);
             distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
             distanceTracker.setDistanceAtCurrentLocation(distance);
         }
         view.paintPoint(desiredPoint, outputInstruction.getPaintColor());
         view.repaint();
         return outputInstruction;
+    }
+
+    private void moveDroid(CardinalDirection direction) {
+        model.moveDroid(direction);
+        view.setDroidLocation(model.droidMazeRobot.getDroidLocation());
     }
 
     private Integer getDroidOxygenDistance() {
