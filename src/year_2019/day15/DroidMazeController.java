@@ -26,9 +26,19 @@ public class DroidMazeController {
     }
 
     public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
+        return moveDroid(direction, true);
+    }
+
+    public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
+        return moveDroid(direction, false);
+    }
+
+    private DroidMazeOutputInstruction moveDroid(CardinalDirection direction, boolean isFindingTank) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
         DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
-        int distance = model.dfsDistance.get(model.droidMazeRobot.droidLocation);
+        int distance = isFindingTank
+                ? model.dfsDistance.get(model.droidMazeRobot.droidLocation)
+                : getDroidOxygenDistance();
         CartesianPoint desiredPoint = new CartesianPoint(model.droidMazeRobot.droidLocation.x + direction.velocity.x, model.droidMazeRobot.droidLocation.y + direction.velocity.y);
         if (outputInstruction != WALL) {
             model.moveDroid(direction);
@@ -38,38 +48,19 @@ public class DroidMazeController {
             } else {
                 view.paintPoint(desiredPoint, Color.WHITE);
             }
-//            view.paintDroid(model.droidLocation);
-            distance = Math.min(distance + 1, model.dfsDistance.getOrDefault(model.droidMazeRobot.droidLocation, Integer.MAX_VALUE));
-            model.dfsDistance.put(desiredPoint, distance);
-            view.setDistance(model.droidMazeRobot.droidLocation, distance);
-        } else {
-            view.paintPoint(desiredPoint, Color.BLACK);
-        }
-        view.repaint();
-        return outputInstruction;
-    }
+            distance = Math.min(distance + 1, isFindingTank ? model.dfsDistance.getOrDefault(model.droidMazeRobot.droidLocation, Integer.MAX_VALUE) : getDroidOxygenDistance());
 
-    public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
-        brain.sendInput(direction.inputInstruction);
-        DroidMazeOutputInstruction outputInstruction;
-        int distance = getDroidOxygenDistance();
-        CartesianPoint desiredPoint = new CartesianPoint(model.droidMazeRobot.droidLocation.x + direction.velocity.x, model.droidMazeRobot.droidLocation.y + direction.velocity.y);
-        if ((outputInstruction = brain.getNextOutputInstruction()) != WALL) {
-            model.moveDroid(direction);
-            view.setDroidLocation(model.droidMazeRobot.droidLocation);
-            if (outputInstruction == TANK) {
-                view.paintPoint(desiredPoint, Color.GREEN);
+            if (isFindingTank) {
+                model.dfsDistance.put(desiredPoint, distance);
+                view.setDistance(model.droidMazeRobot.droidLocation, distance);
             } else {
-                view.paintPoint(desiredPoint, Color.WHITE);
+                model.oxygenDistance.put(desiredPoint, distance);
+                view.setOxygenDistance(model.droidMazeRobot.droidLocation, distance);
             }
-            distance = Math.min(distance + 1, getDroidOxygenDistance());
-            model.oxygenDistance.put(desiredPoint, distance);
-            view.setOxygenDistance(model.droidMazeRobot.droidLocation, distance);
         } else {
             view.paintPoint(desiredPoint, Color.BLACK);
         }
         view.repaint();
-
         return outputInstruction;
     }
 
