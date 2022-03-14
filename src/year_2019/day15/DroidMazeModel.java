@@ -42,7 +42,7 @@ public class DroidMazeModel {
         }
         droidMazeRobot.directionStack.push(droidMazeRobot.attemptDirection);
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
-        oxygenDistance.put((Point) droidMazeRobot.droidLocation.clone(), 0);
+        oxygenDistance.put((Point) droidMazeRobot.getDroidLocation().clone(), 0);
     }
 
     public void oxygenTankDFS() throws InterruptedException {
