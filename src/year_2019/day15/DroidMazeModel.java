@@ -1,5 +1,7 @@
 package year_2019.day15;
 
+import year_2019.CartesianPoint;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.Stack;
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
-    final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
+    private final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
     Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
     Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
     DroidMazeController controller;
@@ -43,6 +45,10 @@ public class DroidMazeModel {
         droidMazeRobot.directionStack.push(droidMazeRobot.attemptDirection);
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
         oxygenDistance.put((Point) droidMazeRobot.getDroidLocation().clone(), 0);
+    }
+
+    public CartesianPoint getDroidLocation() {
+        return droidMazeRobot.getDroidLocation();
     }
 
     public void oxygenTankDFS() throws InterruptedException {
