@@ -67,7 +67,7 @@ public class DroidMazeController {
     }
 
     class FindingTankDistanceTracker implements DistanceTracker {
-        Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
 
         @Override
         public Integer getDistanceAtCurrentLocation() {
