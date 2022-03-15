@@ -33,9 +33,10 @@ public class DroidMazeController {
         return currentTracker.getDistanceAtCurrentLocation();
     }
 
-    public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
+    public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
         DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
+        DistanceTracker distanceTracker = currentTracker;
         int distance = distanceTracker.getDistanceAtCurrentLocation();
         CartesianPoint desiredPoint = new CartesianPoint(model.getDroidLocation().x + direction.velocity.x, model.getDroidLocation().y + direction.velocity.y);
         if (outputInstruction != WALL) {

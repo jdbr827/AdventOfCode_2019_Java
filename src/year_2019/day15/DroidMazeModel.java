@@ -35,14 +35,14 @@ public class DroidMazeModel {
         directionStack = new Stack<>();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!controller.currentTracker.searchIsFinished()) {
-            result = controller.attemptDroidMove(droidMazeRobot.attemptDirection, controller.currentTracker);
+            result = controller.attemptDroidMove(droidMazeRobot.attemptDirection);
             if (result != WALL) {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
                     CardinalDirection prevDir = directionStack.peek(); // we will pop on move
-                    controller.attemptDroidMove(prevDir.opposite(), controller.currentTracker);
+                    controller.attemptDroidMove(prevDir.opposite());
                     droidMazeRobot.attemptDirection = prevDir.clockwise();
                 }
             }

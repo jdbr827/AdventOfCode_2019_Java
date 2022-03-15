@@ -28,7 +28,7 @@ public class DroidMazeView {
     private boolean findingOxygenTankDistance = false;
 
     private void moveDroid(CardinalDirection direction) throws InterruptedException {
-       controller.attemptDroidMove(direction, controller.currentTracker);
+       controller.attemptDroidMove(direction);
     }
 
     public void setDirectionStack(String txt) {
