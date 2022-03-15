@@ -91,7 +91,7 @@ public class DroidMazeView {
         resetOriginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.resetOrigin();
+                controller.resetOriginInModel();
             }
         });
 
@@ -141,7 +141,7 @@ public class DroidMazeView {
         table1.repaint();
     }
 
-    public void resetOrigin(CartesianPoint droidLocation) {
+    public void resetOrigin() {
         droidMazeViewModel.foregroundColor.clear();
         furthestDistanceField.setText("");
 

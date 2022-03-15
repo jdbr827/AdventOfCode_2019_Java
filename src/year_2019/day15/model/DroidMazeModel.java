@@ -93,6 +93,7 @@ public class DroidMazeModel {
     public void resetOrigin() {
         directionStack.clear();
         controller.updateStackInView();
+        controller.resetOriginInView();
         currentTracker.resetOrigin();
     }
 

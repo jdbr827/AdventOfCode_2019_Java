@@ -22,6 +22,10 @@ public class DroidMazeController {
      * Functions that the view uses to update the model
      */
 
+     public void resetOriginInModel() {
+        model.resetOrigin();
+    }
+
 
     public void findOxygenTank() throws InterruptedException {
         model.setCurrentTrackerToTank();
@@ -84,10 +88,10 @@ public class DroidMazeController {
     /* Functions that do neither */
 
 
-    public void resetOrigin() {
-        view.resetOrigin(model.getDroidLocation());
-        model.resetOrigin();
+
+
+    public void resetOriginInView() {
+        view.resetOrigin();
         view.repaint();
     }
-
 }
