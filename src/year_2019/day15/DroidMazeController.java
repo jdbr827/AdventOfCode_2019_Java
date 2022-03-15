@@ -14,15 +14,11 @@ public class DroidMazeController {
     DroidMazeModel model;
 
 
-
-
     public DroidMazeController(long[] brainTape) {
         model = new DroidMazeModel(this, brainTape);
         model.currentTracker.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
-
-    // TODO! Memory Leak?
 
     /**
      * Functions that the view uses to update the model
@@ -43,6 +39,18 @@ public class DroidMazeController {
     public void computeAllDistancesFromPoint() throws InterruptedException {
         model.setCurrentTrackerToAllPoints();
         model.unifiedDFS();
+    }
+
+    public void attemptDroidMove(CardinalDirection direction) throws InterruptedException {
+        model.attemptDroidMove(direction);
+    }
+
+    public void setCurrentTrackerToTank() {
+        model.setCurrentTrackerToTank();
+    }
+
+    public void setCurrentTrackerToAllPoints() {
+        model.setCurrentTrackerToAllPoints();
     }
 
 
