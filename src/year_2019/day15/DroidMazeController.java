@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
@@ -27,7 +26,7 @@ public class DroidMazeController {
     }
 
     public int findOxygenTank() throws InterruptedException {
-        model.findOxygenTank();
+        model.unifiedDFS(model.controller.findingTracker);
         return findingTracker.getDistanceAtCurrentLocation();
     }
 
@@ -72,7 +71,7 @@ public class DroidMazeController {
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
         oxygenTracker.setDistanceAtCurrentLocation(0);
-        model.allPointsDFS();
+        model.unifiedDFS(model.controller.oxygenTracker);
     }
 
     public void resetOrigin() {
