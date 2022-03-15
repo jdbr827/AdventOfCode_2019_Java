@@ -22,6 +22,11 @@ public class DroidMazeModel {
 
     void moveDroid(CardinalDirection direction) {
         droidMazeRobot.moveDroid(direction);
+        updateDirectionStack(direction);
+        controller.moveDroidInView();
+    }
+
+    private void updateDirectionStack(CardinalDirection direction) {
         if (!directionStack.isEmpty() && directionStack.peek() == direction.opposite()) {
             directionStack.pop();
         } else {
@@ -40,7 +45,7 @@ public class DroidMazeModel {
         int distance = distanceTracker.getDistanceAtCurrentLocation();
         CartesianPoint desiredPoint = new CartesianPoint(getDroidLocation().x + direction.velocity.x, getDroidLocation().y + direction.velocity.y);
         if (outputInstruction != WALL) {
-            controller.moveDroid(direction);
+            moveDroid(direction);
             distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
             distanceTracker.setDistanceAtCurrentLocation(distance);
         }

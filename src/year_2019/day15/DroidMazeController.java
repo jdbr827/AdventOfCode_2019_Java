@@ -38,11 +38,6 @@ public class DroidMazeController {
         view.repaint();
     }
 
-    public void moveDroid(CardinalDirection direction) {
-        model.moveDroid(direction);
-        moveDroidInView();
-    }
-
     public void moveDroidInView() {
         view.setDroidLocation(model.getDroidLocation());
         updateStackInView();
