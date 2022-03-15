@@ -36,6 +36,7 @@ public class DroidMazeModel {
         droidMazeRobot.moveDroid(direction);
         directionStack.moveDroid(direction);
         controller.moveDroidInView();
+
     }
 
     public CartesianPoint getDroidLocation() {
@@ -92,7 +93,6 @@ public class DroidMazeModel {
 
     public void resetOrigin() {
         directionStack.clear();
-        controller.updateStackInView();
         controller.resetOriginInView();
         currentTracker.resetOrigin();
     }
@@ -166,12 +166,16 @@ public class DroidMazeModel {
 
     }
 
+    private void updateStackInView() {
+        controller.updateStackInView(directionStack.toString());
+    }
+
 
     /**
      * A stack type class with the invariant that it represents the set of steps (without backtracks)
      * taken by the bot to get from the set origin to its current location.s
      */
-    public static class DirectionStack {
+    private class DirectionStack {
 
         private final Stack<CardinalDirection> dStack = new Stack<>();
 
@@ -181,6 +185,7 @@ public class DroidMazeModel {
             } else {
                 dStack.push(direction);
             }
+            updateStackInView();
         }
 
         public String toString() {
@@ -193,6 +198,7 @@ public class DroidMazeModel {
 
         public void clear() {
             dStack.clear();
+            updateStackInView();
         }
 
         public boolean isEmpty() {

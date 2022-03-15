@@ -75,13 +75,12 @@ public class DroidMazeController {
 
     public void moveDroidInView() {
         view.setDroidLocation(model.getDroidLocation());
-        updateStackInView();
         view.repaint();
     }
 
 
-    public void updateStackInView() {
-        view.setDirectionStack(model.getDirectionStack().toString());
+    public void updateStackInView(String newStr) {
+        view.setDirectionStack(newStr);
     }
 
 
