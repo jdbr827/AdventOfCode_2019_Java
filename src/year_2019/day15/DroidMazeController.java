@@ -24,6 +24,11 @@ public class DroidMazeController {
 
     // TODO! Memory Leak?
 
+    /**
+     * Functions that the view uses to update the model
+     */
+
+
     public int findOxygenTank() throws InterruptedException {
         setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
         resetOrigin();
@@ -32,6 +37,28 @@ public class DroidMazeController {
     }
 
 
+    /**
+     * Searches the entire maze space and records distances from the starting point
+     * @throws InterruptedException
+     */
+    public void computeAllDistancesFromPoint() throws InterruptedException {
+        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
+        resetOrigin();
+        model.unifiedDFS();
+    }
+
+
+    /**
+     *  Functions that the model uses to update the view
+     */
+
+    private void setFurthestDistanceInView(int furthestDistance) {
+            view.setFurthestDistance(furthestDistance);
+    }
+
+    public void setDistanceInView(CartesianPoint point, Integer distance, Color color) {
+         view.setDistance(point, distance, color);
+    }
 
     public void paintPointInView(DroidMazeOutputInstruction outputInstruction, CartesianPoint desiredPoint) {
         view.paintPoint(desiredPoint, outputInstruction.getPaintColor());
@@ -45,7 +72,7 @@ public class DroidMazeController {
     }
 
 
-    private void updateStackInView() {
+    void updateStackInView() {
         view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
             StringBuilder::new,
             StringBuilder::append,
@@ -53,45 +80,32 @@ public class DroidMazeController {
             StringBuilder::toString)));
     }
 
-    public void setCurrentTracker(MapDistanceTracker tracker){
-        currentTracker = tracker;
+
+    /* Functions that do neither */
+
+    public void setCurrentTrackerToTank() {
+        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
     }
 
-    /**
-     * Searches the entire maze space and records distances from the starting point
-     * @throws InterruptedException
-     */
-    public void computeAllDistancesFromPoint() throws InterruptedException {
+    public void setCurrentTrackerToAllPoints() {
         setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
+    }
+
+    private void setCurrentTracker(MapDistanceTracker tracker){
+        currentTracker = tracker;
         resetOrigin();
-        model.unifiedDFS();
     }
 
     public void resetOrigin() {
         view.resetOrigin(model.getDroidLocation());
         model.resetOrigin();
         currentTracker.resetOrigin();
-        updateStackInView();
         view.repaint();
     }
 
-    public void setCurrentTrackerToTank() {
-        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
-        resetOrigin();
-    }
 
-    public void setCurrentTrackerToAllPoints() {
-        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
-        resetOrigin();
-    }
 
-    private void setFurthestDistanceInView(int furthestDistance) {
-            view.setFurthestDistance(furthestDistance);
-    }
 
-    public void setDistanceInView(CartesianPoint point, Integer distance, Color color) {
-         view.setDistance(point, distance, color);
-    }
 
     abstract class MapDistanceTracker extends DistanceTracker {
         protected final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
