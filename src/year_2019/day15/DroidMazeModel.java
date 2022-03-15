@@ -29,7 +29,7 @@ public class DroidMazeModel {
         directionStack = new Stack<>();
         DroidMazeOutputInstruction result;
         while ((result = controller.moveDroidFindingTank(droidMazeRobot.attemptDirection)) != TANK) {
-            findNextAttemptDirection(result, true);
+            findNextAttemptDirection(result, controller.findingTracker);
         }
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
     }
@@ -46,22 +46,18 @@ public class DroidMazeModel {
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!directionStack.isEmpty() || !droidMazeRobot.attemptDirection.equals(droidMazeRobot.startDirection.counterclockwise())) {
             result = controller.moveDroidFromTank(droidMazeRobot.attemptDirection);
-            findNextAttemptDirection(result, false);
+            findNextAttemptDirection(result, controller.oxygenTracker);
         }
     }
 
-    private void findNextAttemptDirection(DroidMazeOutputInstruction result, boolean isFindingTank) throws InterruptedException {
+    private void findNextAttemptDirection(DroidMazeOutputInstruction result, DistanceTracker distanceTracker) throws InterruptedException {
         if (result != WALL) {
             droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
         } else {
             droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
             while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
                 CardinalDirection prevDir = directionStack.peek(); // we will pop on move
-                if (isFindingTank) {
-                    controller.moveDroidFindingTank(prevDir.opposite());
-                } else {
-                    controller.moveDroidFromTank(prevDir.opposite());
-                }
+                controller.attemptDroidMove(prevDir.opposite(), distanceTracker);
                 droidMazeRobot.attemptDirection = prevDir.clockwise();
             }
         }

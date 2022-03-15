@@ -39,7 +39,7 @@ public class DroidMazeController {
         return attemptDroidMove(direction, oxygenTracker);
     }
 
-    private DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
+    public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
         brain.sendInput(direction.inputInstruction);
         DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
         int distance = distanceTracker.getDistanceAtCurrentLocation();
