@@ -1,6 +1,7 @@
 package year_2019.day11;
 
 import year_2019.CartesianPoint;
+import year_2019.day15.CardinalDirection;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class HullPainterModel {
         return robot.getPosition();
     }
 
-    public HullPaintingRobot.Direction getCurrentRobotFacing() {
+    public CardinalDirection getCurrentRobotFacing() {
         return robot.getFacing();
     }
 

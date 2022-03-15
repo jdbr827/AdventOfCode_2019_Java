@@ -2,8 +2,8 @@ package year_2019.day11;
 
 import year_2019.CartesianColorViewModel;
 import year_2019.CartesianPoint;
+import year_2019.day15.CardinalDirection;
 
-import static year_2019.day11.HullPaintingRobot.Direction;
 
 import java.awt.*;
 import java.util.Map;
@@ -35,11 +35,11 @@ public class HullViewModel extends CartesianColorViewModel {
         }
     }
 
-    public static Map<Direction, Character> droidFacingMap = Map.of(
-        Direction.UP, '^',
-        Direction.DOWN, 'v',
-        Direction.LEFT, '<',
-        Direction.RIGHT, '>'
+    public static Map<CardinalDirection, Character> droidFacingMap = Map.of(
+        CardinalDirection.NORTH, '^',
+        CardinalDirection.SOUTH, 'v',
+        CardinalDirection.WEST, '<',
+        CardinalDirection.EAST, '>'
     );
 
     public void updateRobot() {

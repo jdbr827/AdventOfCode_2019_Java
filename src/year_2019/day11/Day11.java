@@ -2,6 +2,7 @@ package year_2019.day11;
 
 import year_2019.CartesianPoint;
 import year_2019.IntCodeComputer.IntCodeAPI;
+import year_2019.day15.CardinalDirection;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -71,7 +72,7 @@ public class Day11 {
         return model.getCurrentRobotPosition();
     }
 
-    public HullPaintingRobot.Direction getCurrentRobotFacing() {
+    public CardinalDirection getCurrentRobotFacing() {
         return model.getCurrentRobotFacing();
     }
 }
