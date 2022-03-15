@@ -17,6 +17,15 @@ public class RotatingMovingRobot {
     protected RotatingMovingRobot(CardinalDirection initiallyFacing) {
         facing = initiallyFacing;
     }
+
+    public CartesianPoint getPosition() {
+        return (CartesianPoint) position.clone();
+    }
+
+    public void moveForward() {
+        position.translate(getFacing().velocity.x, getFacing().velocity.y);
+    }
+
     protected void rotateClockwise() {
         setFacing(CardinalDirection.values()[Math.floorMod(getFacing().ordinal() + 1, 4)]);
     }

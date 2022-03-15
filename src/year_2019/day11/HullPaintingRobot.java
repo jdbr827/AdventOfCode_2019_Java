@@ -16,16 +16,7 @@ public class HullPaintingRobot extends RotatingMovingRobot {
         super(NORTH);
     }
 
-    public CartesianPoint getPosition() {
-        return (CartesianPoint) position.clone();
-    }
-
-
     public void rotate(long rotationInstruction) {
         if (rotationInstruction == 1L) {rotateClockwise();} else {rotateCounterclockwise();}
-    }
-
-    public void moveForward() {
-        position.translate(getFacing().velocity.x, getFacing().velocity.y);
     }
 }
