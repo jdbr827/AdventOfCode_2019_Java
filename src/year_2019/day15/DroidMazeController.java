@@ -25,7 +25,7 @@ public class DroidMazeController {
     // TODO! Memory Leak?
 
     public int findOxygenTank() throws InterruptedException {
-        currentTracker = new TankFindingDistanceTracker(Color.BLACK);
+        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
         resetOrigin();
         model.unifiedDFS();
         return currentTracker.getDistanceAtCurrentLocation();
@@ -53,12 +53,16 @@ public class DroidMazeController {
             StringBuilder::toString)));
     }
 
+    public void setCurrentTracker(MapDistanceTracker tracker){
+        currentTracker = tracker;
+    }
+
     /**
      * Searches the entire maze space and records distances from the starting point
      * @throws InterruptedException
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
-        currentTracker = new AllPointsDistanceTracker(Color.BLUE);
+        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
         resetOrigin();
         model.unifiedDFS();
     }
@@ -72,26 +76,30 @@ public class DroidMazeController {
     }
 
     public void setCurrentTrackerToTank() {
-        currentTracker = new TankFindingDistanceTracker(Color.BLACK);
+        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
         resetOrigin();
     }
 
     public void setCurrentTrackerToAllPoints() {
-        currentTracker = new AllPointsDistanceTracker(Color.BLUE);
+        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
         resetOrigin();
     }
 
-    abstract class MapDistanceTracker implements DistanceTracker {
+    private void setFurthestDistanceInView(int furthestDistance) {
+            view.setFurthestDistance(furthestDistance);
+    }
+
+    public void setDistanceInView(CartesianPoint point, Integer distance, Color color) {
+         view.setDistance(point, distance, color);
+    }
+
+    abstract class MapDistanceTracker extends DistanceTracker {
         protected final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
-        Color viewColor;
 
         public MapDistanceTracker(Color color) {
-            setViewColor(color);
+            super(color);
         }
 
-        public void setViewColor(Color color) {
-            viewColor = color;
-        }
         @Override
         public Integer getDistanceAtCurrentLocation() {
             return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
@@ -100,7 +108,7 @@ public class DroidMazeController {
         @Override
         public void setDistanceAtCurrentLocation(Integer distance) {
              dfsDistance.put(model.getDroidLocation(), distance);
-             view.setDistance(model.getDroidLocation(), distance, viewColor);
+             setDistanceInView(model.getDroidLocation(), distance, viewColor);
         }
 
         public void resetOrigin() {
@@ -127,6 +135,7 @@ public class DroidMazeController {
         }
 
         int directionsChecked = 0;
+        int furthestDistance = 0;
 
         public Boolean searchIsFinished() {
             if(model.directionStack.isEmpty()) {
@@ -139,10 +148,11 @@ public class DroidMazeController {
         @Override
         public void setDistanceAtCurrentLocation(Integer distance) {
              super.setDistanceAtCurrentLocation(distance);
-             view.setFurthestDistance(Math.max(view.getFurthestDistance(), distance));
-
-
+             furthestDistance = Math.max(furthestDistance, distance);
+             setFurthestDistanceInView(furthestDistance);
         }
+
+
     }
 
 }

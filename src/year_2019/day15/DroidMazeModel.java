@@ -13,6 +13,7 @@ public class DroidMazeModel {
     DroidMazeOutputInstruction result = SPACE; // result of previous attempted droid move
     DroidMazeBrain brain;
 
+
     DroidMazeModel(DroidMazeController controller, long[] brainTape) {
         this.controller = controller;
         brain = new DroidMazeBrain(brainTape);
