@@ -14,8 +14,8 @@ public class DroidMazeController {
     DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
-    MapDistanceTracker findingTracker = new MapDistanceTracker(Color.BLACK);
-    MapDistanceTracker oxygenTracker = new MapDistanceTracker(Color.BLUE);
+    TankFindingDistanceTracker findingTracker = new TankFindingDistanceTracker(Color.BLACK);
+    AllPointsDistanceTracker oxygenTracker = new AllPointsDistanceTracker(Color.BLUE);
 
 
 
@@ -29,14 +29,6 @@ public class DroidMazeController {
     public int findOxygenTank() throws InterruptedException {
         model.findOxygenTank();
         return findingTracker.getDistanceAtCurrentLocation();
-    }
-
-    public DroidMazeOutputInstruction moveDroidFindingTank(CardinalDirection direction) throws InterruptedException {
-        return attemptDroidMove(direction, findingTracker);
-    }
-
-    public DroidMazeOutputInstruction moveDroidFromTank(CardinalDirection direction) throws InterruptedException {
-        return attemptDroidMove(direction, oxygenTracker);
     }
 
     public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
@@ -63,6 +55,7 @@ public class DroidMazeController {
             model.directionStack.push(direction);
         }
         updateStackInView();
+        view.repaint();
     }
 
     private void updateStackInView() {
@@ -90,7 +83,7 @@ public class DroidMazeController {
         view.repaint();
     }
 
-    class MapDistanceTracker implements DistanceTracker {
+    abstract class MapDistanceTracker implements DistanceTracker {
         private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
         Color viewColor;
 
@@ -115,6 +108,28 @@ public class DroidMazeController {
         public void resetOrigin() {
             dfsDistance.clear();
             setDistanceAtCurrentLocation(0);
+        }
+    }
+
+    class TankFindingDistanceTracker extends MapDistanceTracker {
+
+        public TankFindingDistanceTracker(Color color) {
+            super(color);
+        }
+
+        public Boolean searchIsFinished() {
+            return model.result == TANK;
+        }
+    }
+
+    class AllPointsDistanceTracker extends MapDistanceTracker {
+
+        public AllPointsDistanceTracker(Color color) {
+            super(color);
+        }
+
+        public Boolean searchIsFinished() {
+            return model.directionStack.isEmpty() && model.droidMazeRobot.attemptDirection.equals(model.droidMazeRobot.startDirection.counterclockwise());
         }
     }
 

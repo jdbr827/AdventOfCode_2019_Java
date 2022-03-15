@@ -5,4 +5,5 @@ import year_2019.CartesianPoint;
 public interface DistanceTracker {
     Integer getDistanceAtCurrentLocation();
     void setDistanceAtCurrentLocation(Integer distance);
+    Boolean searchIsFinished();
 }

@@ -10,9 +10,10 @@ import java.util.function.Predicate;
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
-    private final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
+    final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
     DroidMazeController controller;
     Stack<CardinalDirection> directionStack = new Stack<>();
+    DroidMazeOutputInstruction result = SPACE; // result of previous attempted droid move
 
     DroidMazeModel(DroidMazeController controller) {
         this.controller = controller;
@@ -24,14 +25,9 @@ public class DroidMazeModel {
 
 
     // Stop when we have found the tank
+    // Assumes you are not starting on the tank
     public void findOxygenTank() throws InterruptedException {
-        droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
-        directionStack = new Stack<>();
-        DroidMazeOutputInstruction result;
-        while ((result = controller.moveDroidFindingTank(droidMazeRobot.attemptDirection)) != TANK) {
-            findNextAttemptDirection(result, controller.findingTracker);
-        }
-        droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
+        unifiedDFS(controller.findingTracker);
     }
 
     public CartesianPoint getDroidLocation() {
@@ -39,15 +35,17 @@ public class DroidMazeModel {
     }
 
 
-
-    public void allPointsDFS() throws InterruptedException {
-        DroidMazeOutputInstruction result;
+    public void unifiedDFS(DistanceTracker distanceTracker) throws InterruptedException {
         directionStack = new Stack<>();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
-        while (!directionStack.isEmpty() || !droidMazeRobot.attemptDirection.equals(droidMazeRobot.startDirection.counterclockwise())) {
-            result = controller.moveDroidFromTank(droidMazeRobot.attemptDirection);
-            findNextAttemptDirection(result, controller.oxygenTracker);
+        while (!distanceTracker.searchIsFinished()) {
+            result = controller.attemptDroidMove(droidMazeRobot.attemptDirection, distanceTracker);
+            findNextAttemptDirection(result, distanceTracker);
         }
+    }
+
+    public void allPointsDFS() throws InterruptedException {
+        unifiedDFS(controller.oxygenTracker);
     }
 
     private void findNextAttemptDirection(DroidMazeOutputInstruction result, DistanceTracker distanceTracker) throws InterruptedException {
