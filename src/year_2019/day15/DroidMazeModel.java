@@ -4,6 +4,8 @@ import year_2019.CartesianPoint;
 
 import javax.swing.*;
 import java.util.Stack;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
@@ -27,16 +29,7 @@ public class DroidMazeModel {
         directionStack = new Stack<>();
         DroidMazeOutputInstruction result;
         while ((result = controller.moveDroidFindingTank(droidMazeRobot.attemptDirection)) != TANK) {
-            if (result == SPACE) {
-                droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
-            } else {
-                droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
-                while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.peek(); // we will pop when we move
-                    controller.moveDroidFindingTank(prevDir.opposite());
-                    droidMazeRobot.attemptDirection = prevDir.clockwise();
-                }
-            }
+            findNextAttemptDirection(result, true);
         }
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
     }
@@ -45,24 +38,31 @@ public class DroidMazeModel {
         return droidMazeRobot.getDroidLocation();
     }
 
+
+
     public void allPointsDFS() throws InterruptedException {
         DroidMazeOutputInstruction result;
         directionStack = new Stack<>();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!directionStack.isEmpty() || !droidMazeRobot.attemptDirection.equals(droidMazeRobot.startDirection.counterclockwise())) {
-//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
-            System.out.println(getDroidLocation() + " " + droidMazeRobot.attemptDirection);
             result = controller.moveDroidFromTank(droidMazeRobot.attemptDirection);
-            if (result != WALL) {
-                //directionStack.push(droidMazeRobot.attemptDirection);
-                droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
-            } else {
-                droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
-                while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
-                    CardinalDirection prevDir = directionStack.peek(); // we will pop on move
+            findNextAttemptDirection(result, false);
+        }
+    }
+
+    private void findNextAttemptDirection(DroidMazeOutputInstruction result, boolean isFindingTank) throws InterruptedException {
+        if (result != WALL) {
+            droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
+        } else {
+            droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
+            while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
+                CardinalDirection prevDir = directionStack.peek(); // we will pop on move
+                if (isFindingTank) {
+                    controller.moveDroidFindingTank(prevDir.opposite());
+                } else {
                     controller.moveDroidFromTank(prevDir.opposite());
-                    droidMazeRobot.attemptDirection = prevDir.clockwise();
                 }
+                droidMazeRobot.attemptDirection = prevDir.clockwise();
             }
         }
     }
