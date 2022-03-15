@@ -43,7 +43,7 @@ public class DroidMazeModel {
     }
 
     public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction) throws InterruptedException {
-        DroidMazeOutputInstruction outputInstruction = brainProcessMoveAttempt(direction);
+        DroidMazeOutputInstruction outputInstruction = brain.attemptDroidMove(direction);
         CartesianPoint desiredPoint = computeDesiredPoint(direction);
         controller.paintPointInView(outputInstruction, desiredPoint);
         if (outputInstruction != WALL) {
@@ -59,11 +59,6 @@ public class DroidMazeModel {
         CartesianPoint desiredPoint = getDroidLocation();
         desiredPoint.translate(direction.velocity.x, direction.velocity.y);
         return desiredPoint;
-    }
-
-    private DroidMazeOutputInstruction brainProcessMoveAttempt(CardinalDirection direction) throws InterruptedException {
-        brain.sendInput(direction.inputInstruction);
-        return brain.getNextOutputInstruction();
     }
 
 
