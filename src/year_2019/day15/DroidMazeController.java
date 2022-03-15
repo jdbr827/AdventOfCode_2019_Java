@@ -13,8 +13,6 @@ public class DroidMazeController {
     DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
-//    TankFindingDistanceTracker findingTracker = new TankFindingDistanceTracker(Color.BLACK);
-//    AllPointsDistanceTracker oxygenTracker = new AllPointsDistanceTracker(Color.BLUE);
     MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
 
 
@@ -31,7 +29,7 @@ public class DroidMazeController {
     public int findOxygenTank() throws InterruptedException {
         currentTracker = new TankFindingDistanceTracker(Color.BLACK);
         resetOrigin();
-        model.unifiedDFS(model.controller.currentTracker);
+        model.unifiedDFS();
         return currentTracker.getDistanceAtCurrentLocation();
     }
 
@@ -72,12 +70,12 @@ public class DroidMazeController {
     public void computeAllDistancesFromPoint() throws InterruptedException {
         currentTracker = new AllPointsDistanceTracker(Color.BLUE);
         resetOrigin();
-        model.unifiedDFS(model.controller.currentTracker);
+        model.unifiedDFS();
     }
 
     public void resetOrigin() {
         view.resetOrigin(model.getDroidLocation());
-        model.resetOrigin(model.getDroidLocation());
+        model.resetOrigin();
         currentTracker.resetOrigin();
         updateStackInView();
         view.repaint();

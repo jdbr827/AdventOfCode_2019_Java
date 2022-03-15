@@ -31,18 +31,18 @@ public class DroidMazeModel {
     }
 
 
-    public void unifiedDFS(DistanceTracker distanceTracker) throws InterruptedException {
+    public void unifiedDFS() throws InterruptedException {
         directionStack = new Stack<>();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
-        while (!distanceTracker.searchIsFinished()) {
-            result = controller.attemptDroidMove(droidMazeRobot.attemptDirection, distanceTracker);
+        while (!controller.currentTracker.searchIsFinished()) {
+            result = controller.attemptDroidMove(droidMazeRobot.attemptDirection, controller.currentTracker);
             if (result != WALL) {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
                 while (!directionStack.isEmpty() && droidMazeRobot.attemptDirection.equals(directionStack.peek().opposite())) {
                     CardinalDirection prevDir = directionStack.peek(); // we will pop on move
-                    controller.attemptDroidMove(prevDir.opposite(), distanceTracker);
+                    controller.attemptDroidMove(prevDir.opposite(), controller.currentTracker);
                     droidMazeRobot.attemptDirection = prevDir.clockwise();
                 }
             }
@@ -53,7 +53,7 @@ public class DroidMazeModel {
         return directionStack;
     }
 
-    public void resetOrigin(CartesianPoint droidLocation) {
+    public void resetOrigin() {
         directionStack.clear();
 
     }
