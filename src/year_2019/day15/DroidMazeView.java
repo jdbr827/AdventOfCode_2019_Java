@@ -22,7 +22,7 @@ public class DroidMazeView {
     private JComboBox goalBox;
     private JTextField textField1;
     private JButton startAnimationButton;
-    private JTextField textField2;
+    private JTextField furthestDistanceField;
     DroidMazeController controller;
 
     private boolean findingOxygenTankDistance = false;
@@ -62,6 +62,7 @@ public class DroidMazeView {
             public void actionPerformed(ActionEvent e) {
                 Thread runDroid = new Thread(() -> {
                     try {
+                        goalBox.setSelectedIndex(0);
                         controller.findOxygenTank();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
@@ -76,6 +77,7 @@ public class DroidMazeView {
                 findingOxygenTankDistance = true;
                 Thread runDroid = new Thread(() -> {
                     try {
+                        goalBox.setSelectedIndex(1);
                         controller.computeAllDistancesFromPoint();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
@@ -140,5 +142,16 @@ public class DroidMazeView {
 
     public void resetOrigin(CartesianPoint droidLocation) {
         droidMazeViewModel.foregroundColor.clear();
+        furthestDistanceField.setText("");
+
+
+    }
+
+    public int getFurthestDistance() {
+        return furthestDistanceField.getText().isEmpty() ? 0 : Integer.parseInt(furthestDistanceField.getText());
+    }
+
+    public void setFurthestDistance(Integer distance) {
+        furthestDistanceField.setText(distance.toString());
     }
 };

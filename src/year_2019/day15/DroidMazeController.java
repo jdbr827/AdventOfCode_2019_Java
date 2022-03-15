@@ -92,7 +92,7 @@ public class DroidMazeController {
     }
 
     abstract class MapDistanceTracker implements DistanceTracker {
-        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
+        protected final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
         Color viewColor;
 
         public MapDistanceTracker(Color color) {
@@ -144,6 +144,14 @@ public class DroidMazeController {
                 return directionsChecked == 5;
             }
             return false;
+        }
+
+        @Override
+        public void setDistanceAtCurrentLocation(Integer distance) {
+             super.setDistanceAtCurrentLocation(distance);
+             view.setFurthestDistance(Math.max(view.getFurthestDistance(), distance));
+
+
         }
     }
 
