@@ -29,11 +29,10 @@ public class DroidMazeController {
      */
 
 
-    public int findOxygenTank() throws InterruptedException {
-        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
-        resetOrigin();
+    public void findOxygenTank() throws InterruptedException {
+        setCurrentTrackerToTank();
         model.unifiedDFS();
-        return currentTracker.getDistanceAtCurrentLocation();
+        //return currentTracker.getDistanceAtCurrentLocation();
     }
 
 
@@ -42,8 +41,7 @@ public class DroidMazeController {
      * @throws InterruptedException
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
-        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
-        resetOrigin();
+        setCurrentTrackerToAllPoints();
         model.unifiedDFS();
     }
 
@@ -99,7 +97,6 @@ public class DroidMazeController {
     public void resetOrigin() {
         view.resetOrigin(model.getDroidLocation());
         model.resetOrigin();
-        currentTracker.resetOrigin();
         view.repaint();
     }
 
