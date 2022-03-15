@@ -19,6 +19,10 @@ public class DroidMazeView {
     private JButton AllDistancesButton;
     private JTextField directionStackTextField;
     private JButton resetOriginButton;
+    private JComboBox comboBox1;
+    private JTextField textField1;
+    private JButton startAnimationButton;
+    private JTextField textField2;
     DroidMazeController controller;
 
     private boolean findingOxygenTankDistance = false;

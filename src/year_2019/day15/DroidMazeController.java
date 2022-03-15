@@ -118,35 +118,4 @@ public class DroidMazeController {
         }
     }
 
-//    class FindingTankDistanceTracker implements DistanceTracker {
-//        private final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
-//
-//        @Override
-//        public Integer getDistanceAtCurrentLocation() {
-//            return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
-//        }
-//
-//        @Override
-//        public void setDistanceAtCurrentLocation(Integer distance) {
-//             dfsDistance.put(model.getDroidLocation(), distance);
-//             view.setDistance(model.getDroidLocation(), distance);
-//        }
-//    }
-//
-//    class OxygenDistanceTracker implements DistanceTracker {
-//        private final Map<Point, Integer> oxygenDistance = new HashMap<>(); // distance from starting point of a point
-//
-//        @Override
-//        public Integer getDistanceAtCurrentLocation() {
-//            return oxygenDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
-//        }
-//
-//        @Override
-//        public void setDistanceAtCurrentLocation(Integer distance) {
-//            oxygenDistance.put(model.getDroidLocation(), distance);
-//            view.setOxygenDistance(model.getDroidLocation(), distance);
-//
-//        }
-//    }
-
 }
