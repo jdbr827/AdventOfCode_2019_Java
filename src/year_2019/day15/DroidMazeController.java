@@ -12,13 +12,13 @@ import static year_2019.day15.DroidMazeOutputInstruction.*;
 public class DroidMazeController {
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model;
-    MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
+
 
 
 
     public DroidMazeController(long[] brainTape) {
         model = new DroidMazeModel(this, brainTape);
-        currentTracker.resetOrigin();
+        model.currentTracker.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
@@ -30,7 +30,7 @@ public class DroidMazeController {
 
 
     public void findOxygenTank() throws InterruptedException {
-        setCurrentTrackerToTank();
+        model.setCurrentTrackerToTank();
         model.unifiedDFS();
         //return currentTracker.getDistanceAtCurrentLocation();
     }
@@ -41,7 +41,7 @@ public class DroidMazeController {
      * @throws InterruptedException
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
-        setCurrentTrackerToAllPoints();
+        model.setCurrentTrackerToAllPoints();
         model.unifiedDFS();
     }
 
@@ -50,7 +50,7 @@ public class DroidMazeController {
      *  Functions that the model uses to update the view
      */
 
-    private void setFurthestDistanceInView(int furthestDistance) {
+    void setFurthestDistanceInView(int furthestDistance) {
             view.setFurthestDistance(furthestDistance);
     }
 
@@ -81,89 +81,11 @@ public class DroidMazeController {
 
     /* Functions that do neither */
 
-    public void setCurrentTrackerToTank() {
-        setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
-    }
-
-    public void setCurrentTrackerToAllPoints() {
-        setCurrentTracker(new AllPointsDistanceTracker(Color.BLUE));
-    }
-
-    private void setCurrentTracker(MapDistanceTracker tracker){
-        currentTracker = tracker;
-        resetOrigin();
-    }
 
     public void resetOrigin() {
         view.resetOrigin(model.getDroidLocation());
         model.resetOrigin();
         view.repaint();
-    }
-
-
-
-
-
-    abstract class MapDistanceTracker extends DistanceTracker {
-        protected final Map<Point, Integer> dfsDistance = new HashMap<>(); // distance from starting point of a point
-
-        public MapDistanceTracker(Color color) {
-            super(color);
-        }
-
-        @Override
-        public Integer getDistanceAtCurrentLocation() {
-            return dfsDistance.getOrDefault(model.getDroidLocation(), Integer.MAX_VALUE);
-        }
-
-        @Override
-        public void setDistanceAtCurrentLocation(Integer distance) {
-             dfsDistance.put(model.getDroidLocation(), distance);
-             setDistanceInView(model.getDroidLocation(), distance, viewColor);
-        }
-
-        public void resetOrigin() {
-            dfsDistance.clear();
-            setDistanceAtCurrentLocation(0);
-        }
-    }
-
-    class TankFindingDistanceTracker extends MapDistanceTracker {
-
-        public TankFindingDistanceTracker(Color color) {
-            super(color);
-        }
-
-        public Boolean searchIsFinished() {
-            return model.result == TANK;
-        }
-    }
-
-    class AllPointsDistanceTracker extends MapDistanceTracker {
-
-        public AllPointsDistanceTracker(Color color) {
-            super(color);
-        }
-
-        int directionsChecked = 0;
-        int furthestDistance = 0;
-
-        public Boolean searchIsFinished() {
-            if(model.directionStack.isEmpty()) {
-                directionsChecked++;
-                return directionsChecked == 5;
-            }
-            return false;
-        }
-
-        @Override
-        public void setDistanceAtCurrentLocation(Integer distance) {
-             super.setDistanceAtCurrentLocation(distance);
-             furthestDistance = Math.max(furthestDistance, distance);
-             setFurthestDistanceInView(furthestDistance);
-        }
-
-
     }
 
 }

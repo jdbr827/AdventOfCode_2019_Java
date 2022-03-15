@@ -98,9 +98,9 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (goalBox.getSelectedItem().equals("TANK")) {
-                    controller.setCurrentTrackerToTank();
+                    controller.model.setCurrentTrackerToTank();
                 } else {
-                    controller.setCurrentTrackerToAllPoints();
+                    controller.model.setCurrentTrackerToAllPoints();
                 }
             }
         });
