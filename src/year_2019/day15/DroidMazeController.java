@@ -10,16 +10,14 @@ import java.util.stream.Collector;
 import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeController {
-    DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
-    DroidMazeModel model = new DroidMazeModel(this);
+    DroidMazeModel model;
     MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
 
 
 
     public DroidMazeController(long[] brainTape) {
-        brain = new DroidMazeBrain(brainTape);
-        brain.startProgram();
+        model = new DroidMazeModel(this, brainTape);
         currentTracker.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
@@ -33,28 +31,24 @@ public class DroidMazeController {
         return currentTracker.getDistanceAtCurrentLocation();
     }
 
-    public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction) throws InterruptedException {
-        brain.sendInput(direction.inputInstruction);
-        DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
-        DistanceTracker distanceTracker = currentTracker;
-        int distance = distanceTracker.getDistanceAtCurrentLocation();
-        CartesianPoint desiredPoint = new CartesianPoint(model.getDroidLocation().x + direction.velocity.x, model.getDroidLocation().y + direction.velocity.y);
-        if (outputInstruction != WALL) {
-            moveDroid(direction);
-            distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
-            distanceTracker.setDistanceAtCurrentLocation(distance);
-        }
+
+
+    public void paintPointInView(DroidMazeOutputInstruction outputInstruction, CartesianPoint desiredPoint) {
         view.paintPoint(desiredPoint, outputInstruction.getPaintColor());
         view.repaint();
-        return outputInstruction;
     }
 
-    private void moveDroid(CardinalDirection direction) {
+    public void moveDroid(CardinalDirection direction) {
         model.moveDroid(direction);
+        moveDroidInView();
+    }
+
+    public void moveDroidInView() {
         view.setDroidLocation(model.getDroidLocation());
         updateStackInView();
         view.repaint();
     }
+
 
     private void updateStackInView() {
         view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
