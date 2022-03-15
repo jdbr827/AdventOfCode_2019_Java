@@ -9,7 +9,7 @@ public enum CardinalDirection {
     WEST(4L, new Point(-1, 0), 'W');
 
     final long inputInstruction;
-    final Point velocity;
+    public final Point velocity;
     final char shortName;
 
 

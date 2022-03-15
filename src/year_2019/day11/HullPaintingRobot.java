@@ -1,8 +1,11 @@
 package year_2019.day11;
 
 import year_2019.CartesianPoint;
+import year_2019.day15.CardinalDirection;
 
 import java.awt.*;
+
+import static year_2019.day15.CardinalDirection.*;
 
 /**
  * Data Structure for the position and direction of the robot
@@ -10,19 +13,19 @@ import java.awt.*;
 public class HullPaintingRobot {
 
     public enum Direction{
-        UP(new Point(0, 1)),
-        RIGHT(new Point(1, 0)),
-        DOWN(new Point(0, -1)),
-        LEFT(new Point(-1, 0));
+        UP(CardinalDirection.NORTH),
+        RIGHT(CardinalDirection.EAST),
+        DOWN(CardinalDirection.SOUTH),
+        LEFT(CardinalDirection.WEST);
 
-        final Point velocity;
+        CardinalDirection cardinalDirection;
 
-        Direction(Point velocity) {
-            this.velocity = velocity;
+        Direction(CardinalDirection cardinalDirection) {
+            this.cardinalDirection = cardinalDirection;
         }
     }
 
-    private CartesianPoint position = new CartesianPoint(0, 0);
+    private final CartesianPoint position = new CartesianPoint(0, 0);
     private Direction facing = Direction.UP;
 
     public CartesianPoint getPosition() {
@@ -50,6 +53,6 @@ public class HullPaintingRobot {
     }
 
     public void moveForward() {
-        position.translate(getFacing().velocity.x, getFacing().velocity.y);
+        position.translate(getFacing().cardinalDirection.velocity.x, getFacing().cardinalDirection.velocity.y);
     }
 }
