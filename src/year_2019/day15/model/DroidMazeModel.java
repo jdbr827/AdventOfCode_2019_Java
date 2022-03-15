@@ -15,7 +15,7 @@ public class DroidMazeModel {
     final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
     DroidMazeController controller;
     DirectionStack directionStack = new DirectionStack();
-    DroidMazeOutputInstruction result = SPACE; // result of previous attempted droid move
+    DroidMazeOutputInstruction standingOn = SPACE;
     DroidMazeBrain brain;
     MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
 
@@ -42,11 +42,18 @@ public class DroidMazeModel {
         return droidMazeRobot.getDroidLocation();
     }
 
+    /**
+     * Attempts to move the droid in the inputted direction and updates the state of model and view based on the result.
+     * @param direction
+     * @return the result of the attempted move
+     * @throws InterruptedException
+     */
     public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction) throws InterruptedException {
         DroidMazeOutputInstruction outputInstruction = brain.attemptDroidMove(direction);
         CartesianPoint desiredPoint = computeDesiredPoint(direction);
         controller.paintPointInView(outputInstruction, desiredPoint);
         if (outputInstruction != WALL) {
+            standingOn = outputInstruction;
             int distance = currentTracker.getDistanceAtCurrentLocation();
             moveDroid(direction);
             distance = Math.min(distance + 1, currentTracker.getDistanceAtCurrentLocation());
@@ -62,12 +69,11 @@ public class DroidMazeModel {
     }
 
 
-    public void unifiedDFS() throws InterruptedException {
+    public void droidDFS() throws InterruptedException {
         directionStack = new DirectionStack();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!currentTracker.searchIsFinished()) {
-            result = attemptDroidMove(droidMazeRobot.attemptDirection);
-            if (result != WALL) {
+            if (attemptDroidMove(droidMazeRobot.attemptDirection) != WALL) {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();
@@ -129,7 +135,7 @@ public class DroidMazeModel {
         }
 
         public Boolean searchIsFinished() {
-            return result == TANK;
+            return standingOn == TANK;
         }
     }
 

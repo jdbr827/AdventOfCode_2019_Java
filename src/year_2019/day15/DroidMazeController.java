@@ -6,7 +6,6 @@ import year_2019.day15.model.DroidMazeModel;
 import year_2019.day15.model.DroidMazeOutputInstruction;
 
 import java.awt.*;
-import java.util.stream.Collector;
 
 public class DroidMazeController {
     DroidMazeView view = new DroidMazeView(this);
@@ -26,7 +25,7 @@ public class DroidMazeController {
 
     public void findOxygenTank() throws InterruptedException {
         model.setCurrentTrackerToTank();
-        model.unifiedDFS();
+        model.droidDFS();
         //return currentTracker.getDistanceAtCurrentLocation();
     }
 
@@ -37,7 +36,7 @@ public class DroidMazeController {
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
         model.setCurrentTrackerToAllPoints();
-        model.unifiedDFS();
+        model.droidDFS();
     }
 
     public void attemptDroidMove(CardinalDirection direction) throws InterruptedException {
