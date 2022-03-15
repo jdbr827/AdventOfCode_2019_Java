@@ -15,8 +15,15 @@ public class DroidMazeModel {
     DroidMazeModel(DroidMazeController controller) {
         this.controller = controller;
     }
+
+
     void moveDroid(CardinalDirection direction) {
         droidMazeRobot.moveDroid(direction);
+        if (!directionStack.isEmpty() && directionStack.peek() == direction.opposite()) {
+            directionStack.pop();
+        } else {
+            directionStack.push(direction);
+        }
     }
 
     public CartesianPoint getDroidLocation() {

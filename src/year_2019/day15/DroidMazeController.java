@@ -48,11 +48,6 @@ public class DroidMazeController {
     private void moveDroid(CardinalDirection direction) {
         model.moveDroid(direction);
         view.setDroidLocation(model.getDroidLocation());
-        if (!model.directionStack.isEmpty() && model.directionStack.peek() == direction.opposite()) {
-            model.directionStack.pop();
-        } else {
-            model.directionStack.push(direction);
-        }
         updateStackInView();
         view.repaint();
     }
