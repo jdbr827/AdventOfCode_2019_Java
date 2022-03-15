@@ -1,11 +1,6 @@
 package year_2019.day11;
 
-import year_2019.CartesianPoint;
-import year_2019.day15.CardinalDirection;
-
-import java.awt.*;
-
-import static year_2019.day15.CardinalDirection.*;
+import static year_2019.day15.model.CardinalDirection.*;
 
 /**
  * Data Structure for the position and direction of the robot

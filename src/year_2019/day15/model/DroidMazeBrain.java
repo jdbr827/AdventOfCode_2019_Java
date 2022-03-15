@@ -1,4 +1,4 @@
-package year_2019.day15;
+package year_2019.day15.model;
 
 import year_2019.IntCodeComputer.IntCodeAPI;
 

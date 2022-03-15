@@ -1,13 +1,13 @@
-package year_2019.day15;
+package year_2019.day15.model;
 
 import year_2019.CartesianPoint;
 
 import java.awt.*;
 
 public abstract class DistanceTracker {
-    Color viewColor;
-    abstract Integer getDistanceAtCurrentLocation();
-    abstract void setDistanceAtCurrentLocation(Integer distance);
+    protected Color viewColor;
+    protected abstract Integer getDistanceAtCurrentLocation();
+    protected abstract void setDistanceAtCurrentLocation(Integer distance);
     protected abstract Boolean searchIsFinished();
 
     public DistanceTracker(Color color) {

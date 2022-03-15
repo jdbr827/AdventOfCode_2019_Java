@@ -1,13 +1,14 @@
-package year_2019.day15;
+package year_2019.day15.model;
 
 import year_2019.CartesianPoint;
+import year_2019.day15.DroidMazeController;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static year_2019.day15.DroidMazeOutputInstruction.*;
+import static year_2019.day15.model.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
     final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
@@ -18,13 +19,13 @@ public class DroidMazeModel {
     MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
 
 
-    DroidMazeModel(DroidMazeController controller, long[] brainTape) {
+    public DroidMazeModel(DroidMazeController controller, long[] brainTape) {
         this.controller = controller;
         brain = new DroidMazeBrain(brainTape);
         brain.startProgram();
     }
 
-    void setCurrentTracker(MapDistanceTracker tracker){
+    private void setCurrentTracker(MapDistanceTracker tracker){
         currentTracker = tracker;
         resetOrigin();
     }
@@ -92,7 +93,7 @@ public class DroidMazeModel {
         currentTracker.resetOrigin();
     }
 
-     public void setCurrentTrackerToTank() {
+    public void setCurrentTrackerToTank() {
         setCurrentTracker(new TankFindingDistanceTracker(Color.BLACK));
     }
 

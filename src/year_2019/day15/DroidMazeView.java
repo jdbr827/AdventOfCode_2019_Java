@@ -1,6 +1,7 @@
 package year_2019.day15;
 
 import year_2019.CartesianPoint;
+import year_2019.day15.model.CardinalDirection;
 
 import javax.swing.*;
 import java.awt.*;

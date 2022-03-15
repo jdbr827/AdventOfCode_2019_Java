@@ -1,13 +1,12 @@
 package year_2019.day15;
 
 import year_2019.CartesianPoint;
+import year_2019.day15.model.CardinalDirection;
+import year_2019.day15.model.DroidMazeModel;
+import year_2019.day15.model.DroidMazeOutputInstruction;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collector;
-
-import static year_2019.day15.DroidMazeOutputInstruction.*;
 
 public class DroidMazeController {
     DroidMazeView view = new DroidMazeView(this);
@@ -16,7 +15,7 @@ public class DroidMazeController {
 
     public DroidMazeController(long[] brainTape) {
         model = new DroidMazeModel(this, brainTape);
-        model.currentTracker.resetOrigin();
+        model.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
@@ -58,7 +57,7 @@ public class DroidMazeController {
      *  Functions that the model uses to update the view
      */
 
-    void setFurthestDistanceInView(int furthestDistance) {
+    public void setFurthestDistanceInView(int furthestDistance) {
             view.setFurthestDistance(furthestDistance);
     }
 
@@ -78,7 +77,7 @@ public class DroidMazeController {
     }
 
 
-    void updateStackInView() {
+    public void updateStackInView() {
         view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
             StringBuilder::new,
             StringBuilder::append,

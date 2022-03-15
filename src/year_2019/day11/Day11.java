@@ -2,7 +2,7 @@ package year_2019.day11;
 
 import year_2019.CartesianPoint;
 import year_2019.IntCodeComputer.IntCodeAPI;
-import year_2019.day15.CardinalDirection;
+import year_2019.day15.model.CardinalDirection;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
