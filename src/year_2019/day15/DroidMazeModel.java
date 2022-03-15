@@ -40,7 +40,7 @@ public class DroidMazeModel {
                 }
             }
         }
-        directionStack.push(droidMazeRobot.attemptDirection);
+        //directionStack.push(droidMazeRobot.attemptDirection);
         droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
     }
 
