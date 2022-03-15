@@ -7,13 +7,14 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Collector;
 
 import static year_2019.day15.model.DroidMazeOutputInstruction.*;
 
 public class DroidMazeModel {
     final DroidMazeRobot droidMazeRobot = new DroidMazeRobot();
     DroidMazeController controller;
-    Stack<CardinalDirection> directionStack = new Stack<>();
+    DirectionStack directionStack = new DirectionStack();
     DroidMazeOutputInstruction result = SPACE; // result of previous attempted droid move
     DroidMazeBrain brain;
     MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
@@ -33,16 +34,8 @@ public class DroidMazeModel {
 
     void moveDroid(CardinalDirection direction) {
         droidMazeRobot.moveDroid(direction);
-        updateDirectionStack(direction);
+        directionStack.moveDroid(direction);
         controller.moveDroidInView();
-    }
-
-    private void updateDirectionStack(CardinalDirection direction) {
-        if (!directionStack.isEmpty() && directionStack.peek() == direction.opposite()) {
-            directionStack.pop();
-        } else {
-            directionStack.push(direction);
-        }
     }
 
     public CartesianPoint getDroidLocation() {
@@ -50,23 +43,32 @@ public class DroidMazeModel {
     }
 
     public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction) throws InterruptedException {
-        brain.sendInput(direction.inputInstruction);
-        DroidMazeOutputInstruction outputInstruction = brain.getNextOutputInstruction();
-        DistanceTracker distanceTracker = currentTracker;
-        int distance = distanceTracker.getDistanceAtCurrentLocation();
-        CartesianPoint desiredPoint = new CartesianPoint(getDroidLocation().x + direction.velocity.x, getDroidLocation().y + direction.velocity.y);
-        if (outputInstruction != WALL) {
-            moveDroid(direction);
-            distance = Math.min(distance + 1, distanceTracker.getDistanceAtCurrentLocation());
-            distanceTracker.setDistanceAtCurrentLocation(distance);
-        }
+        DroidMazeOutputInstruction outputInstruction = brainProcessMoveAttempt(direction);
+        CartesianPoint desiredPoint = computeDesiredPoint(direction);
         controller.paintPointInView(outputInstruction, desiredPoint);
+        if (outputInstruction != WALL) {
+            int distance = currentTracker.getDistanceAtCurrentLocation();
+            moveDroid(direction);
+            distance = Math.min(distance + 1, currentTracker.getDistanceAtCurrentLocation());
+            currentTracker.setDistanceAtCurrentLocation(distance);
+        }
         return outputInstruction;
+    }
+
+    private CartesianPoint computeDesiredPoint(CardinalDirection direction) {
+        CartesianPoint desiredPoint = getDroidLocation();
+        desiredPoint.translate(direction.velocity.x, direction.velocity.y);
+        return desiredPoint;
+    }
+
+    private DroidMazeOutputInstruction brainProcessMoveAttempt(CardinalDirection direction) throws InterruptedException {
+        brain.sendInput(direction.inputInstruction);
+        return brain.getNextOutputInstruction();
     }
 
 
     public void unifiedDFS() throws InterruptedException {
-        directionStack = new Stack<>();
+        directionStack = new DirectionStack();
         droidMazeRobot.attemptDirection = droidMazeRobot.startDirection;
         while (!currentTracker.searchIsFinished()) {
             result = attemptDroidMove(droidMazeRobot.attemptDirection);
@@ -83,7 +85,7 @@ public class DroidMazeModel {
         }
     }
 
-    public Stack<CardinalDirection> getDirectionStack() {
+    public DirectionStack getDirectionStack() {
         return directionStack;
     }
 
@@ -160,6 +162,44 @@ public class DroidMazeModel {
              controller.setFurthestDistanceInView(furthestDistance);
         }
 
+    }
+
+
+    /**
+     * A stack type class with the invariant that it represents the set of steps (without backtracks)
+     * taken by the bot to get from the set origin to its current location.s
+     */
+    public static class DirectionStack {
+
+        private final Stack<CardinalDirection> dStack = new Stack<>();
+
+        public void moveDroid(CardinalDirection direction) {
+            if (!dStack.isEmpty() && dStack.peek() == direction.opposite()) {
+                dStack.pop();
+            } else {
+                dStack.push(direction);
+            }
+        }
+
+        public String toString() {
+            return dStack.stream().map(CardinalDirection::getShortName).collect(Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append,
+                StringBuilder::toString));
+        }
+
+        public void clear() {
+            dStack.clear();
+        }
+
+        public boolean isEmpty() {
+            return dStack.isEmpty();
+        }
+
+        public CardinalDirection peek() {
+            return dStack.peek();
+        }
     }
 
 }

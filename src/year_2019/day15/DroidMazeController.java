@@ -78,11 +78,7 @@ public class DroidMazeController {
 
 
     public void updateStackInView() {
-        view.setDirectionStack(model.getDirectionStack().stream().map(CardinalDirection::getShortName).collect(Collector.of(
-            StringBuilder::new,
-            StringBuilder::append,
-            StringBuilder::append,
-            StringBuilder::toString)));
+        view.setDirectionStack(model.getDirectionStack().toString());
     }
 
 
