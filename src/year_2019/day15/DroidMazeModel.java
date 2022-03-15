@@ -27,9 +27,7 @@ public class DroidMazeModel {
         directionStack = new Stack<>();
         DroidMazeOutputInstruction result;
         while ((result = controller.moveDroidFindingTank(droidMazeRobot.attemptDirection)) != TANK) {
-//            assert(model.dfsDistance.get(model.droidLocation).equals(directionStack.size()));
             if (result == SPACE) {
-                //directionStack.push(droidMazeRobot.attemptDirection);
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.counterclockwise();
             } else {
                 droidMazeRobot.attemptDirection = droidMazeRobot.attemptDirection.clockwise();

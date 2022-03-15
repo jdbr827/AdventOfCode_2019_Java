@@ -19,7 +19,7 @@ public class DroidMazeView {
     private JButton AllDistancesButton;
     private JTextField directionStackTextField;
     private JButton resetOriginButton;
-    private JComboBox comboBox1;
+    private JComboBox goalBox;
     private JTextField textField1;
     private JButton startAnimationButton;
     private JTextField textField2;
@@ -65,7 +65,6 @@ public class DroidMazeView {
         findTank.addActionListener(new ActionListener() {;
             @Override
             public void actionPerformed(ActionEvent e) {
-                droidMazeViewModel.droidLocation = new Point(0, 0);
                 Thread runDroid = new Thread(() -> {
                     try {
                         controller.findOxygenTank();
@@ -118,10 +117,6 @@ public class DroidMazeView {
         table1 = droidMazeViewModel.createCartesianColorJTable();
     }
 
-    public void setOxygenDistance(CartesianPoint droidLocation, int distance) {
-        droidMazeViewModel.foregroundColor.put((Point) droidLocation.clone(), Color.BLUE);
-        droidMazeViewModel.setValueAtCartesian(droidLocation, distance);
-    }
 
 
     public void setDistance(CartesianPoint droidLocation, int distance, Color color) {
