@@ -28,12 +28,7 @@ public class DroidMazeView {
     private boolean findingOxygenTankDistance = false;
 
     private void moveDroid(CardinalDirection direction) throws InterruptedException {
-        if (!findingOxygenTankDistance) {
-            controller.attemptDroidMove(direction, controller.findingTracker);
-        } else {
-            controller.attemptDroidMove(direction, controller.oxygenTracker);
-        }
-
+       controller.attemptDroidMove(direction, controller.currentTracker);
     }
 
     public void setDirectionStack(String txt) {
@@ -94,6 +89,17 @@ public class DroidMazeView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.resetOrigin();
+            }
+        });
+
+        goalBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (goalBox.getSelectedItem().equals("TANK")) {
+                    controller.setCurrentTrackerToTank();
+                } else {
+                    controller.setCurrentTrackerToAllPoints();
+                }
             }
         });
     }

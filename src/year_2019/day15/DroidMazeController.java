@@ -13,21 +13,26 @@ public class DroidMazeController {
     DroidMazeBrain brain;
     DroidMazeView view = new DroidMazeView(this);
     DroidMazeModel model = new DroidMazeModel(this);
-    TankFindingDistanceTracker findingTracker = new TankFindingDistanceTracker(Color.BLACK);
-    AllPointsDistanceTracker oxygenTracker = new AllPointsDistanceTracker(Color.BLUE);
+//    TankFindingDistanceTracker findingTracker = new TankFindingDistanceTracker(Color.BLACK);
+//    AllPointsDistanceTracker oxygenTracker = new AllPointsDistanceTracker(Color.BLUE);
+    MapDistanceTracker currentTracker = new TankFindingDistanceTracker(Color.BLACK);
 
 
 
     public DroidMazeController(long[] brainTape) {
         brain = new DroidMazeBrain(brainTape);
         brain.startProgram();
-        findingTracker.resetOrigin();
+        currentTracker.resetOrigin();
         view.paintPoint(new CartesianPoint(0, 0), Color.WHITE);
     }
 
+    // TODO! Memory Leak?
+
     public int findOxygenTank() throws InterruptedException {
-        model.unifiedDFS(model.controller.findingTracker);
-        return findingTracker.getDistanceAtCurrentLocation();
+        currentTracker = new TankFindingDistanceTracker(Color.BLACK);
+        resetOrigin();
+        model.unifiedDFS(model.controller.currentTracker);
+        return currentTracker.getDistanceAtCurrentLocation();
     }
 
     public DroidMazeOutputInstruction attemptDroidMove(CardinalDirection direction, DistanceTracker distanceTracker) throws InterruptedException {
@@ -65,16 +70,27 @@ public class DroidMazeController {
      * @throws InterruptedException
      */
     public void computeAllDistancesFromPoint() throws InterruptedException {
-        oxygenTracker.setDistanceAtCurrentLocation(0);
-        model.unifiedDFS(model.controller.oxygenTracker);
+        currentTracker = new AllPointsDistanceTracker(Color.BLUE);
+        resetOrigin();
+        model.unifiedDFS(model.controller.currentTracker);
     }
 
     public void resetOrigin() {
         view.resetOrigin(model.getDroidLocation());
         model.resetOrigin(model.getDroidLocation());
-        findingTracker.resetOrigin();
+        currentTracker.resetOrigin();
         updateStackInView();
         view.repaint();
+    }
+
+    public void setCurrentTrackerToTank() {
+        currentTracker = new TankFindingDistanceTracker(Color.BLACK);
+        resetOrigin();
+    }
+
+    public void setCurrentTrackerToAllPoints() {
+        currentTracker = new AllPointsDistanceTracker(Color.BLUE);
+        resetOrigin();
     }
 
     abstract class MapDistanceTracker implements DistanceTracker {
@@ -122,8 +138,14 @@ public class DroidMazeController {
             super(color);
         }
 
+        int directionsChecked = 0;
+
         public Boolean searchIsFinished() {
-            return model.directionStack.isEmpty() && model.droidMazeRobot.attemptDirection.equals(model.droidMazeRobot.startDirection.counterclockwise());
+            if(model.directionStack.isEmpty()) {
+                directionsChecked++;
+                return directionsChecked == 5;
+            }
+            return false;
         }
     }
 
