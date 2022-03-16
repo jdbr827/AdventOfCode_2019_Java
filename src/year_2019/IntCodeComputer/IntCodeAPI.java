@@ -46,6 +46,16 @@ public class IntCodeAPI {
         return result;
     }
 
+    public Optional<Long> waitForOutputOptionalSuspended() throws InterruptedException {
+        Optional<Long> result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
+        while(!result.isPresent()) {
+                if (!brain.isAlive()) {return Optional.empty();}
+                else if (isAwaitingNextInput()) {return Optional.empty();}
+               result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
+            }
+        return result;
+    }
+
      public Optional<Long> waitForOutputOptional(Runnable inputProvider) throws Exception {
         Optional<Long> result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
         while(!result.isPresent()) {
