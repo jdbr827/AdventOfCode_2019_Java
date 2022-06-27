@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class GameOfBugLife {
     private boolean[][] board;
+    private boolean[] previousStates = new boolean[(int) Math.pow(2, 25.0)];
 
     GameOfBugLife(boolean[][] board) {
         this.board = board;
@@ -20,26 +21,39 @@ public class GameOfBugLife {
      *
      * @return
      */
-    public boolean runOneMinute() {
+    public void runOneMinute() {
         boolean[][] newBoard = new boolean[5][5];
-        boolean isSame = true;
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 newBoard[x][y] = determineNewState(x, y);
-                if (newBoard[x][y] != board[x][y]) {
-                    isSame = false;
-                }
             }
         }
         this.board = newBoard;
-        return isSame;
     }
 
 
     public static void main(String[] args) throws IOException {
         GameOfBugLife game = readInBoard();
-        System.out.println(game.runOneMinute());
+        System.out.println(game.runUntilRepeat());
         System.out.println(Arrays.deepToString(game.board));
+    }
+
+    private int runUntilRepeat() {
+        int bdr;
+        while ((bdr = this.acknowledgeCurrentBiodiversityRating()) == -1) {
+            this.runOneMinute();
+        }
+        return bdr;
+    }
+
+    private int acknowledgeCurrentBiodiversityRating() {
+        int bdr = this.getCurrentBiodiversityRating();
+        if (this.previousStates[bdr]) {
+            return bdr;
+        } else {
+            this.previousStates[bdr] = true;
+            return -1;
+        }
     }
 
     static GameOfBugLife readInBoard() throws IOException {
@@ -50,7 +64,6 @@ public class GameOfBugLife {
             line = br.readLine();
             for (int y = 0; y < 5; y++) {
                 char c = line.charAt(y);
-                System.out.println(x + " " + y + " " + c);
                 board[x][y] = (c == '#');
             }
         }
@@ -83,5 +96,19 @@ public class GameOfBugLife {
             liveNeighbors += this.board[x][y + 1] ? 1 : 0;
         }
         return liveNeighbors;
+    }
+
+    private int getCurrentBiodiversityRating() {
+        int powerOf2 = 0;
+        int tot = 0;
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (this.board[x][y]) {
+                    tot += Math.pow(2, powerOf2);
+                }
+                powerOf2++;
+            }
+        }
+        return tot;
     }
 }
