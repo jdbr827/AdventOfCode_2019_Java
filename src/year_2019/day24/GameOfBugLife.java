@@ -26,7 +26,6 @@ public class GameOfBugLife {
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 newBoard[x][y] = determineNewState(x, y);
-                System.out.println(x + " " + y + " " + determineLiveNeighbors(x, y) + " " + newBoard[x][y]);
                 if (newBoard[x][y] != board[x][y]) {
                     isSame = false;
                 }
@@ -39,7 +38,7 @@ public class GameOfBugLife {
 
     public static void main(String[] args) throws IOException {
         GameOfBugLife game = readInBoard();
-        game.runOneMinute();
+        System.out.println(game.runOneMinute());
         System.out.println(Arrays.deepToString(game.board));
     }
 
