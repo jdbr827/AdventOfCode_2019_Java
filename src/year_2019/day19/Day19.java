@@ -12,13 +12,23 @@ public class Day19 {
     }
 
     private static int part1(long maxDistance) throws InterruptedException {
-        // The logic doesn't seem to work right at x=1 but does the rest of the way
-        int total = 1; // The point (0, 0)
+        /*
+        Special Cases for the very beginning:
+        - Point (0, 0) counts
+        - There's nothing in the x=1 row
+        - Point (2, 3) is the only one in the x=2
+         */
+
+
+        int total = 2; // (0, 0), (2, 3)
         long ymin = 0;
-        for (long x=2; x<maxDistance; x++) {
+        long ymax = 5; // (since (3, 5) counts)
+        for (long x=3; x<maxDistance; x++) {
             while (!testPoint(x, ymin) && ymin<maxDistance) {ymin++;}
+            while (testPoint(x, ymax) && ymax<maxDistance) {ymax++;}
+            total += ymax - ymin;
             if (ymin == maxDistance) { break;}
-            for (long y=ymin; testPoint(x, y) && y<maxDistance; y++) {total++;}
+            System.out.println(ymin + " " + ymax + " " + total);
         }
         return total;
     }
