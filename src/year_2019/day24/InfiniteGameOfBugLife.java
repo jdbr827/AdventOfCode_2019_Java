@@ -19,7 +19,9 @@ public class InfiniteGameOfBugLife {
 
     InfiniteGameOfBugLife(Boolean[][] startingBoard) throws Exception {
         headLayer = new BugLifeLayer(startingBoard);
+        runOneMinute();
         System.out.println(totalLiveNow());
+        displayLayers();
     }
 
     int totalLiveNow() throws Exception {
@@ -33,7 +35,58 @@ public class InfiniteGameOfBugLife {
             total += layer.get().totalLiveNow();
         }
         return total;
-    };
+    }
+
+    public void runOneMinute() throws Exception {
+        BugLifeLayer newHead = headLayer.createNextState();
+        BugLifeLayer connectingPointer = newHead;
+        Optional<BugLifeLayer> layer;
+        BugLifeLayer newLayer;
+        BugLifeLayer trailingPointer = headLayer;
+        for (layer = headLayer.next; layer.isPresent(); layer = layer.get().next) {
+            newLayer = layer.get().createNextState();
+            connectingPointer.setNext(newLayer);
+            connectingPointer = newLayer;
+            trailingPointer = trailingPointer.next.get();
+        }
+        BugLifeLayer newHighestLayer = new BugLifeLayer();
+        trailingPointer.setNext(newHighestLayer);
+        System.out.println(newHighestLayer.prev.get() == headLayer);
+        newLayer = newHighestLayer.createNextState();
+        connectingPointer.setNext(newLayer);
+
+        System.out.println("Hi!");
+
+        connectingPointer = newHead;
+        trailingPointer = headLayer;
+        for (layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
+            newLayer = layer.get().createNextState();
+            connectingPointer.setPrev(newLayer);
+            connectingPointer = newLayer;
+        }
+        BugLifeLayer newLowestLayer = new BugLifeLayer();
+        trailingPointer.setPrev(newLowestLayer);
+        newLayer = newLowestLayer.createNextState();
+        connectingPointer.setPrev(newLayer);
+
+        headLayer = newHead;
+    }
+
+    void displayLayers() {
+        int idx = 0;
+
+        for (Optional<BugLifeLayer> layer = Optional.of(headLayer); layer.isPresent(); layer = layer.get().next) {
+           System.out.println(idx + " " + layer.get().displayBoard());
+           idx += 1;
+        }
+
+        idx = -1;
+        for (Optional<BugLifeLayer> layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
+           System.out.println(idx + " " + layer.get().displayBoard());
+           idx -= 1;
+        }
+
+    }
 
 
 }
@@ -43,14 +96,28 @@ class BugLifeLayer {
     Optional<BugLifeLayer> next = Optional.empty();
     Optional<BugLifeLayer> prev = Optional.empty();
 
+    String displayBoard() {
+        return Arrays.deepToString(board);
+
+    }
     Boolean getValueAt(int x, int y) throws Exception {
         if (x==2 && y==2) {
             throw new Exception("Bug Life Layer has no value at middle!");
         }
         return board[x][y];
-
-
     }
+
+    void setNext(BugLifeLayer layer) {
+        next = Optional.of(layer);
+        next.get().prev = Optional.of(this);
+    }
+
+    void setPrev(BugLifeLayer layer) {
+        prev = Optional.of(layer);
+        prev.get().next = Optional.of(this);
+    }
+
+
 
     void setValueAt(int x, int y, Boolean b) throws Exception {
         if (x==2 && y==2) {
@@ -59,13 +126,25 @@ class BugLifeLayer {
         board[x][y] = b;
 
     }
+
     BugLifeLayer() {
-        this(new Boolean[5][5]);
+        this(createEmptyBoard());
+    }
+
+    static private Boolean[][] createEmptyBoard() {
+        Boolean[][] myBoard = new Boolean[5][5];
+        for (int x=0; x<5; x++) {
+            for (int y=0; y<5; y++) {
+                if (x == 2 && y == 2) {continue;}
+                myBoard[x][y] = false;
+            }
+        }
+        return myBoard;
     }
 
     BugLifeLayer(Boolean[][] board) {
         this.board = board;
-        System.out.println(Arrays.deepToString(this.board));
+//        System.out.println(Arrays.deepToString(this.board));
     }
 
 
@@ -96,41 +175,104 @@ class BugLifeLayer {
         return total;
     }
 
-    public int getLiveNeighbors(int x, int y) throws Exception {
+    Boolean getPrevValueAt(int x, int y) throws Exception {
+        if (prev.isPresent()) {
+            return prev.get().getValueAt(x, y);
+        }
+        return false;
+    }
 
-        int liveNeighbors = 0;
-        if (x == 0) {
-            liveNeighbors += getOrCreatePrev().getValueAt(2, 1) ? 1 : 0;
+    Boolean getNextValueAt(int x, int y) throws Exception {
+        if (next.isPresent()) {
+            return next.get().getValueAt(x, y);
         }
-        if (y == 0) {
-            liveNeighbors += getOrCreatePrev().getValueAt(1, 2) ? 1 : 0;
-        }
+        return false;
+    }
+
+    public int countLiveNeighbors(int x, int y) throws Exception {
+        return countLiveLeftNeighbors(x, y) + countLiveRightNeighbors(x, y) + countLiveAboveNeighbors(x, y) + countLiveBelowNeighbors(x, y);
+    }
+
+    private int countLiveBelowNeighbors(int x, int y) throws Exception {
         if (x == 4) {
-            liveNeighbors += getOrCreatePrev().getValueAt(3, 2) ? 1 : 0;
-        }
-        if (y == 4) {
-            liveNeighbors += getOrCreatePrev().getValueAt(2, 3) ? 1 : 0;
-        }
-        if (x == 2 && y == 1) {
-            for (int yLower = 0; yLower < 5 ; yLower++) {
-                liveNeighbors += getOrCreateNext().getValueAt(0, yLower) ? 1 : 0;
-            }
-        }
-        if (x == 2 && y == 3) {
-            for (int yLower = 0; yLower < 5 ; yLower++) {
-                liveNeighbors += getOrCreateNext().getValueAt(4, yLower) ? 1 : 0;
-            }
+            return getPrevValueAt(3, 2) ? 1 : 0;
         }
         if (x == 1 && y == 2) {
+            int tot = 0;
+            for (int yLower = 0; yLower < 5 ; yLower++) {
+                tot += getNextValueAt(0, yLower) ? 1 : 0;
+            }
+            return tot;
+        }
+        return getValueAt(x+1, y) ? 1 : 0;
+    }
+
+    private int countLiveAboveNeighbors(int x, int y) throws Exception {
+        if (x == 0) {
+            return getPrevValueAt(2, 1) ? 1 : 0;
+        }
+        if (x == 3 && y == 2) {
+            int tot = 0;
+            for (int yLower = 0; yLower < 5 ; yLower++) {
+                tot += getNextValueAt(4, yLower) ? 1 : 0;
+            }
+            return tot;
+        }
+        return getValueAt(x-1, y) ? 1 : 0;
+    }
+
+    private int countLiveRightNeighbors(int x, int y) throws Exception {
+        if (y == 4) {
+            return getPrevValueAt(2, 3) ? 1 : 0;
+        }
+        else if (x == 2 && y == 1) {
+            int tot = 0;
             for (int xLower = 0; xLower < 5 ; xLower++) {
-                liveNeighbors += getOrCreateNext().getValueAt(xLower, 9) ? 1 : 0;
+                tot += getNextValueAt(xLower, 0) ? 1 : 0;
+            }
+            return tot;
+        }
+        return getValueAt(x, y+1) ? 1 : 0;
+    }
+
+    private int countLiveLeftNeighbors(int x, int y) throws Exception {
+
+        if (y == 0) {
+            return getPrevValueAt(1, 2) ? 1 : 0;
+        }
+         if (x == 2 && y == 3) {
+             int tot = 0;
+            for (int xLeft = 0; xLeft < 5; xLeft++) {
+                tot += getNextValueAt(xLeft, 4) ? 1 : 0;
+            }
+            return tot;
+        }
+         else {
+             return getValueAt(x, y-1) ? 1 : 0;
+         }
+    }
+
+    public BugLifeLayer createNextState() throws Exception {
+        Boolean[][] newBoard = new Boolean[5][5];
+        for (int x=0; x<5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (x == 2 && y == 2) {
+                    continue;
+                }
+                newBoard[x][y] = determineNewState(x, y);
             }
         }
-        if (x == 1 && y == 3) {
-            for (int xLower = 0; xLower < 5 ; xLower++) {
-                liveNeighbors += getOrCreateNext().getValueAt(xLower, 4) ? 1 : 0;
-            }
+        return new BugLifeLayer(newBoard);
+
+    };
+
+    private boolean determineNewState(int x, int y) throws Exception {
+        boolean currentState = this.getValueAt(x, y);
+        int liveNeighbors = countLiveNeighbors(x, y);
+        if (currentState) {
+            return liveNeighbors == 1;
+        } else {
+            return liveNeighbors == 1 || liveNeighbors == 2;
         }
-        return liveNeighbors;
     }
 }
