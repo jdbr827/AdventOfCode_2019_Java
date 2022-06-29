@@ -1,17 +1,15 @@
 package year_2019.day24;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class GameOfBugLife {
-    private boolean[][] board;
+    private Boolean[][] board;
     private boolean[] previousStates = new boolean[(int) Math.pow(2, 25.0)];
 
-    GameOfBugLife(boolean[][] board) {
+    GameOfBugLife(Boolean[][] board) {
         this.board = board;
         System.out.println(Arrays.deepToString(this.board));
     }
@@ -22,7 +20,7 @@ public class GameOfBugLife {
      * @return
      */
     public void runOneMinute() {
-        boolean[][] newBoard = new boolean[5][5];
+        Boolean[][] newBoard = new Boolean[5][5];
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 newBoard[x][y] = determineNewState(x, y);
@@ -33,7 +31,7 @@ public class GameOfBugLife {
 
 
     public static void main(String[] args) throws IOException {
-        GameOfBugLife game = readInBoard();
+        GameOfBugLife game = readInBoardToSingleGame();
         System.out.println(game.runUntilRepeat());
         System.out.println(Arrays.deepToString(game.board));
     }
@@ -56,9 +54,13 @@ public class GameOfBugLife {
         }
     }
 
-    static GameOfBugLife readInBoard() throws IOException {
+    static GameOfBugLife readInBoardToSingleGame() throws IOException {
+        return new GameOfBugLife(readInBoard());
+    }
+
+    static Boolean[][] readInBoard() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("./src/year_2019/day24/day24input.txt"));
-        boolean[][] board = new boolean[5][5];
+        Boolean[][] board = new Boolean[5][5];
         String line;
         for (int x = 0; x < 5; x++) {
             line = br.readLine();
@@ -67,7 +69,7 @@ public class GameOfBugLife {
                 board[x][y] = (c == '#');
             }
         }
-        return new GameOfBugLife(board);
+        return board;
     }
 
 
