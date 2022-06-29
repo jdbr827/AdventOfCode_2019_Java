@@ -19,9 +19,9 @@ public class InfiniteGameOfBugLife {
 
     InfiniteGameOfBugLife(Boolean[][] startingBoard) throws Exception {
         headLayer = new BugLifeLayer(startingBoard);
-        runNMinutes(10);
+        runNMinutes(200);
         System.out.println(totalLiveNow());
-        displayLayers();
+        //displayLayers();
     }
 
     private void runNMinutes(int n) throws Exception {
@@ -62,8 +62,6 @@ public class InfiniteGameOfBugLife {
             newLayer = newHighestLayer.createNextState();
             connectingPointer.setNext(newLayer);
         }
-
-        System.out.println("Hi!");
 
         connectingPointer = newHead;
         trailingPointer = headLayer;
