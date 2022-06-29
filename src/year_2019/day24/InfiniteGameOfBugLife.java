@@ -24,15 +24,13 @@ public class InfiniteGameOfBugLife {
 
     int totalLiveNow() throws Exception {
         int total = 0;
-        Optional<BugLifeLayer> layerPointer = Optional.of(headLayer);
-        while (layerPointer.isPresent()) {
-            total += layerPointer.get().totalLiveNow();
-            layerPointer = layerPointer.get().next;
+
+        for (Optional<BugLifeLayer> layer = Optional.of(headLayer); layer.isPresent(); layer = layer.get().next) {
+            total += layer.get().totalLiveNow();
         }
-        layerPointer = headLayer.prev;
-        while (layerPointer.isPresent()) {
-            total += layerPointer.get().totalLiveNow();
-            layerPointer = layerPointer.get().prev;
+
+        for (Optional<BugLifeLayer> layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
+            total += layer.get().totalLiveNow();
         }
         return total;
     };
