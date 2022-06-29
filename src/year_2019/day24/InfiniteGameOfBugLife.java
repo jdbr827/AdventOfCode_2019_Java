@@ -19,9 +19,15 @@ public class InfiniteGameOfBugLife {
 
     InfiniteGameOfBugLife(Boolean[][] startingBoard) throws Exception {
         headLayer = new BugLifeLayer(startingBoard);
-        runOneMinute();
+        runNMinutes(10);
         System.out.println(totalLiveNow());
         displayLayers();
+    }
+
+    private void runNMinutes(int n) throws Exception {
+        for (int x = 0; x < n; x++) {
+            runOneMinute();
+        }
     }
 
     int totalLiveNow() throws Exception {
@@ -49,11 +55,13 @@ public class InfiniteGameOfBugLife {
             connectingPointer = newLayer;
             trailingPointer = trailingPointer.next.get();
         }
-        BugLifeLayer newHighestLayer = new BugLifeLayer();
-        trailingPointer.setNext(newHighestLayer);
-        System.out.println(newHighestLayer.prev.get() == headLayer);
-        newLayer = newHighestLayer.createNextState();
-        connectingPointer.setNext(newLayer);
+        if (trailingPointer.totalLiveNow() != 0) {
+            BugLifeLayer newHighestLayer = new BugLifeLayer();
+            trailingPointer.setNext(newHighestLayer);
+            //System.out.println(newHighestLayer.prev.get() == headLayer);
+            newLayer = newHighestLayer.createNextState();
+            connectingPointer.setNext(newLayer);
+        }
 
         System.out.println("Hi!");
 
@@ -63,26 +71,52 @@ public class InfiniteGameOfBugLife {
             newLayer = layer.get().createNextState();
             connectingPointer.setPrev(newLayer);
             connectingPointer = newLayer;
+            trailingPointer = trailingPointer.prev.get();
         }
-        BugLifeLayer newLowestLayer = new BugLifeLayer();
-        trailingPointer.setPrev(newLowestLayer);
-        newLayer = newLowestLayer.createNextState();
-        connectingPointer.setPrev(newLayer);
+        if (trailingPointer.totalLiveNow() != 0) {
+             BugLifeLayer newLowestLayer = new BugLifeLayer();
+             trailingPointer.setPrev(newLowestLayer);
+             newLayer = newLowestLayer.createNextState();
+             connectingPointer.setPrev(newLayer);
+        }
 
         headLayer = newHead;
     }
 
-    void displayLayers() {
+    void displayLayers() throws Exception {
         int idx = 0;
 
         for (Optional<BugLifeLayer> layer = Optional.of(headLayer); layer.isPresent(); layer = layer.get().next) {
-           System.out.println(idx + " " + layer.get().displayBoard());
+           for (int x =0; x<5; x++) {
+               String msg = "";
+               for (int y=0; y<5; y++) {
+                   if (x==2 && y==2) {
+                       msg += String.valueOf(idx);
+                   } else {
+                       msg += layer.get().getValueAt(x, y) ? '#' : '.';
+                   }
+               }
+               System.out.println(msg);
+           }
+           System.out.println();
            idx += 1;
+
         }
 
         idx = -1;
         for (Optional<BugLifeLayer> layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
-           System.out.println(idx + " " + layer.get().displayBoard());
+           for (int x =0; x<5; x++) {
+               String msg = "";
+               for (int y=0; y<5; y++) {
+                   if (x==2 && y==2) {
+                       msg += String.valueOf(idx);
+                   } else {
+                       msg += layer.get().getValueAt(x, y) ? '#' : '.';
+                   }
+               }
+               System.out.println(msg);
+           }
+           System.out.println();
            idx -= 1;
         }
 
@@ -100,7 +134,7 @@ class BugLifeLayer {
         return Arrays.deepToString(board);
 
     }
-    Boolean getValueAt(int x, int y) throws Exception {
+    public Boolean getValueAt(int x, int y) throws Exception {
         if (x==2 && y==2) {
             throw new Exception("Bug Life Layer has no value at middle!");
         }
@@ -126,6 +160,8 @@ class BugLifeLayer {
         board[x][y] = b;
 
     }
+
+
 
     BugLifeLayer() {
         this(createEmptyBoard());
@@ -209,7 +245,7 @@ class BugLifeLayer {
 
     private int countLiveAboveNeighbors(int x, int y) throws Exception {
         if (x == 0) {
-            return getPrevValueAt(2, 1) ? 1 : 0;
+            return getPrevValueAt(1, 2) ? 1 : 0;
         }
         if (x == 3 && y == 2) {
             int tot = 0;
@@ -238,18 +274,16 @@ class BugLifeLayer {
     private int countLiveLeftNeighbors(int x, int y) throws Exception {
 
         if (y == 0) {
-            return getPrevValueAt(1, 2) ? 1 : 0;
+            return getPrevValueAt(2, 1) ? 1 : 0;
         }
-         if (x == 2 && y == 3) {
-             int tot = 0;
+        if (x == 2 && y == 3) {
+            int tot = 0;
             for (int xLeft = 0; xLeft < 5; xLeft++) {
                 tot += getNextValueAt(xLeft, 4) ? 1 : 0;
             }
             return tot;
         }
-         else {
-             return getValueAt(x, y-1) ? 1 : 0;
-         }
+        return getValueAt(x, y-1) ? 1 : 0;
     }
 
     public BugLifeLayer createNextState() throws Exception {
