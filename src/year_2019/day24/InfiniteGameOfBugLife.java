@@ -33,12 +33,14 @@ public class InfiniteGameOfBugLife {
     int totalLiveNow() throws Exception {
         int total = 0;
 
-        for (Optional<BugLifeLayer> layer = Optional.of(headLayer); layer.isPresent(); layer = layer.get().next) {
-            total += layer.get().totalLiveNow();
+        for (BugLifeLayer layer = headLayer; layer != null; layer = layer.next) {
+            total += layer.totalLiveNow();
         }
 
-        for (Optional<BugLifeLayer> layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
-            total += layer.get().totalLiveNow();
+        if (headLayer != null) {
+            for (BugLifeLayer layer = headLayer.prev; layer != null; layer = layer.prev) {
+                total += layer.totalLiveNow();
+            }
         }
         return total;
     }
@@ -46,14 +48,14 @@ public class InfiniteGameOfBugLife {
     public void runOneMinute() throws Exception {
         BugLifeLayer newHead = headLayer.createNextState();
         BugLifeLayer connectingPointer = newHead;
-        Optional<BugLifeLayer> layer;
+        BugLifeLayer layer;
         BugLifeLayer newLayer;
         BugLifeLayer trailingPointer = headLayer;
-        for (layer = headLayer.next; layer.isPresent(); layer = layer.get().next) {
-            newLayer = layer.get().createNextState();
+        for (layer = headLayer.next; layer != null; layer = layer.next) {
+            newLayer = layer.createNextState();
             connectingPointer.setNext(newLayer);
             connectingPointer = newLayer;
-            trailingPointer = trailingPointer.next.get();
+            trailingPointer = trailingPointer.next;
         }
         if (trailingPointer.totalLiveNow() != 0) {
             BugLifeLayer newHighestLayer = new BugLifeLayer();
@@ -65,11 +67,11 @@ public class InfiniteGameOfBugLife {
 
         connectingPointer = newHead;
         trailingPointer = headLayer;
-        for (layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
-            newLayer = layer.get().createNextState();
+        for (layer = headLayer.prev; layer != null; layer = layer.prev) {
+            newLayer = layer.createNextState();
             connectingPointer.setPrev(newLayer);
             connectingPointer = newLayer;
-            trailingPointer = trailingPointer.prev.get();
+            trailingPointer = trailingPointer.prev;
         }
         if (trailingPointer.totalLiveNow() != 0) {
              BugLifeLayer newLowestLayer = new BugLifeLayer();
@@ -84,14 +86,14 @@ public class InfiniteGameOfBugLife {
     void displayLayers() throws Exception {
         int idx = 0;
 
-        for (Optional<BugLifeLayer> layer = Optional.of(headLayer); layer.isPresent(); layer = layer.get().next) {
+        for (BugLifeLayer layer = headLayer; layer != null; layer = layer.next) {
            for (int x =0; x<5; x++) {
                String msg = "";
                for (int y=0; y<5; y++) {
                    if (x==2 && y==2) {
                        msg += String.valueOf(idx);
                    } else {
-                       msg += layer.get().getValueAt(x, y) ? '#' : '.';
+                       msg += layer.getValueAt(x, y) ? '#' : '.';
                    }
                }
                System.out.println(msg);
@@ -102,14 +104,14 @@ public class InfiniteGameOfBugLife {
         }
 
         idx = -1;
-        for (Optional<BugLifeLayer> layer = headLayer.prev; layer.isPresent(); layer = layer.get().prev) {
+        for (BugLifeLayer layer = headLayer.prev; layer != null; layer = layer.prev) {
            for (int x =0; x<5; x++) {
                String msg = "";
                for (int y=0; y<5; y++) {
                    if (x==2 && y==2) {
                        msg += String.valueOf(idx);
                    } else {
-                       msg += layer.get().getValueAt(x, y) ? '#' : '.';
+                       msg += layer.getValueAt(x, y) ? '#' : '.';
                    }
                }
                System.out.println(msg);
@@ -125,8 +127,8 @@ public class InfiniteGameOfBugLife {
 
 class BugLifeLayer {
     private Boolean[][] board;
-    Optional<BugLifeLayer> next = Optional.empty();
-    Optional<BugLifeLayer> prev = Optional.empty();
+    BugLifeLayer next = null;
+    BugLifeLayer prev = null;
 
     String displayBoard() {
         return Arrays.deepToString(board);
@@ -140,13 +142,13 @@ class BugLifeLayer {
     }
 
     void setNext(BugLifeLayer layer) {
-        next = Optional.of(layer);
-        next.get().prev = Optional.of(this);
+        next = layer;
+        next.prev = this;
     }
 
     void setPrev(BugLifeLayer layer) {
-        prev = Optional.of(layer);
-        prev.get().next = Optional.of(this);
+        prev = layer;
+        prev.next = this;
     }
 
 
@@ -182,22 +184,6 @@ class BugLifeLayer {
     }
 
 
-    protected BugLifeLayer getOrCreateNext() {
-        if (!next.isPresent()) {
-            next = Optional.of(new BugLifeLayer());
-            next.get().prev = Optional.of(this);
-        }
-        return next.get();
-    }
-
-    protected BugLifeLayer getOrCreatePrev() {
-        if (!prev.isPresent()) {
-            prev = Optional.of(new BugLifeLayer());
-            prev.get().next = Optional.of(this);
-        }
-        return prev.get();
-    }
-
     public int totalLiveNow() throws Exception {
         int total = 0;
         for (int x=0; x<5; x++) {
@@ -210,15 +196,15 @@ class BugLifeLayer {
     }
 
     Boolean getPrevValueAt(int x, int y) throws Exception {
-        if (prev.isPresent()) {
-            return prev.get().getValueAt(x, y);
+        if (prev != null) {
+            return prev.getValueAt(x, y);
         }
         return false;
     }
 
     Boolean getNextValueAt(int x, int y) throws Exception {
-        if (next.isPresent()) {
-            return next.get().getValueAt(x, y);
+        if (next != null) {
+            return next.getValueAt(x, y);
         }
         return false;
     }
