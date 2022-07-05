@@ -5,17 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day12 {
-}
-
-class Point3D {
-    int x;
-    int y;
-    int z;
 }
 
 class Moon {
@@ -41,6 +36,40 @@ class Moon {
             position[i] += velocity[i];
         }
     }
+
+    public int calculateTotalEnergy() {
+        return calculatePotentialEnergy() * calculateKineticEnergy();
+    }
+
+    private int calculateKineticEnergy() {
+        return Arrays.stream(velocity).map(Math::abs).sum();
+
+    }
+
+    private int calculatePotentialEnergy() {
+        return Arrays.stream(position).map(Math::abs).sum();
+    }
+}
+
+class MoonReader {
+    private static final Pattern moonReadInPattern = Pattern.compile("<x=([-]?[0-9]+), y=([-]?[0-9]+), z=([-]?[0-9]+)>");
+
+    static Moon extractMoon(String line) {
+
+        // create matcher for pattern p and given string
+        Matcher m = moonReadInPattern.matcher(line);
+
+        // if an occurrence if a pattern was found in a given string...
+        if (m.find()) {
+            int x = Integer.parseInt(m.group(1));
+            int y = Integer.parseInt(m.group(2));
+            int z = Integer.parseInt(m.group(3));
+            return new Moon(new int[]{x,y,z});
+        } else {
+            throw new RuntimeException("Could not extract moon from Regex: " + line);
+        }
+
+    }
 }
 
 class SolarSystem {
@@ -50,29 +79,11 @@ class SolarSystem {
         BufferedReader br = new BufferedReader(new FileReader(s));
         String line;
         while ((line = br.readLine()) != null) {
-            moons.add(extractMoon(line));
+            moons.add(MoonReader.extractMoon(line));
         }
-
     }
 
-    private Moon extractMoon(String line) {
-        Pattern p = Pattern.compile("<x=([-]?[0-9]+), y=([-]?[0-9]+), z=([-]?[0-9]+)>");
-        // create matcher for pattern p and given string
-        Matcher m = p.matcher(line);
 
-        // if an occurrence if a pattern was found in a given string...
-        if (m.find()) {
-            // ...then you can use group() methods.
-            System.out.println(m.group(0)); // whole matched expression
-            System.out.println(m.group(1)); // first expression from round brackets (Testing)
-            System.out.println(m.group(2)); // second one (123)
-            System.out.println(m.group(3)); // third one (Testing)
-            return new Moon(new int[]{Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3))});
-        } else {
-            throw new RuntimeException("Could not extract moon from Regex: " + line);
-        }
-
-    }
 
     public static void main(String[] args) throws IOException {
         SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
@@ -83,7 +94,7 @@ class SolarSystem {
     }
 
     private int calculateTotalEnergy() {
-        return 0;
+        return moons.stream().mapToInt(Moon::calculateTotalEnergy).sum();
     }
 
     private void executeNTimeSteps(int n) {
