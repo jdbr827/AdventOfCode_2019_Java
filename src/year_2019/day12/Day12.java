@@ -1,9 +1,8 @@
-package year_2019;
+package year_2019.day12;
 
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -17,6 +16,32 @@ public class Day12 {
     private static final int Y_DIRECTION = 1;
     private static final int Z_DIRECTION = 2;
     public static final int[] AXES = {X_DIRECTION, Y_DIRECTION, Z_DIRECTION};
+
+    static final String SMALL_INPUT = "./src/year_2019/day12/day_12_small_input.txt";
+    static final String MEDIUM_INPUT = "./src/year_2019/day12/day_12_medium_input.txt";
+    static final String OFFICIAL_INPUT = "./src/year_2019/day12/day_12_input.txt";
+
+    public static void main(String[] args) throws IOException {
+        part1(SMALL_INPUT, 10, 179);
+        part1(MEDIUM_INPUT, 100, 1940);
+        part1(OFFICIAL_INPUT, 1000, 10189);
+        part2(SMALL_INPUT, BigInteger.valueOf(2772));
+        part2(MEDIUM_INPUT, new BigInteger("4686774924"));
+        part2(OFFICIAL_INPUT, new BigInteger("469671086427712"));
+
+    }
+
+    private static void part1(String inputFile, int steps, int expectedTotalEnergy) throws IOException {
+        SolarSystem solarSystem = new SolarSystem(inputFile);
+        solarSystem.executeNTimeSteps(steps);
+        System.out.println(solarSystem.calculateTotalEnergy() == expectedTotalEnergy);
+    }
+
+    private static void part2(String inputFile, BigInteger expectedMinutes) throws IOException {
+        SolarSystem solarSystem = new SolarSystem(inputFile);
+        System.out.println(solarSystem.findMinutesUntilFirstRepeat().equals(expectedMinutes));
+
+    }
 }
 
 class Moon {
@@ -108,19 +133,18 @@ class SolarSystem {
         this.moons = new MoonReader(s).readInMoons();
     }
 
+    public BigInteger findMinutesUntilFirstRepeat() throws IOException {
+        BigInteger[] periods = findPeriodsInEachDirection();
+        return lcm(periods[0], lcm(periods[1], periods[2]));
+    }
 
-    public static void main(String[] args) throws IOException {
-        part1();
-
-        SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
+    private BigInteger[] findPeriodsInEachDirection() {
         BigInteger[] periods = new BigInteger[3];
         for (int direction : Day12.AXES) {
-            Pair<Integer, Integer> cycle = solarSystem.findCycleInDirection(direction);
-            System.out.println(cycle.getKey());
-            System.out.println(cycle.getValue());
+            Pair<Integer, Integer> cycle = findCycleInDirection(direction);
             periods[direction] = new BigInteger(String.valueOf(cycle.getValue()));
         }
-        System.out.println(lcm(periods[0], lcm(periods[1], periods[2])));
+        return periods;
     }
 
     private static BigInteger lcm(BigInteger num1, BigInteger num2) {
@@ -153,17 +177,13 @@ class SolarSystem {
         }
     }
 
-    private static void part1() throws IOException {
-        SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
-        solarSystem.executeNTimeSteps(1000);
-        System.out.println(solarSystem.calculateTotalEnergy() == 10189);
-    }
 
-    private int calculateTotalEnergy() {
+
+    int calculateTotalEnergy() {
         return moons.stream().mapToInt(Moon::calculateTotalEnergy).sum();
     }
 
-    private void executeNTimeSteps(int n) {
+    void executeNTimeSteps(int n) {
         for (int i=0; i<n; i++) {executeTimeStep();}
     }
 
