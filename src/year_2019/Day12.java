@@ -1,16 +1,20 @@
 package year_2019;
 
+import javafx.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day12 {
+    private static final int X_DIRECTION = 0;
+    private static final int Y_DIRECTION = 1;
+    private static final int Z_DIRECTION = 2;
+    public static final int[] AXES = {X_DIRECTION, Y_DIRECTION, Z_DIRECTION};
 }
 
 class Moon {
@@ -21,19 +25,23 @@ class Moon {
         this.position = initialPosition;
     }
 
-    public void applyGravityFrom(Moon otherMoon) {
-        for (int i = 0; i < 3; i++) {
-            if (otherMoon.position[i] < this.position[i]) {
-                velocity[i] -= 1;
-            } else if (otherMoon.position[i] > this.position[i]) {
-                velocity[i] += 1;
+    public void applyGravityFromInDirection(Moon otherMoon, int direction) {
+        if (otherMoon.position[direction] < this.position[direction]) {
+                velocity[direction] -= 1;
+            } else if (otherMoon.position[direction] > this.position[direction]) {
+                velocity[direction] += 1;
             }
+    }
+
+    public void applyGravityFrom(Moon otherMoon) {
+        for (int direction : Day12.AXES) {
+            applyGravityFromInDirection(otherMoon, direction);
         }
     }
 
     public void applyVelocity() {
-        for(int i=0; i<3; i++) {
-            position[i] += velocity[i];
+        for(int direction : Day12.AXES) {
+            position[direction] += velocity[direction];
         }
     }
 
@@ -88,7 +96,7 @@ class MoonReader {
 }
 
 class SolarSystem {
-    List<Moon> moons = new ArrayList<>();
+    List<Moon> moons;
 
     public SolarSystem(String s) throws IOException {
         this.moons = new MoonReader(s).readInMoons();
@@ -97,11 +105,30 @@ class SolarSystem {
 
 
     public static void main(String[] args) throws IOException {
+        part1();
+
+        SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
+
+
+
+
+
+    }
+
+
+
+    private void applyGravityInDirection(int direction) {
+        for (Moon moon1 : moons) {
+            for (Moon moon2: moons) {
+                moon1.applyGravityFromInDirection(moon2, direction);
+            }
+        }
+    }
+
+    private static void part1() throws IOException {
         SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
         solarSystem.executeNTimeSteps(1000);
-        System.out.println(solarSystem.calculateTotalEnergy());
-
-
+        System.out.println(solarSystem.calculateTotalEnergy() == 10189);
     }
 
     private int calculateTotalEnergy() {
@@ -113,6 +140,7 @@ class SolarSystem {
     }
 
     private void executeTimeStep() {
+
         applyGravity();
         applyVelocity();
     }
@@ -128,8 +156,8 @@ class SolarSystem {
             for (Moon moon2: moons) {
                 moon1.applyGravityFrom(moon2);
             }
+        }
     }
-}
 
 
 
