@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day12 {
     private static final int X_DIRECTION = 0;
@@ -57,6 +58,10 @@ class Moon {
     private int calculatePotentialEnergy() {
         return Arrays.stream(position).map(Math::abs).sum();
     }
+
+    public void applyVelocityInDirection(int direction) {
+        position[direction] += velocity[direction];
+    }
 }
 
 class MoonReader {
@@ -103,18 +108,65 @@ class SolarSystem {
     }
 
 
-
     public static void main(String[] args) throws IOException {
         part1();
 
         SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
-
-
-
-
+        int[] periods = new int[3];
+        for (int direction : Day12.AXES) {
+            Pair<Integer, Integer> cycle = solarSystem.findCycleInDirection(direction);
+            System.out.println(cycle.getKey());
+            System.out.println(cycle.getValue());
+            periods[direction] = cycle.getValue();
+        }
+        System.out.println(lcm(periods));
 
     }
 
+    private static int gcd(int a, int b) {
+        while (a != b) {
+            if (a > b) {
+                a -= b;
+            } else {
+                b -= a;
+            }
+        }
+            return a;
+    }
+
+    private static int lcm(int a, int b) {
+        return (a * b) / gcd(a, b);
+    }
+
+    private static int lcm(int[] nums) {
+        // ASSUME NUMS IS ALL POSITIVE INTEGERS
+        if (nums.length == 1) {
+            return nums[0];
+        }
+
+        int runningLCM = lcm(nums[0], nums[1]);
+        for (int i=2; i<nums.length; i++) {
+            runningLCM = lcm(runningLCM, nums[i]);
+        }
+        return runningLCM;
+    }
+
+    private Pair<Integer, Integer> findCycleInDirection(int direction) {
+        Map<List<Pair<Integer, Integer>>, Integer> history = new HashMap<>();
+        List<Pair<Integer, Integer>> currentState = getDirectionList(direction);
+        int minutes = 0;
+        while (!history.containsKey(currentState)) {
+            history.put(currentState, minutes);
+            minutes++;
+            executeTimeStepInDirection(direction);
+            currentState = getDirectionList(direction);
+        }
+        return new Pair<>(history.get(currentState), minutes);
+    }
+
+    private List<Pair<Integer, Integer>> getDirectionList(int direction) {
+        return moons.stream().map((Moon moon) -> new Pair<>(moon.position[direction], moon.velocity[direction])).collect(Collectors.toList());
+    }
 
 
     private void applyGravityInDirection(int direction) {
@@ -140,22 +192,19 @@ class SolarSystem {
     }
 
     private void executeTimeStep() {
-
-        applyGravity();
-        applyVelocity();
-    }
-
-    private void applyVelocity() {
-        for (Moon moon: moons) {
-            moon.applyVelocity();
+        for (int direction : Day12.AXES) {
+            executeTimeStepInDirection(direction);
         }
     }
 
-    private void applyGravity() {
-        for (Moon moon1 : moons) {
-            for (Moon moon2: moons) {
-                moon1.applyGravityFrom(moon2);
-            }
+    private void executeTimeStepInDirection(int direction) {
+        applyGravityInDirection(direction);
+        applyVelocityInDirection(direction);
+    }
+
+    private void applyVelocityInDirection(int direction) {
+        for (Moon moon: moons) {
+            moon.applyVelocityInDirection(direction);
         }
     }
 
