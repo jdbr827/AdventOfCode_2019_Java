@@ -21,25 +21,15 @@ public class Day12 {
     static final String MEDIUM_INPUT = "./src/year_2019/day12/day_12_medium_input.txt";
     static final String OFFICIAL_INPUT = "./src/year_2019/day12/day_12_input.txt";
 
-    public static void main(String[] args) throws IOException {
-        part1(SMALL_INPUT, 10, 179);
-        part1(MEDIUM_INPUT, 100, 1940);
-        part1(OFFICIAL_INPUT, 1000, 10189);
-        part2(SMALL_INPUT, BigInteger.valueOf(2772));
-        part2(MEDIUM_INPUT, new BigInteger("4686774924"));
-        part2(OFFICIAL_INPUT, new BigInteger("469671086427712"));
-
-    }
-
-    private static void part1(String inputFile, int steps, int expectedTotalEnergy) throws IOException {
+    static int part1(String inputFile, int steps) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
         solarSystem.executeNTimeSteps(steps);
-        System.out.println(solarSystem.calculateTotalEnergy() == expectedTotalEnergy);
+        return solarSystem.calculateTotalEnergy();
     }
 
-    private static void part2(String inputFile, BigInteger expectedMinutes) throws IOException {
+    static BigInteger part2(String inputFile) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
-        System.out.println(solarSystem.findMinutesUntilFirstRepeat().equals(expectedMinutes));
+        return solarSystem.findMinutesUntilFirstRepeat();
 
     }
 }
