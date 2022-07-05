@@ -121,9 +121,9 @@ public class InfiniteGameOfBugLife {
         }
 
     }
-
-
 }
+
+
 
 class BugLifeLayer {
     private Boolean[][] board;
@@ -180,7 +180,6 @@ class BugLifeLayer {
 
     BugLifeLayer(Boolean[][] board) {
         this.board = board;
-//        System.out.println(Arrays.deepToString(this.board));
     }
 
 
