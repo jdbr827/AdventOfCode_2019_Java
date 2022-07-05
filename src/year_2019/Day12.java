@@ -53,6 +53,21 @@ class Moon {
 
 class MoonReader {
     private static final Pattern moonReadInPattern = Pattern.compile("<x=([-]?[0-9]+), y=([-]?[0-9]+), z=([-]?[0-9]+)>");
+    String fileName;
+
+    MoonReader(String fileName){
+        this.fileName = fileName;
+    };
+
+    public List<Moon> readInMoons() throws IOException {
+        List<Moon> moons = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = br.readLine()) != null) {
+            moons.add(MoonReader.extractMoon(line));
+        }
+        return moons;
+    };
 
     static Moon extractMoon(String line) {
 
@@ -76,11 +91,7 @@ class SolarSystem {
     List<Moon> moons = new ArrayList<>();
 
     public SolarSystem(String s) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(s));
-        String line;
-        while ((line = br.readLine()) != null) {
-            moons.add(MoonReader.extractMoon(line));
-        }
+        this.moons = new MoonReader(s).readInMoons();
     }
 
 
