@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,43 +113,18 @@ class SolarSystem {
         part1();
 
         SolarSystem solarSystem = new SolarSystem("src/year_2019/day_12_input.txt");
-        int[] periods = new int[3];
+        BigInteger[] periods = new BigInteger[3];
         for (int direction : Day12.AXES) {
             Pair<Integer, Integer> cycle = solarSystem.findCycleInDirection(direction);
             System.out.println(cycle.getKey());
             System.out.println(cycle.getValue());
-            periods[direction] = cycle.getValue();
+            periods[direction] = new BigInteger(String.valueOf(cycle.getValue()));
         }
-        System.out.println(lcm(periods));
-
+        System.out.println(lcm(periods[0], lcm(periods[1], periods[2])));
     }
 
-    private static int gcd(int a, int b) {
-        while (a != b) {
-            if (a > b) {
-                a -= b;
-            } else {
-                b -= a;
-            }
-        }
-            return a;
-    }
-
-    private static int lcm(int a, int b) {
-        return (a * b) / gcd(a, b);
-    }
-
-    private static int lcm(int[] nums) {
-        // ASSUME NUMS IS ALL POSITIVE INTEGERS
-        if (nums.length == 1) {
-            return nums[0];
-        }
-
-        int runningLCM = lcm(nums[0], nums[1]);
-        for (int i=2; i<nums.length; i++) {
-            runningLCM = lcm(runningLCM, nums[i]);
-        }
-        return runningLCM;
+    private static BigInteger lcm(BigInteger num1, BigInteger num2) {
+        return num1.multiply(num2).divide(num1.gcd(num2));
     }
 
     private Pair<Integer, Integer> findCycleInDirection(int direction) {
