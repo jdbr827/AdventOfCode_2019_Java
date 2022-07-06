@@ -9,6 +9,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+enum DIRECTION {
+    X(0),
+    Y(1),
+    Z(2);
+
+    private final int idx;
+
+
+    DIRECTION(int idx) {
+        this.idx = idx;
+    }
+}
+
 public class Day12 {
     private static final int X_DIRECTION = 0;
     private static final int Y_DIRECTION = 1;
@@ -24,7 +37,6 @@ public class Day12 {
     static BigInteger part2(String inputFile) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
         return solarSystem.findMinutesUntilFirstRepeat();
-
     }
 }
 
@@ -53,12 +65,16 @@ class Moon {
     }
 
     private int calculateKineticEnergy() {
-        return Arrays.stream(velocity).map(Math::abs).sum();
+        return Arrays.stream(velocity)
+                .map(Math::abs)
+                .sum();
 
     }
 
     private int calculatePotentialEnergy() {
-        return Arrays.stream(position).map(Math::abs).sum();
+        return Arrays.stream(position)
+                .map(Math::abs)
+                .sum();
     }
 
 }
@@ -71,17 +87,12 @@ class SolarSystem {
     }
 
     public BigInteger findMinutesUntilFirstRepeat() {
-        BigInteger[] periods = findPeriodsInEachDirection();
+        int[] periods = findPeriodsInEachDirection();
         return lcm(periods);
     }
 
-    private BigInteger[] findPeriodsInEachDirection() {
-        BigInteger[] periods = new BigInteger[3];
-        for (int direction : Day12.AXES) {
-            int period = findPeriodInDirection(direction);
-            periods[direction] = BigInteger.valueOf(period);
-        }
-        return periods;
+    private int[] findPeriodsInEachDirection() {
+        return Arrays.stream(Day12.AXES).map(this::findPeriodInDirection).toArray();
     }
 
 
