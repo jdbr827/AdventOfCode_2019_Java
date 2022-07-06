@@ -9,18 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-enum DIRECTION {
-    X(0),
-    Y(1),
-    Z(2);
-
-    private final int idx;
-
-
-    DIRECTION(int idx) {
-        this.idx = idx;
-    }
-}
 
 public class Day12 {
     private static final int X_DIRECTION = 0;
