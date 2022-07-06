@@ -16,8 +16,6 @@ class MoonReader {
         this.fileName = fileName;
     }
 
-    ;
-
     public List<Moon> readInMoons() throws IOException {
         List<Moon> moons = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader(fileName));
