@@ -1,14 +1,12 @@
 package year_2019.day12;
 
 import javafx.util.Pair;
+import static utils.MathUtils.lcm;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day12 {
@@ -16,10 +14,6 @@ public class Day12 {
     private static final int Y_DIRECTION = 1;
     private static final int Z_DIRECTION = 2;
     public static final int[] AXES = {X_DIRECTION, Y_DIRECTION, Z_DIRECTION};
-
-    static final String SMALL_INPUT = "./src/year_2019/day12/day_12_small_input.txt";
-    static final String MEDIUM_INPUT = "./src/year_2019/day12/day_12_medium_input.txt";
-    static final String OFFICIAL_INPUT = "./src/year_2019/day12/day_12_input.txt";
 
     static int part1(String inputFile, int steps) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
@@ -50,16 +44,8 @@ class Moon {
             }
     }
 
-    public void applyGravityFrom(Moon otherMoon) {
-        for (int direction : Day12.AXES) {
-            applyGravityFromInDirection(otherMoon, direction);
-        }
-    }
-
-    public void applyVelocity() {
-        for(int direction : Day12.AXES) {
-            position[direction] += velocity[direction];
-        }
+    public void applyVelocityInDirection(int direction) {
+        position[direction] += velocity[direction];
     }
 
     public int calculateTotalEnergy() {
@@ -75,45 +61,6 @@ class Moon {
         return Arrays.stream(position).map(Math::abs).sum();
     }
 
-    public void applyVelocityInDirection(int direction) {
-        position[direction] += velocity[direction];
-    }
-}
-
-class MoonReader {
-    private static final Pattern moonReadInPattern = Pattern.compile("<x=([-]?[0-9]+), y=([-]?[0-9]+), z=([-]?[0-9]+)>");
-    String fileName;
-
-    MoonReader(String fileName){
-        this.fileName = fileName;
-    };
-
-    public List<Moon> readInMoons() throws IOException {
-        List<Moon> moons = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        String line;
-        while ((line = br.readLine()) != null) {
-            moons.add(MoonReader.extractMoon(line));
-        }
-        return moons;
-    };
-
-    static Moon extractMoon(String line) {
-
-        // create matcher for pattern p and given string
-        Matcher m = moonReadInPattern.matcher(line);
-
-        // if an occurrence if a pattern was found in a given string...
-        if (m.find()) {
-            int x = Integer.parseInt(m.group(1));
-            int y = Integer.parseInt(m.group(2));
-            int z = Integer.parseInt(m.group(3));
-            return new Moon(new int[]{x,y,z});
-        } else {
-            throw new RuntimeException("Could not extract moon from Regex: " + line);
-        }
-
-    }
 }
 
 class SolarSystem {
@@ -123,57 +70,53 @@ class SolarSystem {
         this.moons = new MoonReader(s).readInMoons();
     }
 
-    public BigInteger findMinutesUntilFirstRepeat() throws IOException {
+    public BigInteger findMinutesUntilFirstRepeat() {
         BigInteger[] periods = findPeriodsInEachDirection();
-        return lcm(periods[0], lcm(periods[1], periods[2]));
+        return lcm(periods);
     }
 
     private BigInteger[] findPeriodsInEachDirection() {
         BigInteger[] periods = new BigInteger[3];
         for (int direction : Day12.AXES) {
-            Pair<Integer, Integer> cycle = findCycleInDirection(direction);
-            periods[direction] = new BigInteger(String.valueOf(cycle.getValue()));
+            int period = findPeriodInDirection(direction);
+            periods[direction] = BigInteger.valueOf(period);
         }
         return periods;
     }
 
-    private static BigInteger lcm(BigInteger num1, BigInteger num2) {
-        return num1.multiply(num2).divide(num1.gcd(num2));
-    }
 
-    private Pair<Integer, Integer> findCycleInDirection(int direction) {
-        Map<List<Pair<Integer, Integer>>, Integer> history = new HashMap<>();
-        List<Pair<Integer, Integer>> currentState = getDirectionList(direction);
-        int minutes = 0;
-        while (!history.containsKey(currentState)) {
-            history.put(currentState, minutes);
+
+    /*
+    Because executing a time step is invertible,
+    we know that the first repeated state will always be the initial state.
+     */
+    private int findPeriodInDirection(int direction) {
+        List<Pair<Integer, Integer>> originalState = getDirectionList(direction);
+        List<Pair<Integer, Integer>> currentState = executeTimeStepInDirectionAndGetDirectionList(direction);
+        int minutes = 1;
+        while (!(currentState.equals(originalState))) {
+            currentState = executeTimeStepInDirectionAndGetDirectionList(direction);
             minutes++;
-            executeTimeStepInDirection(direction);
-            currentState = getDirectionList(direction);
         }
-        return new Pair<>(history.get(currentState), minutes);
+        return minutes;
     }
 
     private List<Pair<Integer, Integer>> getDirectionList(int direction) {
-        return moons.stream().map((Moon moon) -> new Pair<>(moon.position[direction], moon.velocity[direction])).collect(Collectors.toList());
+        return moons.stream()
+                .map((Moon moon) -> new Pair<>(moon.position[direction], moon.velocity[direction]))
+                .collect(Collectors.toList());
     }
 
-
-    private void applyGravityInDirection(int direction) {
-        for (Moon moon1 : moons) {
-            for (Moon moon2: moons) {
-                moon1.applyGravityFromInDirection(moon2, direction);
-            }
-        }
+    private List<Pair<Integer, Integer>> executeTimeStepInDirectionAndGetDirectionList(int direction) {
+        executeTimeStepInDirection(direction);
+        return getDirectionList(direction);
     }
 
-
-
-    int calculateTotalEnergy() {
+    public int calculateTotalEnergy() {
         return moons.stream().mapToInt(Moon::calculateTotalEnergy).sum();
     }
 
-    void executeNTimeSteps(int n) {
+    public void executeNTimeSteps(int n) {
         for (int i=0; i<n; i++) {executeTimeStep();}
     }
 
@@ -191,6 +134,14 @@ class SolarSystem {
     private void applyVelocityInDirection(int direction) {
         for (Moon moon: moons) {
             moon.applyVelocityInDirection(direction);
+        }
+    }
+
+    private void applyGravityInDirection(int direction) {
+        for (Moon moon1 : moons) {
+            for (Moon moon2: moons) {
+                moon1.applyGravityFromInDirection(moon2, direction);
+            }
         }
     }
 
