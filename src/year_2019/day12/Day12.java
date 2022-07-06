@@ -90,29 +90,32 @@ class SolarSystem {
     we know that the first repeated state will always be the initial state.
      */
     private int findPeriodInDirection(int direction) {
-        List<Pair<Integer, Integer>> originalState = getDirectionList(direction);
-        List<Pair<Integer, Integer>> currentState = executeTimeStepInDirectionAndGetDirectionList(direction);
+        List<Pair<Integer, Integer>> originalState = getStateInDirection(direction);
+        List<Pair<Integer, Integer>> currentState = executeTimeStepAndGetStateInDirection(direction);
+
         int minutes = 1;
         while (!(currentState.equals(originalState))) {
-            currentState = executeTimeStepInDirectionAndGetDirectionList(direction);
+            currentState = executeTimeStepAndGetStateInDirection(direction);
             minutes++;
         }
         return minutes;
     }
 
-    private List<Pair<Integer, Integer>> getDirectionList(int direction) {
+    private List<Pair<Integer, Integer>> getStateInDirection(int direction) {
         return moons.stream()
                 .map((Moon moon) -> new Pair<>(moon.position[direction], moon.velocity[direction]))
                 .collect(Collectors.toList());
     }
 
-    private List<Pair<Integer, Integer>> executeTimeStepInDirectionAndGetDirectionList(int direction) {
+    private List<Pair<Integer, Integer>> executeTimeStepAndGetStateInDirection(int direction) {
         executeTimeStepInDirection(direction);
-        return getDirectionList(direction);
+        return getStateInDirection(direction);
     }
 
     public int calculateTotalEnergy() {
-        return moons.stream().mapToInt(Moon::calculateTotalEnergy).sum();
+        return moons.stream()
+                .mapToInt(Moon::calculateTotalEnergy)
+                .sum();
     }
 
     public void executeNTimeSteps(int n) {
@@ -120,9 +123,7 @@ class SolarSystem {
     }
 
     private void executeTimeStep() {
-        for (int direction : Day12.AXES) {
-            executeTimeStepInDirection(direction);
-        }
+       Arrays.stream(Day12.AXES).forEach(this::executeTimeStepInDirection);
     }
 
     private void executeTimeStepInDirection(int direction) {
@@ -131,9 +132,7 @@ class SolarSystem {
     }
 
     private void applyVelocityInDirection(int direction) {
-        for (Moon moon: moons) {
-            moon.applyVelocityInDirection(direction);
-        }
+        moons.forEach((Moon moon) -> moon.applyVelocityInDirection(direction));
     }
 
     private void applyGravityInDirection(int direction) {
