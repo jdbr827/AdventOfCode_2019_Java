@@ -26,8 +26,6 @@ class MoonReader {
         return moons;
     }
 
-    ;
-
     static Moon extractMoon(String line) {
 
         // create matcher for pattern p and given string
