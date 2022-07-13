@@ -28,24 +28,29 @@ public class Day8 {
         return -1;
     }
 
+    public static int[] readNextLayer(FileReader inputFileReader, int layerSize) throws IOException {
+        int[] this_layer = new int[layerSize];
+        int i = 0;
+        int z;
+        while ((z = readNextNumber(inputFileReader)) != -1) {
+            this_layer[i] = z;
+            if (++i == layerSize) {
+                return this_layer;
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws IOException {
         FileReader inputFileReader = new FileReader("src/year_2019/day08/day_8_input.txt");
         int layer_width = 25; int layer_height = 6;
         int layer_size = layer_width*layer_height;
         List<int[]> inputList = new ArrayList<>();
-        int[] this_layer = new int[layer_size];
-        int i = 0;
-        int num_layers = 0;
-        int z;
-        while ((z = readNextNumber(inputFileReader)) != -1) {
-            this_layer[i] = z;
-            if (++i == layer_size) {
-                //System.out.println(Arrays.toString(this_layer));
-                inputList.add(this_layer);
-                this_layer = new int[layer_size];
-                i = 0;
-                num_layers++;
-            }
+        int[] thisLayer;
+        int numLayers = 0;
+        while ((thisLayer = readNextLayer(inputFileReader, layer_size)) != null) {
+            inputList.add(thisLayer);
+            numLayers++;
         }
         for (int[] l : inputList) {
             System.out.println(Arrays.toString(l));
@@ -58,8 +63,9 @@ public class Day8 {
         System.out.println(ones * twos);
 
         /* Part 2 */
-        int[][][] layered_image = new int[num_layers][layer_width][layer_height];
-        for (i=0; i<num_layers; i++) {
+        int[][][] layered_image = new int[numLayers][layer_width][layer_height];
+        int i;
+        for (i=0; i<numLayers; i++) {
             int[] oneDimLayer = inputList.get(i);
             int[][] twoDimLayer = new int[layer_height][layer_width];
             for (int j=0; j<layer_size; j++) {
@@ -71,7 +77,7 @@ public class Day8 {
         int[][] image = new int[layer_height][layer_width];
         for (i=0; i<layer_width; i++) {
             for (int j=0; j<layer_height; j++){
-                for (int l=0; l<num_layers; l++) {
+                for (int l=0; l<numLayers; l++) {
                     if (layered_image[l][j][i] != 2) {
                         image[j][i] = layered_image[l][j][i];
                         break;
