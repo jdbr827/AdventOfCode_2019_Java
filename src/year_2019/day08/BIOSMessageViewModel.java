@@ -2,7 +2,6 @@ package year_2019.day08;
 
 import year_2019.CartesianColorViewModel;
 import year_2019.CartesianPoint;
-import year_2019.JavaPoint;
 
 import java.awt.*;
 
