@@ -24,7 +24,7 @@ public class BIOSMessageViewModel extends CartesianColorViewModel {
 
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
-        return Color.BLACK;
+        return getBackgroundColorAtCartesian(q);
     }
 
 

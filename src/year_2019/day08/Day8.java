@@ -76,10 +76,6 @@ public class Day8 {
             }
         }
 
-        for (int[] row: processedImage){
-            System.out.println(Arrays.toString(row)); // makes YEHEF
-        }
-
         new Day8View(processedImage);
 
 
