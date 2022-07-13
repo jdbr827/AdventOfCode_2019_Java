@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.day08;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,19 +19,25 @@ public class Day8 {
         return cnt;
     }
 
+    public static int readNextNumber(FileReader inputFileReader) throws IOException {
+        int r;
+        if ((r = inputFileReader.read()) != -1) {
+            char[] c = {(char) r};
+            return Integer.parseInt(String.valueOf(c));
+        }
+        return -1;
+    }
+
     public static void main(String[] args) throws IOException {
-        FileReader inputFileReader = new FileReader("./src/year_2019/day_8_input.txt");
+        FileReader inputFileReader = new FileReader("src/year_2019/day08/day_8_input.txt");
         int layer_width = 25; int layer_height = 6;
         int layer_size = layer_width*layer_height;
         List<int[]> inputList = new ArrayList<>();
-        int r;
         int[] this_layer = new int[layer_size];
         int i = 0;
         int num_layers = 0;
-        while ((r = inputFileReader.read()) != -1) {
-            char[] c = {(char) r};
-            int z = Integer.parseInt(String.valueOf(c));
-            //System.out.println(z);
+        int z;
+        while ((z = readNextNumber(inputFileReader)) != -1) {
             this_layer[i] = z;
             if (++i == layer_size) {
                 //System.out.println(Arrays.toString(this_layer));
