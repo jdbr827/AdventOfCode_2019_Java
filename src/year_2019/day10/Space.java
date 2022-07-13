@@ -1,75 +1,74 @@
 package year_2019.day10;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.common.math.IntMath.gcd;
 
 class Space {
-    java.util.List<Point> asteroids;
+    List<Point> asteroids;
 
     Space(String fileName) throws IOException {
-        asteroids = readInSpace(fileName);
-    }
-
-
-    public static java.util.List<Point> readInSpace(String fileName) throws IOException {
-        java.util.List<Point> space = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        String line;
-        int x = 0;
-        while ((line = br.readLine()) != null) {
-            for (int y = 0; y < line.length(); y++) {
-                if (line.charAt(y) == '#') {
-                    space.add(new Point(y, x));
-                }
-            }
-            x++;
-        }
-        return space;
+        asteroids = Day10FileReader.readInSpace(fileName);
     }
 
 
     int numVisibleNeighbors(Point point) {
         Set<Point> reducedVectors = getVisibleNeighbors(point);
-        System.out.println(reducedVectors);
         return reducedVectors.size() - 1; // since (0, 0) is the point itself
 
     }
 
     Set<Point> getVisibleNeighbors(Point point) {
-        List<Point> vectors = new ArrayList<>();
-        for (Point p : asteroids) {
-            vectors.add(new Point(p.x - point.x, p.y - point.y));
-        }
-        Set<Point> reducedVectors = new HashSet<>();
-        for (Point v : vectors) {
-            int vGcd;
-            if (v.x == 0 && v.y == 0) {
-                vGcd = 1;
-            } else if (v.x == 0) {
-                vGcd = Math.abs(v.y);
-            } else if (v.y == 0) {
-                vGcd = Math.abs(v.x);
-            } else {
-                vGcd = gcd(Math.abs(v.x), Math.abs(v.y));
-            }
+        return asteroids.stream()
+                .map((Point p) -> rewriteVectorAtNewOrigin(p, point))
+                .map(Space::reduceVectorByGCD)
+                .collect(Collectors.toSet()); // Important to remove duplicates
+    }
 
-            reducedVectors.add(new Point(v.x / vGcd, v.y / vGcd));
+    private static Point rewriteVectorAtNewOrigin(Point vector, Point newOrigin) {
+        return new Point(vector.x - newOrigin.x, vector.y - newOrigin.y);
+    }
+
+    /**
+     * Given a vector v, reduces vector components by dividing each component by their GCDS
+     * @param v a 2d point
+     * @return a vector in the same direction as v but with magnitude reduced by the GCD of v's components
+     */
+    private static Point reduceVectorByGCD(Point v) {
+        int vGcd = gcdOfComponents(v);
+        return new Point(v.x / vGcd, v.y / vGcd);
+    }
+
+
+    private static int gcdOfComponents(Point v) {
+        int vGcd;
+        if (v.x == 0 && v.y == 0) {
+            vGcd = 1;
+        } else if (v.x == 0) {
+            vGcd = Math.abs(v.y);
+        } else if (v.y == 0) {
+            vGcd = Math.abs(v.x);
+        } else {
+            vGcd = gcd(Math.abs(v.x), Math.abs(v.y));
         }
-        return reducedVectors;
+        return vGcd;
     }
 
     public int findMostVisibleNeighbors() {
-        return asteroids.stream().map(this::numVisibleNeighbors).max(Comparator.naturalOrder()).orElse(-1);
+        return asteroids.stream()
+                .map(this::numVisibleNeighbors)
+                .max(Comparator.naturalOrder())
+                .orElse(-1);
     }
 
     public Point findBestMonitoringStation() {
-        return asteroids.stream().max(Comparator.comparing(this::numVisibleNeighbors)).orElse(null);
+        return asteroids.stream()
+                .max(Comparator.comparing(this::numVisibleNeighbors))
+                .orElse(null);
     }
 
 
