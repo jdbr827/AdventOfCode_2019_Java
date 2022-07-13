@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static year_2019.day01.Day1.*;
+import static year_2019.day01.FuelCalculator.getFuelRequired;
+import static year_2019.day01.FuelCalculator.getMetaFuelRequired;
 
 public class Day1Test {
     public static final String INPUT_FILENAME = "src/year_2019/day01/input_aoc_2019_1.txt";
@@ -25,6 +27,7 @@ public class Day1Test {
 
     @Test
     void testGetMetaFuelRequired() {
+        assertEquals(getMetaFuelRequired(0), 0);
         assertEquals(getMetaFuelRequired(14), 2);
         assertEquals(getMetaFuelRequired(1969), 966);
         assertEquals(getMetaFuelRequired(100756), 50346);
