@@ -43,7 +43,7 @@ public class Day8 {
         return null;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         PixelatedImage image = new PixelatedImage(25, 6, "src/year_2019/day08/day_8_input.txt");
 
         /* Part 1 */
@@ -79,6 +79,8 @@ public class Day8 {
         for (int[] row: processedImage){
             System.out.println(Arrays.toString(row)); // makes YEHEF
         }
+
+        new Day8View(processedImage);
 
 
 
