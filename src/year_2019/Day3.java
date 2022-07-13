@@ -3,10 +3,8 @@ package year_2019;
 import javafx.util.Pair;
 
 import java.awt.*;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class Day3 {
 
@@ -16,27 +14,29 @@ public class Day3 {
         return s1.stream().map(p -> Math.abs((int) p.getX()) + Math.abs((int) p.getY())).min(Comparator.naturalOrder()).get();
     }
 
-    public static Set<Point> getPath(String thread) {
+    public static Map<Point, Integer> getPath(String thread) {
         String[] instructions = thread.split(",");
         int x=0; int y=0;
-        Set<Point> path = new HashSet<>();
+        Map<Point, Integer> path = new HashMap<>();
         Point origin = new Point(0, 0);
+        int dist = 0;
         for (String instruction : instructions) {
             char direction = instruction.charAt(0);
             int magnitude = Integer.parseInt(instruction.substring(1));
             int i;
             switch(direction) {
                 case 'R':
-                    for(i=0; i<magnitude; i++, x++) { path.add(new Point(x, y)); }
+                    for(i=0; i<magnitude; i++, x++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
+
                     break;
                 case 'L':
-                    for(i=0; i<magnitude; i++, x--) { path.add(new Point(x, y)); }
+                    for(i=0; i<magnitude; i++, x--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
                 case 'U':
-                    for(i=0; i<magnitude; i++, y++) { path.add(new Point(x, y)); }
+                    for(i=0; i<magnitude; i++, y++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
                 case 'D':
-                    for(i=0; i<magnitude; i++, y--) { path.add(new Point(x, y)); }
+                    for(i=0; i<magnitude; i++, y--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
             }
         path.remove(origin);
@@ -52,12 +52,17 @@ public class Day3 {
     }
 
     private static void part2(String thread1, String thread2) {
+        Map<Point, Integer> p1 = getPath(thread1);
+        Map<Point, Integer> p2 = getPath(thread2);
+        Set<Point> k1 = p1.keySet();
+        k1.retainAll(p2.keySet());
+        System.out.println(k1.stream().map((k) -> p1.get(k) + p2.get(k)).min(Comparator.naturalOrder()).get());
     }
 
     private static void part1(String thread1, String thread2) {
-        Set<Point> p1 = getPath(thread1);
-        Set<Point> p2 = getPath(thread2);
-        System.out.println(closestIntersecting(p1, p2));
+        Map<Point, Integer> p1 = getPath(thread1);
+        Map<Point, Integer> p2 = getPath(thread2);
+        System.out.println(closestIntersecting(p1.keySet(), p2.keySet()));
     }
 
 }
