@@ -5,13 +5,18 @@ import javafx.util.Pair;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 
 public class Day3 {
 
     public static int closestIntersecting(Set<Point> s1, Set<Point> s2) {
-        s1.retainAll(s2); // s1 becomes intersection of S1 and S2
-        //noinspection OptionalGetWithoutIsPresent
-        return s1.stream().map(p -> Math.abs((int) p.getX()) + Math.abs((int) p.getY())).min(Comparator.naturalOrder()).get();
+        Function<Point, Integer> manhattanDistanceFromOrigin = (p) ->  Math.abs((int) p.getX()) + Math.abs((int) p.getY());
+        return closestIntersectingAccordingTo(s1, s2, manhattanDistanceFromOrigin);
+    }
+
+    public static int closestIntersectingAccordingTo(Set<Point> s1, Set<Point> s2, Function<Point, Integer> f) {
+        s1.retainAll(s2);
+        return s1.stream().map(f).min(Comparator.naturalOrder()).get();
     }
 
     public static Map<Point, Integer> getPath(String thread) {
@@ -54,9 +59,8 @@ public class Day3 {
     private static void part2(String thread1, String thread2) {
         Map<Point, Integer> p1 = getPath(thread1);
         Map<Point, Integer> p2 = getPath(thread2);
-        Set<Point> k1 = p1.keySet();
-        k1.retainAll(p2.keySet());
-        System.out.println(k1.stream().map((k) -> p1.get(k) + p2.get(k)).min(Comparator.naturalOrder()).get());
+        Function<Point, Integer> wireDistance = (p) -> p1.get(p) + p2.get(p);
+        System.out.println(closestIntersectingAccordingTo(p1.keySet(), p2.keySet(), wireDistance));
     }
 
     private static void part1(String thread1, String thread2) {
