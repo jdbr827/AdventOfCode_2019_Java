@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class CartesianColorTableModel extends CartesianTableModel {
+public abstract class CartesianColorTableModel extends CartesianTableModel implements ColorTableModel {
     protected Map<CartesianPoint, Color> cartesianColorMap = new HashMap<CartesianPoint, Color>();
 
     public void setColorAtCartesian(CartesianPoint desiredPointCartesian, Color color) {
@@ -19,23 +19,9 @@ public abstract class CartesianColorTableModel extends CartesianTableModel {
 
     public abstract Color getForegroundColorAtCartesian(Point q);
 
-    public JTable createCartesianColorJTable() {
-        return new JTable() {
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        JavaPoint javaPoint = new JavaPoint(column, row);
-                        Point q = convertJavaToCartesian(javaPoint);
-                        return colorJLabel(l, q);
-                    }
-                };
-            }
-        };
-    }
 
-    public JLabel colorJLabel(JLabel l, Point q) {
+    public JLabel colorJLabel(JLabel l, JavaPoint javaPoint) {
+        Point q = convertJavaToCartesian(javaPoint);
         l.setBackground(getBackgroundColorAtCartesian(q));
         l.setForeground(getForegroundColorAtCartesian(q));
         return l;

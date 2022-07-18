@@ -59,7 +59,7 @@ public class HullView {
 
     private void createUIComponents() {
         viewModel = new HullTableModel(this);
-        table1 = viewModel.createCartesianColorJTable();
+        table1 = viewModel.createColorJTable();
     }
 
     public void repaint() {

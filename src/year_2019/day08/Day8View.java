@@ -21,7 +21,7 @@ public class Day8View {
 
     private void createUIComponents() {
         viewModel = new BIOSMessageTableModel(this.grid);
-        table1 = viewModel.createCartesianColorJTable();
+        table1 = viewModel.createColorJTable();
     }
 
 }

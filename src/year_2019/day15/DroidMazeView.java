@@ -123,7 +123,7 @@ public class DroidMazeView {
 
     private void createUIComponents() {
         this.droidMazeViewModel = new DroidMazeTableModel();
-        table1 = droidMazeViewModel.createCartesianColorJTable();
+        table1 = droidMazeViewModel.createColorJTable();
     }
 
 
