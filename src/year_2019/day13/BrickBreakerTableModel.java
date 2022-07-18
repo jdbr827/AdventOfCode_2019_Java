@@ -1,10 +1,10 @@
 package year_2019.day13;
 
-import viewModelUtil.CartesianColorViewModel;
+import viewModelUtil.CartesianColorTableModel;
 
 import java.awt.*;
 
-public class BrickBreakerViewModel extends CartesianColorViewModel {
+public class BrickBreakerTableModel extends CartesianColorTableModel {
     @Override
     public Color getBackgroundColorAtCartesian(Point q) {
         return null;

@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Day8View {
     private JPanel panel1;
     private JTable table1;
-    BIOSMessageViewModel viewModel;
+    BIOSMessageTableModel viewModel;
     private int[][] grid;
 
     public Day8View(int[][] grid) throws InterruptedException {
@@ -20,7 +20,7 @@ public class Day8View {
     }
 
     private void createUIComponents() {
-        viewModel = new BIOSMessageViewModel(this.grid);
+        viewModel = new BIOSMessageTableModel(this.grid);
         table1 = viewModel.createCartesianColorJTable();
     }
 

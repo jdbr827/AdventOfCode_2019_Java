@@ -1,16 +1,16 @@
 package year_2019.day15;
 
-import viewModelUtil.CartesianColorViewModel;
+import viewModelUtil.CartesianColorTableModel;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DroidMazeViewModel extends CartesianColorViewModel {
+public class DroidMazeTableModel extends CartesianColorTableModel {
     Point droidLocation = new Point(0, 0);
     Map<Point,Color> foregroundColor = new HashMap<>();
 
-    public DroidMazeViewModel() {
+    public DroidMazeTableModel() {
     }
 
     @Override

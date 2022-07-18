@@ -1,8 +1,6 @@
 package year_2019.day08;
 
-import viewModelUtil.CartesianColorViewModel;
-import viewModelUtil.CartesianPoint;
-import viewModelUtil.DTMPoint;
+import viewModelUtil.CartesianColorTableModel;
 import viewModelUtil.JavaPoint;
 
 import javax.swing.*;
@@ -12,13 +10,11 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static viewModelUtil.JavaPoint.convertDTMPointToJavaPoint;
-
-public class BIOSMessageViewModel extends CartesianColorViewModel {
+public class BIOSMessageTableModel extends CartesianColorTableModel {
     Map<JavaPoint, Color> javaColorMap = new HashMap<>();
 
 
-    public BIOSMessageViewModel(int[][] grid) {
+    public BIOSMessageTableModel(int[][] grid) {
         super();
         for(int y=0; y<grid.length; y++) {
             for(int x = 0; x<grid[0].length; x++) {

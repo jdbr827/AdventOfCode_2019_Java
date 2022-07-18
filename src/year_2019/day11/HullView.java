@@ -14,7 +14,7 @@ public class HullView {
     private JButton setCurrentPanelToButton;
     private JButton setCurrentPanelToButton1;
 
-    private HullViewModel viewModel;
+    private HullTableModel viewModel;
     Day11 controller;
 
     public HullView() {
@@ -58,7 +58,7 @@ public class HullView {
     }
 
     private void createUIComponents() {
-        viewModel = new HullViewModel(this);
+        viewModel = new HullTableModel(this);
         table1 = viewModel.createCartesianColorJTable();
     }
 

@@ -7,7 +7,8 @@ import java.util.Vector;
 
 import static viewModelUtil.JavaPoint.convertJavaPointToDTMPoint;
 
-public class CartesianViewModel {
+
+public class CartesianTableModel {
     protected Point cartesianOrigin = new Point(0, 0);
     protected DefaultTableModel dtm = new DefaultTableModel(1, 1);
 

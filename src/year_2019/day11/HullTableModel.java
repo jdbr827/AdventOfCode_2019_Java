@@ -1,6 +1,6 @@
 package year_2019.day11;
 
-import viewModelUtil.CartesianColorViewModel;
+import viewModelUtil.CartesianColorTableModel;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -8,11 +8,11 @@ import year_2019.day15.model.CardinalDirection;
 import java.awt.*;
 import java.util.Map;
 
-public class HullViewModel extends CartesianColorViewModel {
+public class HullTableModel extends CartesianColorTableModel {
     HullView view;
     Day11 controller;
 
-    public HullViewModel(HullView day11Hull) {
+    public HullTableModel(HullView day11Hull) {
         super();
         this.view = day11Hull;
     }

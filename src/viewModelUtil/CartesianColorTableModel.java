@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class CartesianColorViewModel extends CartesianViewModel {
+public abstract class CartesianColorTableModel extends CartesianTableModel {
     protected Map<CartesianPoint, Color> cartesianColorMap = new HashMap<CartesianPoint, Color>();
 
     public void setColorAtCartesian(CartesianPoint desiredPointCartesian, Color color) {

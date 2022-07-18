@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DroidMazeView {
-    DroidMazeViewModel droidMazeViewModel;
+    DroidMazeTableModel droidMazeViewModel;
     private JPanel panel1;
     JTable table1;
     private JButton northButton;
@@ -122,7 +122,7 @@ public class DroidMazeView {
     }
 
     private void createUIComponents() {
-        this.droidMazeViewModel = new DroidMazeViewModel();
+        this.droidMazeViewModel = new DroidMazeTableModel();
         table1 = droidMazeViewModel.createCartesianColorJTable();
     }
 
