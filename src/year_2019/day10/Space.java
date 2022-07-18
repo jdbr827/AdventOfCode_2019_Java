@@ -19,10 +19,15 @@ class Space {
         //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
         myMap.forEach((k, ptLst) -> ptLst.sort(Comparator.comparing(Space::gcdOfComponents)));
         //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
-
-
+        List<Point> sortedByAngles = myMap.keySet().stream().sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop)).collect(Collectors.toList());
+        System.out.println(sortedByAngles);
 
         return new Point(0, 0);
+    }
+
+    public static double getClockwiseArcTanFromTop(Point pt) {
+        double atan = Math.atan2(pt.x, pt.y);
+        return atan >= 0 ? atan : atan + (2*Math.PI);
     }
 
     Space(String fileName) throws IOException {

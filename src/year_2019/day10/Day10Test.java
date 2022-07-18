@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static year_2019.day10.Day10.part1;
@@ -69,6 +72,48 @@ public class Day10Test {
      private Point whenVaporized(Integer i) throws IOException {
             return Day10.findIthVaporizedFromStation(INPUT_5, new Point(11, 13), i);
     }
+
+
+    @Test
+    void testD10P2_getClockwiseArcTanFromTop() {
+        List<Point> unitSquare = new ArrayList<>();
+        for (int x=-1; x<=1; x++) {
+            for (int y=-1; y<=1; y++) {
+                unitSquare.add(new Point(x, y));
+            }
+        }
+        unitSquare.remove(new Point(0, 0));
+        unitSquare.add(new Point(2, 1));
+        unitSquare.add(new Point(1, 2));
+        unitSquare.add(new Point(2, -1));
+        unitSquare.add(new Point(1, -2));
+        unitSquare.add(new Point(-1, -2));
+        unitSquare.add(new Point(-2, -1));
+        unitSquare.add(new Point(-2, 1));
+        unitSquare.add(new Point(-1, 2));
+        assertEquals(unitSquare.stream().sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop)).collect(Collectors.toList()),
+                List.of(
+                        new Point(0, 1),
+                        new Point(1, 2),
+                        new Point(1, 1),
+                        new Point(2, 1),
+                        new Point(1, 0),
+                        new Point(2, -1),
+                        new Point(1, -1),
+                        new Point(1, -2),
+                        new Point(0, -1),
+                        new Point(-1, -2),
+                        new Point(-1, -1),
+                        new Point(-2, -1),
+                        new Point(-1, 0),
+                        new Point(-2, 1),
+                        new Point(-1, 1),
+                        new Point(-1, 2)
+                        )
+        );
+
+    }
+
     @Test
     void testD10P2() throws IOException {
         assertEquals(whenVaporized(1), new Point(11, 12));
