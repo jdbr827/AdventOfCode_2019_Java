@@ -11,6 +11,20 @@ import static com.google.common.math.IntMath.gcd;
 class Space {
     List<Point> asteroids;
 
+    public Point findIthVaporizedFromStation(Point station, int i) {
+        asteroids.remove(station);
+        Map<Point, List<Point>> myMap = asteroids.stream()
+                .map((a) -> rewriteVectorAtNewOrigin(a, station))
+                .collect(Collectors.groupingBy(Space::reduceVectorByGCD));
+        //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
+        myMap.forEach((k, ptLst) -> ptLst.sort(Comparator.comparing(Space::gcdOfComponents)));
+        //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
+
+
+
+        return new Point(0, 0);
+    }
+
     Space(String fileName) throws IOException {
         asteroids = Day10FileReader.readInSpace(fileName);
     }
@@ -70,6 +84,8 @@ class Space {
                 .max(Comparator.comparing(this::numVisibleNeighbors))
                 .orElse(null);
     }
+
+
 
 
 }

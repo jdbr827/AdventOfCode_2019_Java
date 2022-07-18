@@ -21,6 +21,11 @@ public class Day10 {
         Space space = new Space(fileName);
         return space.findBestMonitoringStation();
     }
+
+    public static Point findIthVaporizedFromStation(String fileName, Point station, int i) throws IOException {
+        Space space = new Space(fileName);
+        return space.findIthVaporizedFromStation(station, i);
+    }
 }
 
 
