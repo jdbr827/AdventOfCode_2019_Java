@@ -20,6 +20,10 @@ public class CartesianTableModel {
         return new CartesianPoint(DTMPoint.y - cartesianOrigin.y, DTMPoint.x - cartesianOrigin.x);
     }
 
+    public CartesianPoint convertJavaToCartesian(JavaPoint javaPoint) {
+        return new CartesianPoint(javaPoint.x - cartesianOrigin.x, cartesianOrigin.y - javaPoint.y);
+    }
+
     protected void addNewJavaPointIfNecessary(DefaultTableModel dtm, JavaPoint javaPoint) {
         Point dtmPoint = convertJavaPointToDTMPoint(javaPoint);
         addNewDTMPointIfNecessary(dtm, dtmPoint);
