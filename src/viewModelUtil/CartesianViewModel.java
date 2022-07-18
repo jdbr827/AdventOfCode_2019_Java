@@ -23,7 +23,7 @@ public class CartesianViewModel {
         addNewDTMPointIfNecessary(dtm, desiredPointDTM);
     }
 
-    private void addNewDTMPointIfNecessary(DefaultTableModel dtm, Point desiredPointDTM) {
+    protected void addNewDTMPointIfNecessary(DefaultTableModel dtm, Point desiredPointDTM) {
         int Y = desiredPointDTM.y;
         int X = desiredPointDTM.x;
         while (Y < 0) {

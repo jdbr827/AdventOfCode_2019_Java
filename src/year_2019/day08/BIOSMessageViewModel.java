@@ -20,10 +20,10 @@ public class BIOSMessageViewModel extends CartesianColorViewModel {
 
     public BIOSMessageViewModel(int[][] grid) {
         super();
-        for(int x=0; x<grid.length; x++) {
-            for(int y = 0; y<grid[0].length; y++) {
-                addNewPointIfNecessary(dtm, new CartesianPoint(y, -x));
-                javaColorMap.put(new JavaPoint(x, y), grid[x][y] == 1 ? Color.WHITE : Color.BLACK);
+        for(int y=0; y<grid.length; y++) {
+            for(int x = 0; x<grid[0].length; x++) {
+                addNewDTMPointIfNecessary(dtm, new DTMPoint(y, x));
+                javaColorMap.put(new JavaPoint(x, y), grid[y][x] == 1 ? Color.WHITE : Color.BLACK);
             }
         }
     }
@@ -35,7 +35,7 @@ public class BIOSMessageViewModel extends CartesianColorViewModel {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        JavaPoint p = convertDTMPointToJavaPoint(new DTMPoint(column, row));
+                        JavaPoint p = new JavaPoint(column, row);
                         return colorJLabel(l, p);
                     }
                 };
