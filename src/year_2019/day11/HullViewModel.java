@@ -1,7 +1,7 @@
 package year_2019.day11;
 
-import year_2019.CartesianColorViewModel;
-import year_2019.CartesianPoint;
+import viewModelUtil.CartesianColorViewModel;
+import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
 

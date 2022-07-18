@@ -1,6 +1,6 @@
 package year_2019.day11;
 
-import year_2019.CartesianPoint;
+import viewModelUtil.CartesianPoint;
 
 import javax.swing.*;
 import java.io.IOException;

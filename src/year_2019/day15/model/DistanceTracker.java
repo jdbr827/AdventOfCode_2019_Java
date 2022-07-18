@@ -1,7 +1,5 @@
 package year_2019.day15.model;
 
-import year_2019.CartesianPoint;
-
 import java.awt.*;
 
 public abstract class DistanceTracker {

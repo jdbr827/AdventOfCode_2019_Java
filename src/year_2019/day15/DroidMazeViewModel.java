@@ -1,6 +1,6 @@
 package year_2019.day15;
 
-import year_2019.CartesianColorViewModel;
+import viewModelUtil.CartesianColorViewModel;
 
 import java.awt.*;
 import java.util.HashMap;

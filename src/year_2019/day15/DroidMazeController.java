@@ -1,6 +1,6 @@
 package year_2019.day15;
 
-import year_2019.CartesianPoint;
+import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 import year_2019.day15.model.DroidMazeModel;
 import year_2019.day15.model.DroidMazeOutputInstruction;
