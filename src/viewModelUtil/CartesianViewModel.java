@@ -9,23 +9,23 @@ public class CartesianViewModel {
     protected Point cartesianOrigin = new Point(0, 0);
     protected DefaultTableModel dtm = new DefaultTableModel(1, 1);
 
-    public JavaPoint convertCartesianToJava(CartesianPoint cartesianPoint) {
-        return new JavaPoint(cartesianOrigin.y - cartesianPoint.y, cartesianPoint.x + cartesianOrigin.x);
+    public DTMPoint convertCartesianToDTM(CartesianPoint cartesianPoint) {
+        return new DTMPoint(cartesianOrigin.y - cartesianPoint.y, cartesianPoint.x + cartesianOrigin.x);
     }
 
-    public CartesianPoint convertJavaToCartesian(JavaPoint javaPoint) {
-        return new CartesianPoint(javaPoint.y - cartesianOrigin.y, javaPoint.x - cartesianOrigin.x);
+    public CartesianPoint convertDTMtoCartesian(DTMPoint DTMPoint) {
+        return new CartesianPoint(DTMPoint.y - cartesianOrigin.y, DTMPoint.x - cartesianOrigin.x);
     }
 
     protected void addNewPointIfNecessary(DefaultTableModel dtm, CartesianPoint desiredPointCartesian) {
-        Point desiredPointJava = convertCartesianToJava(desiredPointCartesian);
+        Point desiredPointDTM = convertCartesianToDTM(desiredPointCartesian);
 
-        addNewJavaPointIfNecessary(dtm, desiredPointJava);
+        addNewDTMPointIfNecessary(dtm, desiredPointDTM);
     }
 
-    private void addNewJavaPointIfNecessary(DefaultTableModel dtm, Point desiredPointJava) {
-        int Y = desiredPointJava.y;
-        int X = desiredPointJava.x;
+    private void addNewDTMPointIfNecessary(DefaultTableModel dtm, Point desiredPointDTM) {
+        int Y = desiredPointDTM.y;
+        int X = desiredPointDTM.x;
         while (Y < 0) {
             Vector<Integer> newCol = new Vector<>();
             for (int i = 0; i < dtm.getRowCount(); i++) {
@@ -72,8 +72,8 @@ public class CartesianViewModel {
 
     public void setValueAtCartesian(CartesianPoint droidLocation, Object value) {
         addNewPointIfNecessary(dtm, droidLocation);
-        JavaPoint javaPoint = convertCartesianToJava(droidLocation);
-        dtm.setValueAt(value, javaPoint.x, javaPoint.y);
+        DTMPoint DTMPoint = convertCartesianToDTM(droidLocation);
+        dtm.setValueAt(value, DTMPoint.x, DTMPoint.y);
     }
 
     public void setModelToTable(JTable table1) {

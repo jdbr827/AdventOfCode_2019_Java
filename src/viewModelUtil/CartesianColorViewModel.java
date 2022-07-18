@@ -26,7 +26,7 @@ public abstract class CartesianColorViewModel extends CartesianViewModel {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        CartesianPoint p = convertJavaToCartesian(new JavaPoint(column, row));
+                        CartesianPoint p = convertDTMtoCartesian(new DTMPoint(column, row));
                         Point q = new Point(p.y, -p.x);
                         return colorJLabel(l, q);
                     }
