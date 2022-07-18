@@ -93,22 +93,22 @@ public class Day10Test {
         unitSquare.add(new Point(-1, 2));
         assertEquals(unitSquare.stream().sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop)).collect(Collectors.toList()),
                 List.of(
-                        new Point(0, 1),
-                        new Point(1, 2),
-                        new Point(1, 1),
-                        new Point(2, 1),
-                        new Point(1, 0),
-                        new Point(2, -1),
-                        new Point(1, -1),
-                        new Point(1, -2),
                         new Point(0, -1),
-                        new Point(-1, -2),
-                        new Point(-1, -1),
-                        new Point(-2, -1),
-                        new Point(-1, 0),
-                        new Point(-2, 1),
+                        new Point(1, -2),
+                        new Point(1, -1),
+                        new Point(2, -1),
+                        new Point(1, 0),
+                        new Point(2, 1),
+                        new Point(1, 1),
+                        new Point(1, 2),
+                        new Point(0, 1),
+                        new Point(-1, 2),
                         new Point(-1, 1),
-                        new Point(-1, 2)
+                        new Point(-2, 1),
+                        new Point(-1, 0),
+                        new Point(-2, -1),
+                        new Point(-1, -1),
+                        new Point(-1, -2)
                         )
         );
 

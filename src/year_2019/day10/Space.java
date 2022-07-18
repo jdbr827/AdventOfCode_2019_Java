@@ -1,5 +1,8 @@
 package year_2019.day10;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Streams;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
@@ -13,20 +16,43 @@ class Space {
 
     public Point findIthVaporizedFromStation(Point station, int i) {
         asteroids.remove(station);
-        Map<Point, List<Point>> myMap = asteroids.stream()
-                .map((a) -> rewriteVectorAtNewOrigin(a, station))
-                .collect(Collectors.groupingBy(Space::reduceVectorByGCD));
-        //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
-        myMap.forEach((k, ptLst) -> ptLst.sort(Comparator.comparing(Space::gcdOfComponents)));
-        //System.out.println(myMap.values().stream().filter(v -> v.size() >= 2).collect(Collectors.toList()));
-        List<Point> sortedByAngles = myMap.keySet().stream().sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop)).collect(Collectors.toList());
-        System.out.println(sortedByAngles);
 
-        return new Point(0, 0);
+        Map<Point, List<Point>> myMap = asteroids.stream()
+                .collect(Collectors.groupingBy((a) -> reduceVectorByGCD(rewriteVectorAtNewOrigin(a, station))));
+
+        //System.out.println(myMap.values().stream().filter(lst -> lst.get(0).getX() == 11).collect(Collectors.toList()));
+
+
+        myMap.forEach((k, ptLst) -> ptLst.sort(Comparator.comparing((a) -> gcdOfComponents(rewriteVectorAtNewOrigin(a, station)))));
+        List<Point> sortedByAngles = myMap.keySet().stream()
+                .sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop))
+                .collect(Collectors.toList());
+
+        System.out.println(myMap.get(sortedByAngles.get(0)).get(0));
+        System.out.println(myMap.get(sortedByAngles.get(1)).get(0));
+
+        List<Point> orderedPoints = new ArrayList<>();
+
+        int j=0;
+        do {
+            System.out.println(sortedByAngles.size());
+            int finalJ = j;
+            orderedPoints.addAll(sortedByAngles.stream().map(v -> myMap.get(v).get(finalJ)).collect(Collectors.toList()));
+            sortedByAngles = sortedByAngles.stream().filter(v -> (myMap.get(v).size() >= finalJ + 2)).collect(Collectors.toList());
+            j++;
+        }
+        while (!sortedByAngles.isEmpty());
+
+
+
+
+
+        return orderedPoints.get(i-1);
     }
 
+
     public static double getClockwiseArcTanFromTop(Point pt) {
-        double atan = Math.atan2(pt.x, pt.y);
+        double atan = Math.atan2(pt.x, -pt.y);
         return atan >= 0 ? atan : atan + (2*Math.PI);
     }
 
