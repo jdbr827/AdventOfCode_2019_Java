@@ -118,7 +118,7 @@ public class Day10Test {
     @Test
     void testD10P2() throws IOException {
         assertEquals(part2(INPUT_5), 802);
-        System.out.println(part2(OFFICIAL_INPUT));
+        assertEquals(part2(OFFICIAL_INPUT), 1707);
     }
 
     @Test
