@@ -22,8 +22,9 @@ public class BIOSMessageViewModel extends CartesianColorViewModel {
         super();
         for(int y=0; y<grid.length; y++) {
             for(int x = 0; x<grid[0].length; x++) {
-                addNewDTMPointIfNecessary(dtm, new DTMPoint(y, x));
-                javaColorMap.put(new JavaPoint(x, y), grid[y][x] == 1 ? Color.WHITE : Color.BLACK);
+                JavaPoint javaPoint = new JavaPoint(x, y);
+                addNewJavaPointIfNecessary(dtm, javaPoint);
+                javaColorMap.put(javaPoint, grid[y][x] == 1 ? Color.WHITE : Color.BLACK);
             }
         }
     }

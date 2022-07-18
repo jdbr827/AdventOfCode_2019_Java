@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Vector;
 
+import static viewModelUtil.JavaPoint.convertJavaPointToDTMPoint;
+
 public class CartesianViewModel {
     protected Point cartesianOrigin = new Point(0, 0);
     protected DefaultTableModel dtm = new DefaultTableModel(1, 1);
@@ -17,6 +19,10 @@ public class CartesianViewModel {
         return new CartesianPoint(DTMPoint.y - cartesianOrigin.y, DTMPoint.x - cartesianOrigin.x);
     }
 
+    protected void addNewJavaPointIfNecessary(DefaultTableModel dtm, JavaPoint javaPoint) {
+        Point dtmPoint = convertJavaPointToDTMPoint(javaPoint);
+        addNewDTMPointIfNecessary(dtm, dtmPoint);
+    }
     protected void addNewPointIfNecessary(DefaultTableModel dtm, CartesianPoint desiredPointCartesian) {
         Point desiredPointDTM = convertCartesianToDTM(desiredPointCartesian);
 
