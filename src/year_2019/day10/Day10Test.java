@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static year_2019.day10.Day10.part1;
+import static year_2019.day10.Day10.part2;
 
 public class Day10Test {
     public static final String INPUT_1 = "src/year_2019/day10/day_10_input_1.txt";
@@ -116,6 +117,12 @@ public class Day10Test {
 
     @Test
     void testD10P2() throws IOException {
+        assertEquals(part2(INPUT_5), 802);
+        System.out.println(part2(OFFICIAL_INPUT));
+    }
+
+    @Test
+    void testD10P2_whenVaporized() throws IOException {
         assertEquals(whenVaporized(1), new Point(11, 12));
         assertEquals(whenVaporized(2), new Point(12, 1));
         assertEquals(whenVaporized(3), new Point(12, 2));

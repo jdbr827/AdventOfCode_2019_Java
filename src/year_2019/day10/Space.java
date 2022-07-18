@@ -28,14 +28,11 @@ class Space {
                 .sorted(Comparator.comparing(Space::getClockwiseArcTanFromTop))
                 .collect(Collectors.toList());
 
-        System.out.println(myMap.get(sortedByAngles.get(0)).get(0));
-        System.out.println(myMap.get(sortedByAngles.get(1)).get(0));
-
         List<Point> orderedPoints = new ArrayList<>();
 
         int j=0;
         do {
-            System.out.println(sortedByAngles.size());
+            //System.out.println(sortedByAngles.size());
             int finalJ = j;
             orderedPoints.addAll(sortedByAngles.stream().map(v -> myMap.get(v).get(finalJ)).collect(Collectors.toList()));
             sortedByAngles = sortedByAngles.stream().filter(v -> (myMap.get(v).size() >= finalJ + 2)).collect(Collectors.toList());

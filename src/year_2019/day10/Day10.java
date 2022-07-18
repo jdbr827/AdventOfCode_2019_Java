@@ -22,6 +22,13 @@ public class Day10 {
         return space.findBestMonitoringStation();
     }
 
+    public static int part2(String fileName) throws IOException {
+        Space space = new Space(fileName);
+        Point winningNumber = space.findIthVaporizedFromStation(space.findBestMonitoringStation(), 200);
+        return winningNumber.x * 100 + winningNumber.y;
+
+    }
+
     public static Point findIthVaporizedFromStation(String fileName, Point station, int i) throws IOException {
         Space space = new Space(fileName);
         return space.findIthVaporizedFromStation(station, i);
