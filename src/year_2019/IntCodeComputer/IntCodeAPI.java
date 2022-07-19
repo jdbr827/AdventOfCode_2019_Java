@@ -62,7 +62,7 @@ public class IntCodeAPI {
         return result;
     }
 
-     public Optional<Long> waitForOutputOptional(Runnable inputProvider) throws Exception {
+     public Optional<Long> waitForOutputOptional(Runnable inputProvider) throws InterruptedException {
         Optional<Long> result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
         while(!result.isPresent()) {
                 if (!brain.isAlive()) {return Optional.empty();}
