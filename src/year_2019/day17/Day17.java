@@ -12,18 +12,18 @@ public class Day17 {
 
 
     public static void main(String[] args) throws InterruptedException {
-        part1();
-        //part2();
+        //part1();
+        part2();
     }
 
     private static void part2() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT_2);
         brain.startProgram();
-        Optional<Long> output;
+        Optional<Character> output;
         StringBuilder sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
+        while ((output = brain.waitForCharOutputOptionalSuspended()).isPresent()) {
+            char thisChar = output.get();
             sb.append(thisChar);
             //System.out.println(thisChar);
         }
@@ -34,18 +34,11 @@ public class Day17 {
         String s = scanner.nextLine();
 
         for (char c : s.toCharArray()) {
-            System.out.println((long)(int)c);
-            brain.sendInput((long)(int)c);
+            brain.sendCharInput(c);
         }
-        brain.sendInput(10L);
+        brain.sendCharInput('\n');
 
-        sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        System.out.println(sb);
+        brain.getNextOutputsToString();
 
         /* Function A */
         s = scanner.nextLine();
@@ -56,13 +49,7 @@ public class Day17 {
         }
         brain.sendInput(10L);
 
-        sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        System.out.println(sb);
+        brain.getNextOutputsToString();
 
         /* Function B */
         s = scanner.nextLine();
@@ -73,13 +60,7 @@ public class Day17 {
         }
         brain.sendInput(10L);
 
-        sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        System.out.println(sb);
+        brain.getNextOutputsToString();
 
         /* Function C */
         s = scanner.nextLine();
@@ -90,13 +71,7 @@ public class Day17 {
         }
         brain.sendInput(10L);
 
-        sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        System.out.println(sb);
+        brain.getNextOutputsToString();
 
         /* Continuous Video Feed? */
         s = scanner.nextLine();
@@ -107,18 +82,15 @@ public class Day17 {
         }
         brain.sendInput(10L);
 
-        sb = new StringBuilder();
-        while ((output = brain.waitForOutputOptionalSuspended()).isPresent()) {
-            char thisChar = (char) Math.toIntExact(output.get());
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        System.out.println(sb);
+        brain.getNextOutputsToString();
     }
+
+
 
     private static void part1() throws InterruptedException {
         IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT);
         brain.startProgram();
+
         Optional<Character> output;
         ArrayList<ArrayList<Character>> grid = new ArrayList<>();
         ArrayList<Character> row = new ArrayList<>();
@@ -127,7 +99,7 @@ public class Day17 {
             if (thisChar != ('\n')) {
                 row.add(thisChar);
             } else {
-                grid.add((ArrayList<Character>) row.clone());
+                grid.add(row);
                 row = new ArrayList<>();
             }
         }

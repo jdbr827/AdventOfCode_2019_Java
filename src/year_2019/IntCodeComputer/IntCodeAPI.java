@@ -84,6 +84,27 @@ public class IntCodeAPI {
     public Optional<Character> waitForCharOutputOptional() throws InterruptedException {
         Optional<Long> result = waitForOutputOptional();
         return result.map(aLong -> (char) Math.toIntExact(aLong));
+    }
 
+    public Optional<Character> waitForCharOutputOptionalSuspended() throws InterruptedException {
+        Optional<Long> result = waitForOutputOptionalSuspended();
+        return result.map(aLong -> (char) Math.toIntExact(aLong));
+    }
+
+
+    public void sendCharInput(char c) {
+        sendInput((long)(int)c);
+    }
+
+    public void getNextOutputsToString() throws InterruptedException {
+        Optional<Character> output;
+        StringBuilder sb;
+        sb = new StringBuilder();
+        while ((output = waitForCharOutputOptionalSuspended()).isPresent()) {
+            char thisChar = output.get();
+            sb.append(thisChar);
+            //System.out.println(thisChar);
+        }
+        System.out.println(sb);
     }
 }
