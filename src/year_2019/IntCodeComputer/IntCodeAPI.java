@@ -37,6 +37,11 @@ public class IntCodeAPI {
         inputs.add(input);
     }
 
+    /**
+     * Waits for the next output from the brain.
+     * @return An empty Optional if the brain thread is dead, otherwise an optional of the next output.
+     * @throws InterruptedException
+     */
     public Optional<Long> waitForOutputOptional() throws InterruptedException {
         Optional<Long> result = Optional.ofNullable(outputs.poll(2, TimeUnit.SECONDS));
         while(!result.isPresent()) {
@@ -45,6 +50,7 @@ public class IntCodeAPI {
             }
         return result;
     }
+
 
     public Optional<Long> waitForOutputOptionalSuspended() throws InterruptedException {
         Optional<Long> result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
@@ -71,8 +77,13 @@ public class IntCodeAPI {
     }
 
 
-
-    public boolean isAwaitingNextInput() {
+    private boolean isAwaitingNextInput() {
         return brain.getState() == Thread.State.WAITING && outputs.isEmpty();
+    }
+
+    public Optional<Character> waitForCharOutputOptional() throws InterruptedException {
+        Optional<Long> result = waitForOutputOptional();
+        return result.map(aLong -> (char) Math.toIntExact(aLong));
+
     }
 }

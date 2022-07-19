@@ -12,7 +12,11 @@ public class Day17 {
 
 
     public static void main(String[] args) throws InterruptedException {
-        //part1();
+        part1();
+        //part2();
+    }
+
+    private static void part2() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT_2);
         brain.startProgram();
@@ -23,7 +27,7 @@ public class Day17 {
             sb.append(thisChar);
             //System.out.println(thisChar);
         }
-        assert brain.isAwaitingNextInput();
+        //assert brain.isAwaitingNextInput();
         System.out.println(sb);
 
         /* Main Movement Routine */
@@ -115,11 +119,11 @@ public class Day17 {
     private static void part1() throws InterruptedException {
         IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT);
         brain.startProgram();
-        Optional<Long> output;
+        Optional<Character> output;
         ArrayList<ArrayList<Character>> grid = new ArrayList<>();
         ArrayList<Character> row = new ArrayList<>();
-        while ((output = brain.waitForOutputOptional()).isPresent()){
-            char thisChar = (char) Math.toIntExact(output.get());
+        while ((output = brain.waitForCharOutputOptional()).isPresent()){
+            char thisChar = output.get();
             if (thisChar != ('\n')) {
                 row.add(thisChar);
             } else {
