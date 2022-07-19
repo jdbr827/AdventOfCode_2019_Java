@@ -1,5 +1,6 @@
 package year_2019.day17;
 
+import year_2019.IntCodeComputer.AsciiIntCodeAPI;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Day17 {
 
     private static void part2() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
-        IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT_2);
+        AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT_2);
         brain.startProgram();
 
         /* Initial String */
@@ -45,7 +46,7 @@ public class Day17 {
         brain.getNextOutputsToString();
     }
 
-    private static void inputNextLine(Scanner scanner, IntCodeAPI brain) {
+    private static void inputNextLine(Scanner scanner, AsciiIntCodeAPI brain) {
         String s;
         s = scanner.nextLine();
 
@@ -57,7 +58,7 @@ public class Day17 {
 
 
     private static void part1() throws InterruptedException {
-        IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT);
+        AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT);
         brain.startProgram();
 
         Optional<Character> output;
