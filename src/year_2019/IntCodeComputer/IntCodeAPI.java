@@ -103,7 +103,6 @@ public class IntCodeAPI {
         while ((output = waitForCharOutputOptionalSuspended()).isPresent()) {
             char thisChar = output.get();
             sb.append(thisChar);
-            //System.out.println(thisChar);
         }
         System.out.println(sb);
     }

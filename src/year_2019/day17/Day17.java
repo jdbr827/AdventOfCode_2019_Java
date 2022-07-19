@@ -20,71 +20,40 @@ public class Day17 {
         Scanner scanner = new Scanner(System.in);
         IntCodeAPI brain = new IntCodeAPI(DAY_17_PUZZLE_INPUT_2);
         brain.startProgram();
-        Optional<Character> output;
-        StringBuilder sb = new StringBuilder();
-        while ((output = brain.waitForCharOutputOptionalSuspended()).isPresent()) {
-            char thisChar = output.get();
-            sb.append(thisChar);
-            //System.out.println(thisChar);
-        }
-        //assert brain.isAwaitingNextInput();
-        System.out.println(sb);
+
+        /* Initial String */
+        brain.getNextOutputsToString();
 
         /* Main Movement Routine */
-        String s = scanner.nextLine();
+        inputNextLine(scanner, brain);
+        brain.getNextOutputsToString();
+
+        /* Function A */
+        inputNextLine(scanner, brain);
+        brain.getNextOutputsToString();
+
+        /* Function B */
+        inputNextLine(scanner, brain);
+        brain.getNextOutputsToString();
+
+        /* Function C */
+        inputNextLine(scanner, brain);
+        brain.getNextOutputsToString();
+
+        /* Continuous Video Feed? */
+        inputNextLine(scanner, brain);
+        brain.getNextOutputsToString();
+    }
+
+    private static void inputNextLine(Scanner scanner, IntCodeAPI brain) {
+        String s;
+        s = scanner.nextLine();
 
         for (char c : s.toCharArray()) {
             brain.sendCharInput(c);
         }
         brain.sendCharInput('\n');
-
-        brain.getNextOutputsToString();
-
-        /* Function A */
-        s = scanner.nextLine();
-
-        for (char c : s.toCharArray()) {
-            System.out.println((long)(int)c);
-            brain.sendInput((long)(int)c);
-        }
-        brain.sendInput(10L);
-
-        brain.getNextOutputsToString();
-
-        /* Function B */
-        s = scanner.nextLine();
-
-        for (char c : s.toCharArray()) {
-            System.out.println((long)(int)c);
-            brain.sendInput((long)(int)c);
-        }
-        brain.sendInput(10L);
-
-        brain.getNextOutputsToString();
-
-        /* Function C */
-        s = scanner.nextLine();
-
-        for (char c : s.toCharArray()) {
-            System.out.println((long)(int)c);
-            brain.sendInput((long)(int)c);
-        }
-        brain.sendInput(10L);
-
-        brain.getNextOutputsToString();
-
-        /* Continuous Video Feed? */
-        s = scanner.nextLine();
-
-        for (char c : s.toCharArray()) {
-            System.out.println((long)(int)c);
-            brain.sendInput((long)(int)c);
-        }
-        brain.sendInput(10L);
-
-        brain.getNextOutputsToString();
     }
-
 
 
     private static void part1() throws InterruptedException {
