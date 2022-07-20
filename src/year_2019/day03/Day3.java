@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.day03;
 
 import java.awt.*;
 import java.util.*;
@@ -69,25 +69,3 @@ public class Day3 {
 
 }
 
-class StringPieceInfo {
-    char direction;
-    int magnitude;
-
-    private static final Pattern threadSegmentPattern = Pattern.compile("([RLUD])([0-9]*)");
-
-    StringPieceInfo(String instruction) {
-         Matcher m = threadSegmentPattern.matcher(instruction);
-         findOrElseThrow(m, "Could not match pattern to " + instruction);
-         direction = m.group(1).charAt(0);
-         magnitude = Integer.parseInt(m.group(2));
-    }
-
-    public static List<StringPieceInfo> makeStringThreadInstructions(String thread) {
-        return Arrays.stream(thread.split(","))
-                .map(StringPieceInfo::new)
-                .collect(Collectors.toList());
-    }
-
-
-
-}

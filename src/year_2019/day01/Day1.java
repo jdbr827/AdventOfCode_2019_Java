@@ -17,5 +17,7 @@ public class Day1 {
         return FuelCalculator.getTotalMetaFuelRequired(masses);
     }
 
+
+
 }
 
