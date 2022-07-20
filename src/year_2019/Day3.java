@@ -1,24 +1,18 @@
 package year_2019;
 
-import javafx.util.Pair;
-import utils.ReadIn;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static utils.ReadIn.findOrElseThrow;
 
 public class Day3 {
-     private static final Pattern threadSegmentPattern = Pattern.compile("([RLUD])([0-9]*)");
+    static Function<Point, Integer> manhattanDistanceFromOrigin = (p) ->  Math.abs((int) p.getX()) + Math.abs((int) p.getY());
 
-    public static int closestIntersecting(Set<Point> s1, Set<Point> s2) {
-        Function<Point, Integer> manhattanDistanceFromOrigin = (p) ->  Math.abs((int) p.getX()) + Math.abs((int) p.getY());
-        return closestIntersectingAccordingTo(s1, s2, manhattanDistanceFromOrigin);
-    }
 
     public static int closestIntersectingAccordingTo(Set<Point> s1, Set<Point> s2, Function<Point, Integer> f) {
         s1.retainAll(s2);
@@ -26,35 +20,32 @@ public class Day3 {
     }
 
     public static Map<Point, Integer> getPath(String thread) {
-        String[] instructions = thread.split(",");
         int x=0; int y=0;
         Map<Point, Integer> path = new HashMap<>();
         Point origin = new Point(0, 0);
         int dist = 0;
-        for (String instruction : instructions) {
-            Matcher m = threadSegmentPattern.matcher(instruction);
-            findOrElseThrow(m, "Could not match pattern to " + instruction);
-            char direction = m.group(1).charAt(0);
-            int magnitude = Integer.parseInt(m.group(2));
+        for (StringPieceInfo instruction : StringPieceInfo.makeStringThreadInstructions(thread)) {
             int i;
-            switch(direction) {
+            switch(instruction.direction) {
                 case 'R':
-                    for(i=0; i<magnitude; i++, x++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
+                    for(i=0; i<instruction.magnitude; i++, x++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
                 case 'L':
-                    for(i=0; i<magnitude; i++, x--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
+                    for(i=0; i<instruction.magnitude; i++, x--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
                 case 'U':
-                    for(i=0; i<magnitude; i++, y++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
+                    for(i=0; i<instruction.magnitude; i++, y++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
                 case 'D':
-                    for(i=0; i<magnitude; i++, y--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
+                    for(i=0; i<instruction.magnitude; i++, y--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
                     break;
             }
         path.remove(origin);
         }
         return path;
     }
+
+
 
     public static void main(String[] args) {
         String thread1 = "R1003,U476,L876,U147,R127,D10,R857,U199,R986,U311,R536,D930,R276,U589,L515,D163,L660,U69,R181,D596,L37,D359,R69,D50,L876,D867,L958,U201,R91,D127,R385,U646,L779,D309,L577,U535,R665,D669,L640,D50,L841,D32,R278,U302,L529,U679,R225,U697,R94,D205,L749,U110,L132,U664,R122,U476,R596,U399,R145,U995,R821,U80,L853,U461,L775,U57,R726,U299,L706,U500,R520,U608,L349,D636,L352,U617,R790,U947,L377,D995,R37,U445,L706,D133,R519,D194,L473,U330,L788,D599,L466,D100,L23,D68,R412,U566,R43,U333,L159,D18,L671,U135,R682,D222,R651,U138,R904,U546,R871,U264,R133,U19,R413,D235,R830,D376,R530,U18,L476,D120,L190,D252,R105,D874,L544,D705,R351,U527,L30,U283,L971,U199,L736,U36,R868,D297,L581,D888,L786,D865,R732,U394,L786,U838,L648,U434,L962,D862,R897,U116,L661,D848,L829,U930,L171,U959,R416,D855,L13,U941,R122,D678,R909,U536,R206,U39,L222,D501,L133,U360,R703,D928,R603,U793,L601,D935,R482,U444,L23,U331,L427,D349,L949,U147,L253,U757,R242,D307,R182,D371,L174,U518,L447,D851,R661,U432,R334,D240,R937,U625,L49,D105,R727,U504,L520,D126,R331,U176,L81,D168,L158,U774,L314,U623,R39,U743,R162,D646,R583,U523,R899,D419,L635,U958,R426,U482,L513,D624,L37,U669,L611,U167,L904,U163,L831,U222,L320,U561,R126,D7,L330,D313,R698,D473,R163,U527,R161,U823,L409,D734,L507,U277,L821,D341,R587,U902,R857,U386,R858,D522,R780,D754,L973,U1,R806,D439,R141,D621,R983,D546,R899,U566,L443,D147,R558,D820,R181,U351,R625,U60,R521,U225,R757,U673,L267,D624,L306,U531,L202,U854,L138,D725,R364,D813,L787,U183,R98,D899,R945,D363,L797";
@@ -73,7 +64,30 @@ public class Day3 {
     private static void part1(String thread1, String thread2) {
         Map<Point, Integer> p1 = getPath(thread1);
         Map<Point, Integer> p2 = getPath(thread2);
-        System.out.println(closestIntersecting(p1.keySet(), p2.keySet()));
+        System.out.println(closestIntersectingAccordingTo(p1.keySet(), p2.keySet(), manhattanDistanceFromOrigin));
     }
+
+}
+
+class StringPieceInfo {
+    char direction;
+    int magnitude;
+
+    private static final Pattern threadSegmentPattern = Pattern.compile("([RLUD])([0-9]*)");
+
+    StringPieceInfo(String instruction) {
+         Matcher m = threadSegmentPattern.matcher(instruction);
+         findOrElseThrow(m, "Could not match pattern to " + instruction);
+         direction = m.group(1).charAt(0);
+         magnitude = Integer.parseInt(m.group(2));
+    }
+
+    public static List<StringPieceInfo> makeStringThreadInstructions(String thread) {
+        return Arrays.stream(thread.split(","))
+                .map(StringPieceInfo::new)
+                .collect(Collectors.toList());
+    }
+
+
 
 }

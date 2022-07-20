@@ -33,9 +33,7 @@ public class NICNetwork {
 
     public void sendPacket(Long destinationAddress, Packet packet) {
         if (destinationAddress == 255L) {
-            //nicComputers.forEach(NICComputer::interrupt);
             natComputer.receivePacket(packet);
-            //System.out.println(packet.Y);
         } else {
             NICComputer destinationComputer = nicComputers.get(Math.toIntExact(destinationAddress));
             destinationComputer.receivePacket(packet);

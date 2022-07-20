@@ -4,7 +4,6 @@ import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.util.Optional;
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class NICComputer extends Thread {
@@ -48,7 +47,7 @@ public class NICComputer extends Thread {
         }
     }
 
-    public synchronized void receivePacket(Packet packet) {
+    public void receivePacket(Packet packet) {
         isIdling = false;
         brain.sendInput(packet.X);
         brain.sendInput(packet.Y);
