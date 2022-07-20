@@ -1,12 +1,14 @@
 package year_2019;
 
+import java.util.stream.IntStream;
+
 public class Day4 {
 
-    public static final int PUZZLE_INPUT = 347312;
-    public static final int PUZZLE_OUTPUT = 805915;
+    public static final int PUZZLE_INPUT_MIN = 347312;
+    public static final int PUZZLE_INPUT_MAX = 805915;
 
     public static boolean is_valid_password(Integer num) {
-        if (num < PUZZLE_INPUT || num > PUZZLE_OUTPUT) {
+        if (num < PUZZLE_INPUT_MIN || num > PUZZLE_INPUT_MAX) {
             return false;
         }
 
@@ -36,13 +38,10 @@ public class Day4 {
     }
 
     public static void main(String[] args) {
+        long tot = IntStream.rangeClosed(PUZZLE_INPUT_MIN, PUZZLE_INPUT_MAX)
+                .filter(Day4::is_valid_password)
+                .count();
 
-        int tot = 0;
-        for (int i=PUZZLE_INPUT; i < PUZZLE_OUTPUT; i++) {
-            if (is_valid_password(i)) {
-                tot += 1;
-            }
-        }
 
         System.out.println(tot);
     }
