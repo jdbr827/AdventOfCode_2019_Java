@@ -1,13 +1,19 @@
 package year_2019;
 
 import javafx.util.Pair;
+import utils.ReadIn;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static utils.ReadIn.findOrElseThrow;
 
 public class Day3 {
+     private static final Pattern threadSegmentPattern = Pattern.compile("([RLUD])([0-9]*)");
 
     public static int closestIntersecting(Set<Point> s1, Set<Point> s2) {
         Function<Point, Integer> manhattanDistanceFromOrigin = (p) ->  Math.abs((int) p.getX()) + Math.abs((int) p.getY());
@@ -26,13 +32,14 @@ public class Day3 {
         Point origin = new Point(0, 0);
         int dist = 0;
         for (String instruction : instructions) {
-            char direction = instruction.charAt(0);
-            int magnitude = Integer.parseInt(instruction.substring(1));
+            Matcher m = threadSegmentPattern.matcher(instruction);
+            findOrElseThrow(m, "Could not match pattern to " + instruction);
+            char direction = m.group(1).charAt(0);
+            int magnitude = Integer.parseInt(m.group(2));
             int i;
             switch(direction) {
                 case 'R':
                     for(i=0; i<magnitude; i++, x++) { path.putIfAbsent(new Point(x, y), dist); dist++; }
-
                     break;
                 case 'L':
                     for(i=0; i<magnitude; i++, x--) { path.putIfAbsent(new Point(x, y), dist); dist++; }
