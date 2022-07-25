@@ -56,8 +56,8 @@ public class Day11 {
     }
 
     void colorPoint(Long paint) {
-        model.paintPoint(paint);
-        view.setNumberOfUniquePanelsPainted(model.getNumberOfUniquePanelsPainted());
+        model.paintCurrentPoint(paint);
+        view.setNumberOfUniquePanelsPainted(model.getUniquePanelsPainted());
         view.paintAtCartesian(model.getCurrentRobotPosition(), paint);
     }
 

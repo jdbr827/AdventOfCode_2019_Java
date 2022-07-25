@@ -1,5 +1,7 @@
 package year_2019.day11;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -9,16 +11,14 @@ import java.util.Map;
 
 import static year_2019.day11.Day11.BLACK;
 
+@NoArgsConstructor
 public class HullPainterModel {
-    Map<Point, Long> hull = new HashMap<Point, Long>();
+    Map<Point, Long> hull = new HashMap<>();
     HullPaintingRobot robot = new HullPaintingRobot();
     Map<Point, Boolean> isPainted = new HashMap<>();
-    private int uniquePanelsPainted = 0;
+    @Getter private int uniquePanelsPainted = 0;
 
-    public HullPainterModel() {
-    }
-
-    public void paintPoint(Long paint) {
+    public void paintCurrentPoint(Long paint) {
         if (!currentPointHasBeenPainted()) {uniquePanelsPainted++;}
         hull.put(robot.getPosition(), paint);
         isPainted.put(robot.getPosition(), true);
@@ -48,8 +48,5 @@ public class HullPainterModel {
         return isPainted.getOrDefault(robot.getPosition(), false);
     }
 
-    public int getNumberOfUniquePanelsPainted() {
-        return uniquePanelsPainted;
-    }
 
 }
