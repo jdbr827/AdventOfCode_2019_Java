@@ -8,43 +8,6 @@ public class Day6 {
 
     public static Map<String, Planet> map = new HashMap<>();
 
-    static class Planet {
-
-        List<Planet> orbiters = new ArrayList<>();
-        Planet parent = null;
-
-        Planet() {
-        }
-
-        /**
-         * The total number of planets orbiting this planet
-         * @return the number of planets in orbit (direct or indirect) of this planet
-         */
-        public int getOrbitTotal() {
-            int total = 0;
-            for (Planet orbiter : orbiters) {
-                total += orbiter.getOrbitTotal(); // every planet orbiting orbiter indirectly orbits this planet
-                total += 1; // orbiter directly orbits this planet
-            }
-            return total;
-        }
-
-        /**
-         * Returns the number of orbits of Planet or any planet in direct or indirect orbit of Planet
-         * @return the number of orbits (direct or indirect) between two planets
-         */
-        public int getTotalOrbitTotal() {
-            return orbiters.isEmpty()
-                    ? 0
-                    : orbiters.stream().mapToInt(Planet::getTotalOrbitTotal).sum() +
-                        orbiters.stream().mapToInt(Planet::getOrbitTotal).sum() + orbiters.size();
-        }
-
-        public void addOrbiter(Planet p) {
-            orbiters.add(p);
-        }
-    }
-
     public static void main(String[] args) throws FileNotFoundException {
         readIn();
 
@@ -66,23 +29,17 @@ public class Day6 {
 
         while (distanceFromYou.get(map.get("SAN")) == Integer.MAX_VALUE) {
             Planet thisPlanet = old_bfs.remove();
-            for (Planet orbiter : thisPlanet.orbiters) {
-                if (distanceFromYou.get(orbiter) == Integer.MAX_VALUE) {
-                    distanceFromYou.put(orbiter, distanceFromYou.get(thisPlanet) + 1);
-                    old_bfs.add(orbiter);
-                }
-            }
-            if (thisPlanet.parent != null) {
-                if (distanceFromYou.get(thisPlanet.parent) == Integer.MAX_VALUE) {
-                    distanceFromYou.put(thisPlanet.parent, distanceFromYou.get(thisPlanet) + 1);
-                    old_bfs.add(thisPlanet.parent);
+            for (Planet neighbor: thisPlanet.getNeighbors()) {
+                if (distanceFromYou.get(neighbor) == Integer.MAX_VALUE) {
+                    distanceFromYou.put(neighbor, distanceFromYou.get(thisPlanet) + 1);
+                    old_bfs.add(neighbor);
                 }
             }
         }
 
         /*
-        You start at the object you are orbiting so you don't need to "move" to that one
-        and Santa is on the object he is orbiting so you don't need to move to that one either.
+        You start at the object you are orbiting, so you don't need to "move" to that one
+        and Santa is on the object he is orbiting, so you don't need to move to that one either.
          */
         System.out.println(distanceFromYou.get(map.get("SAN")) - 2 == 550);
     }
@@ -97,7 +54,7 @@ public class Day6 {
             map.putIfAbsent(data[0], new Planet());
             map.putIfAbsent(data[1], new Planet());
             map.get(data[0]).addOrbiter(map.get(data[1]));
-            map.get(data[1]).parent = map.get(data[0]);
+            map.get(data[1]).setParent(map.get(data[0]));
         }
     }
 
