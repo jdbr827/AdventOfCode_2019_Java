@@ -10,12 +10,13 @@ public class Day6 {
 
     public static void main(String[] args) throws FileNotFoundException {
         readIn();
-
-
         System.out.println(map.get("COM").getTotalOrbitTotal() == 621125);
 
         /* Part 2 */
         Collection<Planet> planets = map.values();
+
+        Planet YOU = map.get("YOU");
+        Planet SANTA = map.get("SAN");
 
 
         Map<Planet, Integer> distanceFromYou = new HashMap<>();
@@ -24,10 +25,10 @@ public class Day6 {
         }
 
         Queue<Planet> old_bfs = new LinkedList<>();
-        old_bfs.add(map.get("YOU"));
-        distanceFromYou.put(map.get("YOU"), 0);
+        old_bfs.add(YOU);
+        distanceFromYou.put(YOU, 0);
 
-        while (distanceFromYou.get(map.get("SAN")) == Integer.MAX_VALUE) {
+        while (distanceFromYou.get(SANTA) == Integer.MAX_VALUE) {
             Planet thisPlanet = old_bfs.remove();
             for (Planet neighbor: thisPlanet.getNeighbors()) {
                 if (distanceFromYou.get(neighbor) == Integer.MAX_VALUE) {
@@ -41,7 +42,7 @@ public class Day6 {
         You start at the object you are orbiting, so you don't need to "move" to that one
         and Santa is on the object he is orbiting, so you don't need to move to that one either.
          */
-        System.out.println(distanceFromYou.get(map.get("SAN")) - 2 == 550);
+        System.out.println(distanceFromYou.get(SANTA) - 2 == 550);
     }
 
     private static void readIn() throws FileNotFoundException {
@@ -51,10 +52,18 @@ public class Day6 {
 
         while (scanner.hasNextLine()) {
             String[] data = scanner.nextLine().split("\\)");
-            map.putIfAbsent(data[0], new Planet());
-            map.putIfAbsent(data[1], new Planet());
-            map.get(data[0]).addOrbiter(map.get(data[1]));
-            map.get(data[1]).setParent(map.get(data[0]));
+
+            String orbitingPlanetName = data[0];
+            String orbitedPlanetName = data[1];
+
+            map.putIfAbsent(orbitingPlanetName, new Planet());
+            map.putIfAbsent(orbitedPlanetName, new Planet());
+
+            Planet orbitingPlanet = map.get(orbitingPlanetName);
+            Planet orbitedPlanet = map.get(orbitedPlanetName);
+
+            orbitingPlanet.addOrbiter(orbitedPlanet);
+            orbitedPlanet.setParent(orbitingPlanet);
         }
     }
 
