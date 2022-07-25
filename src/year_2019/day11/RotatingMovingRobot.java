@@ -1,6 +1,8 @@
 package year_2019.day11;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -12,7 +14,7 @@ import year_2019.day15.model.CardinalDirection;
 public class RotatingMovingRobot {
 
     protected final CartesianPoint position = new CartesianPoint(0, 0);
-    protected CardinalDirection facing;
+    @Getter @Setter protected CardinalDirection facing;
 
     protected RotatingMovingRobot(CardinalDirection initiallyFacing) {
         facing = initiallyFacing;
@@ -32,14 +34,6 @@ public class RotatingMovingRobot {
 
     protected void rotateCounterclockwise() {
         setFacing(CardinalDirection.values()[Math.floorMod(getFacing().ordinal() - 1, 4)]);
-    }
-
-    public CardinalDirection getFacing() {
-        return facing;
-    }
-
-    protected void setFacing(CardinalDirection value) {
-        facing = value;
     }
 
 
