@@ -1,4 +1,4 @@
-package year_2019;
+package year_2019.day06;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,17 +46,7 @@ public class Day6 {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String INPUT_FILENAME = "C:\\Users\\Jake\\IdeaProjects\\AdventOfCode_2020\\src\\year_2019\\input_aoc_2019_6.txt";
-        File file = new File(INPUT_FILENAME);
-        Scanner scanner = new Scanner(file);
-
-        while (scanner.hasNextLine()) {
-            String[] data = scanner.nextLine().split("\\)");
-            map.putIfAbsent(data[0], new Planet());
-            map.putIfAbsent(data[1], new Planet());
-            map.get(data[0]).addOrbiter(map.get(data[1]));
-            map.get(data[1]).parent = map.get(data[0]);
-        }
+        readIn();
 
 
         System.out.println(map.get("COM").getTotalOrbitTotal() == 621125);
@@ -95,6 +85,20 @@ public class Day6 {
         and Santa is on the object he is orbiting so you don't need to move to that one either.
          */
         System.out.println(distanceFromYou.get(map.get("SAN")) - 2 == 550);
+    }
+
+    private static void readIn() throws FileNotFoundException {
+        String INPUT_FILENAME = "src/year_2019/day06/input_aoc_2019_6.txt";
+        File file = new File(INPUT_FILENAME);
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            String[] data = scanner.nextLine().split("\\)");
+            map.putIfAbsent(data[0], new Planet());
+            map.putIfAbsent(data[1], new Planet());
+            map.get(data[0]).addOrbiter(map.get(data[1]));
+            map.get(data[1]).parent = map.get(data[0]);
+        }
     }
 
 }
