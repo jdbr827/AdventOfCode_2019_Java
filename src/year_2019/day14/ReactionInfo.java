@@ -22,7 +22,6 @@ public class ReactionInfo {
     }
 
     public Integer findFuelYouCanMakeWithATrillionOre() {
-        currentState.clear();
         currentState.put("ORE", 1000000000000L);
         return 0;
 
@@ -62,14 +61,4 @@ public class ReactionInfo {
 
 
     }
-}
-
-
-class ChemicalState {
-
-}
-
-class Reaction {
-    Map<String, Integer> inputs;
-    Integer quantOutput;
 }

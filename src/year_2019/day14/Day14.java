@@ -9,4 +9,9 @@ public class Day14 {
         ReactionInfo reactionInfo = new ReactionInfo(fileName);
         return reactionInfo.findLeastRequiredOreForOneFuel();
     }
+
+    public static int part2(String fileName) throws IOException {
+        ReactionInfo reactionInfo = new ReactionInfo(fileName);
+        return reactionInfo.findFuelYouCanMakeWithATrillionOre();
+    }
 }
