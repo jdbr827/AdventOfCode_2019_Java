@@ -9,35 +9,40 @@ class ReactionInfo {
 }
 
 -class StoichDoer {
-+ leastRequiredOreForNFuel(N)
++leastRequiredOreForNFuel(N)
 - currentState
 - balance()
 }
 
 interface IReactionInfo {
-+ getQuantityMade()
-+ getReactionInputs()
++getQuantityOfChemicalMadeByOneReaction(String chemical) -> Integer
++getInputsForChemical(String chemical) -> Map<String, Integer>
+}
+
+interface IDay14 {
++leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
++mostFuelForOneTrillionOre(String reactionsFileName) -> Long
+
 }
 
 interface Day14 {
-+leastRequiredOreForOneFuel(fileName)
-+mostFuelCanMakeWithTrillionOre(fileName)
-
-}
-
-class Day14Impl {
 -readIn(fileName)
 -mostFuelCanMakeWithNOre(N)
 -leastRequiredOreForNFuel(N)
 
 }
 
+Class ChemicalEnvironment {
+}
 
 
-Day14 <|.. Day14Impl
+IDay14 <|.. Day14
+Day14 -> ChemicalEnvironment
+ChemicalEnvironment *- IReactionInfo
+IReactionInfo <|.. ReactionInfo
 
 
-ReactionInfo <-* Day14Impl
-Day14Impl::leastRequiredOreForNFuel +-StoichDoer
+
+Day14::leastRequiredOreForNFuel +-StoichDoer
 
 @enduml

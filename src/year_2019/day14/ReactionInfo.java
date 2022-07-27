@@ -1,135 +1,57 @@
 package year_2019.day14;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import utils.ReadIn;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ReactionInfo implements IReactionInfo {
+    static final Pattern reactionInfoPattern = Pattern.compile("([0-9]+) ([A-Z]+)");
+    @Getter(AccessLevel.PUBLIC)
+    private final Map<String, Integer> quantityMade = new HashMap<>();
+    @Getter(AccessLevel.PUBLIC)
+    private final Map<String, Map<String, Integer>> reactionInputs = new HashMap<>();
 
 
-public class ReactionInfo {
-    ReactionInfoReader reactionInfoReader;
-    private
-    final static long ONE_TRILLION = 1000000000000L;
-
-    ReactionInfo(String fileName) throws IOException {
-        reactionInfoReader = new ReactionInfoReader(fileName);
-    }
-
-
-    public Long leastRequiredOreForOneFuel() throws IOException {
-        return leastRequiredOreForNFuel(1L);
-    }
-
-    public Long fuelYouCanMakeWithNOre() throws IOException {
-        return fuelYouCanMakeWithNOre(ONE_TRILLION);
-
-    }
-
-    private long fuelYouCanMakeWithNOre(long availableOre) throws IOException {
-        long lowerBound = 1;
-        while (leastRequiredOreForNFuel(lowerBound) < availableOre) {
-            lowerBound *= 2;
+    public ReactionInfo(String fileName) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = br.readLine()) != null) {
+            readInReaction(line);
         }
+    }
 
-        long upperBound = lowerBound;
-        lowerBound /= 2;
-        long midPoint = (upperBound + lowerBound) / 2;
-        long dist = lowerBound;
-
-        while (dist > 1) {
-
-            long oreNeeded = leastRequiredOreForNFuel(midPoint);
-            System.out.println(midPoint + " " + oreNeeded);
-            if (oreNeeded < availableOre) {
-                lowerBound = midPoint;
-            } else if (oreNeeded > availableOre) {
-                upperBound = midPoint;
-            } else {
-                return midPoint;
-            }
-            dist = upperBound - lowerBound;
-            midPoint = (upperBound + lowerBound) / 2;
+    void readInReaction(String line) {
+        String[] reactionInfo = line.split("=>");
+        Map<String, Integer> inputVals = new HashMap<String, Integer>();
+        for (String inputInfo : reactionInfo[0].split(",")) {
+            Matcher m = reactionInfoPattern.matcher(inputInfo);
+            ReadIn.findOrElseThrow(m, "Could not read in reaction info");
+            Integer inputQuantity = Integer.parseInt(m.group(1));
+            String inputChemical = m.group(2);
+            inputVals.put(inputChemical, inputQuantity);
         }
-        return lowerBound;
+        Matcher m = reactionInfoPattern.matcher(reactionInfo[1]);
+        ReadIn.findOrElseThrow(m, "Could not read in reaction info");
+        Integer outputQuantity = Integer.parseInt(m.group(1));
+        String outputChemical = m.group(2);
+
+        reactionInputs.put(outputChemical, inputVals);
+        quantityMade.put(outputChemical, outputQuantity);
     }
 
-    private long leastRequiredOreForNFuel(long N) throws IOException {
-
-        class StoichDoer {
-            final Map<String, Long> currentState = new HashMap<>();
-
-            StoichDoer(long desiredFuel) throws IOException {
-                currentState.put("FUEL", desiredFuel);
-                balance();
-            }
-
-            long getRequiredOre() {
-                return currentState.getOrDefault("ORE", 0L);
-            }
-
-
-            private void balance() {
-                while (isNotBalanced()) {
-                }
-            }
-
-            private void applyReaction(String chemical) {
-                Long currentQuantityOfChemical = currentState.getOrDefault(chemical, 0L);
-                Integer reactionQuantityOfChemical = reactionInfoReader.getQuantityMade().get(chemical);
-                Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
-
-                currentState.put(chemical, currentQuantityOfChemical + (timesRun * reactionQuantityOfChemical));
-                Map<String, Integer> inputChemicals = reactionInfoReader.getReactionInputs().get(chemical);
-                for (String inputChemical : inputChemicals.keySet()) {
-                    currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0L) - (timesRun * inputChemicals.get(inputChemical)));
-                }
-            }
-
-            private void applyInvReaction(String chemical) {
-                Long currentQuantityOfChemical = getCurrentQuantityOfChemical(chemical);
-                Integer reactionQuantityOfChemical = getQuantityMade(chemical);
-                Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
-
-                currentState.put(chemical, currentQuantityOfChemical - (timesRun * reactionQuantityOfChemical));
-                Map<String, Integer> inputChemicals = reactionInfoReader.getReactionInputs().get(chemical);
-                for (String inputChemical : inputChemicals.keySet()) {
-                    currentState.put(inputChemical, getCurrentQuantityOfChemical(inputChemical) + (timesRun * inputChemicals.get(inputChemical)));
-                }
-            }
-
-            private Long getCurrentQuantityOfChemical(String chemical) {
-                return currentState.getOrDefault(chemical, 0L);
-            }
-
-            private boolean isNotBalanced() {
-                for (String chemical : currentState.keySet()) {
-                    if (chemical.equals("ORE")) {
-                        continue;
-                    }
-                    if (-1L * getQuantityMade(chemical) > currentState.get(chemical)) {
-                        while (-1L * getQuantityMade(chemical) > currentState.get(chemical)) {
-                            applyReaction(chemical);
-                        }
-                        return true;
-                    }
-                    if (currentState.get(chemical) > 0) {
-                        while (currentState.get(chemical) > 0) {
-                            applyInvReaction(chemical);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-
-
-            }
-        }
-        return new StoichDoer(N).getRequiredOre();
+    public Integer getQuantityOfChemicalMadeByOneReaction(String chemical) {
+        return getQuantityMade().get(chemical);
     }
 
-    private Integer getQuantityMade(String chemical) {
-        return reactionInfoReader.getQuantityMade().get(chemical);
+    public Map<String, Integer> getInputsForChemical(String chemical) {
+        return getReactionInputs().get(chemical);
     }
-
 }
-
-
