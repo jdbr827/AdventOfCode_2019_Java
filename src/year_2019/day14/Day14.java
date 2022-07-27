@@ -19,18 +19,27 @@ public class Day14 {
 
     private static final Pattern reactionInfoPattern = Pattern.compile("([0-9]+) ([A-Z]+)");
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("src/year_2019/day14/day_14_small_input.txt"));
+    public static Integer part1(String fileName) throws IOException {
+        Day14 day14 = readInReactions(fileName);
+        return day14.findLeastRequiredOreForOneFuel();
+    }
+
+    public Integer findLeastRequiredOreForOneFuel() {
+        currentState.put("FUEL", 1);
+        while (!isBalanced()) {}
+        return currentState.get("ORE");
+
+
+    }
+
+    private static Day14 readInReactions(String fileName) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line;
         Day14 day14 = new Day14();
         while ((line = br.readLine()) != null) {
             day14.readInReaction(line);
         }
-        day14.currentState.put("FUEL", 1);
-        while (!day14.isBalanced()) {
-            //System.out.println(day14.currentState);
-        };
-        System.out.println(day14.currentState.get("ORE"));
+        return day14;
     }
 
     public void readInReaction(String line) {
