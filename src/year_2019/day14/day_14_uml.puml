@@ -8,10 +8,15 @@ class ReactionInfo {
 + reactionInputs
 }
 
-class StoichDoer {
+-class StoichDoer {
++ leastRequiredOreForNFuel(N)
 - currentState
-+ StoichDoer(desiredFuel)
 - balance()
+}
+
+interface IReactionInfo {
++ getQuantityMade()
++ getReactionInputs()
 }
 
 interface Day14 {
@@ -21,14 +26,18 @@ interface Day14 {
 }
 
 class Day14Impl {
-+ readIn(fileName)
-+ leastRequiredOreForNFuel(N)
-+ mostFuelCanMakeWithNOre(N)
+-readIn(fileName)
+-mostFuelCanMakeWithNOre(N)
+-leastRequiredOreForNFuel(N)
+
 }
 
-Day14Impl::readIn -> ReactionInfo
-Day14 <|.. Day14Impl
-Day14Impl::leastRequiredOreForNFuel -> StoichDoer
 
-ReactionInfo -* StoichDoer
+
+Day14 <|.. Day14Impl
+
+
+ReactionInfo <-* Day14Impl
+Day14Impl::leastRequiredOreForNFuel +-StoichDoer
+
 @enduml
