@@ -61,6 +61,11 @@ public class Day14Test {
         assertEquals(460664, Day14.part2(INPUT_5));
     }
 
+    @Test
+   void testD14P2_official() throws IOException {
+        assertEquals(2509120, Day14.part2(OFFICIAL_INPUT));
+    }
+
 
 
 
