@@ -17,32 +17,48 @@ public class Day14Test {
 
     @Test
     void testD14P1I1() throws IOException {
-        assertEquals(Day14.part1(INPUT_1), 31);
+        assertEquals( 31, Day14.part1(INPUT_1));
     }
 
     @Test
     void testD14P1I2() throws IOException {
-        assertEquals(Day14.part1(INPUT_2), 165);
+        assertEquals( 165, Day14.part1(INPUT_2));
     }
 
     @Test
     void testD14P1I3() throws IOException {
-        assertEquals(Day14.part1(INPUT_3), 13312);
+        assertEquals(13312, Day14.part1(INPUT_3));
     }
 
     @Test
     void testD14P1I4() throws IOException {
-        assertEquals(Day14.part1(INPUT_4), 180697);
+        assertEquals(180697, Day14.part1(INPUT_4));
     }
 
     @Test
     void testD14P1I5() throws IOException {
-        assertEquals(Day14.part1(INPUT_5), 2210736);
+        assertEquals(2210736, Day14.part1(INPUT_5));
     }
 
-     @Test
+    @Test
     void testD14P1_official() throws IOException {
-        assertEquals(Day14.part1(OFFICIAL_INPUT), 612880);
+        assertEquals(612880, Day14.part1(OFFICIAL_INPUT));
+    }
+
+
+    @Test
+    void testD14P2I3() throws IOException {
+        assertEquals(82892753, Day14.part2(INPUT_3));
+    }
+
+    @Test
+    void testD14P2I4() throws IOException {
+        assertEquals(5586022, Day14.part2(INPUT_4));
+    }
+
+   @Test
+   void testD14P2I5() throws IOException {
+        assertEquals(460664, Day14.part2(INPUT_5));
     }
 
 
