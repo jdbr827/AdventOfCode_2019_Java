@@ -6,35 +6,41 @@ import java.util.Map;
 
 public class ReactionInfo {
     final ReactionInformation reactionInformation;
-    Map<String, Integer> currentState = new HashMap<>();
+    Map<String, Long> currentState = new HashMap<>();
 
     ReactionInfo(String fileName) throws IOException {
         reactionInformation = new ReactionInformation(fileName);
     }
 
 
-    public Integer findLeastRequiredOreForOneFuel() {
-        currentState.put("FUEL", 1);
+    public Long findLeastRequiredOreForOneFuel() {
+        currentState.clear();
+        currentState.put("FUEL", 1L);
         while (!isBalanced()) {
         }
         return currentState.get("ORE");
+    }
 
+    public Integer findFuelYouCanMakeWithATrillionOre() {
+        currentState.clear();
+        currentState.put("ORE", 1000000000000L);
+        return 0;
 
     }
 
     public void applyReaction(String chemical) {
-        currentState.put(chemical, currentState.getOrDefault(chemical, 0) + reactionInformation.getQuantityMade().get(chemical));
+        currentState.put(chemical, currentState.getOrDefault(chemical, 0L) + reactionInformation.getQuantityMade().get(chemical));
         Map<String, Integer> inputChemicals = reactionInformation.getReactionInputs().get(chemical);
         for (String inputChemical : inputChemicals.keySet()) {
-            currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0) - inputChemicals.get(inputChemical));
+            currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0L) - inputChemicals.get(inputChemical));
         }
     }
 
     public void applyInvReaction(String chemical) {
-        currentState.put(chemical, currentState.getOrDefault(chemical, 0) - reactionInformation.getQuantityMade().get(chemical));
+        currentState.put(chemical, currentState.getOrDefault(chemical, 0L) - reactionInformation.getQuantityMade().get(chemical));
         Map<String, Integer> inputChemicals = reactionInformation.getReactionInputs().get(chemical);
         for (String inputChemical : inputChemicals.keySet()) {
-            currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0) + inputChemicals.get(inputChemical));
+            currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0L) + inputChemicals.get(inputChemical));
         }
     }
 
@@ -43,7 +49,7 @@ public class ReactionInfo {
             if (chemical.equals("ORE")) {
                 continue;
             }
-            if (-1 * reactionInformation.getQuantityMade().get(chemical) > currentState.get(chemical)) {
+            if (-1L * reactionInformation.getQuantityMade().get(chemical) > currentState.get(chemical)) {
                 applyReaction(chemical);
                 return false;
             }
