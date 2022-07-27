@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+class ReactionInfo {
++ quantityMade
++ reactionInputs
+}
+
+class StoichDoer {
+- currentState
++ StoichDoer(desiredFuel)
+- balance()
+}
+
+interface Day14 {
++leastRequiredOreForOneFuel(fileName)
++mostFuelCanMakeWithTrillionOre(fileName)
+
+}
+
+class Day14Impl {
++ readIn(fileName)
++ leastRequiredOreForNFuel(N)
++ mostFuelCanMakeWithNOre(N)
+}
+
+Day14Impl::readIn -> ReactionInfo
+Day14 <|.. Day14Impl
+Day14Impl::leastRequiredOreForNFuel -> StoichDoer
+
+ReactionInfo -* StoichDoer
+@enduml

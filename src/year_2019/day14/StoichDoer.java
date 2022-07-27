@@ -4,23 +4,28 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChemicalInfo {
-    private final ReactionInfo reactionInfo;
+public class StoichDoer {
+
     final ReactionInfoReader reactionInformation;
-    Map<String, Long> currentState = new HashMap<String, Long>();
+    Map<String, Long> currentState = new HashMap<>();
 
-    public ChemicalInfo(ReactionInfo reactionInfo, String fileName) throws IOException {
-        this.reactionInfo = reactionInfo;
-        this.reactionInformation = new ReactionInfoReader(fileName);
-
+    public StoichDoer(ReactionInfoReader reactionInformation, long desiredFuel) throws IOException {
+        this.reactionInformation = reactionInformation;
+        currentState.put("FUEL", desiredFuel);
+        balance();
     }
 
-    void balance() {
+    public static long findLeastRequiredOreForNFuel(ReactionInfoReader reactionInformation, long desiredFuel) throws IOException {
+        StoichDoer stoichDoer =  new StoichDoer(reactionInformation, desiredFuel);
+        return stoichDoer.currentState.getOrDefault("ORE", 0L);
+    }
+
+    public void balance() {
         while (isNotBalanced()) {
         }
     }
 
-    public void applyReaction(String chemical) {
+    private void applyReaction(String chemical) {
         Long currentQuantityOfChemical = currentState.getOrDefault(chemical, 0L);
         Integer reactionQuantityOfChemical = reactionInformation.getQuantityMade().get(chemical);
         Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
@@ -31,7 +36,7 @@ public class ChemicalInfo {
         }
     }
 
-    public void applyInvReaction(String chemical) {
+    private void applyInvReaction(String chemical) {
         Long currentQuantityOfChemical = currentState.getOrDefault(chemical, 0L);
         Integer reactionQuantityOfChemical = reactionInformation.getQuantityMade().get(chemical);
         Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
@@ -42,7 +47,7 @@ public class ChemicalInfo {
         }
     }
 
-    public boolean isNotBalanced() {
+    private boolean isNotBalanced() {
         for (String chemical : currentState.keySet()) {
             if (chemical.equals("ORE")) {
                 continue;
