@@ -14,19 +14,27 @@ class Day6 {
 
 class SolarSystem {
 +Map<String, Integer> solarSystem
-+getPlanet(String name)
++getPlanet(String name) : Planet
 }
 
 class SolarSystemFactory {
 +{static} readInSolarSystem
 }
 
+interface ISolarSystem {
++{abstract} getPlanet(name) : Planet
+}
 
+
+class Planet {
+
+}
 
 
 SolarSystem <- SolarSystemFactory: creates
-Day6 *- SolarSystem
+Day6 *- ISolarSystem
 IDay6 <|.. Day6
+ISolarSystem <|.. SolarSystem
 
 SolarSystem o-- Planet
 

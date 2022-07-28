@@ -4,22 +4,18 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class Day6 implements IDay6 {
+    public final ISolarSystem solarSystem;
 
-    public final SolarSystem solarSystem;
 
     @Override
     public int getOrbitalChecksum() {
-        return getPlanet("COM").orbitalChecksum();
-    }
-
-    public Planet getPlanet(String name) {
-        return solarSystem.getPlanet(name);
+        return solarSystem.getPlanet("COM").orbitalChecksum();
     }
 
     @Override
     public int getDistanceToSanta() {
-        Planet YOU = getPlanet("YOU");
-        Planet SANTA = getPlanet("SAN");
+        Planet YOU = solarSystem.getPlanet("YOU");
+        Planet SANTA = solarSystem.getPlanet("SAN");
 
         /*
         You start at the object you are orbiting, so you don't need to "move" to that one

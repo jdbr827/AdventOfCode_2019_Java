@@ -29,6 +29,6 @@ public class SolarSystemFactory {
             orbitingPlanet.addOrbiter(orbitedPlanet);
             orbitedPlanet.setParent(orbitingPlanet);
         }
-        return SolarSystem.create(map);
+        return new SolarSystem(Collections.unmodifiableMap(map));
     }
 };

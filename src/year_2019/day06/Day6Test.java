@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day6Test {
 
-    public static String INPUT_1 = "src/year_2019/day06/input_aoc_2019_6_small.txt";
-    public static String INPUT_2 = "src/year_2019/day06/input_aoc_2019_6_2_small.txt";
-    public static String OFFICIAL_INPUT = "src/year_2019/day06/input_aoc_2019_6.txt";
+    public static String INPUT_1 = "src/year_2019/day06/test_inputs/input_aoc_2019_6_small.txt";
+    public static String INPUT_2 = "src/year_2019/day06/test_inputs/input_aoc_2019_6_2_small.txt";
+    public static String OFFICIAL_INPUT = "src/year_2019/day06/test_inputs/input_aoc_2019_6.txt";
 
     @Test
     void test_D6P1() throws FileNotFoundException {
