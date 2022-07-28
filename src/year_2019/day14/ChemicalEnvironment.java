@@ -20,12 +20,12 @@ public class ChemicalEnvironment {
         return BinarySearchUtil.doExponentialSearch(this::leastRequiredOreForNFuel, availableOre);
     }
 
-    public long leastRequiredOreForNFuel(long N) throws IOException {
+    public long leastRequiredOreForNFuel(long N) {
 
         class StoichDoer {
             final Map<String, Long> currentState = new HashMap<>();
 
-            StoichDoer(long desiredFuel) throws IOException {
+            StoichDoer(long desiredFuel) {
                 currentState.put("FUEL", desiredFuel);
                 balance();
             }

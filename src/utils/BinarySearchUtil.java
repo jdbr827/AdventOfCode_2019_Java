@@ -3,11 +3,12 @@ package utils;
 import year_2019.day14.CheckedFunction;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 public class BinarySearchUtil {
 
 
-    public static <T> Long doExponentialSearch(CheckedFunction<Long, Comparable<T>> func, T target) throws IOException {
+    public static <T> Long doExponentialSearch(Function<Long, Comparable<T>> func, T target) throws IOException {
         long lowerBound = 1;
         while (func.apply(lowerBound).compareTo(target) < 0) {
             lowerBound *= 2;
@@ -18,7 +19,7 @@ public class BinarySearchUtil {
         return doBinarySearch(func, target, lowerBound, upperBound);
     }
 
-    private static <T> long doBinarySearch(CheckedFunction<Long, Comparable<T>> func, T target, long lowerBound, long upperBound) throws IOException {
+    private static <T> long doBinarySearch(Function<Long, Comparable<T>> func, T target, long lowerBound, long upperBound) throws IOException {
         long midPoint = (upperBound + lowerBound) / 2;
         long dist = lowerBound;
 
