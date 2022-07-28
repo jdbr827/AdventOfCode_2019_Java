@@ -10,13 +10,6 @@ import java.util.List;
 
 
 
-/*
-The direct orbit relation aDb ("a directly orbits b").
-The orbit relation a0b ("a orbits b") is the transitive closure of aDb.
-for any planet a except COM, there is a unique planet b such that aDb ("a directly orbits b"). Call such b the "parent" of a.
- */
-
-
 @NoArgsConstructor
 class Planet {
 
@@ -39,7 +32,6 @@ class Planet {
     }
 
     public int orbitalChecksum() {
-
         return orbiters.isEmpty() ? 0
                 : numOrbitsOfPlanetsThatOrbitThisPlanet()
                     + numIndirectOrbitsOfThisPlanet()
