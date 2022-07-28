@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface IDay6 {
++{abstract} getOrbitalChecksum()
++{abstract} getDistanceToSanta()
+}
+
+class Day6 {
++getOrbitalChecksum()
++getDistanceToSanta()
+}
+
+
+class SolarSystem {
++Map<String, Integer> solarSystem
++getPlanet(String name)
+}
+
+class SolarSystemFactory {
++{static} readInSolarSystem
+}
+
+
+
+
+SolarSystem <- SolarSystemFactory: creates
+Day6 *- SolarSystem
+IDay6 <|.. Day6
+
+SolarSystem o-- Planet
+
+@enduml

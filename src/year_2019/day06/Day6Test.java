@@ -14,12 +14,12 @@ public class Day6Test {
 
     @Test
     void test_D6P1() throws FileNotFoundException {
-        assertEquals(621125, new Day6(OFFICIAL_INPUT).getOrbitalChecksum());
+        assertEquals(621125, IDay6.create(OFFICIAL_INPUT).getOrbitalChecksum());
     }
 
     @Test
     void test_D6P2() throws FileNotFoundException {
-        assertEquals(550, new Day6(OFFICIAL_INPUT).getDistanceToSanta());
+        assertEquals(550, IDay6.create(OFFICIAL_INPUT).getDistanceToSanta());
     }
 
 }

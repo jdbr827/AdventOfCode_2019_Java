@@ -23,10 +23,7 @@ class Planet {
     @Getter private final List<Planet> orbiters = new ArrayList<>(); // The set of planets in direct orbit of this planet.
     @Getter @Setter private Planet parent = null; // The planet which this planet is orbiting, null for COM
 
-    /**
-     * Returns the set of all neighbors (orbiters and parent if any)
-     * @return
-     */
+
     public Collection<Planet> getNeighbors() {
         List<Planet> neighbors = getOrbiters();
         if (getParent() != null) {
@@ -36,21 +33,11 @@ class Planet {
     }
 
 
-    /**
-     * The number of planets p such that p orbits this. The total number of planets orbiting this planet.
-     * |{b: bOthis}|
-     *
-     * @return the number of planets in orbit (direct or indirect) of this planet
-     */
+
     public int numOrbitsOfThisPlanet() {
         return numDirectOrbitsOfThisPlanet() + numIndirectOrbitsOfThisPlanet();
     }
 
-    /**
-     * Returns the number of orbits of Planet or any planet in direct or indirect orbit of Planet
-     * |{(a, b) st. (aOthis || a == this) && (bOthis || b==this) && aOb}|
-     * @return the number of orbits (direct or indirect) between two planets
-     */
     public int orbitalChecksum() {
 
         return orbiters.isEmpty() ? 0
@@ -68,7 +55,6 @@ class Planet {
     }
 
     private int numIndirectOrbitsOfThisPlanet() {
-        //
         return orbiters.stream()
                 .mapToInt(Planet::numOrbitsOfThisPlanet)
                 .sum();

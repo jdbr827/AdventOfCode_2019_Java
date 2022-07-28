@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class SolarSystemFactory {
 
-    public static Map<String, Planet> readInSolarSystem(String fileName) throws FileNotFoundException {
+    public static SolarSystem readInSolarSystem(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
         Scanner scanner = new Scanner(file);
         Map<String, Planet> map = new HashMap<>();
@@ -29,6 +29,6 @@ public class SolarSystemFactory {
             orbitingPlanet.addOrbiter(orbitedPlanet);
             orbitedPlanet.setParent(orbitingPlanet);
         }
-        return Collections.unmodifiableMap(map);
+        return SolarSystem.create(map);
     }
 };

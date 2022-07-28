@@ -1,28 +1,25 @@
 package year_2019.day06;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.*;
+import lombok.AllArgsConstructor;
 
-import static year_2019.day06.SolarSystemFactory.readInSolarSystem;
-
+@AllArgsConstructor
 public class Day6 implements IDay6 {
 
-    public final Map<String, Planet> map;
-
-    Day6(String fileName) throws FileNotFoundException {
-        map = readInSolarSystem(fileName);
-    }
+    public final SolarSystem solarSystem;
 
     @Override
     public int getOrbitalChecksum() {
-        return map.get("COM").orbitalChecksum();
+        return getPlanet("COM").orbitalChecksum();
+    }
+
+    public Planet getPlanet(String name) {
+        return solarSystem.getPlanet(name);
     }
 
     @Override
     public int getDistanceToSanta() {
-        Planet YOU = map.get("YOU");
-        Planet SANTA = map.get("SAN");
+        Planet YOU = getPlanet("YOU");
+        Planet SANTA = getPlanet("SAN");
 
         /*
         You start at the object you are orbiting, so you don't need to "move" to that one
