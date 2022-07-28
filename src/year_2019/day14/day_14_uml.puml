@@ -20,15 +20,14 @@ interface IReactionInfo {
 }
 
 interface IDay14 {
-+leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
-+mostFuelForOneTrillionOre(String reactionsFileName) -> Long
++{abstract}leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
++{abstract}mostFuelForOneTrillionOre(String reactionsFileName) -> Long
 
 }
 
 interface Day14 {
--readIn(fileName)
--mostFuelCanMakeWithNOre(N)
--leastRequiredOreForNFuel(N)
++leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
++mostFuelForOneTrillionOre(String reactionsFileName) -> Long
 
 }
 
@@ -37,12 +36,15 @@ Class ChemicalEnvironment {
 
 
 IDay14 <|.. Day14
-Day14 -> ChemicalEnvironment
+
 ChemicalEnvironment *- IReactionInfo
 IReactionInfo <|.. ReactionInfo
+Day14 -> ChemicalEnvironment
+Day14 -> ReactionInfo
 
 
 
-Day14::leastRequiredOreForNFuel +-StoichDoer
+Day14::leastRequiredOreForNFuel +--StoichDoer
+
 
 @enduml

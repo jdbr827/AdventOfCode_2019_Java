@@ -7,23 +7,14 @@ import java.util.Map;
 
 public class ChemicalEnvironment {
     IReactionInfo reactionInfo;
-    private final static long ONE_TRILLION = 1000000000000L;
+
 
     ChemicalEnvironment(IReactionInfo reactionInfo) throws IOException {
         this.reactionInfo = reactionInfo;
     }
 
 
-    public Long leastRequiredOreForOneFuel() throws IOException {
-        return leastRequiredOreForNFuel(1L);
-    }
-
-    public Long fuelYouCanMakeWithATrillionOre() throws IOException {
-        return fuelYouCanMakeWithNOre(ONE_TRILLION);
-
-    }
-
-    private long fuelYouCanMakeWithNOre(long availableOre) throws IOException {
+    public long fuelYouCanMakeWithNOre(long availableOre) throws IOException {
         long lowerBound = 1;
         while (leastRequiredOreForNFuel(lowerBound) < availableOre) {
             lowerBound *= 2;
@@ -51,7 +42,7 @@ public class ChemicalEnvironment {
         return lowerBound;
     }
 
-    private long leastRequiredOreForNFuel(long N) throws IOException {
+    public long leastRequiredOreForNFuel(long N) throws IOException {
 
         class StoichDoer {
             final Map<String, Long> currentState = new HashMap<>();
