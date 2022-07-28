@@ -20,8 +20,6 @@ class Space {
         Map<Point, List<Point>> myMap = asteroids.stream()
                 .collect(Collectors.groupingBy((a) -> reduceVectorByGCD(rewriteVectorAtNewOrigin(a, station))));
 
-        //System.out.println(myMap.values().stream().filter(lst -> lst.get(0).getX() == 11).collect(Collectors.toList()));
-
 
         myMap.forEach((k, ptLst) -> ptLst.sort(Comparator.comparing((a) -> gcdOfComponents(rewriteVectorAtNewOrigin(a, station)))));
         List<Point> sortedByAngles = myMap.keySet().stream()

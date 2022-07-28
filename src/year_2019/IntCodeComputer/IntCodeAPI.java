@@ -19,10 +19,9 @@ public class IntCodeAPI {
         this.outputs = brain.output;
     }
 
-     public IntCodeAPI(long[] tape, BlockingQueue<Long> inputs) {
+    public IntCodeAPI(long[] tape, BlockingQueue<Long> inputs) {
         this(tape, inputs, new LinkedBlockingQueue<>());
     }
-
 
     public IntCodeAPI(long[] tape) {
         this(tape, new LinkedBlockingQueue<>(), new LinkedBlockingQueue<>());

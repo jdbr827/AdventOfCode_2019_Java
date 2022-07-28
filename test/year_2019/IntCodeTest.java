@@ -3,6 +3,7 @@ package year_2019;
 import com.google.common.primitives.Longs;
 import org.junit.jupiter.api.Test;
 import year_2019.IntCodeComputer.IntCode;
+import year_2019.IntCodeComputer.IntCodeAPI;
 
 
 import java.util.ArrayList;
@@ -76,8 +77,10 @@ class IntCodeTest {
 
         // Position Mode Equality Check (=8)
         long[] m2 = {3,9,8,9,10,9,4,9,99,-1,8};
-        IntCode.createAndRun(m2, () -> 8L, output);
-        assertEquals(output.take(), 1);
+        IntCodeAPI intCodeAPI = new IntCodeAPI(m2);
+        intCodeAPI.startProgram();
+        intCodeAPI.sendInput(8L);
+        assertEquals(intCodeAPI.waitForOutputKnown(), 1);
         IntCode.createAndRun(m2, () -> 9L, output);
         assertEquals(output.take(), 0);
 

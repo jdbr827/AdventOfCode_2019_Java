@@ -1,6 +1,10 @@
 package year_2019.day12;
 
 import javafx.util.Pair;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
 import static utils.MathUtils.lcm;
 
 import java.io.IOException;
@@ -29,23 +33,20 @@ public class Day12 {
 }
 
 class Moon {
-    int[] position;
-    int[] velocity = {0, 0, 0};
+    MoonDimension[] moonDirections = new MoonDimension[3];
 
     Moon(int[] initialPosition) {
-        this.position = initialPosition;
+        moonDirections[0] = new MoonDimension(initialPosition[0]);
+        moonDirections[1] = new MoonDimension(initialPosition[1]);
+        moonDirections[2] = new MoonDimension(initialPosition[2]);
     }
 
     public void applyGravityFromInDirection(Moon otherMoon, int direction) {
-        if (otherMoon.position[direction] < this.position[direction]) {
-                velocity[direction] -= 1;
-            } else if (otherMoon.position[direction] > this.position[direction]) {
-                velocity[direction] += 1;
-            }
+         moonDirections[direction].applyGravityFrom(otherMoon.moonDirections[direction]);
     }
 
     public void applyVelocityInDirection(int direction) {
-        position[direction] += velocity[direction];
+        moonDirections[direction].applyVelocity();
     }
 
     public int calculateTotalEnergy() {
@@ -53,16 +54,37 @@ class Moon {
     }
 
     private int calculateKineticEnergy() {
-        return Arrays.stream(velocity)
-                .map(Math::abs)
+        return Arrays.stream(moonDirections)
+                .map(dir -> dir.velocity)
+                .mapToInt(Math::abs)
                 .sum();
 
     }
 
     private int calculatePotentialEnergy() {
-        return Arrays.stream(position)
-                .map(Math::abs)
+        return Arrays.stream(moonDirections)
+                .map(dir -> dir.position)
+                .mapToInt(Math::abs)
                 .sum();
+    }
+
+}
+
+@RequiredArgsConstructor
+class MoonDimension {
+    @NotNull Integer position;
+    Integer velocity = 0;
+
+    public void applyGravityFrom(MoonDimension otherMoonDirection) {
+        if (otherMoonDirection.position < this.position) {
+                velocity -= 1;
+            } else if (otherMoonDirection.position > this.position) {
+                velocity += 1;
+            }
+    }
+
+    public void applyVelocity() {
+        position += velocity;
     }
 
 }
@@ -103,7 +125,7 @@ class SolarSystem {
 
     private List<Pair<Integer, Integer>> getStateInDirection(int direction) {
         return moons.stream()
-                .map((Moon moon) -> new Pair<>(moon.position[direction], moon.velocity[direction]))
+                .map((Moon moon) -> new Pair<>(moon.moonDirections[direction].position, moon.moonDirections[direction].velocity))
                 .collect(Collectors.toList());
     }
 
