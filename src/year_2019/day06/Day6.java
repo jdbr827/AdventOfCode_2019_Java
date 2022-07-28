@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 public class Day6 implements IDay6 {
     public final ISolarSystem solarSystem;
 
-
     @Override
     public int getOrbitalChecksum() {
         return solarSystem.getPlanet("COM").orbitalChecksum();

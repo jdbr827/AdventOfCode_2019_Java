@@ -27,6 +27,10 @@ interface ISolarSystem {
 
 
 class Planet {
+-orbiters
+-parent
++getNeighbors()
++getOrbitalChecksum()
 
 }
 
