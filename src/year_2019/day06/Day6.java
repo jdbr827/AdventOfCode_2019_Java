@@ -13,36 +13,14 @@ public class Day6 {
         System.out.println(map.get("COM").getTotalOrbitTotal() == 621125);
 
         /* Part 2 */
-        Collection<Planet> planets = map.values();
-
         Planet YOU = map.get("YOU");
         Planet SANTA = map.get("SAN");
-
-
-        Map<Planet, Integer> distanceFromYou = new HashMap<>();
-        for (Planet p : planets) {
-            distanceFromYou.put(p, Integer.MAX_VALUE);
-        }
-
-        Queue<Planet> old_bfs = new LinkedList<>();
-        old_bfs.add(YOU);
-        distanceFromYou.put(YOU, 0);
-
-        while (distanceFromYou.get(SANTA) == Integer.MAX_VALUE) {
-            Planet thisPlanet = old_bfs.remove();
-            for (Planet neighbor: thisPlanet.getNeighbors()) {
-                if (distanceFromYou.get(neighbor) == Integer.MAX_VALUE) {
-                    distanceFromYou.put(neighbor, distanceFromYou.get(thisPlanet) + 1);
-                    old_bfs.add(neighbor);
-                }
-            }
-        }
 
         /*
         You start at the object you are orbiting, so you don't need to "move" to that one
         and Santa is on the object he is orbiting, so you don't need to move to that one either.
          */
-        System.out.println(distanceFromYou.get(SANTA) - 2 == 550);
+        System.out.println(BFSUtil.doBFS(YOU, SANTA, Planet::getNeighbors) - 2 == 550);
     }
 
     private static void readIn() throws FileNotFoundException {

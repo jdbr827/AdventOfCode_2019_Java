@@ -40,7 +40,7 @@ public class ChemicalEnvironment {
                 }
             }
 
-            private void applyReaction(String chemical) {
+            private void applyReactionsToCreate(String chemical) {
                 Long currentQuantityOfChemical = currentState.getOrDefault(chemical, 0L);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
@@ -52,7 +52,7 @@ public class ChemicalEnvironment {
                 }
             }
 
-            private void applyInvReaction(String chemical) {
+            private void applyReactionsToDestroy(String chemical) {
                 Long currentQuantityOfChemical = getCurrentQuantityOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
@@ -75,13 +75,13 @@ public class ChemicalEnvironment {
                     }
                     if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > currentState.get(chemical)) {
                         while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > currentState.get(chemical)) {
-                            applyReaction(chemical);
+                            applyReactionsToCreate(chemical);
                         }
                         return true;
                     }
                     if (currentState.get(chemical) > 0) {
                         while (currentState.get(chemical) > 0) {
-                            applyInvReaction(chemical);
+                            applyReactionsToDestroy(chemical);
                         }
                         return true;
                     }
