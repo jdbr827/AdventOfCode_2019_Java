@@ -10,7 +10,7 @@ public class Day6 {
 
     public static void main(String[] args) throws FileNotFoundException {
         readIn();
-        System.out.println(map.get("COM").getTotalOrbitTotal() == 621125);
+        System.out.println(map.get("COM").orbitalChecksum() == 621125);
 
         /* Part 2 */
         Planet YOU = map.get("YOU");

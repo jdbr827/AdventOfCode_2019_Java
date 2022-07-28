@@ -42,13 +42,8 @@ class Planet {
      *
      * @return the number of planets in orbit (direct or indirect) of this planet
      */
-    public int getOrbitTotal() {
-        int total = 0;
-        for (Planet orbiter : orbiters) {
-            total += orbiter.getOrbitTotal(); // every planet orbiting orbiter indirectly orbits this planet
-            total += 1; // orbiter directly orbits this planet
-        }
-        return total;
+    public int numOrbitsOfThisPlanet() {
+        return numDirectOrbitsOfThisPlanet() + numIndirectOrbitsOfThisPlanet();
     }
 
     /**
@@ -56,10 +51,27 @@ class Planet {
      * |{(a, b) st. (aOthis || a == this) && (bOthis || b==this) && aOb}|
      * @return the number of orbits (direct or indirect) between two planets
      */
-    public int getTotalOrbitTotal() {
+    public int orbitalChecksum() {
+
         return orbiters.isEmpty() ? 0
-                : orbiters.stream().mapToInt(Planet::getTotalOrbitTotal).sum()
-                    + orbiters.stream().mapToInt(Planet::getOrbitTotal).sum() + orbiters.size();
+                : numOrbitsOfPlanetsThatOrbitThisPlanet()
+                    + numIndirectOrbitsOfThisPlanet()
+                    + numDirectOrbitsOfThisPlanet();
+    }
+
+    private int numOrbitsOfPlanetsThatOrbitThisPlanet() {
+        return orbiters.stream().mapToInt(Planet::orbitalChecksum).sum();
+    }
+
+    private int numDirectOrbitsOfThisPlanet() {
+        return orbiters.size();
+    }
+
+    private int numIndirectOrbitsOfThisPlanet() {
+        //
+        return orbiters.stream()
+                .mapToInt(Planet::numOrbitsOfThisPlanet)
+                .sum();
     }
 
     public void addOrbiter(Planet p) {
