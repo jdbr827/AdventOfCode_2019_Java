@@ -15,31 +15,7 @@ public class ChemicalEnvironment {
 
 
     public long fuelYouCanMakeWithNOre(long availableOre) throws IOException {
-        long lowerBound = 1;
-        while (leastRequiredOreForNFuel(lowerBound) < availableOre) {
-            lowerBound *= 2;
-        }
-
-        long upperBound = lowerBound;
-        lowerBound /= 2;
-        long midPoint = (upperBound + lowerBound) / 2;
-        long dist = lowerBound;
-
-        while (dist > 1) {
-
-            long oreNeeded = leastRequiredOreForNFuel(midPoint);
-            System.out.println(midPoint + " " + oreNeeded);
-            if (oreNeeded < availableOre) {
-                lowerBound = midPoint;
-            } else if (oreNeeded > availableOre) {
-                upperBound = midPoint;
-            } else {
-                return midPoint;
-            }
-            dist = upperBound - lowerBound;
-            midPoint = (upperBound + lowerBound) / 2;
-        }
-        return lowerBound;
+        return ExponentialSearchUtil.doExponentialSearch(this::leastRequiredOreForNFuel, availableOre);
     }
 
     public long leastRequiredOreForNFuel(long N) throws IOException {
