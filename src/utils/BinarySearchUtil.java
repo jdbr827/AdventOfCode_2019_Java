@@ -1,9 +1,10 @@
-package year_2019.day14;
+package utils;
+
+import year_2019.day14.CheckedFunction;
 
 import java.io.IOException;
-import java.util.function.Function;
 
-public class ExponentialSearchUtil {
+public class BinarySearchUtil {
 
 
     public static <T> Long doExponentialSearch(CheckedFunction<Long, Comparable<T>> func, T target) throws IOException {
@@ -14,6 +15,10 @@ public class ExponentialSearchUtil {
 
         long upperBound = lowerBound;
         lowerBound /= 2;
+        return doBinarySearch(func, target, lowerBound, upperBound);
+    }
+
+    private static <T> long doBinarySearch(CheckedFunction<Long, Comparable<T>> func, T target, long lowerBound, long upperBound) throws IOException {
         long midPoint = (upperBound + lowerBound) / 2;
         long dist = lowerBound;
 

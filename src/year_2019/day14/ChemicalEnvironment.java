@@ -1,5 +1,7 @@
 package year_2019.day14;
 
+import utils.BinarySearchUtil;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +11,13 @@ public class ChemicalEnvironment {
     IReactionInfo reactionInfo;
 
 
-    ChemicalEnvironment(IReactionInfo reactionInfo) throws IOException {
+    ChemicalEnvironment(IReactionInfo reactionInfo) {
         this.reactionInfo = reactionInfo;
     }
 
 
     public long fuelYouCanMakeWithNOre(long availableOre) throws IOException {
-        return ExponentialSearchUtil.doExponentialSearch(this::leastRequiredOreForNFuel, availableOre);
+        return BinarySearchUtil.doExponentialSearch(this::leastRequiredOreForNFuel, availableOre);
     }
 
     public long leastRequiredOreForNFuel(long N) throws IOException {
