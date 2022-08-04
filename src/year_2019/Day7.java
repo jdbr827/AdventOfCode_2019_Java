@@ -31,13 +31,10 @@ public class Day7 {
     public static long feedbackLoopThrusterPower(List<Long> phaseSettings, long[] mem) throws InterruptedException {
         List<BlockingQueue<Long>> wires = new ArrayList<>();
         List<IntCode> amps = new ArrayList<>();
+        for (int i=0; i<5; i++) {wires.add(new LinkedBlockingQueue<>());}
+
         for (int i=0; i<5; i++) {
-            wires.add(new LinkedBlockingQueue<>());
-            amps.add(new IntCode(mem));
-        }
-        for (int i=0; i<5; i++) {
-            amps.get(i).setInput(wires.get(i));
-            amps.get(i).setOutput(wires.get((i+1) % 5));
+            amps.add(new IntCode(mem, wires.get(i), wires.get((i+1) % 5)));
             wires.get(i).add(phaseSettings.get(i));
             amps.get(i).start();
         }

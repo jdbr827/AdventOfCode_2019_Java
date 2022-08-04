@@ -53,10 +53,6 @@ public class AsciiIntCodeAPI {
         System.out.println(sb);
     }
 
-    public Optional<Long> waitForNextOutputLong() throws InterruptedException {
-        return intCodeAPI.waitForOutputOptional();
-    }
-
     public static char convertLongToAsciiCharacter(long num) {
         return (char) Math.toIntExact(num);
     }

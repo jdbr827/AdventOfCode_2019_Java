@@ -28,7 +28,6 @@ class IntCodeTest {
         long[] o1 = {3500,9,10,70,2,3,11,0,99,30,40,50};
         assertArrayEquals(IntCode.createAndRun(i1).getMemory(), o1);
 
-
         long[] i2 = {1,0,0,0,99};
         long[] o2 = {2,0,0,0,99};
         assertArrayEquals(IntCode.createAndRun(i2).getMemory(), o2);

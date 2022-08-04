@@ -50,7 +50,12 @@ public class IntCodeAPI {
         return result;
     }
 
-
+    /**
+     * Waits for the next output from the brain.
+     * @return An empty Optional if the brain thread is dead or awaiting a new input,
+     * otherwise an optional of the next output.
+     * @throws InterruptedException
+     */
     public Optional<Long> waitForOutputOptionalSuspended() throws InterruptedException {
         Optional<Long> result = Optional.ofNullable(outputs.poll(20, TimeUnit.MILLISECONDS));
         while(!result.isPresent()) {

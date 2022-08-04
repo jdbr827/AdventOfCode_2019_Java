@@ -42,18 +42,10 @@ public class IntCode extends Thread {
         return memory.toArray();
     }
 
-    public void setInput(BlockingQueue<Long> input) {
-        this.input = input;
-    }
-
-    public void setOutput(BlockingQueue<Long> output) {
-        this.output = output;
-    }
-
-
     public static IntCode createAndRun(long[] startingMemory) throws InterruptedException {
         return createAndRun(startingMemory, (BlockingQueue<Long>) null, null);
     }
+
 
     public static IntCode createAndRun(long[] startingMemory, Supplier<Long> input, BlockingQueue<Long> output) throws InterruptedException {
       return createAndRun(startingMemory, new SupplierQueue<>(input), output);

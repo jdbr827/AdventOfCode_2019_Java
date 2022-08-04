@@ -31,4 +31,4 @@ class Memory {
         }
         return Longs.toArray(lst);
     }
-    }
+}
