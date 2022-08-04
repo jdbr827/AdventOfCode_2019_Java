@@ -17,8 +17,43 @@ public class Day17 {
         part2();
     }
 
-    private static void part2() throws InterruptedException {
-        Scanner scanner = new Scanner(System.in);
+    static Long part2(String l1, String l2, String l3, String l4, String l5) throws InterruptedException {
+        AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT_2);
+        brain.startProgram();
+
+        /* Initial String */
+        brain.getNextOutputsToString();
+
+        /* Main Movement Routine */
+        sendLineToBrain(brain, l1);
+        brain.getNextOutputsToString();
+
+        /* Function A */
+        sendLineToBrain(brain, l2);
+        brain.getNextOutputsToString();
+
+        /* Function B */
+        sendLineToBrain(brain, l3);
+        brain.getNextOutputsToString();
+
+        /* Function C */
+        sendLineToBrain(brain, l4);
+        brain.getNextOutputsToString();
+
+        /* Continuous Video Feed? */
+        sendLineToBrain(brain, l5);
+        brain.getNextOutputsToString();
+
+        return brain.getLastLongOutput();
+
+    }
+
+    private static Long part2() throws InterruptedException {
+        Day17InputReader scanner = new Day17InputReaderImpl();
+        return part2Helper(scanner);
+    }
+
+    public static Long part2Helper(Day17InputReader scanner) throws InterruptedException {
         AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT_2);
         brain.startProgram();
 
@@ -42,19 +77,22 @@ public class Day17 {
         inputNextLine(scanner, brain);
         brain.getNextOutputsToString();
 
-        System.out.println(brain.getLastLongOutput());
+        return brain.getLastLongOutput();
     }
 
-    private static void doInteraction(Scanner scanner, AsciiIntCodeAPI brain) throws InterruptedException {
+    private static void doInteraction(Day17InputReader scanner, AsciiIntCodeAPI brain) throws InterruptedException {
         inputNextLine(scanner, brain);
         brain.getNextOutputsToString();
     }
 
 
-    private static void inputNextLine(Scanner scanner, AsciiIntCodeAPI brain) {
-        String s;
-        s = scanner.nextLine();
+    private static void inputNextLine(Day17InputReader scanner, AsciiIntCodeAPI brain) {
+        String s = scanner.getNextLine();
 
+        sendLineToBrain(brain, s);
+    }
+
+    private static void sendLineToBrain(AsciiIntCodeAPI brain, String s) {
         for (char c : s.toCharArray()) {
             brain.sendCharInput(c);
         }
@@ -62,7 +100,7 @@ public class Day17 {
     }
 
 
-    private static void part1() throws InterruptedException {
+    public static Integer part1() throws InterruptedException {
         AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT);
         brain.startProgram();
 
@@ -91,6 +129,6 @@ public class Day17 {
             }
         }
 
-        System.out.println(total);
+        return total;
     }
 }

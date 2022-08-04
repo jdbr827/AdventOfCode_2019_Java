@@ -48,5 +48,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.mockito:mockito-all:1.9.0" level="project" />
   </component>
 </module>
