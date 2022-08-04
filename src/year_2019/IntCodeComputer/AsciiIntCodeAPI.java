@@ -15,6 +15,13 @@ public class AsciiIntCodeAPI {
         this.intCodeAPI = new IntCodeAPI(tape);
     }
 
+    public void sendLine(String s) {
+        for (char c : s.toCharArray()) {
+            sendCharInput(c);
+        }
+        sendCharInput('\n');
+    }
+
     public void startProgram() {
         this.intCodeAPI.startProgram();
     }

@@ -4,12 +4,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Scanner;
 
-public interface Day17InputReader {
+public interface Day17InputSource {
     String getNextLine();
 }
 
 @NoArgsConstructor
-class Day17InputReaderImpl implements Day17InputReader {
+class Day17InputSourceImpl implements Day17InputSource {
 
     Scanner scanner = new Scanner(System.in);
 

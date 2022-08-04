@@ -13,7 +13,7 @@ public class Day17Test {
 
     @Test
     void test_D17_P2() throws InterruptedException {
-        Day17InputReader fakeScanner = Mockito.mock(Day17InputReader.class);
+        Day17InputSource fakeScanner = Mockito.mock(Day17InputSource.class);
         Mockito.when(fakeScanner.getNextLine())
                 .thenReturn("A,A,B,C,C,A,C,B,C,B")
                 .thenReturn("L,4,L,4,L,6,R,10,L,6")
