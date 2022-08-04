@@ -26,25 +26,30 @@ public class Day17 {
         brain.getNextOutputsToString();
 
         /* Main Movement Routine */
-        inputNextLine(scanner, brain);
-        brain.getNextOutputsToString();
+        doInteraction(scanner, brain);
 
         /* Function A */
-        inputNextLine(scanner, brain);
-        brain.getNextOutputsToString();
+        doInteraction(scanner, brain);
 
         /* Function B */
-        inputNextLine(scanner, brain);
-        brain.getNextOutputsToString();
+        doInteraction(scanner, brain);
 
         /* Function C */
-        inputNextLine(scanner, brain);
-        brain.getNextOutputsToString();
+        doInteraction(scanner, brain);
 
         /* Continuous Video Feed? */
         inputNextLine(scanner, brain);
+        Optional<Long> op;
+        while((op =brain.waitForNextOutputLong()).isPresent()) {
+            System.out.println(op.get());
+        }
+    }
+
+    private static void doInteraction(Scanner scanner, AsciiIntCodeAPI brain) throws InterruptedException {
+        inputNextLine(scanner, brain);
         brain.getNextOutputsToString();
     }
+
 
     private static void inputNextLine(Scanner scanner, AsciiIntCodeAPI brain) {
         String s;
