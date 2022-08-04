@@ -1,9 +1,15 @@
 package year_2019.IntCodeComputer;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Optional;
 
 public class AsciiIntCodeAPI {
     private final IntCodeAPI intCodeAPI;
+    @Getter @Setter(AccessLevel.PRIVATE) private Long lastLongOutput = null;
+
 
     public AsciiIntCodeAPI(long[] tape) {
         this.intCodeAPI = new IntCodeAPI(tape);
@@ -14,15 +20,15 @@ public class AsciiIntCodeAPI {
     }
 
     public Optional<Character> waitForCharOutputOptionalSuspended() throws InterruptedException {
-        return intCodeAPI
-                .waitForOutputOptionalSuspended()
-                .map(AsciiIntCodeAPI::convertLongToAsciiCharacter);
+        Optional<Long> longOptional = intCodeAPI.waitForOutputOptionalSuspended();
+        longOptional.ifPresent(this::setLastLongOutput);
+        return longOptional.map(AsciiIntCodeAPI::convertLongToAsciiCharacter);
     }
 
     public Optional<Character> waitForCharOutputOptional() throws InterruptedException {
-        return intCodeAPI
-                .waitForOutputOptional()
-                .map(AsciiIntCodeAPI::convertLongToAsciiCharacter);
+       Optional<Long> longOptional = intCodeAPI.waitForOutputOptional();
+        longOptional.ifPresent(this::setLastLongOutput);
+        return longOptional.map(AsciiIntCodeAPI::convertLongToAsciiCharacter);
     }
 
     public void sendCharInput(char c) {

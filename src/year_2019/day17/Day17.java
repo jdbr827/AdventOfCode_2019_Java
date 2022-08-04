@@ -24,6 +24,7 @@ public class Day17 {
 
         /* Initial String */
         brain.getNextOutputsToString();
+        System.out.println(brain.getLastLongOutput());
 
         /* Main Movement Routine */
         doInteraction(scanner, brain);
@@ -39,10 +40,9 @@ public class Day17 {
 
         /* Continuous Video Feed? */
         inputNextLine(scanner, brain);
-        Optional<Long> op;
-        while((op =brain.waitForNextOutputLong()).isPresent()) {
-            System.out.println(op.get());
-        }
+        brain.getNextOutputsToString();
+
+        System.out.println(brain.getLastLongOutput());
     }
 
     private static void doInteraction(Scanner scanner, AsciiIntCodeAPI brain) throws InterruptedException {
