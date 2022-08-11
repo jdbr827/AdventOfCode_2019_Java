@@ -10,10 +10,16 @@ public interface IChemicalState {
     void applyReactionsToDestroyChemical(Reaction reaction);
 
 
-     default Optional<String> findUnbalancedChemical() {
+    default Optional<String> findUnDestroyedChemical() {
          return knownChemicals().stream()
                  .filter((chem) -> !(chem.equals("ORE")) && getAmountAvailableOfChemical(chem) > 0)
                  .findAny();
      }
 
+    default void balanceChemicalState(IReactionInfo reactionInfo) {
+        Optional<String> unDestroyedChemical;
+        while ((unDestroyedChemical = findUnDestroyedChemical()).isPresent()) {
+            applyReactionsToDestroyChemical(reactionInfo.getReactionForChemical(unDestroyedChemical.get()));
+        }
+    }
 }

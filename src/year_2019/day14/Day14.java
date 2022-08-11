@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import utils.BinarySearchUtil;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class Day14 implements IDay14 {
@@ -13,16 +12,9 @@ public class Day14 implements IDay14 {
 
 
     public Long leastOreRequiredToMakeNFuel(Long desiredFuel) {
-        IChemicalState chemicalState = new ChemicalState(desiredFuel);
-        balanceChemicalState(chemicalState);
+        IChemicalState chemicalState = new ChemicalStateImpl(desiredFuel);
+        chemicalState.balanceChemicalState(reactionInfo);
         return chemicalState.getAmountAvailableOfChemical("ORE");
-    }
-
-    private void balanceChemicalState(IChemicalState chemicalState) {
-        Optional<String> unbalancedChemical;
-        while ((unbalancedChemical = chemicalState.findUnbalancedChemical()).isPresent()) {
-            chemicalState.applyReactionsToDestroyChemical(reactionInfo.getReactionForChemical(unbalancedChemical.get()));
-        }
     }
 
     public Long mostFuelForNOre(Long availableOre) throws IOException {
