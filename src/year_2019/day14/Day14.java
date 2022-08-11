@@ -69,10 +69,9 @@ public class Day14 implements IDay14 {
                         }
                         return true;
                     }
-                    if (chemicalState.getAmountAvailableOfChemical(chemical) > 0) {
-                        while (chemicalState.getAmountAvailableOfChemical(chemical) > 0) {
-                            applyReactionsToDestroy(chemical);
-                        }
+                    Long numTimes;
+                    if ((numTimes = numTimesYouCanDestroy(chemical)) > 0) {
+                        chemicalState.applyReactionToDestroyChemical(chemical, numTimes);
                         return true;
                     }
                 }
