@@ -1,14 +1,10 @@
 package year_2019.day14;
 
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import utils.BinarySearchUtil;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @AllArgsConstructor
 public class Day14 implements IDay14 {
@@ -22,12 +18,12 @@ public class Day14 implements IDay14 {
             final IChemicalState chemicalState = new ChemicalState();
 
             StoichDoer(long desiredFuel1) {
-                createChemicalAmount("FUEL", desiredFuel1);
+                chemicalState.createChemical("FUEL", desiredFuel1);
                 balance();
             }
 
             long getRequiredOre() {
-                return getCurrentQuantityOfChemical("ORE");
+                return chemicalState.getAmountAvailableOfChemical("ORE");
             }
 
 
@@ -37,58 +33,42 @@ public class Day14 implements IDay14 {
             }
 
             private void applyReactionsToCreate(String chemical) {
-                Long currentQuantityOfChemical = getCurrentQuantityOfChemical(chemical);
+                Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
 
-                createChemicalAmount(chemical, timesRun * reactionQuantityOfChemical);
+                chemicalState.createChemical(chemical, timesRun * reactionQuantityOfChemical);
                 Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
                 for (String inputChemical : inputChemicals.keySet()) {
-                    destroyChemicalAmount(inputChemical, timesRun * inputChemicals.get(inputChemical));
+                    chemicalState.destroyChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
                 }
             }
 
             private void applyReactionsToDestroy(String chemical) {
-                Long currentQuantityOfChemical = getCurrentQuantityOfChemical(chemical);
+                Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
 
-                destroyChemicalAmount(chemical, timesRun * reactionQuantityOfChemical);
+                chemicalState.destroyChemical(chemical, timesRun * reactionQuantityOfChemical);
                 Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
                 for (String inputChemical : inputChemicals.keySet()) {
-                    createChemicalAmount(inputChemical, timesRun * inputChemicals.get(inputChemical));
+                    chemicalState.createChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
                 }
             }
 
-            private Long getCurrentQuantityOfChemical(String chemical) {
-                return chemicalState.getAmountAvailableOfChemical(chemical);
-            }
-
-            private void setChemicalAmount(String chemical, Long amount) {
-                chemicalState.setChemicalAmount(chemical, amount);
-            }
-
-            private void createChemicalAmount(String chemical, Long amountCreated) {
-                setChemicalAmount(chemical, getCurrentQuantityOfChemical(chemical) + amountCreated);
-            }
-
-            private void destroyChemicalAmount(String chemical, Long amountDestroyed) {
-                setChemicalAmount(chemical, getCurrentQuantityOfChemical(chemical) - amountDestroyed);
-            }
-
             private boolean isNotBalanced() {
-                for (String chemical : getKnownChemicals()) {
+                for (String chemical : chemicalState.knownChemicals()) {
                     if (chemical.equals("ORE")) {
                         continue;
                     }
-                    if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > getCurrentQuantityOfChemical(chemical)) {
-                        while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > getCurrentQuantityOfChemical(chemical)) {
+                    if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > chemicalState.getAmountAvailableOfChemical(chemical)) {
+                        while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > chemicalState.getAmountAvailableOfChemical(chemical)) {
                             applyReactionsToCreate(chemical);
                         }
                         return true;
                     }
-                    if (getCurrentQuantityOfChemical(chemical) > 0) {
-                        while (getCurrentQuantityOfChemical(chemical) > 0) {
+                    if (chemicalState.getAmountAvailableOfChemical(chemical) > 0) {
+                        while (chemicalState.getAmountAvailableOfChemical(chemical) > 0) {
                             applyReactionsToDestroy(chemical);
                         }
                         return true;
@@ -99,10 +79,6 @@ public class Day14 implements IDay14 {
 
             }
 
-            @NotNull
-            private Collection<String> getKnownChemicals() {
-                return chemicalState.knownChemicals();
-            }
         }
         return new StoichDoer(desiredFuel).getRequiredOre();
     }
