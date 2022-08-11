@@ -6,17 +6,17 @@ import java.util.Map;
 
 public class ChemicalState implements IChemicalState {
     final Map<String, Long> currentState = new HashMap<>();
+    IReactionInfo reactionInfo;
+
+    public ChemicalState(Long desiredFuel, IReactionInfo reactionInfo) {
+        this.reactionInfo = reactionInfo;
+        currentState.put("FUEL", desiredFuel);
+    }
 
 
     @Override
     public Collection<String> knownChemicals() {
         return currentState.keySet();
-    }
-
-    @Override
-    public void setChemicalAmount(String chemical, Long units) {
-        currentState.put(chemical, units);
-
     }
 
     @Override
@@ -29,8 +29,26 @@ public class ChemicalState implements IChemicalState {
         currentState.put(chemical, getAmountAvailableOfChemical(chemical) + units);
     }
 
-    @Override
     public void destroyChemical(String chemical, Long units) {
         currentState.put(chemical, getAmountAvailableOfChemical(chemical) - units);
+    }
+
+    @Override
+    public void applyReactionToCreateChemical(String chemical, Long timesRun) {
+        createChemical(chemical, timesRun * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical));
+                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
+                for (String inputChemical : inputChemicals.keySet()) {
+                    destroyChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
+                }
+    }
+
+    @Override
+    public void applyReactionToDestroyChemical(String chemical, Long timesRun) {
+        destroyChemical(chemical, timesRun * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical));
+                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
+                for (String inputChemical : inputChemicals.keySet()) {
+                    createChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
+                }
+
     }
 }

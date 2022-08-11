@@ -1,6 +1,7 @@
 package year_2019.day14;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import utils.BinarySearchUtil;
 
 import java.io.IOException;
@@ -15,10 +16,9 @@ public class Day14 implements IDay14 {
     public Long leastOreRequiredToMakeNFuel(Long desiredFuel) {
 
         class StoichDoer {
-            final IChemicalState chemicalState = new ChemicalState();
+            final IChemicalState chemicalState = new ChemicalState(desiredFuel, reactionInfo);
 
-            StoichDoer(long desiredFuel1) {
-                chemicalState.createChemical("FUEL", desiredFuel1);
+            StoichDoer() {
                 balance();
             }
 
@@ -33,27 +33,29 @@ public class Day14 implements IDay14 {
             }
 
             private void applyReactionsToCreate(String chemical) {
+                Long timesRun = numTimesYouCanCreateChemical(chemical);
+                chemicalState.applyReactionToCreateChemical(chemical, timesRun);
+
+
+            }
+
+            @NotNull
+            private Long numTimesYouCanCreateChemical(String chemical) {
                 Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
-                Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
-
-                chemicalState.createChemical(chemical, timesRun * reactionQuantityOfChemical);
-                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
-                for (String inputChemical : inputChemicals.keySet()) {
-                    chemicalState.destroyChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
-                }
+                return Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
             }
 
             private void applyReactionsToDestroy(String chemical) {
+                Long timesRun = numTimesYouCanDestroy(chemical);
+                chemicalState.applyReactionToDestroyChemical(chemical, timesRun);
+            }
+
+            @NotNull
+            private Long numTimesYouCanDestroy(String chemical) {
                 Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
-                Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
-
-                chemicalState.destroyChemical(chemical, timesRun * reactionQuantityOfChemical);
-                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
-                for (String inputChemical : inputChemicals.keySet()) {
-                    chemicalState.createChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
-                }
+                return (Long) (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
             }
 
             private boolean isNotBalanced() {
@@ -80,7 +82,7 @@ public class Day14 implements IDay14 {
             }
 
         }
-        return new StoichDoer(desiredFuel).getRequiredOre();
+        return new StoichDoer().getRequiredOre();
     }
 
     public Long mostFuelForNOre(Long availableOre) throws IOException {

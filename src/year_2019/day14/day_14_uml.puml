@@ -43,5 +43,7 @@ IReactionInfo <|.. ReactionInfo
 
 Day14::leastRequiredOreForNFuel +--StoichDoer
 
+StoichDoer *-- ChemicalState
+
 
 @enduml
