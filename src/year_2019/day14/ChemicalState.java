@@ -33,12 +33,12 @@ public class ChemicalState implements IChemicalState {
 
     @Override
     public void applyReactionToDestroyChemical(Reaction reaction, Long timesRun) {
-
         destroyChemical(reaction.outputChemical, timesRun * reaction.outputChemicalQuantity);
-                Map<String, Integer> inputChemicals = reaction.inputChemicalInfo;
-                for (String inputChemical : inputChemicals.keySet()) {
-                    createChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
-                }
+        reaction.inputChemicalInfo
+                .forEach((inputChem, reactionAmt) ->
+                        createChemical(inputChem, timesRun * reactionAmt)
+                );
+
 
     }
 }

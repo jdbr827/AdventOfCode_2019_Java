@@ -1,6 +1,5 @@
 package year_2019.day14;
 
-import java.util.Collection;
 import java.util.Map;
 
 public interface IReactionInfo {
