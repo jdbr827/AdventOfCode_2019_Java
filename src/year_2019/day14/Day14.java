@@ -32,25 +32,6 @@ public class Day14 implements IDay14 {
                 }
             }
 
-            private void applyReactionsToCreate(String chemical) {
-                Long timesRun = numTimesYouCanCreateChemical(chemical);
-                chemicalState.applyReactionToCreateChemical(chemical, timesRun);
-
-
-            }
-
-            @NotNull
-            private Long numTimesYouCanCreateChemical(String chemical) {
-                Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
-                Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
-                return Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
-            }
-
-            private void applyReactionsToDestroy(String chemical) {
-                Long timesRun = numTimesYouCanDestroy(chemical);
-                chemicalState.applyReactionToDestroyChemical(chemical, timesRun);
-            }
-
             @NotNull
             private Long numTimesYouCanDestroy(String chemical) {
                 Long currentQuantityOfChemical = chemicalState.getAmountAvailableOfChemical(chemical);
@@ -62,12 +43,6 @@ public class Day14 implements IDay14 {
                 for (String chemical : chemicalState.knownChemicals()) {
                     if (chemical.equals("ORE")) {
                         continue;
-                    }
-                    if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > chemicalState.getAmountAvailableOfChemical(chemical)) {
-                        while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > chemicalState.getAmountAvailableOfChemical(chemical)) {
-                            applyReactionsToCreate(chemical);
-                        }
-                        return true;
                     }
                     Long numTimes;
                     if ((numTimes = numTimesYouCanDestroy(chemical)) > 0) {

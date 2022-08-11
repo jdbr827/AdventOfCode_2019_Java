@@ -24,23 +24,14 @@ public class ChemicalState implements IChemicalState {
         return currentState.getOrDefault(chemical, 0L);
     }
 
-    @Override
-    public void createChemical(String chemical, Long units) {
+    private void createChemical(String chemical, Long units) {
         currentState.put(chemical, getAmountAvailableOfChemical(chemical) + units);
     }
 
-    public void destroyChemical(String chemical, Long units) {
+    private void destroyChemical(String chemical, Long units) {
         currentState.put(chemical, getAmountAvailableOfChemical(chemical) - units);
     }
 
-    @Override
-    public void applyReactionToCreateChemical(String chemical, Long timesRun) {
-        createChemical(chemical, timesRun * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical));
-                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
-                for (String inputChemical : inputChemicals.keySet()) {
-                    destroyChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
-                }
-    }
 
     @Override
     public void applyReactionToDestroyChemical(String chemical, Long timesRun) {
