@@ -30,13 +30,20 @@ public class ChemicalState implements IChemicalState {
         currentState.put(chemical, getAmountAvailableOfChemical(chemical) - units);
     }
 
+    private Long numTimesYouCanApplyReaction(Reaction reaction) {
+                Long currentQuantityOfChemical = getAmountAvailableOfChemical(reaction.outputChemical);
+                Integer reactionQuantityOfChemical = reaction.outputChemicalQuantity;
+                return (Long) (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
+    }
+
 
     @Override
-    public void applyReactionToDestroyChemical(Reaction reaction, Long timesRun) {
-        destroyChemical(reaction.outputChemical, timesRun * reaction.outputChemicalQuantity);
+    public void applyReactionsToDestroyChemical(Reaction reaction) {
+        Long timesToRun = numTimesYouCanApplyReaction(reaction);
+        destroyChemical(reaction.outputChemical, timesToRun * reaction.outputChemicalQuantity);
         reaction.inputChemicalInfo
                 .forEach((inputChem, reactionAmt) ->
-                        createChemical(inputChem, timesRun * reactionAmt)
+                        createChemical(inputChem, timesToRun * reactionAmt)
                 );
 
 
