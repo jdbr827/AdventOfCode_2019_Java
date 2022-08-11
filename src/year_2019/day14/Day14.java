@@ -19,12 +19,12 @@ public class Day14 implements IDay14 {
             final Map<String, Long> currentState = new HashMap<>();
 
             StoichDoer(long desiredFuel1) {
-                currentState.put("FUEL", desiredFuel1);
+                createChemicalAmount("FUEL", desiredFuel1);
                 balance();
             }
 
             long getRequiredOre() {
-                return currentState.getOrDefault("ORE", 0L);
+                return getCurrentQuantityOfChemical("ORE");
             }
 
 
