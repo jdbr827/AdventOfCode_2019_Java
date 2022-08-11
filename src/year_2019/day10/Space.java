@@ -27,7 +27,6 @@ class Space {
                 .collect(Collectors.toList());
 
         List<Point> orderedPoints = new ArrayList<>();
-
         int j=0;
         do {
             //System.out.println(sortedByAngles.size());

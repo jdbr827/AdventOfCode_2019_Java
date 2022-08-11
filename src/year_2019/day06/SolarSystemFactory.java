@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class SolarSystemFactory {
+public final class SolarSystemFactory {
 
     public static SolarSystem readInSolarSystem(String fileName) throws FileNotFoundException {
         File file = new File(fileName);

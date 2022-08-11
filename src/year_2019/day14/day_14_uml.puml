@@ -20,27 +20,24 @@ interface IReactionInfo {
 }
 
 interface IDay14 {
-+{abstract}leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
-+{abstract}mostFuelForOneTrillionOre(String reactionsFileName) -> Long
++{abstract}leastOreRequiredToMakeOneFuel() -> Long
++{abstract}mostFuelForNOre(N) -> Long
 
 }
 
-interface Day14 {
-+leastOreRequiredToMakeOneFuel(String reactionsFileName) -> Long
-+mostFuelForOneTrillionOre(String reactionsFileName) -> Long
+class Day14 {
++IReactionInfo reactionInfo
++leastOreRequiredToMakeOneFuel() -> Long
++mostFuelForOneTrillionOre(N) -> Long
 
 }
 
-Class ChemicalEnvironment {
-}
 
 
 IDay14 <|.. Day14
 
-ChemicalEnvironment *- IReactionInfo
+Day14 *- IReactionInfo
 IReactionInfo <|.. ReactionInfo
-Day14 -> ChemicalEnvironment
-Day14 -> ReactionInfo
 
 
 

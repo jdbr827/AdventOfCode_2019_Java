@@ -1,8 +1,24 @@
 package year_2019.day14;
 
-public interface ChemicalState {
+import java.util.HashMap;
+import java.util.Map;
 
-    public Long getAmountAvailableOfChemical(String chemical);
+public class ChemicalState implements IChemicalState {
+    final Map<String, Long> currentState = new HashMap<>();
 
-    public void applyReaction(String chemical);
+
+    @Override
+    public Long getAmountAvailableOfChemical(String chemical) {
+        return currentState.getOrDefault(chemical, 0L);
+    }
+
+    @Override
+    public void createChemical(String chemical, Long units) {
+        currentState.put(chemical, getAmountAvailableOfChemical(chemical) + units);
+    }
+
+    @Override
+    public void destroyChemical(String chemical, Long units) {
+        currentState.put(chemical, getAmountAvailableOfChemical(chemical) - units);
+    }
 }

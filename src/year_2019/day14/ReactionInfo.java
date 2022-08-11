@@ -14,10 +14,8 @@ import java.util.regex.Pattern;
 
 public class ReactionInfo implements IReactionInfo {
     static final Pattern reactionInfoPattern = Pattern.compile("([0-9]+) ([A-Z]+)");
-    @Getter(AccessLevel.PUBLIC)
-    private final Map<String, Integer> quantityMade = new HashMap<>();
-    @Getter(AccessLevel.PUBLIC)
-    private final Map<String, Map<String, Integer>> reactionInputs = new HashMap<>();
+    @Getter(AccessLevel.PUBLIC) private final Map<String, Integer> quantityMade = new HashMap<>();
+    @Getter(AccessLevel.PUBLIC) private final Map<String, Map<String, Integer>> reactionInputs = new HashMap<>();
 
 
     public ReactionInfo(String fileName) throws IOException {
