@@ -25,10 +25,8 @@ class Planet {
         return neighbors;
     }
 
-
-
-    public int numOrbitsOfThisPlanet() {
-        return numDirectOrbitsOfThisPlanet() + numIndirectOrbitsOfThisPlanet();
+    public void addOrbiter(Planet p) {
+        orbiters.add(p);
     }
 
     public int orbitalChecksum() {
@@ -39,12 +37,11 @@ class Planet {
     }
 
     private int numOrbitsOfPlanetsThatOrbitThisPlanet() {
-        return orbiters.stream().mapToInt(Planet::orbitalChecksum).sum();
+        return orbiters.stream()
+                .mapToInt(Planet::orbitalChecksum)
+                .sum();
     }
 
-    private int numDirectOrbitsOfThisPlanet() {
-        return orbiters.size();
-    }
 
     private int numIndirectOrbitsOfThisPlanet() {
         return orbiters.stream()
@@ -52,7 +49,14 @@ class Planet {
                 .sum();
     }
 
-    public void addOrbiter(Planet p) {
-        orbiters.add(p);
+     private int numDirectOrbitsOfThisPlanet() {
+        return orbiters.size();
     }
+
+    private int numOrbitsOfThisPlanet() {
+        return numDirectOrbitsOfThisPlanet() + numIndirectOrbitsOfThisPlanet();
+    }
+
+
+
 }
