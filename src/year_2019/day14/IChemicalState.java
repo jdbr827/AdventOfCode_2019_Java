@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface IChemicalState {
 
-    public Collection<String> knownChemicals();
-    public Long getAmountAvailableOfChemical(String chemical);
-    public void applyReactionsToDestroyChemical(Reaction reaction);
+    Collection<String> knownChemicals();
+    Long getAmountAvailableOfChemical(String chemical);
+    void applyReactionsToDestroyChemical(Reaction reaction);
 
 
      default Optional<String> findUnbalancedChemical() {

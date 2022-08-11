@@ -21,7 +21,7 @@ public class Day14 implements IDay14 {
     private void balanceChemicalState(IChemicalState chemicalState) {
         Optional<String> unbalancedChemical;
         while ((unbalancedChemical = chemicalState.findUnbalancedChemical()).isPresent()) {
-            chemicalState.applyReactionsToDestroyChemical(reactionInfo.getReaction(unbalancedChemical.get()));
+            chemicalState.applyReactionsToDestroyChemical(reactionInfo.getReactionForChemical(unbalancedChemical.get()));
         }
     }
 

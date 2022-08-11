@@ -46,12 +46,17 @@ public class ReactionInfo implements IReactionInfo {
         quantityMade.put(outputChemical, outputQuantity);
     }
 
-    public Integer getQuantityOfChemicalMadeByOneReaction(String chemical) {
+    private Integer getQuantityOfChemicalMadeByOneReaction(String chemical) {
         return getQuantityMade().get(chemical);
     }
 
-    public Map<String, Integer> getInputsForChemical(String chemical) {
+    private Map<String, Integer> getInputsForChemical(String chemical) {
         return getReactionInputs().get(chemical);
+    }
+
+    @Override
+    public Reaction getReactionForChemical(String chemical) {
+        return new Reaction(chemical, getInputsForChemical(chemical), getQuantityOfChemicalMadeByOneReaction(chemical));
     }
 
 }

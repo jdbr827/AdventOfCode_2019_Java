@@ -40,8 +40,8 @@ public class ChemicalState implements IChemicalState {
     @Override
     public void applyReactionsToDestroyChemical(Reaction reaction) {
         Long timesToRun = numTimesYouCanApplyReaction(reaction);
-        destroyChemical(reaction.outputChemical, timesToRun * reaction.outputChemicalQuantity);
-        reaction.inputChemicalInfo
+        destroyChemical(reaction.getOutputChemical(), timesToRun * reaction.getOutputChemicalQuantity());
+        reaction.getInputChemicalInfo()
                 .forEach((inputChem, reactionAmt) ->
                         createChemical(inputChem, timesToRun * reactionAmt)
                 );
