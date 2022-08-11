@@ -34,14 +34,14 @@ public class Day14 implements IDay14 {
             }
 
             private void applyReactionsToCreate(String chemical) {
-                Long currentQuantityOfChemical = currentState.getOrDefault(chemical, 0L);
+                Long currentQuantityOfChemical = getCurrentQuantityOfChemical(chemical);
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = Math.floorDiv(currentQuantityOfChemical, reactionQuantityOfChemical);
 
-                currentState.put(chemical, currentQuantityOfChemical + (timesRun * reactionQuantityOfChemical));
+                createChemicalAmount(chemical, timesRun * reactionQuantityOfChemical);
                 Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
                 for (String inputChemical : inputChemicals.keySet()) {
-                    currentState.put(inputChemical, currentState.getOrDefault(inputChemical, 0L) - (timesRun * inputChemicals.get(inputChemical)));
+                    destroyChemicalAmount(inputChemical, timesRun * inputChemicals.get(inputChemical));
                 }
             }
 
@@ -50,15 +50,27 @@ public class Day14 implements IDay14 {
                 Integer reactionQuantityOfChemical = reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical);
                 Long timesRun = (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
 
-                currentState.put(chemical, currentQuantityOfChemical - (timesRun * reactionQuantityOfChemical));
+                destroyChemicalAmount(chemical, timesRun * reactionQuantityOfChemical);
                 Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
                 for (String inputChemical : inputChemicals.keySet()) {
-                    currentState.put(inputChemical, getCurrentQuantityOfChemical(inputChemical) + (timesRun * inputChemicals.get(inputChemical)));
+                    createChemicalAmount(inputChemical, timesRun * inputChemicals.get(inputChemical));
                 }
             }
 
             private Long getCurrentQuantityOfChemical(String chemical) {
                 return currentState.getOrDefault(chemical, 0L);
+            }
+
+            private void setChemicalAmount(String chemical, Long amount) {
+                currentState.put(chemical, amount);
+            }
+
+            private void createChemicalAmount(String chemical, Long amountCreated) {
+                setChemicalAmount(chemical, getCurrentQuantityOfChemical(chemical) + amountCreated);
+            }
+
+            private void destroyChemicalAmount(String chemical, Long amountDestroyed) {
+                setChemicalAmount(chemical, getCurrentQuantityOfChemical(chemical) - amountDestroyed);
             }
 
             private boolean isNotBalanced() {
