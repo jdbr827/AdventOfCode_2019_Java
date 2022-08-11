@@ -31,8 +31,8 @@ public class ChemicalState implements IChemicalState {
     }
 
     private Long numTimesYouCanApplyReaction(Reaction reaction) {
-                Long currentQuantityOfChemical = getAmountAvailableOfChemical(reaction.outputChemical);
-                Integer reactionQuantityOfChemical = reaction.outputChemicalQuantity;
+                Long currentQuantityOfChemical = getAmountAvailableOfChemical(reaction.getOutputChemical());
+                Integer reactionQuantityOfChemical = reaction.getOutputChemicalQuantity();
                 return (Long) (long) Math.ceil(currentQuantityOfChemical / (double) reactionQuantityOfChemical);
     }
 
