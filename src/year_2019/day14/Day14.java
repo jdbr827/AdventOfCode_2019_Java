@@ -16,7 +16,7 @@ public class Day14 implements IDay14 {
     public Long leastOreRequiredToMakeNFuel(Long desiredFuel) {
 
         class StoichDoer {
-            final IChemicalState chemicalState = new ChemicalState(desiredFuel, reactionInfo);
+            final IChemicalState chemicalState = new ChemicalState(desiredFuel);
 
             StoichDoer() {
                 balance();
@@ -44,9 +44,10 @@ public class Day14 implements IDay14 {
                     if (chemical.equals("ORE")) {
                         continue;
                     }
-                    Long numTimes;
-                    if ((numTimes = numTimesYouCanDestroy(chemical)) > 0) {
-                        chemicalState.applyReactionToDestroyChemical(chemical, numTimes);
+                    if (chemicalState.getAmountAvailableOfChemical(chemical) > 0) {
+                        Reaction reaction = reactionInfo.getReaction(chemical);
+                        Long numTimes = numTimesYouCanDestroy(chemical);
+                        chemicalState.applyReactionToDestroyChemical(reaction, numTimes);
                         return true;
                     }
                 }

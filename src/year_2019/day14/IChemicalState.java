@@ -6,5 +6,5 @@ public interface IChemicalState {
 
     public Collection<String> knownChemicals();
     public Long getAmountAvailableOfChemical(String chemical);
-    public void applyReactionToDestroyChemical(String chemical, Long timesRun);
+    public void applyReactionToDestroyChemical(Reaction reaction, Long timesRun);
 }

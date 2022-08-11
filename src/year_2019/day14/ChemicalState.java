@@ -6,10 +6,8 @@ import java.util.Map;
 
 public class ChemicalState implements IChemicalState {
     final Map<String, Long> currentState = new HashMap<>();
-    IReactionInfo reactionInfo;
 
-    public ChemicalState(Long desiredFuel, IReactionInfo reactionInfo) {
-        this.reactionInfo = reactionInfo;
+    public ChemicalState(Long desiredFuel) {
         currentState.put("FUEL", desiredFuel);
     }
 
@@ -34,9 +32,10 @@ public class ChemicalState implements IChemicalState {
 
 
     @Override
-    public void applyReactionToDestroyChemical(String chemical, Long timesRun) {
-        destroyChemical(chemical, timesRun * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical));
-                Map<String, Integer> inputChemicals = reactionInfo.getInputsForChemical(chemical);
+    public void applyReactionToDestroyChemical(Reaction reaction, Long timesRun) {
+
+        destroyChemical(reaction.outputChemical, timesRun * reaction.outputChemicalQuantity);
+                Map<String, Integer> inputChemicals = reaction.inputChemicalInfo;
                 for (String inputChemical : inputChemicals.keySet()) {
                     createChemical(inputChemical, timesRun * inputChemicals.get(inputChemical));
                 }
