@@ -1,11 +1,13 @@
 package year_2019.day14;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import utils.BinarySearchUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @AllArgsConstructor
 public class Day14 implements IDay14 {
@@ -74,18 +76,18 @@ public class Day14 implements IDay14 {
             }
 
             private boolean isNotBalanced() {
-                for (String chemical : currentState.keySet()) {
+                for (String chemical : getKnownChemicals()) {
                     if (chemical.equals("ORE")) {
                         continue;
                     }
-                    if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > currentState.get(chemical)) {
-                        while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > currentState.get(chemical)) {
+                    if (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > getCurrentQuantityOfChemical(chemical)) {
+                        while (-1L * reactionInfo.getQuantityOfChemicalMadeByOneReaction(chemical) > getCurrentQuantityOfChemical(chemical)) {
                             applyReactionsToCreate(chemical);
                         }
                         return true;
                     }
-                    if (currentState.get(chemical) > 0) {
-                        while (currentState.get(chemical) > 0) {
+                    if (getCurrentQuantityOfChemical(chemical) > 0) {
+                        while (getCurrentQuantityOfChemical(chemical) > 0) {
                             applyReactionsToDestroy(chemical);
                         }
                         return true;
@@ -94,6 +96,11 @@ public class Day14 implements IDay14 {
                 return false;
 
 
+            }
+
+            @NotNull
+            private Set<String> getKnownChemicals() {
+                return currentState.keySet();
             }
         }
         return new StoichDoer(desiredFuel).getRequiredOre();
