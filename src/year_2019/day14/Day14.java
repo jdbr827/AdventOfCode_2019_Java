@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import utils.BinarySearchUtil;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class Day14 implements IDay14 {
     public Long leastOreRequiredToMakeNFuel(Long desiredFuel) {
 
         class StoichDoer {
-            final Map<String, Long> currentState = new HashMap<>();
+            final IChemicalState chemicalState = new ChemicalState();
 
             StoichDoer(long desiredFuel1) {
                 createChemicalAmount("FUEL", desiredFuel1);
@@ -60,11 +61,11 @@ public class Day14 implements IDay14 {
             }
 
             private Long getCurrentQuantityOfChemical(String chemical) {
-                return currentState.getOrDefault(chemical, 0L);
+                return chemicalState.getAmountAvailableOfChemical(chemical);
             }
 
             private void setChemicalAmount(String chemical, Long amount) {
-                currentState.put(chemical, amount);
+                chemicalState.setChemicalAmount(chemical, amount);
             }
 
             private void createChemicalAmount(String chemical, Long amountCreated) {
@@ -99,8 +100,8 @@ public class Day14 implements IDay14 {
             }
 
             @NotNull
-            private Set<String> getKnownChemicals() {
-                return currentState.keySet();
+            private Collection<String> getKnownChemicals() {
+                return chemicalState.knownChemicals();
             }
         }
         return new StoichDoer(desiredFuel).getRequiredOre();
