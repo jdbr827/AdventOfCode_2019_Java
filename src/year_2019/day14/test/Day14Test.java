@@ -1,6 +1,8 @@
-package year_2019.day14;
+package year_2019.day14.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import year_2019.day14.Day14;
 
 import java.io.IOException;
 
@@ -17,32 +19,32 @@ public class Day14Test {
 
     @Test
     void testD14P1I1() throws IOException {
-        assertEquals( 31, IDay14.create(INPUT_1).leastOreRequiredToMakeOneFuel());
+        Assertions.assertEquals( 31, Day14.fromReactionsFileName(INPUT_1).leastOreRequiredToMakeNFuel(1L));
     }
 
     @Test
     void testD14P1I2() throws IOException {
-        assertEquals( 165, IDay14.create(INPUT_2).leastOreRequiredToMakeOneFuel());
+        assertEquals( 165, Day14.fromReactionsFileName(INPUT_2).leastOreRequiredToMakeNFuel(1L));
     }
 
     @Test
     void testD14P1I3() throws IOException {
-        assertEquals(13312, IDay14.create(INPUT_3).leastOreRequiredToMakeOneFuel());
+        assertEquals(13312, Day14.fromReactionsFileName(INPUT_3).leastOreRequiredToMakeNFuel(1L));
     }
 
     @Test
     void testD14P1I4() throws IOException {
-        assertEquals(180697, IDay14.create(INPUT_4).leastOreRequiredToMakeOneFuel());
+        assertEquals(180697, Day14.fromReactionsFileName(INPUT_4).leastOreRequiredToMakeNFuel(1L));
     }
 
     @Test
     void testD14P1I5() throws IOException {
-        assertEquals(2210736, IDay14.create(INPUT_5).leastOreRequiredToMakeOneFuel());
+        assertEquals(2210736, Day14.fromReactionsFileName(INPUT_5).leastOreRequiredToMakeNFuel(1L));
     }
 
     @Test
     void testD14P1_official() throws IOException {
-        assertEquals(612880, IDay14.create(OFFICIAL_INPUT).leastOreRequiredToMakeOneFuel());
+        assertEquals(612880, Day14.fromReactionsFileName(OFFICIAL_INPUT).leastOreRequiredToMakeNFuel(1L));
     }
 
     final static long ONE_TRILLION = 1000000000000L;
@@ -50,22 +52,22 @@ public class Day14Test {
 
     @Test
     void testD14P2I3() throws IOException {
-        assertEquals(82892753, IDay14.create(INPUT_3).mostFuelForNOre(ONE_TRILLION));
+        assertEquals(82892753, Day14.fromReactionsFileName(INPUT_3).mostFuelForNOre(ONE_TRILLION));
     }
 
     @Test
     void testD14P2I4() throws IOException {
-        assertEquals(5586022, IDay14.create(INPUT_4).mostFuelForNOre(ONE_TRILLION));
+        assertEquals(5586022, Day14.fromReactionsFileName(INPUT_4).mostFuelForNOre(ONE_TRILLION));
     }
 
    @Test
    void testD14P2I5() throws IOException {
-        assertEquals(460664, IDay14.create(INPUT_5).mostFuelForNOre(ONE_TRILLION));
+        assertEquals(460664, Day14.fromReactionsFileName(INPUT_5).mostFuelForNOre(ONE_TRILLION));
     }
 
     @Test
    void testD14P2_official() throws IOException {
-        assertEquals(2509120, IDay14.create(OFFICIAL_INPUT).mostFuelForNOre(ONE_TRILLION));
+        assertEquals(2509120, Day14.fromReactionsFileName(OFFICIAL_INPUT).mostFuelForNOre(ONE_TRILLION));
     }
 
 

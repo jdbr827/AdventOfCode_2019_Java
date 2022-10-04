@@ -11,6 +11,7 @@ class ReactionInfo {
 
 interface IReactionInfo {
 +{abstract}getReactionForChemical(String chemical) -> Reaction
++{static} create(reactionFileName)
 }
 
 IReactionInfo - Reaction
@@ -21,23 +22,17 @@ class Reaction {
 +outputChemicalQuantity
 }
 
-interface IDay14 {
-+{abstract}leastOreRequiredToMakeNFuel(N)
-+{abstract}mostFuelForNOre(N)
-+leastOreRequiredToMakeOneFuel()
-
-}
 
 class Day14 {
 -IReactionInfo reactionInfo
 +leastOreRequiredToMakeNFuel(N)
 +mostFuelForNOre(N)
-
++{static} fromReactionFileName(reactionFileName)
 }
 
 
 
-IDay14 <|.. Day14
+
 
 Day14 *- IReactionInfo
 IReactionInfo <|.. ReactionInfo
@@ -69,7 +64,6 @@ class ChemicalStateImpl {
 }
 
 IChemicalState --> ChemicalStateImpl: "creates"
-IDay14 --> Day14: "creates"
 IReactionInfo --> ReactionInfo: "creates"
 
 
