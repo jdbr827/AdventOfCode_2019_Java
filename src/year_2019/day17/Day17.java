@@ -22,37 +22,7 @@ public class Day17 {
 
     public static Long part2Helper(Day17InputSource scanner) throws InterruptedException {
         AsciiIntCodeAPI brain = new AsciiIntCodeAPI(DAY_17_PUZZLE_INPUT_2);
-        brain.startProgram();
-
-        /* Initial String */
-        brain.getNextOutputsToString();
-        System.out.println(brain.getLastLongOutput());
-
-        /* Main Movement Routine */
-        doInteraction(scanner, brain);
-
-        /* Function A */
-        doInteraction(scanner, brain);
-
-        /* Function B */
-        doInteraction(scanner, brain);
-
-        /* Function C */
-        doInteraction(scanner, brain);
-
-        /* Continuous Video Feed? */
-        doInteraction(scanner, brain);
-
-        return brain.getLastLongOutput();
-    }
-
-    private static void doInteraction(Day17InputSource scanner, AsciiIntCodeAPI brain) throws InterruptedException {
-        inputNextLine(scanner, brain);
-        brain.getNextOutputsToString();
-    }
-
-    private static void inputNextLine(Day17InputSource scanner, AsciiIntCodeAPI brain) {
-        brain.sendLine(scanner.getNextLine());
+        return new Day17Brain(scanner, brain).runProgramAndGetDustCollected();
     }
 
 
