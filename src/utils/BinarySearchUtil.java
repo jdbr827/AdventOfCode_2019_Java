@@ -1,6 +1,5 @@
 package utils;
 
-import year_2019.day14.CheckedFunction;
 
 import java.io.IOException;
 import java.util.function.Function;

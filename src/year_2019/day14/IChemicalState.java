@@ -10,7 +10,7 @@ public interface IChemicalState {
     void applyReactionsToDestroyChemical(Reaction reaction);
 
 
-    default Optional<String> findUnDestroyedChemical() {
+    private Optional<String> findUnDestroyedChemical() {
          return knownChemicals().stream()
                  .filter((chem) -> !(chem.equals("ORE")) && getAmountAvailableOfChemical(chem) > 0)
                  .findAny();
@@ -21,5 +21,9 @@ public interface IChemicalState {
         while ((unDestroyedChemical = findUnDestroyedChemical()).isPresent()) {
             applyReactionsToDestroyChemical(reactionInfo.getReactionForChemical(unDestroyedChemical.get()));
         }
+    }
+
+    static IChemicalState createWithStartingFuel(Long desiredFuel) {
+        return new ChemicalStateImpl(desiredFuel);
     }
 }

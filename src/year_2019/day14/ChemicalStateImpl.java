@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChemicalStateImpl implements ChemicalState {
+class ChemicalStateImpl implements ChemicalState {
     final Map<String, Long> currentState = new HashMap<>();
 
     public ChemicalStateImpl(Long desiredFuel) {

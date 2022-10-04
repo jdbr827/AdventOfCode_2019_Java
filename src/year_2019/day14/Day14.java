@@ -8,11 +8,11 @@ import java.io.IOException;
 @AllArgsConstructor
 public class Day14 implements IDay14 {
 
-    IReactionInfo reactionInfo;
+    private IReactionInfo reactionInfo;
 
 
     public Long leastOreRequiredToMakeNFuel(Long desiredFuel) {
-        IChemicalState chemicalState = new ChemicalStateImpl(desiredFuel);
+        IChemicalState chemicalState = IChemicalState.createWithStartingFuel(desiredFuel);
         chemicalState.balanceChemicalState(reactionInfo);
         return chemicalState.getAmountAvailableOfChemical("ORE");
     }
