@@ -1,5 +1,7 @@
 package year_2019.day12;
 
+import com.google.common.collect.ImmutableList;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,14 +18,14 @@ class MoonReader {
         this.fileName = fileName;
     }
 
-    public List<Moon> readInMoons() throws IOException {
+    public ImmutableList<Moon> readInMoons() throws IOException {
         List<Moon> moons = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line;
         while ((line = br.readLine()) != null) {
             moons.add(MoonReader.extractMoon(line));
         }
-        return moons;
+        return ImmutableList.copyOf(moons);
     }
 
     static Moon extractMoon(String line) {

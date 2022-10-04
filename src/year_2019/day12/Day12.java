@@ -1,5 +1,6 @@
 package year_2019.day12;
 
+import com.google.common.collect.ImmutableList;
 import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ public class Day12 {
     private static final int X_DIRECTION = 0;
     private static final int Y_DIRECTION = 1;
     private static final int Z_DIRECTION = 2;
-    public static final int[] AXES = {X_DIRECTION, Y_DIRECTION, Z_DIRECTION};
 
     static int part1(String inputFile, int steps) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
@@ -40,6 +40,8 @@ class Moon {
         moonDirections[1] = new MoonDimension(initialPosition[1]);
         moonDirections[2] = new MoonDimension(initialPosition[2]);
     }
+
+
 
     public void applyGravityFromInDirection(Moon otherMoon, int direction) {
          moonDirections[direction].applyGravityFrom(otherMoon.moonDirections[direction]);
@@ -70,6 +72,13 @@ class Moon {
 
 }
 
+
+class MoonState extends Pair<Integer, Integer> {
+    public MoonState(Integer key, Integer value) {
+        super(key, value);
+    }
+}
+
 @RequiredArgsConstructor
 class MoonDimension {
     @NotNull Integer position;
@@ -87,13 +96,27 @@ class MoonDimension {
         position += velocity;
     }
 
+    public MoonState copyAndFreeze() {
+        return new MoonState(position, velocity);
+    }
+
+}
+
+@AllArgsConstructor
+class SolarSystemStateDimension {
+    List<MoonState> moonStates;
 }
 
 class SolarSystem {
-    List<Moon> moons;
+    ImmutableList<Moon> moons;
+    SolarSystemDimension[] solarSystemDimensions = new SolarSystemDimension[3];
 
     public SolarSystem(String s) throws IOException {
         this.moons = new MoonReader(s).readInMoons();
+        this.solarSystemDimensions[0] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[0]).collect(Collectors.toList())));
+        this.solarSystemDimensions[1] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[1]).collect(Collectors.toList())));
+        this.solarSystemDimensions[2] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[2]).collect(Collectors.toList())));
+
     }
 
     public BigInteger findMinutesUntilFirstRepeat() {
@@ -102,37 +125,12 @@ class SolarSystem {
     }
 
     private int[] findPeriodsInEachDirection() {
-        return Arrays.stream(Day12.AXES).map(this::findPeriodInDirection).toArray();
+        return Arrays.stream(solarSystemDimensions).mapToInt(SolarSystemDimension::findPeriod).toArray();
     }
 
 
 
-    /*
-    Because executing a time step is invertible,
-    we know that the first repeated state will always be the initial state.
-     */
-    private int findPeriodInDirection(int direction) {
-        List<Pair<Integer, Integer>> originalState = getStateInDirection(direction);
-        List<Pair<Integer, Integer>> currentState = executeTimeStepAndGetStateInDirection(direction);
 
-        int minutes = 1;
-        while (!(currentState.equals(originalState))) {
-            currentState = executeTimeStepAndGetStateInDirection(direction);
-            minutes++;
-        }
-        return minutes;
-    }
-
-    private List<Pair<Integer, Integer>> getStateInDirection(int direction) {
-        return moons.stream()
-                .map((Moon moon) -> new Pair<>(moon.moonDirections[direction].position, moon.moonDirections[direction].velocity))
-                .collect(Collectors.toList());
-    }
-
-    private List<Pair<Integer, Integer>> executeTimeStepAndGetStateInDirection(int direction) {
-        executeTimeStepInDirection(direction);
-        return getStateInDirection(direction);
-    }
 
     public int calculateTotalEnergy() {
         return moons.stream()
@@ -145,25 +143,58 @@ class SolarSystem {
     }
 
     private void executeTimeStep() {
-       Arrays.stream(Day12.AXES).forEach(this::executeTimeStepInDirection);
+       Arrays.stream(solarSystemDimensions).forEach(SolarSystemDimension::executeTimeStep);
+    }
+}
+
+@AllArgsConstructor
+class SolarSystemDimension {
+    ImmutableList<MoonDimension> moonDimensions;
+
+    public void applyVelocity() {
+        moonDimensions.forEach(MoonDimension::applyVelocity);
     }
 
-    private void executeTimeStepInDirection(int direction) {
-        applyGravityInDirection(direction);
-        applyVelocityInDirection(direction);
-    }
-
-    private void applyVelocityInDirection(int direction) {
-        moons.forEach((Moon moon) -> moon.applyVelocityInDirection(direction));
-    }
-
-    private void applyGravityInDirection(int direction) {
-        for (Moon moon1 : moons) {
-            for (Moon moon2: moons) {
-                moon1.applyGravityFromInDirection(moon2, direction);
+    public void applyGravity() {
+        for (MoonDimension moon1: moonDimensions) {
+            for (MoonDimension moon2 : moonDimensions) {
+                moon1.applyGravityFrom(moon2);
             }
         }
     }
+
+    public void executeTimeStep() {
+        applyGravity();
+        applyVelocity();
+    }
+
+    public SolarSystemStateDimension getCurrentState() {
+        return new SolarSystemStateDimension(moonDimensions.stream().map(MoonDimension::copyAndFreeze).collect(Collectors.toList()));
+    }
+
+    public SolarSystemStateDimension executeTimeStepAndGetState() {
+        executeTimeStep();
+        return getCurrentState();
+    }
+
+
+     /*
+    Because executing a time step is invertible,
+    we know that the first repeated state will always be the initial state.
+     */
+    public int findPeriod() {
+        SolarSystemStateDimension originalState = getCurrentState();
+        SolarSystemStateDimension currentState = executeTimeStepAndGetState();
+
+        int minutes = 1;
+        while (!(currentState.moonStates.equals(originalState.moonStates))) {
+            currentState = executeTimeStepAndGetState();
+            minutes++;
+        }
+        return minutes;
+
+    }
+
 
 
 
