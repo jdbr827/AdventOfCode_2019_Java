@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day14Test {
 
-    public static final String INPUT_1 = "src/year_2019/day14/day_14_input_1.txt";
-    public static final String INPUT_2 = "src/year_2019/day14/day_14_input_2.txt";
-    public static final String INPUT_3 = "src/year_2019/day14/day_14_input_3.txt";
-    public static final String INPUT_4 = "src/year_2019/day14/day_14_input_4.txt";
-    public static final String INPUT_5 = "src/year_2019/day14/day_14_input_5.txt";
-    public static final String OFFICIAL_INPUT = "src/year_2019/day14/day_14_official_input.txt";
+    public static final String INPUT_1 = "src/year_2019/day14/test/day_14_input_1.txt";
+    public static final String INPUT_2 = "src/year_2019/day14/test/day_14_input_2.txt";
+    public static final String INPUT_3 = "src/year_2019/day14/test/day_14_input_3.txt";
+    public static final String INPUT_4 = "src/year_2019/day14/test/day_14_input_4.txt";
+    public static final String INPUT_5 = "src/year_2019/day14/test/day_14_input_5.txt";
+    public static final String OFFICIAL_INPUT = "src/year_2019/day14/test/day_14_official_input.txt";
 
     @Test
     void testD14P1I1() throws IOException {

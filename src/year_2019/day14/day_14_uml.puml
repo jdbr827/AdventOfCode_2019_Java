@@ -24,6 +24,7 @@ class Reaction {
 interface IDay14 {
 +{abstract}leastOreRequiredToMakeNFuel(N)
 +{abstract}mostFuelForNOre(N)
++leastOreRequiredToMakeOneFuel()
 
 }
 
