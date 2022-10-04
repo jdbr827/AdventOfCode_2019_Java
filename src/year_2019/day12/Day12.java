@@ -69,6 +69,7 @@ class MoonState extends Pair<Integer, Integer> {
     }
 }
 
+@AllArgsConstructor
 @RequiredArgsConstructor
 class MoonDimension {
     @NotNull Integer position;
@@ -76,30 +77,27 @@ class MoonDimension {
 
     public void applyGravityFrom(MoonDimension otherMoonDirection) {
         if (otherMoonDirection.position < this.position) {
-                velocity -= 1;
-            } else if (otherMoonDirection.position > this.position) {
-                velocity += 1;
-            }
+            velocity -= 1;
+        } else if (otherMoonDirection.position > this.position) {
+            velocity += 1;
+        }
     }
 
     public void applyVelocity() {
         position += velocity;
     }
 
-    public MoonState copy() {
-        return new MoonState(position, velocity);
+    public MoonDimension copy() {
+        return new MoonDimension(position, velocity);
     }
 
-    public static List<MoonState> copyList(List<MoonDimension> moonDimensionsList) {
+    public static List<MoonDimension> copyList(List<MoonDimension> moonDimensionsList) {
         return moonDimensionsList.stream().map(MoonDimension::copy).collect(Collectors.toList());
     }
 
-
-}
-
-@AllArgsConstructor
-class SolarSystemStateDimension {
-    List<MoonState> moonStates;
+    public boolean inSameStateAs(MoonDimension moon2) {
+        return position.equals(moon2.position) && velocity.equals(moon2.velocity);
+    }
 }
 
 class SolarSystem {
@@ -158,6 +156,16 @@ class SolarSystemDimension {
         applyVelocity();
     }
 
+    public boolean inSameStateAs(List<MoonDimension> solarSystem2) {
+        if (solarSystem2.size() != moonDimensions.size()) { return false; }
+        for (int i=0; i<moonDimensions.size(); i++) {
+            if (!moonDimensions.get(i).inSameStateAs(solarSystem2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
 
@@ -166,11 +174,11 @@ class SolarSystemDimension {
     we know that the first repeated state will always be the initial state.
      */
     public int findPeriod() {
-        List<MoonState> originalState = MoonDimension.copyList(moonDimensions); // copy
+        List<MoonDimension> originalState = MoonDimension.copyList(moonDimensions); // copy
         executeTimeStep();
 
         int minutes = 1;
-        while (!(MoonDimension.copyList(moonDimensions).equals(originalState))) {
+        while (!(inSameStateAs(originalState))) {
             executeTimeStep();
             minutes++;
         }
