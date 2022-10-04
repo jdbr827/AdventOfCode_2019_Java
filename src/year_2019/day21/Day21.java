@@ -12,6 +12,14 @@ public class Day21 {
 
         /* Initial String */
         brain.getNextOutputsToString();
+        brain.sendLine("OR A J");
+        brain.sendLine("AND B J");
+        brain.sendLine("AND C J");
+        brain.sendLine("NOT J J");
+        brain.sendLine("AND D J");
+        brain.sendLine("WALK");
+        brain.getNextOutputsToString();
+        System.out.println(brain.getLastLongOutput());
         //System.out.println(brain.getLastLongOutput());
     }
 }
