@@ -41,16 +41,6 @@ class Moon {
         moonDirections[2] = new MoonDimension(initialPosition[2]);
     }
 
-
-
-    public void applyGravityFromInDirection(Moon otherMoon, int direction) {
-         moonDirections[direction].applyGravityFrom(otherMoon.moonDirections[direction]);
-    }
-
-    public void applyVelocityInDirection(int direction) {
-        moonDirections[direction].applyVelocity();
-    }
-
     public int calculateTotalEnergy() {
         return calculatePotentialEnergy() * calculateKineticEnergy();
     }
@@ -96,9 +86,14 @@ class MoonDimension {
         position += velocity;
     }
 
-    public MoonState copyAndFreeze() {
+    public MoonState copy() {
         return new MoonState(position, velocity);
     }
+
+    public static List<MoonState> copyList(List<MoonDimension> moonDimensionsList) {
+        return moonDimensionsList.stream().map(MoonDimension::copy).collect(Collectors.toList());
+    }
+
 
 }
 
@@ -116,7 +111,6 @@ class SolarSystem {
         this.solarSystemDimensions[0] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[0]).collect(Collectors.toList())));
         this.solarSystemDimensions[1] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[1]).collect(Collectors.toList())));
         this.solarSystemDimensions[2] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[2]).collect(Collectors.toList())));
-
     }
 
     public BigInteger findMinutesUntilFirstRepeat() {
@@ -127,10 +121,6 @@ class SolarSystem {
     private int[] findPeriodsInEachDirection() {
         return Arrays.stream(solarSystemDimensions).mapToInt(SolarSystemDimension::findPeriod).toArray();
     }
-
-
-
-
 
     public int calculateTotalEnergy() {
         return moons.stream()
@@ -168,14 +158,7 @@ class SolarSystemDimension {
         applyVelocity();
     }
 
-    public SolarSystemStateDimension getCurrentState() {
-        return new SolarSystemStateDimension(moonDimensions.stream().map(MoonDimension::copyAndFreeze).collect(Collectors.toList()));
-    }
 
-    public SolarSystemStateDimension executeTimeStepAndGetState() {
-        executeTimeStep();
-        return getCurrentState();
-    }
 
 
      /*
@@ -183,12 +166,12 @@ class SolarSystemDimension {
     we know that the first repeated state will always be the initial state.
      */
     public int findPeriod() {
-        SolarSystemStateDimension originalState = getCurrentState();
-        SolarSystemStateDimension currentState = executeTimeStepAndGetState();
+        List<MoonState> originalState = MoonDimension.copyList(moonDimensions); // copy
+        executeTimeStep();
 
         int minutes = 1;
-        while (!(currentState.moonStates.equals(originalState.moonStates))) {
-            currentState = executeTimeStepAndGetState();
+        while (!(MoonDimension.copyList(moonDimensions).equals(originalState))) {
+            executeTimeStep();
             minutes++;
         }
         return minutes;
