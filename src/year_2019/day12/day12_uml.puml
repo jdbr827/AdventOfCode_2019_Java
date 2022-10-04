@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class SolarSystem {
++ImmutableList<Moon> moons
++SolarSystemDimensions[3] solarSystemDimensions
++calculateTotalEnergy()
++executeNTimeSteps(N)
+-executeTimeStep()
++findMinutesUntilFirstRepeat()
+
+}
+
+SolarSystem "1" *-- "*" Moon
+SolarSystem "1" *-- "3" SolarSystemDimension
+
+class Moon {
++MoonDimensions[3] moonDimensions
++calculateTotalEnergy()
+-calculatePotentialEnergy()
+-calculateKineticEnergy()
+}
+
+class MoonDimension {
++ position
++ velocity
++ applyGravityFrom(MoonDimension otherMoon)
++ applyVelocity()
+}
+
+Moon "1" *-- "3" MoonDimension
+SolarSystemDimension "1" *-- "*" MoonDimension
+
+class SolarSystemDimension {
++ List<MoonDimension> moonDimensions
+- applyVelocity()
+- applyGravity()
++ executeTimeStep()
++ findPeriod()
+
+}
+
+
+@enduml

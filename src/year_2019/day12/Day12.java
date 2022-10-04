@@ -1,7 +1,6 @@
 package year_2019.day12;
 
 import com.google.common.collect.ImmutableList;
-import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +15,6 @@ import java.util.stream.Collectors;
 
 
 public class Day12 {
-    private static final int X_DIRECTION = 0;
-    private static final int Y_DIRECTION = 1;
-    private static final int Z_DIRECTION = 2;
 
     static int part1(String inputFile, int steps) throws IOException {
         SolarSystem solarSystem = new SolarSystem(inputFile);
@@ -63,12 +59,6 @@ class Moon {
 }
 
 
-class MoonState extends Pair<Integer, Integer> {
-    public MoonState(Integer key, Integer value) {
-        super(key, value);
-    }
-}
-
 @AllArgsConstructor
 @RequiredArgsConstructor
 class MoonDimension {
@@ -106,9 +96,10 @@ class SolarSystem {
 
     public SolarSystem(String s) throws IOException {
         this.moons = new MoonReader(s).readInMoons();
-        this.solarSystemDimensions[0] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[0]).collect(Collectors.toList())));
-        this.solarSystemDimensions[1] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[1]).collect(Collectors.toList())));
-        this.solarSystemDimensions[2] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[2]).collect(Collectors.toList())));
+        for (int i = 0; i < 3; i++) {
+            int finalI = i;
+            this.solarSystemDimensions[i] = new SolarSystemDimension(ImmutableList.copyOf(moons.stream().map(moon -> moon.moonDirections[finalI]).collect(Collectors.toList())));
+        }
     }
 
     public BigInteger findMinutesUntilFirstRepeat() {
@@ -139,11 +130,11 @@ class SolarSystem {
 class SolarSystemDimension {
     ImmutableList<MoonDimension> moonDimensions;
 
-    public void applyVelocity() {
+    private void applyVelocity() {
         moonDimensions.forEach(MoonDimension::applyVelocity);
     }
 
-    public void applyGravity() {
+    private void applyGravity() {
         for (MoonDimension moon1: moonDimensions) {
             for (MoonDimension moon2 : moonDimensions) {
                 moon1.applyGravityFrom(moon2);
