@@ -12,11 +12,13 @@ public class Day1Test {
 
     @Test
     void test_2022_D1_P1() throws FileNotFoundException {
+         assertEquals(24000, Day1.part1(EXAMPLE_INPUT));
          assertEquals(72017, Day1.part1(OFFICIAL_INPUT));
     }
 
     @Test
     void test_2022_D1_P2() throws FileNotFoundException {
+         assertEquals(45000, Day1.part2(EXAMPLE_INPUT));
          assertEquals(212520, Day1.part2(OFFICIAL_INPUT));
     }
 

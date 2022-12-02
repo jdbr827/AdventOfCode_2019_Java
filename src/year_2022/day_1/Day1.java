@@ -7,48 +7,24 @@ import java.util.*;
 public class Day1 {
 
 
-
-
     public static int readInNumbers(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
-
-        //PriorityQueue<Integer> bestSoFar = new PriorityQueue<>(3, Comparator.reverseOrder());
+        Day1Scanner scanner = new Day1Scanner(fileName);
         ArrayList<Integer> elves = new ArrayList<>();
-        int current = 0;
-
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            if (data.isEmpty()) {
-                elves.add(current);
-                //bestSoFar.offer(current);
-                current = 0;
-            } else {
-                current += Integer.parseInt(data);
-            }
+        int current;
+        while ((current = scanner.getNextElfCalories()) != 0) {
+            elves.add(current);
         }
-        //System.out.println(bestSoFar);
         elves.sort(Comparator.reverseOrder());
         return elves.get(0) + elves.get(1) + elves.get(2);
     }
 
     public static int part1(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
+        Day1Scanner scanner = new Day1Scanner(fileName);
 
         int bestSoFar = 0;
-        int current = 0;
-
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            if (data.isEmpty()) {
-                System.out.println(bestSoFar + " " + current);
-                bestSoFar = Math.max(bestSoFar, current);
-
-                current = 0;
-            } else {
-                current += Integer.parseInt(data);
-            }
+        int current;
+        while ((current = scanner.getNextElfCalories()) != 0) {
+            bestSoFar = Math.max(current, bestSoFar);
         }
         return bestSoFar;
     }
