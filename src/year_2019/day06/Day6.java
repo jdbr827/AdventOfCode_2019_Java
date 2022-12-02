@@ -1,6 +1,7 @@
 package year_2019.day06;
 
 import lombok.AllArgsConstructor;
+import utils.BFSUtil;
 
 @AllArgsConstructor
 public class Day6 implements IDay6 {

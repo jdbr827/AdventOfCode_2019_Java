@@ -1,4 +1,4 @@
-package year_2019.day06;
+package utils;
 
 import java.util.*;
 import java.util.function.Function;
