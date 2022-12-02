@@ -18,6 +18,16 @@ public class BinarySearchUtil {
         return doBinarySearch(func, target, lowerBound, upperBound);
     }
 
+    /**
+     * Returns x such that func(x) = target assuming func is non-decreasing over [lowerbound, upperbound]
+     * @param func
+     * @param target
+     * @param lowerBound
+     * @param upperBound
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
     private static <T> long doBinarySearch(Function<Long, Comparable<T>> func, T target, long lowerBound, long upperBound) throws IOException {
         long midPoint = (upperBound + lowerBound) / 2;
         long dist = lowerBound;
