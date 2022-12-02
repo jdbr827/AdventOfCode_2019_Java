@@ -62,12 +62,4 @@ public class BinarySearchUtil {
         }
         return arr;
     }
-
-    public static void main(String[] args) throws IOException {
-        ArrayList<Integer> testLst = new ArrayList<>();
-        testLst.add(0);
-        testLst.add(2);
-        testLst.add(4);
-        System.out.println(binaryInsert(testLst, 3));
-    }
 }

@@ -29,13 +29,18 @@ public class Day1 {
         return elves.get(0) + elves.get(1) + elves.get(2);
     }
 
+
+    /* O(T) time and O(1) additional space */
     public static int part2Method2(String fileName) throws IOException {
         Day1Scanner scanner = new Day1Scanner(fileName);
-        ArrayList<Integer> elves = new ArrayList<>(Arrays.asList(0, 0, 0));
+
+        ArrayList<Integer> elves = new ArrayList<>(Arrays.asList(0, 0, 0)); // O(1) space because of invariant
 
         int current;
-        while ((current = scanner.getNextElfCalories()) != 0) {
-            binaryInsert(elves, current);
+
+        // LOOP INVARIANT: elves has size 3
+        while ((current = scanner.getNextElfCalories()) != 0) { // O(T) time to scan
+            binaryInsert(elves, current); // O(1) to insert [logN but N constant]
             elves.remove(0);
         }
 
@@ -57,7 +62,4 @@ public class Day1 {
         return bestSoFar;
     }
 
-    public static int part2(String fileName) throws IOException {
-        return part2Method2(fileName);
-    }
 }

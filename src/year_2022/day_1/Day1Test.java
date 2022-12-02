@@ -18,9 +18,15 @@ public class Day1Test {
     }
 
     @Test
-    void test_2022_D1_P2() throws IOException {
-         assertEquals(45000, Day1.part2(EXAMPLE_INPUT));
-        // assertEquals(212520, Day1.part2(OFFICIAL_INPUT));
+    void test_2022_D1_P2_method1() throws IOException {
+         assertEquals(45000, Day1.part2Method1(EXAMPLE_INPUT));
+         assertEquals(212520, Day1.part2Method1(OFFICIAL_INPUT));
+    }
+
+    @Test
+    void test_2022_D1_P2_method2() throws IOException {
+         assertEquals(45000, Day1.part2Method2(EXAMPLE_INPUT));
+         assertEquals(212520, Day1.part2Method2(OFFICIAL_INPUT));
     }
 
 
