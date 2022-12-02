@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static java.util.Map.entry;
 
 public class Day2 {
-    static final Pattern reactionInfoPattern = Pattern.compile("([ABC]) ([XYZ])");
+    static final Pattern strategyLinePattern = Pattern.compile("([ABC]) ([XYZ])");
 
     static Map<String, RockPaperScissors> map1 = Map.ofEntries(
             entry("A", RockPaperScissors.ROCK),
@@ -38,20 +38,15 @@ public class Day2 {
 
 
 
-    public static void main(String[] args) throws FileNotFoundException {
-        //part1();
-        part2();
 
-    }
-
-    private static void part1() throws FileNotFoundException {
-        File file = new File("src/year_2022/day_2/day_2_input.txt");
+    public static int part1(String fileName) throws FileNotFoundException {
+        File file = new File(fileName);
         Scanner scanner = new Scanner(file);
 
         int totalScore = 0;
         while (scanner.hasNextLine()){
             String data = scanner.nextLine();
-            Matcher m = reactionInfoPattern.matcher(data);
+            Matcher m = strategyLinePattern.matcher(data);
             ReadIn.findOrElseThrow(m, "Could not read in RPS Strategy info");
             RockPaperScissors theyPlay = map1.get(m.group(1));
             RockPaperScissors strategy = map1.get(m.group(2));
@@ -60,17 +55,17 @@ public class Day2 {
             System.out.println(theyPlay.name() + " versus " + strategy.name() + " => " + thisScore);
 
         }
-        System.out.println(totalScore);
+        return totalScore;
     }
 
-     private static void part2() throws FileNotFoundException {
-        File file = new File("src/year_2022/day_2/day_2_input.txt");
+     public static int part2(String fileName) throws FileNotFoundException {
+        File file = new File(fileName);
         Scanner scanner = new Scanner(file);
 
         int totalScore = 0;
         while (scanner.hasNextLine()){
             String data = scanner.nextLine();
-            Matcher m = reactionInfoPattern.matcher(data);
+            Matcher m = strategyLinePattern.matcher(data);
             ReadIn.findOrElseThrow(m, "Could not read in RPS Strategy info");
             RockPaperScissors theyPlay = map2a.get(m.group(1));
             RPSResult goal = map2b.get(m.group(2));
@@ -82,7 +77,7 @@ public class Day2 {
             //System.out.println(theyPlay.name() + " versus " + strategy.name() + " => " + thisScore);
 
         }
-        System.out.println(totalScore);
+        return totalScore;
     }
 }
 

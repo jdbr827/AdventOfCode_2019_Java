@@ -1,22 +1,11 @@
 package year_2022.day_2;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum RockPaperScissors {
     ROCK(0 ),
     PAPER(1),
     SCISSORS(2);
 
-    private final static Map<Integer, RockPaperScissors> map = new HashMap<>();
-     static {
-        for (RockPaperScissors rps : RockPaperScissors.values()) {
-            map.put(rps.index, rps);
-        }
-    }
-
     private final int index;
-
     RockPaperScissors(int index) {
         this.index = index;
     }
@@ -38,7 +27,7 @@ public enum RockPaperScissors {
     }
 
     RockPaperScissors toGetResult(RPSResult result) {
-        return map.get((index + result.offset + 3) % 3);
+        return ordering[(index + result.offset + 3) % 3];
     }
 }
 
