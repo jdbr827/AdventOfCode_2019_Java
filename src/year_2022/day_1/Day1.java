@@ -1,13 +1,12 @@
-package year_2021.day_1;
+package year_2022.day_1;
 
-import javafx.scene.layout.Priority;
-
-import javax.print.attribute.IntegerSyntax;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Day1 {
+
+
 
 
     public static int readInNumbers(String fileName) throws FileNotFoundException {
@@ -33,7 +32,28 @@ public class Day1 {
         return elves.get(0) + elves.get(1) + elves.get(2);
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        System.out.println(readInNumbers("src/year_2021/day_1/day_1_input.txt"));
+    public static int part1(String fileName) throws FileNotFoundException {
+        File file = new File(fileName);
+        Scanner scanner = new Scanner(file);
+
+        int bestSoFar = 0;
+        int current = 0;
+
+        while (scanner.hasNextLine()) {
+            String data = scanner.nextLine();
+            if (data.isEmpty()) {
+                System.out.println(bestSoFar + " " + current);
+                bestSoFar = Math.max(bestSoFar, current);
+
+                current = 0;
+            } else {
+                current += Integer.parseInt(data);
+            }
+        }
+        return bestSoFar;
+    }
+
+    public static int part2(String fileName) throws FileNotFoundException {
+        return readInNumbers(fileName);
     }
 }
