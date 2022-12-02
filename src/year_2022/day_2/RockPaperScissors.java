@@ -1,9 +1,19 @@
 package year_2022.day_2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum RockPaperScissors {
     ROCK(0 ),
     PAPER(1),
     SCISSORS(2);
+
+    private final static Map<Integer, RockPaperScissors> map = new HashMap<>();
+     static {
+        for (RockPaperScissors rps : RockPaperScissors.values()) {
+            map.put(rps.index, rps);
+        }
+    }
 
     private final int index;
 
@@ -11,10 +21,12 @@ public enum RockPaperScissors {
         this.index = index;
     }
 
-    public static final int[][] payoffTable =  {
-            {3, 0, 6},
-            {6, 3, 0},
-            {0, 6, 3}
+    static final RockPaperScissors[] ordering = {ROCK, PAPER, SCISSORS};
+
+    public static final RPSResult[][] payoffTable =  {
+            {RPSResult.DRAW, RPSResult.LOSS, RPSResult.WIN},
+            {RPSResult.WIN, RPSResult.DRAW, RPSResult.LOSS},
+            {RPSResult.LOSS, RPSResult.WIN, RPSResult.DRAW}
     };
 
     int soloScore() {
@@ -22,13 +34,27 @@ public enum RockPaperScissors {
     }
 
     int scoreVersus(RockPaperScissors other) {
-        return RockPaperScissors.payoffTable[index][other.index];
+        return RockPaperScissors.payoffTable[index][other.index].score();
     }
 
+    RockPaperScissors toGetResult(RPSResult result) {
+        return map.get((index + result.offset + 3) % 3);
+    }
+}
 
+enum RPSResult {
+    LOSS(0, -1),
+    DRAW(1, 0),
+    WIN(2, 1);
 
+    private final int index;
+    final int offset;
 
-
-    //RockPaperScissors Rock = new RockPaperScissors(1);
-
+    int score() {
+        return 3*index;
+    }
+    RPSResult(int index, int offset) {
+        this.index = index;
+        this.offset = offset;
+    }
 }
