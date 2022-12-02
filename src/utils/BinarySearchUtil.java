@@ -57,7 +57,6 @@ public class BinarySearchUtil {
             arr.add(0, toInsert);
         } else {
             long idxToInsert = doBinarySearch((i) -> arr.get(i.intValue()), toInsert, 0, arr.size());
-            System.out.println(idxToInsert);
             arr.add((int) idxToInsert + 1, toInsert);
         }
         return arr;

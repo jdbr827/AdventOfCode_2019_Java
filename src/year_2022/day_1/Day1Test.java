@@ -19,14 +19,14 @@ public class Day1Test {
 
     @Test
     void test_2022_D1_P2_method1() throws IOException {
-         assertEquals(45000, Day1.part2Method1(EXAMPLE_INPUT));
-         assertEquals(212520, Day1.part2Method1(OFFICIAL_INPUT));
+         assertEquals(45000, Day1.part2Method1(EXAMPLE_INPUT,3));
+         assertEquals(212520, Day1.part2Method1(OFFICIAL_INPUT, 3));
     }
 
     @Test
     void test_2022_D1_P2_method2() throws IOException {
-         assertEquals(45000, Day1.part2Method2(EXAMPLE_INPUT));
-         assertEquals(212520, Day1.part2Method2(OFFICIAL_INPUT));
+         assertEquals(45000, Day1.part2Method2(EXAMPLE_INPUT, 3));
+         assertEquals(212520, Day1.part2Method2(OFFICIAL_INPUT, 3));
     }
 
 
