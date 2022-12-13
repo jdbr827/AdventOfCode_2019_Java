@@ -1,4 +1,4 @@
-package year_2022.day_3;
+package year_2022.day_03;
 
 import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;

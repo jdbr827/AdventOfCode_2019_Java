@@ -1,4 +1,4 @@
-package year_2022.day_2;
+package year_2022.day_02;
 
 public enum RockPaperScissors {
     ROCK(0 ),

@@ -1,4 +1,4 @@
-package year_2022.day_2;
+package year_2022.day_02;
 
 import javafx.util.Pair;
 import utils.ReadIn;

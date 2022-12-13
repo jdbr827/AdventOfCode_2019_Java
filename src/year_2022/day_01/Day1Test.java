@@ -1,4 +1,4 @@
-package year_2022.day_1;
+package year_2022.day_01;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +8,8 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day1Test {
-    public static String OFFICIAL_INPUT = "src/year_2022/day_1/day_1_input.txt";
-    public static String EXAMPLE_INPUT = "src/year_2022/day_1/day_1_sample_input.txt";
+    public static String OFFICIAL_INPUT = "src/year_2022/day_01/day_1_input.txt";
+    public static String EXAMPLE_INPUT = "src/year_2022/day_01/day_1_sample_input.txt";
 
     @Test
     void test_2022_D1_P1() throws FileNotFoundException {
