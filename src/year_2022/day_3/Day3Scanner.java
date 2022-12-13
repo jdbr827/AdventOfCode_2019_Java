@@ -18,4 +18,8 @@ public class Day3Scanner {
         }
         return null;
     }
+
+    public boolean hasNextLine() {
+        return scanner.hasNextLine();
+    }
 }

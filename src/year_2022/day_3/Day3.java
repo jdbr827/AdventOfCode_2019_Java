@@ -21,6 +21,35 @@ public class Day3 {
         return totalMissing;
     }
 
+     public static int part2(String filename) throws FileNotFoundException, KeyException {
+        Day3Scanner scanner = new Day3Scanner(filename);
+        int totalMissing = 0;
+        while (scanner.hasNextLine()) { // Faith that the number of lines is a multiple of 3
+            int thisPriority = getBadgePriority(scanner.getNextLine(), scanner.getNextLine(), scanner.getNextLine());
+            totalMissing += thisPriority;
+        }
+        return totalMissing;
+    }
+
+    public static int getBadgePriority(String line1, String line2, String line3) throws InvalidKeyException {// could optimize for off-by-1 later
+        boolean[] priorityPresent1 = new boolean[53]; // could optimize for off-by-1 later
+        boolean[] priorityPresent2 = new boolean[53];
+        boolean[] priorityPresent3 = new boolean[53];
+        for (char c : line1.toCharArray()) {
+            priorityPresent1[getPriority(c)] = true;
+        }
+        for (char c : line2.toCharArray()) {
+            priorityPresent2[getPriority(c)] = true;
+        }
+        for (char c : line3.toCharArray()) {
+            priorityPresent3[getPriority(c)] = true;
+            if (priorityPresent1[getPriority(c)] && priorityPresent2[getPriority(c)]) {
+                return getPriority(c);
+            }
+        }
+        throw new InvalidKeyException("No shared element found");
+    }
+
     protected static int getPriority(char thisChar) throws InvalidKeyException {
         int thisOrd = (int) thisChar;
         if (thisOrd > 96) {

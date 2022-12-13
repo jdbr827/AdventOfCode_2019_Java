@@ -3,6 +3,7 @@ package year_2022.day_3;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.security.InvalidKeyException;
 import java.security.KeyException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,5 +32,21 @@ public class Day3Test {
     @Test
     public void test_missing() throws Exception {
         assertEquals(16, Day3.getMissingPriority("vJrwpWtwJgWrhcsFMMfFFhFp"));
+    }
+
+    @Test
+    public void test_getBadgePriority() throws InvalidKeyException {
+        assertEquals(18, Day3.getBadgePriority(
+                "vJrwpWtwJgWrhcsFMMfFFhFp",
+                "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+                "PmmdzqPrVvPwwTWBwg"
+        ));
+
+    }
+
+    @Test
+    public void test_part2() throws FileNotFoundException, KeyException {
+        assertEquals(70, Day3.part2(EXAMPLE_INPUT));
+        System.out.println(Day3.part2(OFFICIAL_INPUT));
     }
 }
