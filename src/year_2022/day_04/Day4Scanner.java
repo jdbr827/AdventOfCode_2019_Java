@@ -18,14 +18,18 @@ public class Day4Scanner {
         scanner = new Scanner(file);
     }
 
-    public Matcher getNextLine() {
+    public Day4AssignmentPair getNextLine() {
         if (scanner.hasNextLine()) {
             Matcher m = rangesPattern.matcher(scanner.nextLine());
             ReadIn.findOrElseThrow(m, "Could not match ranges pattern");
-            return m;
+            return new Day4AssignmentPair(
+                    Integer.parseInt(m.group(1)),
+                    Integer.parseInt(m.group(2)),
+                    Integer.parseInt(m.group(3)),
+                    Integer.parseInt(m.group(4))
+            );
         }
         return null;
     }
-
 
 }
