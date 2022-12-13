@@ -1,5 +1,6 @@
 package year_2022.day_2;
 
+import javafx.util.Pair;
 import utils.ReadIn;
 
 import java.io.File;
@@ -37,23 +38,18 @@ public class Day2 {
 
 
 
-
-
     public static int part1(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
+        Day2Scanner scanner = new Day2Scanner(fileName);
 
         int totalScore = 0;
-        while (scanner.hasNextLine()){
-            String data = scanner.nextLine();
-            Matcher m = strategyLinePattern.matcher(data);
-            ReadIn.findOrElseThrow(m, "Could not read in RPS Strategy info");
-            RockPaperScissors theyPlay = map1.get(m.group(1));
-            RockPaperScissors strategy = map1.get(m.group(2));
+        Pair<RockPaperScissors, RockPaperScissors> pr;
+        while ((pr = scanner.getNextOpponentAndStrategyPair()) != null){
+            RockPaperScissors theyPlay = pr.getKey();
+            RockPaperScissors strategy = pr.getValue();
+
             int thisScore = strategy.soloScore() + strategy.scoreVersus(theyPlay);
             totalScore += thisScore;
-            System.out.println(theyPlay.name() + " versus " + strategy.name() + " => " + thisScore);
-
+            //System.out.println(theyPlay.name() + " versus " + strategy.name() + " => " + thisScore);
         }
         return totalScore;
     }
