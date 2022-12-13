@@ -16,4 +16,10 @@ public class Day4Test {
         assertEquals(2, Day4.part1(EXAMPLE_INPUT));
         assertEquals(530, Day4.part1(OFFICIAL_INPUT));
     }
+
+    @Test
+    void test_part2() throws FileNotFoundException {
+        assertEquals(4, Day4.part2(EXAMPLE_INPUT));
+        assertEquals(903, Day4.part2(OFFICIAL_INPUT));
+    }
 }
