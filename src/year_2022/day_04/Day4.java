@@ -7,9 +7,13 @@ import java.io.FileNotFoundException;
 import java.util.function.Predicate;
 
 public class Day4 {
+    Day4Scanner scanner;
 
-    private static int countPairsWithProperty(String fileName, Predicate<Day4AssignmentPair> predicate) throws FileNotFoundException {
-        Day4Scanner scanner = new Day4Scanner(fileName);
+    Day4(String fileName) throws FileNotFoundException {
+       scanner = new Day4Scanner(fileName);
+    }
+
+    int countPairsWithProperty(Predicate<Day4AssignmentPair> predicate) {
         Day4AssignmentPair assignmentPair;
         int num_contained = 0;
         while ((assignmentPair = scanner.getNextLine()) != null) {
@@ -23,11 +27,11 @@ public class Day4 {
 
 
     public static int part1(String fileName) throws FileNotFoundException {
-        return countPairsWithProperty(fileName, Day4AssignmentPair::completelyContains);
+        return new Day4(fileName).countPairsWithProperty(Day4AssignmentPair::completelyContains);
     }
 
      public static int part2(String fileName) throws FileNotFoundException {
-       return countPairsWithProperty(fileName, Day4AssignmentPair::hasOverlap);
+       return new Day4(fileName).countPairsWithProperty(Day4AssignmentPair::hasOverlap);
     }
 
 
