@@ -35,8 +35,8 @@ public class Day3Test {
     }
 
     @Test
-    public void test_getBadgePriority() throws InvalidKeyException {
-        assertEquals(18, Day3.getBadgePriority(
+    public void test_getUniqueSharedChar() throws InvalidKeyException {
+        assertEquals(18, Day3.getUniqueSharedChar(
                 "vJrwpWtwJgWrhcsFMMfFFhFp",
                 "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
                 "PmmdzqPrVvPwwTWBwg"
@@ -47,6 +47,6 @@ public class Day3Test {
     @Test
     public void test_part2() throws FileNotFoundException, KeyException {
         assertEquals(70, Day3.part2(EXAMPLE_INPUT));
-        System.out.println(Day3.part2(OFFICIAL_INPUT));
+        assertEquals(2805, Day3.part2(OFFICIAL_INPUT));
     }
 }

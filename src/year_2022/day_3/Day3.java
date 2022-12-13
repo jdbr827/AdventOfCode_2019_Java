@@ -3,6 +3,7 @@ package year_2022.day_3;
 import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.KeyException;
+import java.util.Arrays;
 
 public class Day3 {
 
@@ -25,29 +26,43 @@ public class Day3 {
         Day3Scanner scanner = new Day3Scanner(filename);
         int totalMissing = 0;
         while (scanner.hasNextLine()) { // Faith that the number of lines is a multiple of 3
-            int thisPriority = getBadgePriority(scanner.getNextLine(), scanner.getNextLine(), scanner.getNextLine());
+            int thisPriority = getUniqueSharedChar(scanner.getNextLine(), scanner.getNextLine(), scanner.getNextLine());
             totalMissing += thisPriority;
         }
         return totalMissing;
     }
 
-    public static int getBadgePriority(String line1, String line2, String line3) throws InvalidKeyException {// could optimize for off-by-1 later
-        boolean[] priorityPresent1 = new boolean[53]; // could optimize for off-by-1 later
-        boolean[] priorityPresent2 = new boolean[53];
-        boolean[] priorityPresent3 = new boolean[53];
-        for (char c : line1.toCharArray()) {
-            priorityPresent1[getPriority(c)] = true;
-        }
-        for (char c : line2.toCharArray()) {
-            priorityPresent2[getPriority(c)] = true;
-        }
-        for (char c : line3.toCharArray()) {
-            priorityPresent3[getPriority(c)] = true;
-            if (priorityPresent1[getPriority(c)] && priorityPresent2[getPriority(c)]) {
-                return getPriority(c);
-            }
-        }
-        throw new InvalidKeyException("No shared element found");
+    /**
+     * Finds the priority of the unique char shared among an arbitrary number of strings.
+     * @param lines
+     * @return
+     * @throws InvalidKeyException if no char is shared among them all;
+     */
+     public static int getUniqueSharedChar(String... lines) throws InvalidKeyException {// could optimize for off-by-1 later
+
+         boolean[] priorityPresentAll = new boolean[53]; // could optimize for off-by-1 later;
+         Arrays.fill(priorityPresentAll, true);
+
+         /*
+          * INVAR @ iteration i:
+          * priorityPresentAll is true iff the character with priority p is present in lines[0, ..., i-1]
+          */
+         for (String line : lines) {                                // O(L) time
+             boolean[] priorityPresentThis = new boolean[53];
+             for (char c: line.toCharArray()) {                     // O(M) time
+                 priorityPresentThis[getPriority(c)] = true;        // O(P) time
+             }
+             for (int i=0; i<53; i++) {
+                 priorityPresentAll[i] &= priorityPresentThis[i];
+             }
+         }
+
+         for (int i=0; i<53; i++) {                                 // Constant time
+             if (priorityPresentAll[i]) {
+                 return i;
+             }
+         }
+         throw new InvalidKeyException("No shared element found");
     }
 
     protected static int getPriority(char thisChar) throws InvalidKeyException {
@@ -62,17 +77,7 @@ public class Day3 {
     }
 
     protected static int getMissingPriority(String thisLine) throws KeyException {
-        boolean[] priorityPresent = new boolean[53]; // could optimize for off-by-1 later
         int n = thisLine.length();
-        for (int i=0; i<n/2; i++) {
-            priorityPresent[getPriority(thisLine.charAt(i))] = true;
-        }
-        for (int i=n/2; i<n; i++) {
-            if (priorityPresent[getPriority(thisLine.charAt(i))]) {
-                return getPriority(thisLine.charAt(i));
-            }
-        }
-        throw new InvalidKeyException("No shared element found");
-        // execution should never reach here
+        return getUniqueSharedChar(thisLine.substring(0, n/2), thisLine.substring(n/2));
     }
 }
