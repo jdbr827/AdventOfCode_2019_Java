@@ -17,6 +17,19 @@ We know that N <= E <= T, and suspect E << T
 public class Day1 {
 
 
+    /* O(T) time to scan all the items and O(1) Space */
+    public static int part1(String fileName) throws FileNotFoundException {
+        Day1Scanner scanner = new Day1Scanner(fileName);
+
+        int bestSoFar = 0;
+        int current;
+
+        while ((current = scanner.getNextElfCalories()) != 0) { // O(T)
+            bestSoFar = Math.max(current, bestSoFar);
+        }
+        return bestSoFar;
+    }
+
 
     /*
     TIME: O(T + E Log E + N) = O(T + E Log E)
@@ -58,17 +71,6 @@ public class Day1 {
 
 
 
-    /* O(T) time to scan all the items and O(1) Space */
-    public static int part1(String fileName) throws FileNotFoundException {
-        Day1Scanner scanner = new Day1Scanner(fileName);
 
-        int bestSoFar = 0;
-        int current;
-
-        while ((current = scanner.getNextElfCalories()) != 0) { // O(T)
-            bestSoFar = Math.max(current, bestSoFar);
-        }
-        return bestSoFar;
-    }
 
 }

@@ -4,9 +4,12 @@ import java.io.FileNotFoundException;
 
 public class Day6 {
     Day6Scanner scanner;
+    int N;
+    Character[] previous = new Character[N];
 
-    public Day6(String fileName) throws FileNotFoundException {
+    public Day6(String fileName, int N) throws FileNotFoundException {
         scanner = new Day6Scanner(fileName);
+        this.N = N;
 
 
 
@@ -51,20 +54,30 @@ public class Day6 {
     }
 
     protected int findStepsUntilLastNAllDiffMethod2(int N) {
-        Character[] previous = new Character[N];
+
+
         for (int i = 0; i < N; i++) {
             previous[N - 1 - i] = scanner.getNextChar();
         }
 
-        int minToScan = getMinToScan(previous);
 
-        while (minToScan > 0) {
+        /*
+         * LOOP INVARIANT:
+         * - previous is the N most recently scanned chars, previous[0] most recent and previous[N-1] least recent.
+         * - nearestLater is the smallest j such that there exists i<j such that previous[i] = previous[j]
+         */
+
+
+        int nearestLater = getMinToScan(previous);
+
+
+        while (nearestLater < N) {
             cyclePrevious(N, previous);
-            minToScan -= 1;
+            nearestLater += 1;
 
-            for (int i=1; i<N-minToScan; i++) {
+            for (int i=1; i<nearestLater; i++) {
                 if (previous[i].equals(previous[0])) {
-                    minToScan = N-i;
+                    nearestLater = i;
                 }
             }
         }
@@ -73,7 +86,6 @@ public class Day6 {
     }
 
     protected int findStepsUntilLastNAllDiffMethod3(int N) {
-        Character[] previous = new Character[N];
         int minToScan = N;
 
         while (minToScan > 0) {
@@ -102,7 +114,7 @@ public class Day6 {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < i; j++) {
                 if (p[i].equals(p[j])) {
-                    return N-i;
+                    return i;
                 }
             }
         }
