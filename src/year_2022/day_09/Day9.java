@@ -1,0 +1,19 @@
+package year_2022.day_09;
+
+import java.io.FileNotFoundException;
+
+public class Day9 {
+
+    static void part1(String fileName) throws FileNotFoundException {
+        Rope myRope = new Rope();
+        Day9Scanner myScanner = new Day9Scanner(fileName);
+        Day9InstructionPair instructionPair;
+        while ((instructionPair = myScanner.getNextInstruction()) != null) {
+            for (int i=0; i<instructionPair.numTimes; i++) {
+                myRope.moveRope(instructionPair.direction);
+            }
+
+        }
+
+    }
+}
