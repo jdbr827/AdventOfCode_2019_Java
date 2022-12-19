@@ -19,11 +19,7 @@ public class ChessKing implements IChessKing {
         return position;
     }
 
-    public static void main(String[] args) {
-        ChessKing myKing = new ChessKing();
-        myKing.move(MovementDirection.UP);
-        myKing.move(MovementDirection.UPLEFT);
-        myKing.move(MovementDirection.DOWN);
-        System.out.println(myKing.getPosition());
+    public CartesianPoint copyPosition() {
+        return new CartesianPoint(position.x, position.y);
     }
 }
