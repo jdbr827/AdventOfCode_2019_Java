@@ -1,15 +1,17 @@
 package year_2022.day_06;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 public class Day6 {
     Day6Scanner scanner;
     int N;
-    Character[] previous = new Character[N];
+    Character[] previous;
 
     public Day6(String fileName, int N) throws FileNotFoundException {
         scanner = new Day6Scanner(fileName);
         this.N = N;
+        this.previous = new Character[N];
 
 
 
@@ -53,7 +55,7 @@ public class Day6 {
         }
     }
 
-    protected int findStepsUntilLastNAllDiffMethod2(int N) {
+    protected int findStepsUntilLastNAllDiffMethod2() {
 
 
         for (int i = 0; i < N; i++) {
