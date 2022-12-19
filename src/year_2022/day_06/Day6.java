@@ -73,11 +73,11 @@ public class Day6 {
         int nearestLater = getMinToScan(previous);
 
 
-        while (nearestLater < N) {
-            cyclePrevious(N, previous);
+        while (nearestLater < N) {  // O(C)
+            cyclePrevious(N, previous); // O(N)
             nearestLater += 1;
 
-            for (int i=1; i<nearestLater; i++) {
+            for (int i=1; i<nearestLater; i++) { // O(N)
                 if (previous[i].equals(previous[0])) {
                     nearestLater = i;
                 }
