@@ -24,7 +24,7 @@ public class Day6Test {
           assertEquals(6, Day6.part1(EXAMPLE_INPUT_3));
           assertEquals(10, Day6.part1(EXAMPLE_INPUT_4));
           assertEquals(11, Day6.part1(EXAMPLE_INPUT_5));
-          System.out.println(Day6.part1(OFFICIAL_INPUT));
+          assertEquals(1850, Day6.part1(OFFICIAL_INPUT));
       }
 
 
@@ -35,7 +35,7 @@ public class Day6Test {
           assertEquals(23, Day6.part2(EXAMPLE_INPUT_3));
           assertEquals(29, Day6.part2(EXAMPLE_INPUT_4));
           assertEquals(26, Day6.part2(EXAMPLE_INPUT_5));
-          System.out.println(Day6.part2(OFFICIAL_INPUT));
+          assertEquals(2823, Day6.part2(OFFICIAL_INPUT));
       }
 
 }
