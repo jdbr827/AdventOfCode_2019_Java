@@ -27,4 +27,15 @@ public class Day6Test {
           System.out.println(Day6.part1(OFFICIAL_INPUT));
       }
 
+
+      @Test
+      public void test_part2() throws FileNotFoundException {
+          assertEquals(19, Day6.part2(EXAMPLE_INPUT_1));
+          assertEquals(23, Day6.part2(EXAMPLE_INPUT_2));
+          assertEquals(23, Day6.part2(EXAMPLE_INPUT_3));
+          assertEquals(29, Day6.part2(EXAMPLE_INPUT_4));
+          assertEquals(26, Day6.part2(EXAMPLE_INPUT_5));
+          System.out.println(Day6.part2(OFFICIAL_INPUT));
+      }
+
 }
