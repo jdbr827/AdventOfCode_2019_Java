@@ -38,4 +38,22 @@ public class Day6Test {
           assertEquals(2823, Day6.part2(OFFICIAL_INPUT));
       }
 
+      @Test
+      public void test_method2() throws FileNotFoundException {
+          assertEquals(7, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_1, 4));
+          assertEquals(5, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_2, 4));
+          assertEquals(6, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_3, 4));
+          assertEquals(10, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_4, 4));
+          assertEquals(11, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_5, 4));
+          assertEquals(1850, Day6.findStepsUntilLastNAllDiffMethod2(OFFICIAL_INPUT, 4));
+
+          assertEquals(19, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_1, 14));
+          assertEquals(23, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_2, 14));
+          assertEquals(23, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_3, 14));
+          assertEquals(29, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_4, 14));
+          assertEquals(26, Day6.findStepsUntilLastNAllDiffMethod2(EXAMPLE_INPUT_5, 14));
+          assertEquals(2823, Day6.findStepsUntilLastNAllDiffMethod2(OFFICIAL_INPUT, 14));
+
+      }
+
 }

@@ -5,7 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Day6Scanner {
-    private Scanner scanner;
+    private final Scanner scanner;
+    int numScanned = 0;
 
     Day6Scanner(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
@@ -15,8 +16,13 @@ public class Day6Scanner {
 
     Character getNextChar() {
         if (scanner.hasNext()){
+            numScanned++;
             return scanner.next().charAt(0);
         }
         return null;
+    }
+
+    int getNumScanned() {
+        return numScanned;
     }
 }
