@@ -1,5 +1,6 @@
 package year_2022.day_04;
 
+import utils.AOCScanner;
 import utils.ReadIn;
 
 import java.io.File;
@@ -8,14 +9,12 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day4Scanner {
-    private Scanner scanner;
+public class Day4Scanner extends AOCScanner {
     static final Pattern rangesPattern = Pattern.compile("([0-9]+)-([0-9]+),([0-9]+)-([0-9]+)");
 
 
     public Day4Scanner(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        scanner = new Scanner(file);
+        super(fileName);
     }
 
     public Day4AssignmentPair getNextLine() {

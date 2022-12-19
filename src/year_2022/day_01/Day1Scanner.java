@@ -1,15 +1,15 @@
 package year_2022.day_01;
 
+import utils.AOCScanner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Day1Scanner {
-    private Scanner scanner;
+public class Day1Scanner extends AOCScanner {
 
     Day1Scanner(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        scanner = new Scanner(file);
+        super(fileName);
     }
 
     public int getNextElfCalories() {

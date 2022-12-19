@@ -1,15 +1,15 @@
 package year_2022.day_03;
 
+import utils.AOCScanner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Day3Scanner {
-    private Scanner scanner;
+public class Day3Scanner extends AOCScanner {
 
     public Day3Scanner(String filename) throws FileNotFoundException {
-        File file = new File(filename);
-        scanner = new Scanner(file);
+        super(filename);
     }
 
     public String getNextLine() {

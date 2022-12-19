@@ -1,16 +1,16 @@
 package year_2022.day_06;
 
+import utils.AOCScanner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Day6Scanner {
-    private final Scanner scanner;
+public class Day6Scanner extends AOCScanner {
     int numScanned = 0;
 
     Day6Scanner(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        scanner = new Scanner(file);
+        super(fileName);
         scanner.useDelimiter("");
     }
 

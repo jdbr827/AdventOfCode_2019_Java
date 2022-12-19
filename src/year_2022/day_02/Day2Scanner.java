@@ -1,6 +1,7 @@
 package year_2022.day_02;
 
 import javafx.util.Pair;
+import utils.AOCScanner;
 import utils.ReadIn;
 
 import java.io.File;
@@ -12,13 +13,11 @@ import java.util.regex.Pattern;
 
 import static java.util.Map.entry;
 
-public class Day2Scanner {
-    private Scanner scanner;
+public class Day2Scanner extends AOCScanner  {
     static final Pattern strategyLinePattern = Pattern.compile("([ABC]) ([XYZ])");
 
     Day2Scanner(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        scanner = new Scanner(file);
+       super(fileName);
     }
 
     private Matcher getNextPair() {
