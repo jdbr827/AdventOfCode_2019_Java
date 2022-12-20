@@ -11,6 +11,15 @@ import java.io.FileNotFoundException;
  * - Integer N > 0
  * OUTPUT:
  * C := The number of characters streamed before the first time that the last N characters streamed from S are all different
+ *
+ *
+ * COMPLEXITY PARAMETERS:
+ * C (as output),
+ * N (as input), 4 and 14 in the problem
+ * U (time it takes to scan a new char and update the information about previous scans (scanNextChar())
+ * G (time it takes to get the char that was scanned x scans ago (getCharScannedXAgo())
+ *
+ * we know N is O(C)
  */
 public abstract class Day6 {
     IDay6Helper helper;
@@ -44,25 +53,23 @@ public abstract class Day6 {
 };
 
 class Day6Method1 extends Day6 {
-
-
     public Day6Method1(String fileName, int N, int helperMethod) throws FileNotFoundException {
         super(fileName, N, helperMethod);
     }
 
-    /* O(CxN^2) bottle-necked at checking for all diff for each new char */
+    /* O(NU + GC(N^2) + CU) = O(CU + C(N^2)G) bottle-necked at checking for all diff for each new char */
     public int findStepsUntilLastNAllDiff() {
 
 
         for (int i = 0; i < N; i++) {                           // O(N)
-            scanNextChar();                                     // O(N)
+            scanNextChar();                                     // O(U)
         }
 
         while (true) {                                          // O(C)
             boolean allDiff = true;
             for (int i = 0; i < N; i++) {                           // O(N)
                 for (int j = i + 1; j < N; j++) {                       // O(N)
-                    if (getCharScannedXAgo(i).equals(getCharScannedXAgo(j))) {
+                    if (getCharScannedXAgo(i).equals(getCharScannedXAgo(j))) { // O(G)
                         allDiff = false;
                         break;
                     }
@@ -71,7 +78,7 @@ class Day6Method1 extends Day6 {
             if (allDiff) {
                 return numScanned;
             } else {
-                scanNextChar();                          // O(N)
+                scanNextChar();                                     // O(U)
             }
         }
     }
@@ -83,6 +90,7 @@ class Day6Method2 extends Day6 {
         super(fileName, N, helperMethod);
     }
 
+    /* O(CU + CNG), strictly better than method 1 */
     public int findStepsUntilLastNAllDiff() {
 
         /*
@@ -91,13 +99,20 @@ class Day6Method2 extends Day6 {
          *      and as a base case, assume the "-1"th element scanned is equal to all other characters.
          */
         int nearestLater = 0;
-        while (nearestLater < N) {                          // O(C)
-            scanNextChar();                          // O(N)
+        while (nearestLater < N) {                                          // O(C)
+            scanNextChar();                                                      // O(U)
             nearestLater += 1;
-            for (int i = 1; i < nearestLater; i++) {            // O(N)
-                if (getCharScannedXAgo(i).equals(getCharScannedXAgo(0))) {
-                    nearestLater = i;
-                    break;
+
+            /*
+             * Because of the loop invariant, any pair not involving
+             * the most recently scanned char would have been
+             * found on a previous iteration
+             */
+            Character mostRecentlyScannedChar = getCharScannedXAgo(0);
+            for (int j = 1; j < nearestLater; j++) {                            // O(N)
+                if (getCharScannedXAgo(j).equals(mostRecentlyScannedChar)) {        //O(G)
+                    nearestLater = j;
+                    break; // because nearestLater is smallest such j
                 }
             }
         }
@@ -113,15 +128,16 @@ class Day6Method3 extends Day6 {
         super(fileName, N, helperMethod);
     }
 
+    /* Also O(CU + CNG), equivalent to Method 2 */
     public int findStepsUntilLastNAllDiff() {
 
         int minToScan = N;
-        while (minToScan > 0) {
-            scanNextChar();
+        while (minToScan > 0) {                                                 // O(C)
+            scanNextChar();                                                     // O(U)
             minToScan -= 1;
 
-            for (int i = 1; i < N - minToScan; i++) {
-                if (getCharScannedXAgo(i).equals(getCharScannedXAgo(0))) {
+            for (int i = 1; i < N - minToScan; i++) {                           // O(N)
+                if (getCharScannedXAgo(i).equals(getCharScannedXAgo(0))) {      // O(G)
                     minToScan = N - i;
                 }
             }
@@ -130,6 +146,13 @@ class Day6Method3 extends Day6 {
         return numScanned;
     }
 }
+
+/*
+Fastest Solution is Method 2 or 3 with Helper 2
+
+O(CU + CNG) => O(C + CN) = O(CN)
+
+ */
 
 
 

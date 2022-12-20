@@ -60,12 +60,13 @@ public class Day6Test {
 
 
       @Test
-      public void test_all_methods() throws FileNotFoundException {
+      public void test_all_solution_methods() throws FileNotFoundException {
           for (int algo=1; algo < ALGO_METHODS + 1; algo++) {
               for (int h = 1; h < HELPER_METHODS + 1; h++) {
                   test_a_helper_method(algo, h);
               }
           }
       }
+
 
 }

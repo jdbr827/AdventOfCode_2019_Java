@@ -20,7 +20,7 @@ interface IDay6Helper {
 }
 
 
-/* Linear time update, Constant time get */
+/*  Naive Solution: U = O(N); G = O(1) */
 class Day6Helper1 implements IDay6Helper {
     private final Day6Scanner scanner;
     int N;
@@ -47,7 +47,7 @@ class Day6Helper1 implements IDay6Helper {
 }
 
 
-/* Constant time update and get using "clock-face" implementation */
+/*  "clock-face" implementation: U = O(1) and G = O(1) */
 class Day6Helper2 implements IDay6Helper {
     private final Day6Scanner scanner;
     int N;
