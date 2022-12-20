@@ -73,7 +73,7 @@ public class Day6 {
     }
 
 
-    protected int findStepsUntilLastNAllDiffMethod3(int N) {
+    protected int findStepsUntilLastNAllDiffMethod3() {
 
         int minToScan = N;
         while (minToScan > 0) {
@@ -98,16 +98,26 @@ public class Day6 {
     private Character getCharScannedXAgo(int x) {
         return helper.getCharScannedXAgo(x);
     }
-    
-    interface IDay6Helper {
-        void scanNextChar();
-        Character getCharScannedXAgo(int x);
-    }
+
 
     /**
      * Encapsulates the scanner and the "previous N" part of the problem.
      * With access control, we can abstract away how previous is updated.
      */
+    interface IDay6Helper {
+
+        void scanNextChar();
+
+        /**
+         * previous is the N most recently scanned chars, previous[0] most recent and previous[N-1] least recent.
+         * @param x integer between 0 and N-1 inclusive.
+         * @return the character that was scanned x scans ago (0 for most recently scanned)
+         */
+        Character getCharScannedXAgo(int x);
+    }
+
+
+    /* Linear time update, Constant time get */
     class Day6Helper1 implements IDay6Helper {
         private final Day6Scanner scanner;
         @Getter private final Character[] previous;
@@ -117,10 +127,6 @@ public class Day6 {
             this.previous = new Character[N];
         }
 
-        /**
-         * Scans the next character from the scanner and updates previous according to the following invariant:
-         * INVARIANT: previous is the N most recently scanned chars, previous[0] most recent and previous[N-1] least recent.
-         */
         public void scanNextChar() {
             for (int i = N - 1; i > 0; i--) {
                 previous[i] = previous[i - 1];
@@ -136,10 +142,7 @@ public class Day6 {
 
 
 
-    /**
-     * Encapsulates the scanner and the "previous N" part of the problem.
-     * With access control, we can abstract away how previous is updated.
-     */
+    /* Constant time update and get using "clock-face" implementation */
     class Day6Helper2 implements IDay6Helper {
         private final Day6Scanner scanner;
         private int head_idx = N-1;
@@ -150,10 +153,6 @@ public class Day6 {
             this.previous = new Character[N];
         }
 
-        /**
-         * Scans the next character from the scanner and updates previous according to the following invariant:
-         * INVARIANT: previous is the N most recently scanned chars, previous[0] most recent and previous[N-1] least recent.
-         */
         public void scanNextChar() {
             head_idx++;
             head_idx %= N;
