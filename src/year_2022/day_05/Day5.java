@@ -29,5 +29,10 @@ public class Day5 {
     }
 
     private void executeInstructions() {
+        for (Day5Instruction instruction : instructions) {
+            for (int i=0; i<instruction.amountToMove; i++) {
+                boat.get(instruction.moveTo).push(boat.get(instruction.moveFrom).pop());
+            }
+        }
     }
 }
