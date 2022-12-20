@@ -33,16 +33,15 @@ public class Day12 {
             }
         }
 
-        Function<Point, Collection<Point>> neighborFunction = (p -> {
-            return Stream.of(
-                            new Point(p.x + 1, p.y),
-                            new Point(p.x - 1, p.y),
-                            new Point(p.x, p.y + 1),
-                            new Point(p.x, p.y - 1)
-                    ).filter((nbr) -> nbr.getX() >= 0 && nbr.getX() < N && nbr.getY() >= 0 && nbr.getY() < M &&
-                            (int) matrix.get(nbr.x).get(nbr.y) - (int) (matrix.get(p.x).get(p.y)) <= 1)
-                    .collect(Collectors.toList());
-        });
+        Function<Point, Collection<Point>> neighborFunction = (p -> Stream.of(
+                        new Point(p.x + 1, p.y),
+                        new Point(p.x - 1, p.y),
+                        new Point(p.x, p.y + 1),
+                        new Point(p.x, p.y - 1)
+                ).filter((nbr) ->
+                        nbr.getX() >= 0 && nbr.getX() < N && nbr.getY() >= 0 && nbr.getY() < M &&
+                                (int) matrix.get(nbr.x).get(nbr.y) - (int) (matrix.get(p.x).get(p.y)) <= 1)
+                .collect(Collectors.toList()));
 
         return BFSUtil.doBFS(start, goal, neighborFunction);
     }
@@ -51,7 +50,6 @@ public class Day12 {
     public static long part2(String fileName) throws FileNotFoundException {
         Day12Scanner scanner = new Day12Scanner(fileName);
         List<List<Character>> matrix = scanner.readInMatrix();
-        //System.out.println(matrix.toString());
         int N = matrix.size();
         int M = matrix.get(0).size();
         Point start = null; Point goal = null;
