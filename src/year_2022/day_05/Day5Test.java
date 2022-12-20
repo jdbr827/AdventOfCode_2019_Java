@@ -16,4 +16,10 @@ public class Day5Test {
         assertEquals("CMZ", Day5.part1(EXAMPLE_INPUT));
         assertEquals("LJSVLTWQM",Day5.part1(OFFICIAL_INPUT));
     }
+
+     @Test
+    void test_part2() throws FileNotFoundException {
+        assertEquals("MCD", Day5.part2(EXAMPLE_INPUT));
+        assertEquals("BRQWDBBJM",Day5.part2(OFFICIAL_INPUT));
+    }
 }
