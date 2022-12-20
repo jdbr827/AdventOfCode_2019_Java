@@ -15,6 +15,12 @@ public class Day12Test {
     public void test_part1() throws FileNotFoundException {
         assertEquals(31, Day12.part1(EXAMPLE_INPUT));
         assertEquals(370, Day12.part1(OFFICIAL_INPUT));
+    }
+
+    @Test
+    public void test_part2() throws FileNotFoundException {
+        assertEquals(29, Day12.part2(EXAMPLE_INPUT));
+        assertEquals(363, Day12.part2(OFFICIAL_INPUT));
 
     }
 }
