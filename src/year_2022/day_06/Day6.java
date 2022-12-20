@@ -1,6 +1,5 @@
 package year_2022.day_06;
 
-import lombok.Getter;
 
 import java.io.FileNotFoundException;
 
@@ -16,8 +15,8 @@ import java.io.FileNotFoundException;
  * COMPLEXITY PARAMETERS:
  * C (as output),
  * N (as input), 4 and 14 in the problem
- * U (time it takes to scan a new char and update the information about previous scans (scanNextChar())
- * G (time it takes to get the char that was scanned x scans ago (getCharScannedXAgo())
+ * U := time it takes to scan a new char and update the information about previous scans (scanNextChar())
+ * G := time it takes to get the char that was scanned x scans ago (getCharScannedXAgo())
  *
  * we know N is O(C)
  */
@@ -50,7 +49,7 @@ public abstract class Day6 {
         return helper.getCharScannedXAgo(x);
     }
 
-};
+}
 
 class Day6Method1 extends Day6 {
     public Day6Method1(String fileName, int N, int helperMethod) throws FileNotFoundException {
@@ -82,7 +81,7 @@ class Day6Method1 extends Day6 {
             }
         }
     }
-};
+}
 
 class Day6Method2 extends Day6 {
 
@@ -120,7 +119,7 @@ class Day6Method2 extends Day6 {
         return numScanned;
     }
 
-};
+}
 
 class Day6Method3 extends Day6 {
 
