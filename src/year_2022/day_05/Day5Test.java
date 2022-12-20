@@ -12,7 +12,7 @@ public class Day5Test {
 
     @Test
     void test_part1() throws FileNotFoundException {
-        Day5.part1(EXAMPLE_INPUT);
+        System.out.println(Day5.part1(EXAMPLE_INPUT));
         //assertEquals(530, Day4.part1(OFFICIAL_INPUT));
     }
 }

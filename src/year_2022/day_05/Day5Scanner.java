@@ -15,6 +15,7 @@ public class Day5Scanner {
 
     static final Pattern cratesPattern = Pattern.compile("\\[([A-Z])]");
     static final Pattern numbersPattern = Pattern.compile("\\s([0-9]+)\\s");
+    static final Pattern instructionsPattern = Pattern.compile("move ([0-9]+) from ([0-9]+) to ([0-9]+)");
 
     public Day5Scanner(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
@@ -41,12 +42,12 @@ public class Day5Scanner {
         }).collect(Collectors.toList());
     }
 
-    public void createStacks() {
+    public Day5 createStacks() {
         Stack<String> lines = new Stack<>();
         String thisLine = "";
         while (!(thisLine = scanner.nextLine()).equals("")) {
             lines.push(thisLine);
-            System.out.println(thisLine);
+            //System.out.println(thisLine);
         }
         String numbers = lines.pop();
         List<Stack<Character>> boat = new ArrayList<>();
@@ -66,6 +67,21 @@ public class Day5Scanner {
             }
         }
         // made boat
+
+        List<Day5Instruction> instructions = new LinkedList<>();
+        while (scanner.hasNextLine()) {
+            thisLine = scanner.nextLine();
+            Matcher m = instructionsPattern.matcher(thisLine);
+            ReadIn.findOrElseThrow(m, "Could not match instructions pattern");
+            instructions.add(new Day5Instruction(
+                    Integer.parseInt(m.group(1)),
+                    Integer.parseInt(m.group(2)),
+                    Integer.parseInt(m.group(3))
+                    ));
+        }
+
+        return new Day5(boat, instructions);
+
 
 
     }
