@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
  * OUTPUT:
  * C := The number of characters streamed before the first time that the last N characters streamed from S are all different
  */
-public class Day6 {
+public abstract class Day6 {
     IDay6Helper helper;
     int N;
     int numScanned = 0;
@@ -22,17 +22,36 @@ public class Day6 {
 
         switch (helperMethod) {
             case 1:
-                helper = new Day6Helper1(fileName);
+                helper = new Day6Helper1(fileName, N);
             case 2:
-                helper = new Day6Helper2(fileName);
+                helper = new Day6Helper2(fileName, N);
             default:
-                helper = new Day6Helper1(fileName);
+                helper = new Day6Helper1(fileName, N);
         }
+    }
 
+    public abstract int findStepsUntilLastNAllDiff();
+
+    protected void scanNextChar() {
+        numScanned++;
+        helper.scanNextChar();
+    }
+
+    protected Character getCharScannedXAgo(int x) {
+        return helper.getCharScannedXAgo(x);
+    }
+
+};
+
+class Day6Method1 extends Day6 {
+
+
+    public Day6Method1(String fileName, int N, int helperMethod) throws FileNotFoundException {
+        super(fileName, N, helperMethod);
     }
 
     /* O(CxN^2) bottle-necked at checking for all diff for each new char */
-    public int findStepsUntilLastNAllDiffMethod1() {
+    public int findStepsUntilLastNAllDiff() {
 
 
         for (int i = 0; i < N; i++) {                           // O(N)
@@ -56,9 +75,15 @@ public class Day6 {
             }
         }
     }
+};
 
+class Day6Method2 extends Day6 {
 
-    protected int findStepsUntilLastNAllDiffMethod2() {
+    public Day6Method2(String fileName, int N, int helperMethod) throws FileNotFoundException {
+        super(fileName, N, helperMethod);
+    }
+
+    public int findStepsUntilLastNAllDiff() {
 
         /*
          * LOOP INVARIANT:
@@ -80,8 +105,15 @@ public class Day6 {
         return numScanned;
     }
 
+};
 
-    protected int findStepsUntilLastNAllDiffMethod3() {
+class Day6Method3 extends Day6 {
+
+    public Day6Method3(String fileName, int N, int helperMethod) throws FileNotFoundException {
+        super(fileName, N, helperMethod);
+    }
+
+    public int findStepsUntilLastNAllDiff() {
 
         int minToScan = N;
         while (minToScan > 0) {
@@ -97,80 +129,9 @@ public class Day6 {
 
         return numScanned;
     }
-
-    private void scanNextChar() {
-        numScanned++;
-        helper.scanNextChar();
-    }
-
-    private Character getCharScannedXAgo(int x) {
-        return helper.getCharScannedXAgo(x);
-    }
-
-
-    /**
-     * Encapsulates the scanner and the "previous N" part of the problem.
-     * With access control, we can abstract away how previous is updated.
-     */
-    interface IDay6Helper {
-
-        void scanNextChar();
-
-        /**
-         * previous is the N most recently scanned chars, previous[0] most recent and previous[N-1] least recent.
-         * @param x integer between 0 and N-1 inclusive.
-         * @return the character that was scanned x scans ago (0 for most recently scanned)
-         */
-        Character getCharScannedXAgo(int x);
-    }
-
-
-    /* Linear time update, Constant time get */
-    class Day6Helper1 implements IDay6Helper {
-        private final Day6Scanner scanner;
-        @Getter private final Character[] previous;
-
-        Day6Helper1(String fileName) throws FileNotFoundException {
-            scanner = new Day6Scanner(fileName);
-            this.previous = new Character[N];
-        }
-
-        public void scanNextChar() {
-            for (int i = N - 1; i > 0; i--) {
-                previous[i] = previous[i - 1];
-            }
-            previous[0] = scanner.getNextChar();
-        }
-
-        @Override
-        public Character getCharScannedXAgo(int x) {
-            return previous[x];
-        }
-    }
-
-
-
-    /* Constant time update and get using "clock-face" implementation */
-    class Day6Helper2 implements IDay6Helper {
-        private final Day6Scanner scanner;
-        private int head_idx = N-1;
-        @Getter private final Character[] previous;
-
-        Day6Helper2(String fileName) throws FileNotFoundException {
-            scanner = new Day6Scanner(fileName);
-            this.previous = new Character[N];
-        }
-
-        public void scanNextChar() {
-            head_idx++;
-            head_idx %= N;
-            previous[head_idx] = scanner.getNextChar();
-        }
-
-        @Override
-        public Character getCharScannedXAgo(int x) {
-            return previous[(head_idx - x + N) % N];
-        }
-    }
-
 }
+
+
+
+
+
