@@ -15,6 +15,8 @@ public class Day6Test {
       public static String EXAMPLE_INPUT_5 = "src/year_2022/day_06/test_inputs/day_6_sample_5.txt";
       public static String OFFICIAL_INPUT = "src/year_2022/day_06/test_inputs/day_6_input.txt";
 
+      final int HELPER_METHODS = 2;
+
 
 
       @Test
@@ -38,58 +40,75 @@ public class Day6Test {
           assertEquals(2823, IDay6.part2(OFFICIAL_INPUT));
       }
 
+      private void test_a_helper_method(int helperMethod) throws FileNotFoundException {
+          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(10, new Day6(EXAMPLE_INPUT_4, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(11, new Day6(EXAMPLE_INPUT_5, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4, helperMethod).findStepsUntilLastNAllDiffMethod1());
+
+          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14, helperMethod).findStepsUntilLastNAllDiffMethod1());
+      }
+
+
+       private void test_a_helper_method2(int helperMethod) throws FileNotFoundException {
+          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(10, new Day6(EXAMPLE_INPUT_4, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(11, new Day6(EXAMPLE_INPUT_5, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4, helperMethod).findStepsUntilLastNAllDiffMethod2());
+
+          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14, helperMethod).findStepsUntilLastNAllDiffMethod2());
+      }
+
+       private void test_a_helper_method3(int helperMethod) throws FileNotFoundException {
+          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(10, new Day6(EXAMPLE_INPUT_4, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(11, new Day6(EXAMPLE_INPUT_5, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4, helperMethod).findStepsUntilLastNAllDiffMethod3());
+
+          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14, helperMethod).findStepsUntilLastNAllDiffMethod3());
+      }
+
       @Test
       public void test_method1() throws FileNotFoundException {
-          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(10, new Day6(EXAMPLE_INPUT_4, 4).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(11, new Day6(EXAMPLE_INPUT_5, 4).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4).findStepsUntilLastNAllDiffMethod1());
-
-          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14).findStepsUntilLastNAllDiffMethod1());
-          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14).findStepsUntilLastNAllDiffMethod1());
+          for (int h=1; h<HELPER_METHODS+1; h++) {
+              test_a_helper_method(h);
+          }
       }
 
       @Test
       public void test_method2() throws FileNotFoundException {
-          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(10, new Day6(EXAMPLE_INPUT_4,4).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(11, new Day6(EXAMPLE_INPUT_5, 4).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4).findStepsUntilLastNAllDiffMethod2());
-
-          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14).findStepsUntilLastNAllDiffMethod2());
-          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14).findStepsUntilLastNAllDiffMethod2());
-
-      }
+          for (int h=1; h<HELPER_METHODS+1; h++) {
+              test_a_helper_method2(h);
+          }
+      };
 
 
-       @Test
+      @Test
       public void test_method3() throws FileNotFoundException {
-          assertEquals(7, new Day6(EXAMPLE_INPUT_1, 4).findStepsUntilLastNAllDiffMethod3());
-          assertEquals(5, new Day6(EXAMPLE_INPUT_2, 4).findStepsUntilLastNAllDiffMethod3());
-          assertEquals(6, new Day6(EXAMPLE_INPUT_3, 4).findStepsUntilLastNAllDiffMethod3());
-          assertEquals(10, new Day6(EXAMPLE_INPUT_4, 4).findStepsUntilLastNAllDiffMethod3());
-          assertEquals(11, new Day6(EXAMPLE_INPUT_5,4 ).findStepsUntilLastNAllDiffMethod3());
-          assertEquals(1850, new Day6(OFFICIAL_INPUT, 4).findStepsUntilLastNAllDiffMethod3( ));
-
-          assertEquals(19, new Day6(EXAMPLE_INPUT_1, 14).findStepsUntilLastNAllDiffMethod3( ));
-          assertEquals(23, new Day6(EXAMPLE_INPUT_2, 14).findStepsUntilLastNAllDiffMethod3( ));
-          assertEquals(23, new Day6(EXAMPLE_INPUT_3, 14).findStepsUntilLastNAllDiffMethod3( ));
-          assertEquals(29, new Day6(EXAMPLE_INPUT_4, 14).findStepsUntilLastNAllDiffMethod3( ));
-          assertEquals(26, new Day6(EXAMPLE_INPUT_5, 14).findStepsUntilLastNAllDiffMethod3( ));
-          assertEquals(2823, new Day6(OFFICIAL_INPUT, 14).findStepsUntilLastNAllDiffMethod3( ));
-
+          for (int h=1; h<HELPER_METHODS+1; h++) {
+              test_a_helper_method3(h);
+          }
       }
 
 }

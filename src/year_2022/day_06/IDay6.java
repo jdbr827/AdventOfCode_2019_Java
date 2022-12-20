@@ -5,10 +5,11 @@ import java.io.FileNotFoundException;
 public interface IDay6 {
 
     static int part1(String fileName) throws FileNotFoundException {
-        return new Day6(fileName, 4).findStepsUntilLastNAllDiffMethod1();
+        return new Day6(fileName, 4, 3).findStepsUntilLastNAllDiffMethod1();
     }
 
     static int part2(String fileName) throws FileNotFoundException {
-        return new Day6(fileName, 14).findStepsUntilLastNAllDiffMethod2();
+        return new Day6(fileName, 14, 3).findStepsUntilLastNAllDiffMethod2();
     }
+
 }

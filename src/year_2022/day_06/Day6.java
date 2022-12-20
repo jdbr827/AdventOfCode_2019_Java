@@ -17,9 +17,17 @@ public class Day6 {
     int N;
     int numScanned = 0;
 
-    public Day6(String fileName, int N) throws FileNotFoundException {
+    public Day6(String fileName, int N, int helperMethod) throws FileNotFoundException {
         this.N = N;
-        helper = new Day6Helper1(fileName);
+
+        switch (helperMethod) {
+            case 1:
+                helper = new Day6Helper1(fileName);
+            case 2:
+                helper = new Day6Helper2(fileName);
+            default:
+                helper = new Day6Helper1(fileName);
+        }
 
     }
 
