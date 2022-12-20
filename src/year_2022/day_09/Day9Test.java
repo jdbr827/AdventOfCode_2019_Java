@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day9Test {
 
-     public static String EXAMPLE_INPUT = "src/year_2022/day_09/day_9_sample_input.txt";
+    public static String EXAMPLE_INPUT = "src/year_2022/day_09/day_9_sample_input.txt";
     public static String OFFICIAL_INPUT = "src/year_2022/day_09/day_9_input.txt";
 
     @Test

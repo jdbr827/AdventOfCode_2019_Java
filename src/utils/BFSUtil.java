@@ -12,7 +12,7 @@ public class BFSUtil {
         distanceFromOrigin.put(origin, 0L);
 
         while (distanceFromOrigin.getOrDefault(destination, Long.MAX_VALUE) == Long.MAX_VALUE || !old_bfs.isEmpty())  {
-             T thisNode = old_bfs.remove();
+            T thisNode = old_bfs.remove();
             for (T neighbor: neighborFunction.apply(thisNode)) {
                 if (distanceFromOrigin.getOrDefault(neighbor, Long.MAX_VALUE) == Long.MAX_VALUE) {
                     distanceFromOrigin.put(neighbor, distanceFromOrigin.get(thisNode) + 1);

@@ -13,7 +13,6 @@ public class Day8Scanner extends AOCScanner {
 
 
     List<List<Integer>> readInMatrix() {
-        int N = 0;
         List<List<Integer>> matrix = new java.util.ArrayList<>(List.of());
         while (scanner.hasNextLine()) {
             List<Integer> row = new java.util.ArrayList<>(List.of());
