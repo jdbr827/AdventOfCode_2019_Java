@@ -1,5 +1,6 @@
 package year_2019.day06;
 
+
 import java.io.FileNotFoundException;
 
 import static year_2019.day06.SolarSystemFactory.readInSolarSystem;

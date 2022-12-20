@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface IDay6 {
++{abstract} getOrbitalChecksum()
++{abstract} getDistanceToSanta()
+}
+
+class Day6 {
++getOrbitalChecksum()
++getDistanceToSanta()
+}
+
+
+class SolarSystem {
++Map<String, Planet> solarSystem
++getPlanet(String name) : Planet
+}
+
+class SolarSystemFactory {
++{static} readInSolarSystem
+}
+
+interface ISolarSystem {
++{abstract} getPlanet(name) : Planet
+}
+
+
+class Planet {
+-List<Planet> orbiters
+-Planet parent
++getNeighbors()
++getOrbitalChecksum()
+}
+
+
+SolarSystem <- SolarSystemFactory: creates
+Day6 *- ISolarSystem
+IDay6 <|.. Day6
+ISolarSystem <|.. SolarSystem
+
+SolarSystem o-- Planet
+
+@enduml
