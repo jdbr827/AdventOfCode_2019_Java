@@ -34,10 +34,6 @@ public class Valve {
 
     @Override
     public String toString() {
-        return "Valve{" +
-                "name='" + name + '\'' +
-//                ", flowValue=" + flowValue +
-//                ", neighbors=" + neighbors +
-                '}';
+        return name;
     }
 }
