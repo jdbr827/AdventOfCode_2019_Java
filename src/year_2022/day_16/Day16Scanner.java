@@ -4,10 +4,7 @@ import utils.AOCScanner;
 import utils.ReadIn;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +25,7 @@ public class Day16Scanner extends AOCScanner {
             Matcher m = valvesPattern.matcher(thisLine);
             ReadIn.findOrElseThrow(m, "Could not match valves pattern");
 
-            List<String> nbrList = new java.util.ArrayList<>(List.of(m.group(3).split(", ")));
+            List<String> nbrList = m.group(3).isEmpty() ? new ArrayList<>() : new java.util.ArrayList<>(List.of(m.group(3).split(", ")));
             nbrList.add(m.group(4));
 
             return new Valve(m.group(1), Integer.parseInt(m.group(2)), nbrList);
