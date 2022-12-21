@@ -36,8 +36,8 @@ public class Valve {
     public String toString() {
         return "Valve{" +
                 "name='" + name + '\'' +
-                ", flowValue=" + flowValue +
-                ", neighbors=" + neighbors +
+//                ", flowValue=" + flowValue +
+//                ", neighbors=" + neighbors +
                 '}';
     }
 }
