@@ -22,6 +22,18 @@ public class MonkeyMapRobot extends RotatingMovingRobot {
         super.rotateCounterclockwise();
     }
 
+    @Override
+    public void moveForward() {
+        this.position = previewMoveForward();
+    }
+
+    public void moveTo(CartesianPoint p) {
+        this.position = p;
+    }
+
+    public void moveTo(int x, int y) {
+        moveTo(new CartesianPoint(x, y));
+    }
 
     public CartesianPoint previewMoveForward() {
         return new CartesianPoint(position.x + getFacing().velocity.x, position.y + getFacing().velocity.y);

@@ -14,6 +14,11 @@ public class Day22 {
         return solver.findPassword();
     }
 
+    public static int part2(String fileName) throws FileNotFoundException {
+        Day22 solver = new Day22(fileName);
+        return solver.findPasswordCube();
+    }
+
     Day22(String fileName) throws FileNotFoundException {
         Day22Scanner scanner = new Day22Scanner(fileName);
         IMonkeyMapDiagram diagram = new MonkeyMapDiagram(scanner.readInDiagram());
@@ -22,10 +27,7 @@ public class Day22 {
 
     }
 
-    public static int part2(String fileName) throws FileNotFoundException {
-        Day22 solver = new Day22(fileName);
-        return solver.findPasswordCube();
-    }
+
 
     public int findPasswordCube() {
         return 0;
@@ -39,8 +41,10 @@ public class Day22 {
 
     private void moveRobotToStartSpace() {
         // start at left-most open space
+        int y=0;
         while (robot.readCurrentPosition() != MonkeyMapEnum.OPEN_SPACE) {
-            robot.moveForward();
+            robot.moveTo(0, y);
+            y--;
         }
     }
 
