@@ -90,7 +90,6 @@ public class Day22 {
     }
 
     void attemptMoveForward() {
-
         switch (robot.readDesiredPosition()) {
             case WALL:
                 break; // you cant move forward;

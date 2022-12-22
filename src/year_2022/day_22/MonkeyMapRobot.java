@@ -5,7 +5,7 @@ import year_2019.day11.RotatingMovingRobot;
 import year_2019.day15.model.CardinalDirection;
 
 public class MonkeyMapRobot extends RotatingMovingRobot {
-    IMonkeyMapDiagram diagram;
+    protected IMonkeyMapDiagram diagram;
 
     public MonkeyMapRobot(IMonkeyMapDiagram diagram) {
         super(CardinalDirection.EAST);
