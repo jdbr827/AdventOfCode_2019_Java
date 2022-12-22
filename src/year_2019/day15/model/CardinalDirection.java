@@ -19,15 +19,15 @@ public enum CardinalDirection {
         this.shortName = shortName;
     }
 
-    CardinalDirection opposite() {
+    public CardinalDirection opposite() {
         return CardinalDirection.values()[Math.floorMod(this.ordinal() + 2, 4)];
     }
 
-    CardinalDirection clockwise() {
+    public CardinalDirection clockwise() {
         return CardinalDirection.values()[Math.floorMod(this.ordinal() + 1, 4)];
     }
 
-    CardinalDirection counterclockwise() {
+    public CardinalDirection counterclockwise() {
         return CardinalDirection.values()[Math.floorMod(this.ordinal() + 3, 4)];
     }
 
