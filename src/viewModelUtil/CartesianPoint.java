@@ -8,4 +8,5 @@ public class CartesianPoint extends Point {
         super(x, y);
     }
 
+
 }
