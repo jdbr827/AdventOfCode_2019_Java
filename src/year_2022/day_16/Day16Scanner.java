@@ -34,8 +34,8 @@ public class Day16Scanner extends AOCScanner {
     }
 
 
-    public Collection<Valve> scanAll() {
-        Collection<Valve> valves = new ArrayList<>();
+    public List<Valve> scanAll() {
+        List<Valve> valves = new ArrayList<>();
         Valve thisValve;
         while ((thisValve = scanNextLine()) != null) {
             valves.add(thisValve);

@@ -12,6 +12,7 @@ public class Valve {
     private final @Getter String name;
     private final @Getter int flowValue;
     private final Collection<String> neighbors;
+    public int index;
 
 
     public static final Map<String, Valve> lookupByName = new HashMap<>();
@@ -34,6 +35,11 @@ public class Valve {
 
     @Override
     public String toString() {
-        return name;
+        return "Valve{" +
+                "name='" + name + '\'' +
+                ", flowValue=" + flowValue +
+                ", neighbors=" + neighbors +
+                ", index=" + index +
+                '}';
     }
 }
