@@ -25,10 +25,6 @@ public class RotatingMovingRobot {
         return (CartesianPoint) position.clone();
     }
 
-    public CartesianPoint previewMoveForward() {
-        return new CartesianPoint(position.x + getFacing().velocity.x, position.y + getFacing().velocity.y);
-    }
-
     public void moveForward() {
         position.translate(getFacing().velocity.x, getFacing().velocity.y);
     }

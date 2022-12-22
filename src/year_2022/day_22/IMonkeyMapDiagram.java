@@ -17,7 +17,7 @@ class MonkeyMapDiagram implements IMonkeyMapDiagram {
 
     @Override
     public MonkeyMapEnum readAtCartesianPoint(CartesianPoint p) {
-        if (p.y > 0 || p.y <= -diagram.size() || p.x < 0 || p.x >= diagram.get(0).length()) {
+        if (p.y > 0 || p.y <= -diagram.size() || p.x < 0 || p.x >= diagram.get(-p.y).length()) {
             return MonkeyMapEnum.WARP_ZONE;
         }
         return MonkeyMapEnum.of(diagram.get(-p.y).charAt(p.x));

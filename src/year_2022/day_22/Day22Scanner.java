@@ -23,15 +23,12 @@ public class Day22Scanner extends AOCScanner {
         List<String> diagram = new ArrayList<>();
         String thisLine;
         while (!(thisLine = scanner.nextLine()).equals("")) {
-         //System.out.println(thisLine);
          diagram.add(thisLine);
         }
         return diagram;
     }
 
-    static final Pattern instructionsPattern = Pattern.compile(
-            "([0-9]*[R|L])*"
-    );
+
 
     public List<MonkeyInstruction> scanInstructions() {
         String instructionLine = scanner.nextLine();

@@ -1,13 +1,11 @@
 package year_2022.day_22;
 
 import viewModelUtil.CartesianPoint;
-import year_2019.day15.model.CardinalDirection;
 
 import java.io.FileNotFoundException;
 import java.util.List;
 
 public class Day22 {
-    IMonkeyMapDiagram diagram;
     MonkeyMapRobot robot;
     List<MonkeyInstruction> instructions;
 
@@ -18,21 +16,32 @@ public class Day22 {
 
     Day22(String fileName) throws FileNotFoundException {
         Day22Scanner scanner = new Day22Scanner(fileName);
-        diagram = new MonkeyMapDiagram(scanner.readInDiagram());
-        robot = new MonkeyMapRobot();
+        IMonkeyMapDiagram diagram = new MonkeyMapDiagram(scanner.readInDiagram());
+        robot = new MonkeyMapRobot(diagram);
         instructions = scanner.scanInstructions();
 
     }
 
+    public static int part2(String fileName) throws FileNotFoundException {
+        Day22 solver = new Day22(fileName);
+        return solver.findPasswordCube();
+    }
+
+    public int findPasswordCube() {
+        return 0;
+    }
+
     public int findPassword() {
+        moveRobotToStartSpace();
+        processInstructions();
+        return calculatePassword();
+    }
+
+    private void moveRobotToStartSpace() {
         // start at left-most open space
-        while (diagram.readAtCartesianPoint(robot.getPosition()) != MonkeyMapEnum.OPEN_SPACE) {
+        while (robot.readCurrentPosition() != MonkeyMapEnum.OPEN_SPACE) {
             robot.moveForward();
         }
-
-        processInstructions();
-
-        return calculatePassword();
     }
 
     private int calculatePassword() {
@@ -81,8 +90,8 @@ public class Day22 {
     }
 
     void attemptMoveForward() {
-        CartesianPoint desiredNewPoint = robot.previewMoveForward();
-        switch (diagram.readAtCartesianPoint(desiredNewPoint)) {
+
+        switch (robot.readDesiredPosition()) {
             case WALL:
                 break; // you cant move forward;
             case OPEN_SPACE:
@@ -90,12 +99,12 @@ public class Day22 {
                 break;
             case WARP_ZONE:
                 robot.turnAround();
-                while (diagram.readAtCartesianPoint(robot.previewMoveForward()) != MonkeyMapEnum.WARP_ZONE) {
+                while (robot.readDesiredPosition() != MonkeyMapEnum.WARP_ZONE) {
                     robot.moveForward();
                 }
                 robot.turnAround();
-                if (diagram.readAtCartesianPoint(robot.getPosition()) == MonkeyMapEnum.WALL) {
-                    while (diagram.readAtCartesianPoint(robot.previewMoveForward()) != MonkeyMapEnum.WARP_ZONE) {
+                if (robot.readCurrentPosition() == MonkeyMapEnum.WALL) {
+                    while (robot.readDesiredPosition() != MonkeyMapEnum.WARP_ZONE) {
                         robot.moveForward();
                     }
                 }
