@@ -22,10 +22,10 @@ public class Day16Test {
         assertEquals(1651, Day16.part1(EXAMPLE_INPUT, 30));
     }
 
-//     @Test
-//    public void test_part1_official() throws FileNotFoundException {
-//        assertEquals(1737, Day16.part1(OFFICIAL_INPUT, 30));
-//    }
+     @Test
+    public void test_part1_official() throws FileNotFoundException {
+        assertEquals(1737, Day16.part1(OFFICIAL_INPUT, 30));
+    }
 
 //    @Test
 //    public void test_part2() throws FileNotFoundException {

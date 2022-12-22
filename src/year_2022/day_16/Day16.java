@@ -80,7 +80,7 @@ public class Day16 {
                 for (int i=0; i<valveGraph.size(); i++) {
                     int powVal = (int) Math.pow(2, i);
                     Valve currentPosition = sortedValveGraph.get(i);
-                    if ((c & powVal) != 0) {
+                    if (c >= powVal && (c & powVal)!= 0) {
                         dpMatrix[c][time_remaining][i] = dpMatrix[c - powVal][time_remaining-1][i] + (time_remaining-1)*currentPosition.getFlowValue();
                     }
                     int res = dpMatrix[c][time_remaining][i];
