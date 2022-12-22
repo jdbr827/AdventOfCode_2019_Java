@@ -76,47 +76,18 @@ public class Day16 {
         System.out.println("Hi");
 
         for (int time_remaining=2; time_remaining<=time_available; time_remaining++) {
-//            for (int setSize=0; setSize<nonzeroFlowValves.size() + 1; setSize++) {
-//                for (Set<Valve> s : valvePowerSetBySize.get(setSize)) {
-            for (int c=1; c<Math.pow(2, nonzeroFlowValves.size()); c++) {
-                StringBuilder binaryStringBuilder = new StringBuilder(Integer.toBinaryString(c));
-                while(binaryStringBuilder.length() < powersetSize) {
-                    binaryStringBuilder.insert(0, '0');
-                }
-                String binaryString = binaryStringBuilder.toString();
+            for (int c=1; c<powersetSize; c++) {
                 for (int i=0; i<valveGraph.size(); i++) {
                     int powVal = (int) Math.pow(2, i);
                     Valve currentPosition = sortedValveGraph.get(i);
-                    if (binaryString.charAt(powersetSize - i - 1) == '1') {
+                    if ((c & powVal) != 0) {
                         dpMatrix[c][time_remaining][i] = dpMatrix[c - powVal][time_remaining-1][i] + (time_remaining-1)*currentPosition.getFlowValue();
                     }
-                    Integer[][] subMatrix = dpMatrix[c];
-                    Integer[] subsubMatrix = subMatrix[time_remaining];
-                    //System.out.println(Arrays.toString(subsubMatrix));
-                    int res = subsubMatrix[i];
+                    int res = dpMatrix[c][time_remaining][i];
                     for (Valve neighbor : currentPosition.getNeighbors()) {
                         res = Math.max(res, dpMatrix[c][time_remaining-1][neighbor.index]);
                     }
                     dpMatrix[c][time_remaining][i] = res;
-
-
-
-
-//                    for (Valve closedPosition : s) {
-//                        Set<Valve> setWithoutCurrentPosition = Sets.difference(s, Set.of(closedPosition));
-//                        int ifIOpenedIt = dpMatrixGet(setWithoutCurrentPosition, time_remaining-1, closedPosition) + (time_remaining-1) * closedPosition.getFlowValue();
-//                        dpMatrixPut(s, time_remaining, closedPosition, ifIOpenedIt);
-//                    }
-
-//                    for (Valve currentPosition : valveGraph) {
-//                        int res = dpMatrixGet(s, time_remaining, currentPosition);
-//                        for (Valve neighbor : currentPosition.getNeighbors()) {
-//                            res = Math.max(res, dpMatrixGet(s, time_remaining-1, neighbor));
-//                        }
-//
-//                        dpMatrixPut(s, time_remaining, currentPosition, res);
-//
-//                    }
                 }
             }
         }
