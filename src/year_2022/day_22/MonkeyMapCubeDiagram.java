@@ -75,20 +75,22 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
 
     @Override
     public MonkeyMapEnum readAtCartesianPoint(CartesianPoint p) {
-        return new FacePoint(p, n).readValue();
+        return rawDiagram.readAtCartesianPoint(p);
     }
 
     @Override
     public CartesianPoint getNextPointInDirection(CartesianPoint position, CardinalDirection facing) {
+       // TODO: this part;
         return null;
     }
-
 
     class FacePoint {
         MonkeyMapCubeFace face;
         CartesianPoint positionInFace;
+        CartesianPoint rawPoint;
 
         FacePoint(CartesianPoint p, int n) {
+            rawPoint = p;
             int x = p.x;
             int y = p.y;
             int dx = 0;
@@ -97,12 +99,29 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
             y = Math.floorDiv(p.y, n);
             int finalX = x;
             int finalY = y + 1;
-            face = faces.stream().filter(f -> f.topRightCorner.x == finalX * n && f.topRightCorner.y == finalY * n).findFirst().get();
+            face = faces.stream().filter(f -> f.topRightCorner.x == finalX * n && f.topRightCorner.y == finalY * n).findFirst().orElse(null);
             positionInFace = new CartesianPoint(Math.floorMod(p.x, n), -Math.floorMod(p.y, n));
         }
 
         MonkeyMapEnum readValue() {
+            if (face == null) {
+                return MonkeyMapEnum.WARP_ZONE;
+            }
            return face.subDiagram.readAtCartesianPoint(positionInFace);
+        }
+
+        boolean isFacingEdge(CardinalDirection facing) {
+            switch (facing) {
+                case WEST:
+                    return positionInFace.x == 0;
+                case EAST:
+                    return positionInFace.x == n-1;
+                case NORTH:
+                    return positionInFace.y == 0;
+                case SOUTH:
+                    return positionInFace.y == -(n-1);
+            }
+            return false;
         }
 
 

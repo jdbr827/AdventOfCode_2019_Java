@@ -31,7 +31,9 @@ public class Day22 {
 
 
     public int findPasswordCube() {
-        return 0;
+       moveRobotToStartSpace();
+       //processInstructions();
+       return calculatePassword();
     }
 
     public int findPassword() {
@@ -42,10 +44,10 @@ public class Day22 {
 
     private void moveRobotToStartSpace() {
         // start at left-most open space
-        int y=0;
+        int x=0;
         while (robot.readCurrentPosition() != MonkeyMapEnum.OPEN_SPACE) {
-            robot.moveTo(0, y);
-            y--;
+            robot.moveTo(x, 0);
+            x++;
         }
     }
 
