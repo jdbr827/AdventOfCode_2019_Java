@@ -24,6 +24,7 @@ public class Day22 {
         IMonkeyMapDiagram diagram = n == 0 ? new MonkeyMapDiagram(scanner.readInDiagram()) : new MonkeyMapCubeDiagram(n, scanner.readInDiagram());
         robot = new MonkeyMapRobot(diagram);
         instructions = scanner.scanInstructions();
+        //System.out.println(diagram.readAtCartesianPoint(2, -6));
 
     }
 

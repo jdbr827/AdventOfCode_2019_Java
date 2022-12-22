@@ -12,22 +12,24 @@ import java.util.stream.Collectors;
 public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
     List<MonkeyMapCubeFace> faces = new ArrayList<>();
     MonkeyMapDiagram rawDiagram;
+    int n;
 
     MonkeyMapCubeFace[][] facesMatrix;
 
     public MonkeyMapCubeDiagram(int n, List<String> rawDiagram) {
+        this.n = n;
         this.rawDiagram = new MonkeyMapDiagram(rawDiagram);
         facesMatrix = new MonkeyMapCubeFace[(int) Math.pow(n, 2)][(int) Math.pow(n, 2)];
 
-        int id =1;
-        for (int y=0; y>-rawDiagram.size()+1; y-=n) {
-            for (int x=0; x<rawDiagram.get(-y).length(); x+=n) {
+        int id = 1;
+        for (int y = 0; y > -rawDiagram.size() + 1; y -= n) {
+            for (int x = 0; x < rawDiagram.get(-y).length(); x += n) {
                 //System.out.println(x + " " + y);
                 if (this.rawDiagram.readAtCartesianPoint(x, y) != MonkeyMapEnum.WARP_ZONE) {
                     MonkeyMapCubeFace newFace = new MonkeyMapCubeFace(id++, rawDiagram, n, x, y);
                     faces.add(newFace);
-                    if (y!=0) {
-                        if (this.rawDiagram.readAtCartesianPoint(x, y+n) != MonkeyMapEnum.WARP_ZONE) {
+                    if (y != 0) {
+                        if (this.rawDiagram.readAtCartesianPoint(x, y + n) != MonkeyMapEnum.WARP_ZONE) {
                             System.out.println(x + " " + (-n + y) + " " + y);
                             // this is below another face
                             int finalY = y;
@@ -38,14 +40,14 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
                         }
                     }
                     if (x != 0) {
-                        if (this.rawDiagram.readAtCartesianPoint(x-n, y) != MonkeyMapEnum.WARP_ZONE) {
+                        if (this.rawDiagram.readAtCartesianPoint(x - n, y) != MonkeyMapEnum.WARP_ZONE) {
                             int finalY = y;
                             int finalX = x;
                             MonkeyMapCubeFace westNeighborFace = faces.stream().filter(f -> f.topRightCorner.x == finalX - n && f.topRightCorner.y == finalY).findFirst().get();
                             newFace.setNeighbor(CardinalDirection.WEST, westNeighborFace, CardinalDirection.EAST);
                             westNeighborFace.setNeighbor(CardinalDirection.EAST, newFace, CardinalDirection.WEST);
                         }
-                     }
+                    }
                 }
             }
         }
@@ -73,20 +75,47 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
 
     @Override
     public MonkeyMapEnum readAtCartesianPoint(CartesianPoint p) {
-        return null;
+        return new FacePoint(p, n).readValue();
     }
 
     @Override
     public CartesianPoint getNextPointInDirection(CartesianPoint position, CardinalDirection facing) {
         return null;
     }
+
+
+    class FacePoint {
+        MonkeyMapCubeFace face;
+        CartesianPoint positionInFace;
+
+        FacePoint(CartesianPoint p, int n) {
+            int x = p.x;
+            int y = p.y;
+            int dx = 0;
+            int dy = 0;
+            x = Math.floorDiv(p.x, n);
+            y = Math.floorDiv(p.y, n);
+            int finalX = x;
+            int finalY = y + 1;
+            face = faces.stream().filter(f -> f.topRightCorner.x == finalX * n && f.topRightCorner.y == finalY * n).findFirst().get();
+            positionInFace = new CartesianPoint(Math.floorMod(p.x, n), -Math.floorMod(p.y, n));
+        }
+
+        MonkeyMapEnum readValue() {
+           return face.subDiagram.readAtCartesianPoint(positionInFace);
+        }
+
+
+    }
 }
 
 
 @AllArgsConstructor
 class MonkeyMapCubeFaceEdge {
-    @Getter CardinalDirection direction;
-    @Getter MonkeyMapCubeFace neighbor;
+    @Getter
+    CardinalDirection direction;
+    @Getter
+    MonkeyMapCubeFace neighbor;
 
     @Override
     public String toString() {
@@ -96,7 +125,6 @@ class MonkeyMapCubeFaceEdge {
                 '}';
     }
 }
-
 
 
 @AllArgsConstructor
@@ -109,7 +137,7 @@ class MonkeyMapCubeFace {
 
     public MonkeyMapCubeFace(int id, List<String> rawDiagram, int n, int x, int y) {
         this.id = id;
-        List<String> newRawDiagram = rawDiagram.subList(-y, -y+n).stream().map(s -> s.substring(x, x+n)).collect(Collectors.toList());
+        List<String> newRawDiagram = rawDiagram.subList(-y, -y + n).stream().map(s -> s.substring(x, x + n)).collect(Collectors.toList());
         this.subDiagram = new MonkeyMapDiagram(newRawDiagram);
         this.topRightCorner = new CartesianPoint(x, y);
     }
