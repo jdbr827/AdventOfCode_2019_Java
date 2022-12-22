@@ -36,7 +36,7 @@ public class MonkeyMapRobot extends RotatingMovingRobot {
     }
 
     public CartesianPoint previewMoveForward() {
-        return new CartesianPoint(position.x + getFacing().velocity.x, position.y + getFacing().velocity.y);
+        return diagram.getNextPointInDirection(getPosition(), getFacing());
     }
 
     public MonkeyMapEnum readCurrentPosition() {

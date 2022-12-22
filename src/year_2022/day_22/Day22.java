@@ -10,18 +10,18 @@ public class Day22 {
     List<MonkeyInstruction> instructions;
 
     public static int part1(String fileName) throws FileNotFoundException {
-        Day22 solver = new Day22(fileName);
+        Day22 solver = new Day22(fileName, 0);
         return solver.findPassword();
     }
 
-    public static int part2(String fileName) throws FileNotFoundException {
-        Day22 solver = new Day22(fileName);
+    public static int part2(String fileName, int n) throws FileNotFoundException {
+        Day22 solver = new Day22(fileName, n);
         return solver.findPasswordCube();
     }
 
-    Day22(String fileName) throws FileNotFoundException {
+    Day22(String fileName, int n) throws FileNotFoundException {
         Day22Scanner scanner = new Day22Scanner(fileName);
-        IMonkeyMapDiagram diagram = new MonkeyMapDiagram(scanner.readInDiagram());
+        IMonkeyMapDiagram diagram = n == 0 ? new MonkeyMapDiagram(scanner.readInDiagram()) : new MonkeyMapCubeDiagram(n, scanner.readInDiagram());
         robot = new MonkeyMapRobot(diagram);
         instructions = scanner.scanInstructions();
 
@@ -100,6 +100,7 @@ public class Day22 {
             case OPEN_SPACE:
                 robot.moveForward();
                 break;
+            // should only happen in part 1?
             case WARP_ZONE:
                 robot.turnAround();
                 while (robot.readDesiredPosition() != MonkeyMapEnum.WARP_ZONE) {

@@ -1,5 +1,6 @@
 package year_2022.day_22;
 
+import org.checkerframework.checker.units.qual.C;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -9,6 +10,10 @@ public interface IMonkeyMapDiagram {
     MonkeyMapEnum readAtCartesianPoint(CartesianPoint p);
 
     CartesianPoint getNextPointInDirection(CartesianPoint position, CardinalDirection facing);
+
+    default MonkeyMapEnum readAtCartesianPoint(int x, int y) {
+        return readAtCartesianPoint(new CartesianPoint(x, y));
+    }
 }
 
 class MonkeyMapDiagram implements IMonkeyMapDiagram {
@@ -30,5 +35,11 @@ class MonkeyMapDiagram implements IMonkeyMapDiagram {
     public CartesianPoint getNextPointInDirection(CartesianPoint position, CardinalDirection facing) {
         return new CartesianPoint(position.x + facing.velocity.x, position.y + facing.velocity.y);
     }
+
+    @Override
+    public String toString() {
+        return diagram.toString();
+    }
+
 }
 
