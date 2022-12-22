@@ -1,6 +1,7 @@
 package year_2019.day11;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import viewModelUtil.CartesianPoint;
@@ -13,7 +14,7 @@ import year_2019.day15.model.CardinalDirection;
  */
 public class RotatingMovingRobot {
 
-    protected final CartesianPoint position = new CartesianPoint(0, 0);
+    protected CartesianPoint position = new CartesianPoint(0, 0);
     @Getter @Setter protected CardinalDirection facing;
 
     protected RotatingMovingRobot(CardinalDirection initiallyFacing) {
@@ -22,6 +23,10 @@ public class RotatingMovingRobot {
 
     public CartesianPoint getPosition() {
         return (CartesianPoint) position.clone();
+    }
+
+    public CartesianPoint previewMoveForward() {
+        return new CartesianPoint(position.x + getFacing().velocity.x, position.y + getFacing().velocity.y);
     }
 
     public void moveForward() {
