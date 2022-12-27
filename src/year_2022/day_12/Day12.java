@@ -16,7 +16,6 @@ public class Day12 {
     static Long part1(String fileName) throws FileNotFoundException {
         Day12Scanner scanner = new Day12Scanner(fileName);
         List<List<Character>> matrix = scanner.readInMatrix();
-        //System.out.println(matrix.toString());
         int N = matrix.size();
         int M = matrix.get(0).size();
         Point start = null; Point goal = null;
