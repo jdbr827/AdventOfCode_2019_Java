@@ -38,6 +38,9 @@ public abstract class Day6 {
     }
 
     protected Character getCharScannedXAgo(int x) {
+        if (numScanned <= x) {
+            throw new Error("We haven't scanned enough to go back that far yet.");
+        }
         return helper.getCharScannedXAgo(x);
     }
 
@@ -82,13 +85,14 @@ class Day6Method2 extends Day6 {
         super(of, n);
     }
 
-    /* O(CU + CNG), strictly better than method 1 */
+    /* O(C(U + NG)), strictly better than method 1 */
     public int findStepsUntilLastNAllDiff() {
 
         /*
          * LOOP INVARIANT:
          * nearestLater is the smallest j such that there exists i<j such that previous[i] = previous[j]
-         *      and as a base case, assume the "-1"th element scanned is equal to all other characters.
+         *      as a base case, and to ensure we scan the minimum required number of elements,
+         *      assume the "-1"th element scanned is equal to all other characters.
          */
         int nearestLater = 0;
         while (nearestLater < N) {                                          // O(C)
@@ -101,8 +105,8 @@ class Day6Method2 extends Day6 {
              * found on a previous iteration
              */
             Character mostRecentlyScannedChar = getCharScannedXAgo(0);
-            for (int j = 1; j < nearestLater; j++) {                            // O(N)
-                if (getCharScannedXAgo(j).equals(mostRecentlyScannedChar)) {        //O(G)
+            for (int j = 1; j < nearestLater; j++) {                            // O(N) worst case but will usually be less
+                if (getCharScannedXAgo(j).equals(mostRecentlyScannedChar)) {        // O(G)
                     nearestLater = j;
                     break; // because nearestLater is smallest such j
                 }
@@ -141,7 +145,7 @@ class Day6Method3 extends Day6 {
 /*
 Fastest Solution is Method 2 or 3 with Helper 2
 
-O(CU + CNG) => O(C + CN) = O(CN)
+O(CU + CNG) => O(C + CN) = O(CN) worst case
 
  */
 

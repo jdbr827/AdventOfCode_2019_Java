@@ -1,5 +1,6 @@
 package year_2022.day_06;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.io.FileNotFoundException;
@@ -19,6 +20,8 @@ interface IDay6Helper {
 
     static IDay6Helper of(String fileName, int N, int method) throws FileNotFoundException {
         Day6Scanner scanner = new Day6Scanner(fileName);
+
+
         if (method == 1) {
             return new Day6Helper1(scanner, N);
         }
@@ -30,10 +33,10 @@ interface IDay6Helper {
 /*  Naive Solution: U = O(N); G = O(1) */
 class Day6Helper1 implements IDay6Helper {
     private final Day6Scanner scanner;
-    int N;
-    @Getter private final Character[] previous;
+    private final int N;
+    private final Character[] previous;
 
-    Day6Helper1(Day6Scanner scanner, int N) throws java.io.FileNotFoundException {
+    Day6Helper1(Day6Scanner scanner, int N) {
         this.scanner = scanner;
         this.N = N;
         this.previous = new Character[N];
@@ -57,10 +60,10 @@ class Day6Helper1 implements IDay6Helper {
 class Day6Helper2 implements IDay6Helper {
     private final Day6Scanner scanner;
     int N;
-    private int head_idx = N - 1;
+    private int head_idx = -1; // the index of previous of the last char scanned
     @Getter private final Character[] previous; //= new Character[N];
 
-    Day6Helper2(Day6Scanner scanner, int N) throws java.io.FileNotFoundException {
+    Day6Helper2(Day6Scanner scanner, int N) {
         this.N = N;
         this.scanner = scanner;
         this.previous = new Character[N];
