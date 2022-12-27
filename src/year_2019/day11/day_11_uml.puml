@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class RotatingMovingRobot {
+    + moveForward()
+    + rotateClockwise()
+    + rotateCounterClockwise()
+}
+
+class HullPaintingRobot {
+    + rotate(instruction)
+}
+
+HullPaintingRobot *-- RotatingMovingRobot
+
+class HullPainterModel {
+hull : Map<Point, Long>
+isPainted: Map<Point, boolean>
+uniquePanelsPainted: int
+
++paintCurrentPoint()
++getColorAtCurrentPoint()
++rotateRobot(instruction)
++getCurrentRobotPosition()
++getCurrentRobotFacing()
++currentPointHasBeenPainted()
+}
+
+HullPainterModel *-- HullPaintingRobot
+Day11 *-- HullPainterModel
+
+class Day11 {
+brain: IntCodeAPI
+
+}
+
+Day11 *-- IntCodeAPI
+
+class IntCodeAPI {
+}
+@enduml

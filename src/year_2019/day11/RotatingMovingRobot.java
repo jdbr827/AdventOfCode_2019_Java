@@ -29,11 +29,11 @@ public class RotatingMovingRobot {
         position.translate(getFacing().velocity.x, getFacing().velocity.y);
     }
 
-    protected void rotateClockwise() {
+    public void rotateClockwise() {
         setFacing(CardinalDirection.values()[Math.floorMod(getFacing().ordinal() + 1, 4)]);
     }
 
-    protected void rotateCounterclockwise() {
+    public void rotateCounterclockwise() {
         setFacing(CardinalDirection.values()[Math.floorMod(getFacing().ordinal() - 1, 4)]);
     }
 
