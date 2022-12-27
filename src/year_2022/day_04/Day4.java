@@ -1,9 +1,10 @@
 package year_2022.day_04;
 
 
-import jdk.nashorn.api.tree.AssignmentTree;
+import com.google.common.collect.Streams;
 
 import java.io.FileNotFoundException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class Day4 {
@@ -13,18 +14,11 @@ public class Day4 {
        scanner = new Day4Scanner(fileName);
     }
 
-    int countPairsWithProperty(Predicate<Day4AssignmentPair> predicate) {
-        Day4AssignmentPair assignmentPair;
-        int num_contained = 0;
-        while ((assignmentPair = scanner.getNextLine()) != null) {
-            if (predicate.test(assignmentPair)) {
-                num_contained += 1;
-            }
-        }
-        return num_contained;
-
+    int countPairsWithProperty(Predicate<Day4AssignmentPair> property) {
+        return (int) Streams.stream(scanner)
+                .filter(property)
+                .count();
     }
-
 
     public static int part1(String fileName) throws FileNotFoundException {
         return new Day4(fileName).countPairsWithProperty(Day4AssignmentPair::completelyContains);

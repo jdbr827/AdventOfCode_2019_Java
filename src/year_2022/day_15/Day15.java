@@ -40,7 +40,6 @@ public class Day15 {
     public static long part2(String fileName, int nMax) throws FileNotFoundException {
         Day15Scanner scanner = new Day15Scanner(fileName);
         Map<Point, Point> beaconMap = scanner.readInSensorInfo();
-        int count = 0;
 
         Map<Point, Integer> distances = beaconMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, (e) -> manhattanDistance(e.getKey(), e.getValue())));
@@ -51,7 +50,6 @@ public class Day15 {
         for (int y = 0; y<= nMax; y++) {
             for (int x=0; x<= nMax; x++) {
                 Point p = new Point(x, y);
-                //System.out.println(p);
                 if (!beacons.contains(p)) {
                     boolean foundFlag = true;
                     for (Point s : sensors) {
