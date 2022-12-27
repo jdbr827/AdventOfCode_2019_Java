@@ -15,12 +15,12 @@ public interface IDay6 {
     static Day6 create(String fileName, int N, int algoMethod, int helperMethod) throws FileNotFoundException {
         switch (algoMethod) {
             case 1:
-                return new Day6Method1(fileName, N, helperMethod);
+                return new Day6Method1(IDay6Helper.of(fileName, N, helperMethod), N);
             case 2:
-                return new Day6Method2(fileName, N, helperMethod);
+                return new Day6Method2(IDay6Helper.of(fileName, N, helperMethod), N);
             case 3:
             default:
-                return new Day6Method3(fileName, N, helperMethod);
+                return new Day6Method3(IDay6Helper.of(fileName, N, helperMethod), N);
         }
     }
 

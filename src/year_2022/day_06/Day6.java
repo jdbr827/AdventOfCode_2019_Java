@@ -1,6 +1,10 @@
 package year_2022.day_06;
 
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 
 /**
@@ -20,23 +24,11 @@ import java.io.FileNotFoundException;
  *
  * we know N is O(C)
  */
+@RequiredArgsConstructor
 public abstract class Day6 {
-    IDay6Helper helper;
-    int N;
-    int numScanned = 0;
-
-    public Day6(String fileName, int N, int helperMethod) throws FileNotFoundException {
-        this.N = N;
-
-        switch (helperMethod) {
-            case 1:
-                helper = new Day6Helper1(fileName, N);
-            case 2:
-                helper = new Day6Helper2(fileName, N);
-            default:
-                helper = new Day6Helper1(fileName, N);
-        }
-    }
+    @NotNull IDay6Helper helper;
+    @NotNull Integer N;
+    Integer numScanned = 0;
 
     public abstract int findStepsUntilLastNAllDiff();
 
@@ -52,8 +44,8 @@ public abstract class Day6 {
 }
 
 class Day6Method1 extends Day6 {
-    public Day6Method1(String fileName, int N, int helperMethod) throws FileNotFoundException {
-        super(fileName, N, helperMethod);
+    public Day6Method1(IDay6Helper of, int n) {
+        super(of, n);
     }
 
     /* O(NU + GC(N^2) + CU) = O(CU + C(N^2)G) bottle-necked at checking for all diff for each new char */
@@ -83,10 +75,11 @@ class Day6Method1 extends Day6 {
     }
 }
 
+
 class Day6Method2 extends Day6 {
 
-    public Day6Method2(String fileName, int N, int helperMethod) throws FileNotFoundException {
-        super(fileName, N, helperMethod);
+    public Day6Method2(IDay6Helper of, int n) {
+        super(of, n);
     }
 
     /* O(CU + CNG), strictly better than method 1 */
@@ -122,9 +115,8 @@ class Day6Method2 extends Day6 {
 }
 
 class Day6Method3 extends Day6 {
-
-    public Day6Method3(String fileName, int N, int helperMethod) throws FileNotFoundException {
-        super(fileName, N, helperMethod);
+    public Day6Method3(IDay6Helper of, int n) {
+        super(of, n);
     }
 
     /* Also O(CU + CNG), equivalent to Method 2 */
