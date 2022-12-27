@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Day22
+class MonkeyMapRobot
+class MonkeyInstruction
+interface IMonkeyMapDiagram
+
+Day22 "1" *-- "*" MonkeyInstruction
+Day22 *-- MonkeyMapRobot
+RotatingMovingRobot <|-- MonkeyMapRobot
+MonkeyMapRobot *-- IMonkeyMapDiagram
+IMonkeyMapDiagram <|-- MonkeyMapDiagram
+IMonkeyMapDiagram <|-- MonkeyMapCubeDiagram
+
+@enduml

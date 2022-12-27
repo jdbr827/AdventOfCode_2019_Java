@@ -21,7 +21,9 @@ public class Day22 {
 
     Day22(String fileName, int n) throws FileNotFoundException {
         Day22Scanner scanner = new Day22Scanner(fileName);
-        IMonkeyMapDiagram diagram = n == 0 ? new MonkeyMapDiagram(scanner.readInDiagram()) : new MonkeyMapCubeDiagram(n, scanner.readInDiagram());
+        IMonkeyMapDiagram diagram = n == 0
+                ? new MonkeyMapDiagram(scanner.readInDiagram())
+                : new MonkeyMapCubeDiagram(n, scanner.readInDiagram());
         robot = new MonkeyMapRobot(diagram);
         instructions = scanner.scanInstructions();
         //System.out.println(diagram.readAtCartesianPoint(2, -6));
@@ -32,8 +34,12 @@ public class Day22 {
 
     public int findPasswordCube() {
        moveRobotToStartSpace();
+       System.out.println(robot.getPosition());
+       //robot.rotateCounterclockwise();
+       System.out.println(robot.previewMoveForward());
        //processInstructions();
-       return calculatePassword();
+        return 0;
+       //return calculatePassword();
     }
 
     public int findPassword() {

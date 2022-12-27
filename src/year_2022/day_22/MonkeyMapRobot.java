@@ -4,7 +4,7 @@ import viewModelUtil.CartesianPoint;
 import year_2019.day11.RotatingMovingRobot;
 import year_2019.day15.model.CardinalDirection;
 
-public class MonkeyMapRobot extends RotatingMovingRobot {
+public class MonkeyMapRobot extends RotatingMovingRobot implements IMonkeyMapRobot {
     protected IMonkeyMapDiagram diagram;
 
     public MonkeyMapRobot(IMonkeyMapDiagram diagram) {
@@ -35,6 +35,7 @@ public class MonkeyMapRobot extends RotatingMovingRobot {
         moveTo(new CartesianPoint(x, y));
     }
 
+
     public CartesianPoint previewMoveForward() {
         return diagram.getNextPointInDirection(getPosition(), getFacing());
     }
@@ -46,8 +47,6 @@ public class MonkeyMapRobot extends RotatingMovingRobot {
     public MonkeyMapEnum readDesiredPosition() {
         return diagram.readAtCartesianPoint(previewMoveForward());
     }
-
-
 
 
     public void turnAround() {

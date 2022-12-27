@@ -1,6 +1,5 @@
 package year_2022.day_22;
 
-import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import viewModelUtil.CartesianPoint;
@@ -34,7 +33,7 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
                             // this is below another face
                             int finalY = y;
                             int finalX = x;
-                            MonkeyMapCubeFace northNeighborFace = faces.stream().filter(f -> f.topRightCorner.x == finalX && f.topRightCorner.y == finalY + n).findFirst().get();
+                            MonkeyMapCubeFace northNeighborFace = faces.stream().filter(f -> f.topLeftCorner.x == finalX && f.topLeftCorner.y == finalY + n).findFirst().get();
                             newFace.setNeighbor(CardinalDirection.NORTH, northNeighborFace, CardinalDirection.SOUTH);
                             northNeighborFace.setNeighbor(CardinalDirection.SOUTH, newFace, CardinalDirection.NORTH);
                         }
@@ -43,7 +42,7 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
                         if (this.rawDiagram.readAtCartesianPoint(x - n, y) != MonkeyMapEnum.WARP_ZONE) {
                             int finalY = y;
                             int finalX = x;
-                            MonkeyMapCubeFace westNeighborFace = faces.stream().filter(f -> f.topRightCorner.x == finalX - n && f.topRightCorner.y == finalY).findFirst().get();
+                            MonkeyMapCubeFace westNeighborFace = faces.stream().filter(f -> f.topLeftCorner.x == finalX - n && f.topLeftCorner.y == finalY).findFirst().get();
                             newFace.setNeighbor(CardinalDirection.WEST, westNeighborFace, CardinalDirection.EAST);
                             westNeighborFace.setNeighbor(CardinalDirection.EAST, newFace, CardinalDirection.WEST);
                         }
@@ -59,7 +58,7 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
 
         buildCube();
         for (MonkeyMapCubeFace face : faces) {
-            System.out.println(face.topRightCorner + " " + face.neighbors.entrySet());
+            System.out.println(face.topLeftCorner + " " + face.neighbors.entrySet());
         }
 
     }
@@ -99,7 +98,7 @@ public class MonkeyMapCubeDiagram implements IMonkeyMapDiagram {
             y = Math.floorDiv(p.y, n);
             int finalX = x;
             int finalY = y + 1;
-            face = faces.stream().filter(f -> f.topRightCorner.x == finalX * n && f.topRightCorner.y == finalY * n).findFirst().orElse(null);
+            face = faces.stream().filter(f -> f.topLeftCorner.x == finalX * n && f.topLeftCorner.y == finalY * n).findFirst().orElse(null);
             positionInFace = new CartesianPoint(Math.floorMod(p.x, n), -Math.floorMod(p.y, n));
         }
 
@@ -145,20 +144,27 @@ class MonkeyMapCubeFaceEdge {
     }
 }
 
+class CubePoint {
+    int x;
+    int y;
+    int z;
+
+}
+
 
 @AllArgsConstructor
 class MonkeyMapCubeFace {
     int id;
     int n;
     IMonkeyMapDiagram subDiagram;
-    CartesianPoint topRightCorner;
+    CartesianPoint topLeftCorner;
     Map<CardinalDirection, MonkeyMapCubeFaceEdge> neighbors = new HashMap<>();
 
     public MonkeyMapCubeFace(int id, List<String> rawDiagram, int n, int x, int y) {
         this.id = id;
         List<String> newRawDiagram = rawDiagram.subList(-y, -y + n).stream().map(s -> s.substring(x, x + n)).collect(Collectors.toList());
         this.subDiagram = new MonkeyMapDiagram(newRawDiagram);
-        this.topRightCorner = new CartesianPoint(x, y);
+        this.topLeftCorner = new CartesianPoint(x, y);
     }
 
     @Override

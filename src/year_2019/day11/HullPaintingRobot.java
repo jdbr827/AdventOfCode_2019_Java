@@ -11,7 +11,7 @@ import static year_2019.day15.model.CardinalDirection.*;
  */
 @NoArgsConstructor
 public class HullPaintingRobot {
-    RotatingMovingRobot underlyingRobot = new RotatingMovingRobot(NORTH);
+    private final RotatingMovingRobot underlyingRobot = new RotatingMovingRobot(NORTH);
 
     public void rotate(long rotationInstruction) {
         if (rotationInstruction == 1L) {underlyingRobot.rotateClockwise();} else {underlyingRobot.rotateCounterclockwise();}
