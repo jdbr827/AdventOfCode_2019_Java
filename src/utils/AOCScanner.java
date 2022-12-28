@@ -7,8 +7,12 @@ import java.util.Scanner;
 public class AOCScanner {
     protected final Scanner scanner;
 
-    public AOCScanner(String fileName) throws FileNotFoundException {
+    public AOCScanner(String fileName) {
         File file = new File(fileName);
-        scanner = new Scanner(file);
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+           throw new Error("Did not recognize file name " + fileName);
+        }
     }
 }

@@ -14,12 +14,12 @@ public class Day15 {
     public static int part1(String fileName, int Y) throws FileNotFoundException {
         Day15Scanner scanner = new Day15Scanner(fileName);
         Map<Point, Point> beacons = scanner.readInSensorInfo();
-        Map<Integer, Integer> hasBeacon = new HashMap<>(); // 0 = false, 1= true, 2 = unknown
+        Map<Integer, Boolean> hasBeacon = new HashMap<>();
         int count = 0;
 
         for (Point beacon : beacons.values()) {
             if (beacon.getY() == Y) {
-                hasBeacon.put(beacon.x, 1);
+                hasBeacon.put(beacon.x, true);
             }
         }
 
@@ -27,8 +27,7 @@ public class Day15 {
             int m = manhattanDistance(sensor, beacons.get(sensor));
             int xAvailable = m - Math.abs(sensor.y - Y);
             for (int ruledOutX=sensor.x-xAvailable; ruledOutX <= sensor.x + xAvailable; ruledOutX++) {
-                if (hasBeacon.getOrDefault(ruledOutX, 2) == 2) {
-                    hasBeacon.put(ruledOutX, 0);
+                if (hasBeacon.putIfAbsent(ruledOutX, false) == null) {
                     count++;
                 }
             }

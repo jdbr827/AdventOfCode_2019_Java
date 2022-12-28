@@ -1,8 +1,11 @@
 package year_2022.day_01;
 
+import com.google.common.collect.Streams;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static utils.BinarySearchUtil.binaryInsert;
 
@@ -18,7 +21,14 @@ public class Day1 {
 
 
     /* O(T) time to scan all the items and O(1) Space */
-    public static int part1(String fileName) throws FileNotFoundException {
+    public static int part1(String fileName) {
+        return Streams.stream(new Day1Scanner(fileName))
+                .max(Comparator.naturalOrder())
+                .get();
+    }
+
+    // Same as above but less streamy
+    public static int part1Method2(String fileName) {
         Day1Scanner scanner = new Day1Scanner(fileName);
 
         int bestSoFar = 0;
@@ -35,8 +45,9 @@ public class Day1 {
     TIME: O(T + E Log E + N) = O(T + E Log E)
     SPACE: O(E)
      */
-    public static int part2Method1(String fileName, int topN) throws FileNotFoundException {
+    public static int part2Method1(String fileName, int topN) {
         Day1Scanner scanner = new Day1Scanner(fileName);
+
         ArrayList<Integer> elves = new ArrayList<>(); // O(E) space since we will add all of the elves
         int current;
 
@@ -45,6 +56,13 @@ public class Day1 {
         }
         elves.sort(Comparator.reverseOrder()); // O(E Log E) time
         return elves.subList(0, topN).stream().reduce(0, Math::addExact); // O(N) scan
+    }
+
+    public static int part2Method3(String fileName, int topN) {
+         return Streams.stream(new Day1Scanner(fileName))
+                .sorted(Comparator.reverseOrder())
+                .limit(topN)
+                .reduce(0, Math::addExact);
     }
 
 
