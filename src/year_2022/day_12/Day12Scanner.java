@@ -12,7 +12,7 @@ public class Day12Scanner extends AOCScanner {
         super(fileName);
     }
 
-    List<List<Character>> readInMatrix() {
+    Day12Matrix readInMatrix() {
         List<List<Character>> matrix = new java.util.ArrayList<>(List.of());
         int i=0;
         while (scanner.hasNextLine()) {
@@ -24,7 +24,11 @@ public class Day12Scanner extends AOCScanner {
             }
             matrix.add(row);
         }
-        return matrix;
+        return new Day12Matrix(matrix);
+    }
+
+    static Day12Matrix readInMatrix(String fileName) throws FileNotFoundException {
+        return new Day12Scanner(fileName).readInMatrix();
     }
 
 

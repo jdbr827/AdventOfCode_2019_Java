@@ -21,6 +21,6 @@ public class Day6 implements IDay6 {
         You start at the object you are orbiting, so you don't need to "move" to that one
         and Santa is on the object he is orbiting, so you don't need to move to that one either.
          */
-        return BFSUtil.doBFS(YOU, SANTA, Planet::getNeighbors).intValue() - 2;
+        return BFSUtil.doBFSToPoint(YOU, SANTA, Planet::getNeighbors).intValue() - 2;
     }
 }

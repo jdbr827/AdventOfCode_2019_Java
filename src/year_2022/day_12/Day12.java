@@ -1,12 +1,13 @@
 package year_2022.day_12;
 
 import utils.BFSUtil;
+import viewModelUtil.CartesianPoint;
+import year_2019.day15.model.CardinalDirection;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,79 +15,63 @@ import java.util.stream.Stream;
 public class Day12 {
 
     static Long part1(String fileName) throws FileNotFoundException {
-        Day12Scanner scanner = new Day12Scanner(fileName);
-        List<List<Character>> matrix = scanner.readInMatrix();
-        int N = matrix.size();
-        int M = matrix.get(0).size();
-        Point start = null; Point goal = null;
-        for (int i=0; i<N; i++) {
-            for (int j=0; j<M; j++) {
-                if (matrix.get(i).get(j).equals('S')) {
-                    start = new Point(i, j);
-                    matrix.get(i).set(j, 'a');
-                }
-                else if (matrix.get(i).get(j).equals('E')) {
-                    goal = new Point(i, j);
-                    matrix.get(i).set(j, 'z');
+        Day12Matrix matrix = Day12Scanner.readInMatrix(fileName);
+
+        // scan to find start and goal O(NM)
+        CartesianPoint start = null; CartesianPoint goal = null;
+        for (int i = 0; i< matrix.getXSize(); i++) {
+            for (int j = 0; j< matrix.getYSize(); j++) {
+                if (matrix.getValue(i, j).equals('S')) {start = new CartesianPoint(i, j);}
+                else if (matrix.getValue(i, j).equals('E')) {goal = new CartesianPoint(i, j);}
+
+                if (start != null && goal != null) {
+                    break;
                 }
             }
         }
 
-        Function<Point, Collection<Point>> neighborFunction = (p -> Stream.of(
-                        new Point(p.x + 1, p.y),
-                        new Point(p.x - 1, p.y),
-                        new Point(p.x, p.y + 1),
-                        new Point(p.x, p.y - 1)
-                ).filter((nbr) ->
-                        nbr.getX() >= 0 && nbr.getX() < N && nbr.getY() >= 0 && nbr.getY() < M &&
-                                (int) matrix.get(nbr.x).get(nbr.y) - (int) (matrix.get(p.x).get(p.y)) <= 1)
+        Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
+                Arrays.stream(CardinalDirection.values())
+                        .map(d -> p.add(d.velocity))
+                        .filter((nbr) -> matrix.containsPoint(nbr) && matrix.getRelativeHeight(nbr) - (matrix.getRelativeHeight(p)) <= 1)
                 .collect(Collectors.toList()));
 
-        return BFSUtil.doBFS(start, goal, neighborFunction);
+
+        return BFSUtil.doBFSToPoint(start, goal, neighborFunction);
     }
 
 
     public static long part2(String fileName) throws FileNotFoundException {
-        Day12Scanner scanner = new Day12Scanner(fileName);
-        List<List<Character>> matrix = scanner.readInMatrix();
-        int N = matrix.size();
-        int M = matrix.get(0).size();
-        Point start = null; Point goal = null;
-        Collection<Point> elevationA = new java.util.ArrayList<>(List.of());
-        for (int i=0; i<N; i++) {
-            for (int j=0; j<M; j++) {
-                if (matrix.get(i).get(j).equals('a')) {
-                    elevationA.add(new Point(i, j));
+        Day12Matrix matrix = Day12Scanner.readInMatrix(fileName);
+        
+        
+        CartesianPoint goal = null;
+        Collection<CartesianPoint> elevationA = new ArrayList<>();
+        // scan to find goal and all points with elevation a  - O(NM)
+        for (int i = 0; i< matrix.getXSize(); i++) {
+            for (int j = 0; j< matrix.getYSize(); j++) {
+                if (matrix.getElevation(i, j).equals('a')) {
+                    elevationA.add(new CartesianPoint(i, j));
                 }
-                if (matrix.get(i).get(j).equals('S')) {
-                    start = new Point(i, j);
-                    matrix.get(i).set(j, 'a');
-                    elevationA.add(start);
-                }
-                else if (matrix.get(i).get(j).equals('E')) {
-                    goal = new Point(i, j);
-                    matrix.get(i).set(j, 'z');
+                else if (matrix.getValue(i, j).equals('E')) {
+                    goal = new CartesianPoint(i, j);
                 }
             }
         }
 
-        Function<Point, Collection<Point>> neighborFunction = (p -> {
-            return Stream.of(
-                            new Point(p.x + 1, p.y),
-                            new Point(p.x - 1, p.y),
-                            new Point(p.x, p.y + 1),
-                            new Point(p.x, p.y - 1)
-                    ).filter((nbr) -> nbr.getX() >= 0 && nbr.getX() < N && nbr.getY() >= 0 && nbr.getY() < M &&
-                            (int) matrix.get(nbr.x).get(nbr.y) - (int) (matrix.get(p.x).get(p.y)) >= -1)
+        Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = p ->
+            Arrays.stream(CardinalDirection.values())
+                    .map(d -> p.add(d.velocity))
+                    .filter((nbr) -> matrix.containsPoint(nbr) && matrix.getRelativeHeight(nbr) - matrix.getRelativeHeight(p) >= -1)
                     .collect(Collectors.toList());
-        });
 
-        Map<Point, Long> bfsResult = BFSUtil.doBFSAnyDestination(goal, elevationA, neighborFunction);
+        Map<CartesianPoint, Long> bfsResult = BFSUtil.doBFSAnyDestination(goal, elevationA, neighborFunction);
 
-        long lowestSteps = Long.MAX_VALUE;
-        for (Point a : elevationA) {
-            lowestSteps = Math.min(bfsResult.getOrDefault(a, Long.MAX_VALUE), lowestSteps);
-        }
-        return lowestSteps;
+
+        return elevationA.stream()
+                .map((a) -> bfsResult.getOrDefault(a, Long.MAX_VALUE))
+                .min(Comparator.naturalOrder())
+                .get();
+
     }
 }

@@ -55,12 +55,12 @@ public class Day8 {
            for (int j=0; j<N; j++) {
                int finalJ = j;
                int finalI = i;
-               long up = IntStream.range(1, i+1).takeWhile(i_prime -> trees.get(finalI - i_prime).get(finalJ) < trees.get(finalI).get(finalJ)).count() + ((IntStream.range(0, i).allMatch((i_prime -> trees.get(i_prime).get(finalJ) < trees.get(finalI).get(finalJ))))? 0 : 1 );
-               //System.out.println(Arrays.toString(IntStream.range(1, i+1).takeWhile(i_prime -> trees.get(finalI - i_prime).get(finalJ) < trees.get(finalI).get(finalJ)).toArray()));
+               long up = IntStream.range(1, i+1)
+                       .takeWhile(i_prime -> trees.get(finalI - i_prime).get(finalJ) < trees.get(finalI).get(finalJ))
+                       .count() + ((IntStream.range(0, i).allMatch((i_prime -> trees.get(i_prime).get(finalJ) < trees.get(finalI).get(finalJ))))? 0 : 1 );
                long down = IntStream.range(i+1, N).takeWhile(i_prime -> trees.get(i_prime).get(finalJ) < trees.get(finalI).get(finalJ)).count() + ((IntStream.range(i+1, N).allMatch((i_prime -> trees.get(i_prime).get(finalJ) < trees.get(finalI).get(finalJ)))) ? 0 : 1);
                long left = IntStream.range(1, j+1).takeWhile(j_prime -> trees.get(finalI).get(finalJ - j_prime) < trees.get(finalI).get(finalJ)).count() + ((IntStream.range(0, j).allMatch((j_prime -> trees.get(finalI).get(j_prime) < trees.get(finalI).get(finalJ)))) ? 0 : 1);
                long right = IntStream.range(j+1, M).takeWhile(j_prime -> trees.get(finalI).get(j_prime) < trees.get(finalI).get(finalJ)).count() + ((IntStream.range(j+1, M).allMatch((j_prime -> trees.get(finalI).get(j_prime) < trees.get(finalI).get(finalJ)))) ? 0 : 1);
-               //System.out.println(i + " " + j + " " + up + " " + down + " " + left + " " + right);
                scenicScore[finalI][finalJ] = up * down * left * right;
                bestScenicScore = Math.max(bestScenicScore, scenicScore[i][j]);
 
