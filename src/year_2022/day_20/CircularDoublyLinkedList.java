@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -16,10 +17,18 @@ public class CircularDoublyLinkedList<T> {
 
     public void setNext(T newNext) {
         CircularDoublyLinkedList<T> newNextNode = new CircularDoublyLinkedList<>(newNext);
+        setNextNode(newNextNode);
+    }
+
+    public void setNextNode(CircularDoublyLinkedList<T> newNextNode) {
         this.next.prev = newNextNode;
         newNextNode.next = this.next;
         this.next = newNextNode;
         this.next.prev = this;
+    }
+
+    public void setPrevNode(CircularDoublyLinkedList<T> newPrevNode) {
+        prev.setNextNode(newPrevNode);
     }
 
     public void setPrev(T newPrev) {
@@ -63,10 +72,20 @@ public class CircularDoublyLinkedList<T> {
         return s.toString();
     };
 
+    public CircularDoublyLinkedList<T> setHeadToNode(CircularDoublyLinkedList<T> node) {
+        return node;
+    }
+
+
     static <T> CircularDoublyLinkedList<T> fromList(List<T> lst) {
-        CircularDoublyLinkedList<T> dll = new CircularDoublyLinkedList<T>(lst.get(0));
-        for (int i=1; i < lst.size(); i++) {
-            dll.setPrev(lst.get(i));
+        List<CircularDoublyLinkedList<T>> dllNodes = lst.stream().map(CircularDoublyLinkedList::new).collect(Collectors.toList());
+        return fromDllNodes(dllNodes);
+    }
+
+    public static <T> CircularDoublyLinkedList<T> fromDllNodes(List<CircularDoublyLinkedList<T>> dllNodes) {
+        CircularDoublyLinkedList<T> dll = dllNodes.get(0);
+        for (int i = 1; i < dllNodes.size(); i++) {
+            dll.setPrevNode(dllNodes.get(i));
         }
         return dll;
     }
@@ -97,11 +116,12 @@ public class CircularDoublyLinkedList<T> {
     }
 
     public static int mixList(List<Integer> inList) {
-        CircularDoublyLinkedList<Integer> dll = CircularDoublyLinkedList.fromList(inList);
-        for (Integer num : inList) {
-            dll = dll.setHeadToValue(num);
+         List<CircularDoublyLinkedList<Integer>> dllNodes = inList.stream().map(CircularDoublyLinkedList::new).collect(Collectors.toList());
+        CircularDoublyLinkedList<Integer> dll = fromDllNodes(dllNodes);
+        for (CircularDoublyLinkedList<Integer> node : dllNodes) {
+            dll = dll.setHeadToNode(node);
             //System.out.println(dll);
-            dll.moveForwardN(num);
+            dll.moveForwardN(node.value);
             //System.out.println(dll);
         }
 

@@ -15,9 +15,6 @@ public class Day20Scanner extends AOCScanner {
         List<Integer> lst = new ArrayList<>();
         while (scanner.hasNextLine()) {
             Integer num = Integer.parseInt(scanner.nextLine());
-            if (lst.contains(num)) {
-                System.out.println("Duplicate of " + num);
-            }
             lst.add(num);
         }
         return lst;
