@@ -11,10 +11,10 @@ public class Day20Scanner extends AOCScanner {
         super(fileName);
     }
 
-    List<Integer> createListToMix() {
-        List<Integer> lst = new ArrayList<>();
+    List<Long> createListToMix() {
+        List<Long> lst = new ArrayList<>();
         while (scanner.hasNextLine()) {
-            Integer num = Integer.parseInt(scanner.nextLine());
+            Long num = Long.parseLong(scanner.nextLine());
             lst.add(num);
         }
         return lst;

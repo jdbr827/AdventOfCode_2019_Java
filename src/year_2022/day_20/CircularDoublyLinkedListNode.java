@@ -41,16 +41,6 @@ public class CircularDoublyLinkedListNode<T> {
     };
 
 
-    /**
-     * Removes the current node and sets the head at the next node
-     * @return the next node
-     */
-    public CircularDoublyLinkedListNode<T> removeThisNode() {
-        this.next.prev = this.prev;
-        this.prev.next = this.next;
-        return this.next;
-    }
-
     public void swapWithNext() {
         this.next.prev = this.prev;
         this.prev.next = this.next;
@@ -64,18 +54,6 @@ public class CircularDoublyLinkedListNode<T> {
         this.prev.swapWithNext();
     }
 
-
-    public void moveForwardN(int N) {
-        if (N >= 0) {
-            for (int i = 0; i < N; i++) {
-                swapWithNext();
-            }
-        } else {
-            for (int i=0; i>N; i--){
-                swapWithPrev();
-            }
-        }
-    }
 
 }
 
