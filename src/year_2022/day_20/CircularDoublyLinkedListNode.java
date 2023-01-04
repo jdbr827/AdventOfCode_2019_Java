@@ -64,32 +64,6 @@ public class CircularDoublyLinkedListNode<T> {
         this.prev.swapWithNext();
     }
 
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("[");
-        CircularDoublyLinkedListNode<T> ptr = this;
-        s.append(ptr.value);
-        while ((ptr = ptr.next) != this) {
-            s.append(", ");
-            s.append(ptr.value);
-        }
-        s.append("]");
-        return s.toString();
-    };
-
-
-    static <T> CircularDoublyLinkedListNode<T> fromList(List<T> lst) {
-        List<CircularDoublyLinkedListNode<T>> dllNodes = lst.stream().map(CircularDoublyLinkedListNode::new).collect(Collectors.toList());
-        return fromDllNodes(dllNodes);
-    }
-
-    public static <T> CircularDoublyLinkedListNode<T> fromDllNodes(List<CircularDoublyLinkedListNode<T>> dllNodes) {
-        CircularDoublyLinkedListNode<T> dll = dllNodes.get(0);
-        for (int i = 1; i < dllNodes.size(); i++) {
-            dll.setPrevNode(dllNodes.get(i));
-        }
-        return dll;
-    }
 
     public void moveForwardN(int N) {
         if (N >= 0) {
@@ -101,19 +75,6 @@ public class CircularDoublyLinkedListNode<T> {
                 swapWithPrev();
             }
         }
-    }
-
-    public CircularDoublyLinkedListNode<T> setHeadToValue(T val) {
-        if (val == this.value) {
-            return this;
-        }
-        for (CircularDoublyLinkedListNode<T> ptr = this.next; ptr!=this; ptr=ptr.next) {
-            if (ptr.value == val) {
-                return ptr;
-            }
-        }
-        System.out.println("Could not find value " + val + " in Circular DLL " + this);
-        return new CircularDoublyLinkedListNode<T>(val);
     }
 
 }

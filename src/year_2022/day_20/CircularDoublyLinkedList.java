@@ -6,17 +6,10 @@ import java.util.stream.Collectors;
 
 public class CircularDoublyLinkedList<T> {
     CircularDoublyLinkedListNode<T> head;
-    int size;
 
     CircularDoublyLinkedList(CircularDoublyLinkedListNode<T> head) {
         this.head = head;
-        size = 1;
-        for (CircularDoublyLinkedListNode<T> ptr = head.next; ptr != head; ptr=ptr.next) {
-            size++;
-        }
     }
-
-
 
     public T findNthElementFromHead(int N) {
         CircularDoublyLinkedListNode<T> ptr = head;
@@ -36,7 +29,7 @@ public class CircularDoublyLinkedList<T> {
         for (int i = 1; i < dllNodes.size(); i++) {
             head.setPrevNode(dllNodes.get(i));
         }
-        return new CircularDoublyLinkedList<T>(head);
+        return new CircularDoublyLinkedList<>(head);
     }
 
     public void setHeadToNode(CircularDoublyLinkedListNode<T> node) {
@@ -62,6 +55,15 @@ public class CircularDoublyLinkedList<T> {
 
     @Override
     public String toString() {
-        return head.toString();
-    }
+        StringBuilder s = new StringBuilder();
+        s.append("[");
+        CircularDoublyLinkedListNode<T> ptr = head;
+        s.append(ptr.value);
+        while ((ptr = ptr.next) != head) {
+            s.append(", ");
+            s.append(ptr.value);
+        }
+        s.append("]");
+        return s.toString();
+    };
 }
