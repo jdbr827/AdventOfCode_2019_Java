@@ -37,6 +37,15 @@ public class CircularDoublyLinkedList<T> {
         return true;
     };
 
+    public void swapWithNext() {
+        this.next.prev = this.prev;
+        this.prev.next = this.next;
+        this.next.next.prev = this;
+        this.next = this.next.next;
+        this.prev = this.prev.next;
+        this.prev.next = this;
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("[");
@@ -56,8 +65,11 @@ public class CircularDoublyLinkedList<T> {
         System.out.println(dll.checkConsistent());
         System.out.println(dll.toString());
         dll.setNext(8);
+        dll.setPrev(-5);
         System.out.println(dll.toString());
         dll.setPrev(-2);
+        System.out.println(dll.toString());
+        dll.swapWithNext();
         System.out.println(dll.toString());
         System.out.println(dll.checkConsistent());
 
