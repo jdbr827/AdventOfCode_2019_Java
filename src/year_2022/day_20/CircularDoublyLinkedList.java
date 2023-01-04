@@ -46,6 +46,10 @@ public class CircularDoublyLinkedList<T> {
         this.prev.next = this;
     }
 
+    public void swapWithPrev() {
+        this.prev.swapWithNext();
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("[");
@@ -59,19 +63,82 @@ public class CircularDoublyLinkedList<T> {
         return s.toString();
     };
 
+    static <T> CircularDoublyLinkedList<T> fromList(List<T> lst) {
+        CircularDoublyLinkedList<T> dll = new CircularDoublyLinkedList<T>(lst.get(0));
+        for (int i=1; i < lst.size(); i++) {
+            dll.setPrev(lst.get(i));
+        }
+        return dll;
+    }
+
+    public void moveForwardN(int N) {
+        if (N >= 0) {
+            for (int i = 0; i < N; i++) {
+                swapWithNext();
+            }
+        } else {
+            for (int i=0; i>N; i--){
+                swapWithPrev();
+            }
+        }
+    }
+
+    public CircularDoublyLinkedList<T> setHeadToValue(T val) {
+        if (val == this.value) {
+            return this;
+        }
+        for (CircularDoublyLinkedList<T> ptr = this.next; ptr!=this; ptr=ptr.next) {
+            if (ptr.value == val) {
+                return ptr;
+            }
+        }
+        System.out.println("Could not find value " + val + " in Circular DLL " + this);
+        return new CircularDoublyLinkedList<T>(val);
+    }
+
+    public static String mixList(List<Integer> inList) {
+        CircularDoublyLinkedList<Integer> dll = CircularDoublyLinkedList.fromList(inList);
+        for (Integer num : inList) {
+            dll = dll.setHeadToValue(num);
+            System.out.println(dll);
+            dll.moveForwardN(num);
+            System.out.println(dll);
+        }
+
+        dll = dll.setHeadToValue(0);
+        System.out.println(dll.toString());
+        return " " + dll.findNthElementFromHead(1000) + " " + dll.findNthElementFromHead(2000) + " " + dll.findNthElementFromHead(3000);
+    }
+
+    public T findNthElementFromHead(int N) {
+        CircularDoublyLinkedList<T> ptr = this;
+        for (int i=0; i<N; i++) {
+            ptr = ptr.next;
+        }
+        return ptr.value;
+    }
 
     public static void main(String[] args) {
-        CircularDoublyLinkedList<Integer> dll = new CircularDoublyLinkedList<>(7);
-        System.out.println(dll.checkConsistent());
-        System.out.println(dll.toString());
-        dll.setNext(8);
-        dll.setPrev(-5);
-        System.out.println(dll.toString());
-        dll.setPrev(-2);
+//        CircularDoublyLinkedList<Integer> dll = new CircularDoublyLinkedList<>(7);
+//        System.out.println(dll.checkConsistent());
+//        System.out.println(dll.toString());
+//        dll.setNext(8);
+//        dll.setPrev(-5);
+//        System.out.println(dll.toString());
+//        dll.setPrev(-2);
+//        System.out.println(dll.toString());
+        CircularDoublyLinkedList<Integer> dll = CircularDoublyLinkedList.fromList(List.of(1, 2, -3, 3, -2, 0, 4));
         System.out.println(dll.toString());
         dll.swapWithNext();
+        dll.swapWithPrev();
+        System.out.println(dll.toString());
+        dll = dll.prev;
+        System.out.println(dll.toString());
+        dll.moveForwardN(2);
+        dll.setHeadToValue(0);
         System.out.println(dll.toString());
         System.out.println(dll.checkConsistent());
+        System.out.println(mixList(List.of(1, 2, -3, 3, -2, 0, 4)));
 
 
     }
