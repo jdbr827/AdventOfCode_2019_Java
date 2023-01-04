@@ -96,18 +96,24 @@ public class CircularDoublyLinkedList<T> {
         return new CircularDoublyLinkedList<T>(val);
     }
 
-    public static String mixList(List<Integer> inList) {
+    public static int mixList(List<Integer> inList) {
         CircularDoublyLinkedList<Integer> dll = CircularDoublyLinkedList.fromList(inList);
         for (Integer num : inList) {
             dll = dll.setHeadToValue(num);
-            System.out.println(dll);
+            //System.out.println(dll);
             dll.moveForwardN(num);
-            System.out.println(dll);
+            //System.out.println(dll);
         }
 
         dll = dll.setHeadToValue(0);
         System.out.println(dll.toString());
-        return " " + dll.findNthElementFromHead(1000) + " " + dll.findNthElementFromHead(2000) + " " + dll.findNthElementFromHead(3000);
+        //return " " + dll.findNthElementFromHead(1000) + " " + dll.findNthElementFromHead(2000) + " " + dll.findNthElementFromHead(3000);
+        return dll.findNthElementFromHead(1000) + dll.findNthElementFromHead(2000) + dll.findNthElementFromHead(3000);
+    }
+
+    public static int compute_grove_coordinates(String fileName) {
+        List<Integer> lst = new Day20Scanner(fileName).createListToMix();
+        return mixList(lst);
     }
 
     public T findNthElementFromHead(int N) {
@@ -116,31 +122,6 @@ public class CircularDoublyLinkedList<T> {
             ptr = ptr.next;
         }
         return ptr.value;
-    }
-
-    public static void main(String[] args) {
-//        CircularDoublyLinkedList<Integer> dll = new CircularDoublyLinkedList<>(7);
-//        System.out.println(dll.checkConsistent());
-//        System.out.println(dll.toString());
-//        dll.setNext(8);
-//        dll.setPrev(-5);
-//        System.out.println(dll.toString());
-//        dll.setPrev(-2);
-//        System.out.println(dll.toString());
-        CircularDoublyLinkedList<Integer> dll = CircularDoublyLinkedList.fromList(List.of(1, 2, -3, 3, -2, 0, 4));
-        System.out.println(dll.toString());
-        dll.swapWithNext();
-        dll.swapWithPrev();
-        System.out.println(dll.toString());
-        dll = dll.prev;
-        System.out.println(dll.toString());
-        dll.moveForwardN(2);
-        dll.setHeadToValue(0);
-        System.out.println(dll.toString());
-        System.out.println(dll.checkConsistent());
-        System.out.println(mixList(List.of(1, 2, -3, 3, -2, 0, 4)));
-
-
     }
 
 }
