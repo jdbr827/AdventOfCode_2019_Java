@@ -1,6 +1,6 @@
 package year_2022.day_20;
 
-Daimport java.util.List;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
