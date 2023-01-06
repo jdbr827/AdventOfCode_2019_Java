@@ -1,8 +1,4 @@
 @startuml
-'https://plantuml.com/class-diagram
-
-
-
 class ReactionInfo {
 + quantityMade
 + reactionInputs
@@ -29,10 +25,6 @@ class Day14 {
 +mostFuelForNOre(N)
 +{static} fromReactionFileName(reactionFileName)
 }
-
-
-
-
 
 Day14 *- IReactionInfo
 IReactionInfo <|.. ReactionInfo
@@ -65,7 +57,4 @@ class ChemicalStateImpl {
 
 IChemicalState --> ChemicalStateImpl: "creates"
 IReactionInfo --> ReactionInfo: "creates"
-
-
-
 @enduml

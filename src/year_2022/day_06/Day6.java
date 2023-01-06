@@ -1,11 +1,8 @@
 package year_2022.day_06;
 
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.FileNotFoundException;
 
 /**
  * PROBLEM STATEMENT:
@@ -26,7 +23,7 @@ import java.io.FileNotFoundException;
  */
 @RequiredArgsConstructor
 public abstract class Day6 {
-    @NotNull IDay6Helper helper;
+    @NotNull Day6DataStream helper;
     @NotNull Integer N;
     Integer numScanned = 0;
 
@@ -47,7 +44,7 @@ public abstract class Day6 {
 }
 
 class Day6Method1 extends Day6 {
-    public Day6Method1(IDay6Helper of, int n) {
+    public Day6Method1(Day6DataStream of, int n) {
         super(of, n);
     }
 
@@ -81,7 +78,7 @@ class Day6Method1 extends Day6 {
 
 class Day6Method2 extends Day6 {
 
-    public Day6Method2(IDay6Helper of, int n) {
+    public Day6Method2(Day6DataStream of, int n) {
         super(of, n);
     }
 
@@ -119,7 +116,7 @@ class Day6Method2 extends Day6 {
 }
 
 class Day6Method3 extends Day6 {
-    public Day6Method3(IDay6Helper of, int n) {
+    public Day6Method3(Day6DataStream of, int n) {
         super(of, n);
     }
 

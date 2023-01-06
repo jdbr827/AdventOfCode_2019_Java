@@ -1,6 +1,5 @@
 package year_2022.day_06;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.io.FileNotFoundException;
@@ -9,7 +8,7 @@ import java.io.FileNotFoundException;
  * Encapsulates the scanner and the "previous N" part of the problem.
  * With access control, we can abstract away how previous is updated.
  */
-interface IDay6Helper {
+interface Day6DataStream {
     void scanNextChar();
 
     /**
@@ -18,25 +17,25 @@ interface IDay6Helper {
      */
     Character getCharScannedXAgo(int x);
 
-    static IDay6Helper of(String fileName, int N, int method) throws FileNotFoundException {
-        Day6Scanner scanner = new Day6Scanner(fileName);
+    static Day6DataStream of(String fileName, int N, int method) throws FileNotFoundException {
+        Day6Reader scanner = new Day6Reader(fileName);
 
 
         if (method == 1) {
-            return new Day6Helper1(scanner, N);
+            return new Day6DataStream1(scanner, N);
         }
-        return new Day6Helper2(scanner, N);
+        return new Day6DataStream2(scanner, N);
     }
 }
 
 
 /*  Naive Solution: U = O(N); G = O(1) */
-class Day6Helper1 implements IDay6Helper {
-    private final Day6Scanner scanner;
+class Day6DataStream1 implements Day6DataStream {
+    private final Day6Reader scanner;
     private final int N;
     private final Character[] previous;
 
-    Day6Helper1(Day6Scanner scanner, int N) {
+    Day6DataStream1(Day6Reader scanner, int N) {
         this.scanner = scanner;
         this.N = N;
         this.previous = new Character[N];
@@ -57,13 +56,13 @@ class Day6Helper1 implements IDay6Helper {
 
 
 /*  "clock-face" implementation: U = O(1) and G = O(1) */
-class Day6Helper2 implements IDay6Helper {
-    private final Day6Scanner scanner;
+class Day6DataStream2 implements Day6DataStream {
+    private final Day6Reader scanner;
     int N;
     private int head_idx = -1; // the index of previous of the last char scanned
     @Getter private final Character[] previous; //= new Character[N];
 
-    Day6Helper2(Day6Scanner scanner, int N) {
+    Day6DataStream2(Day6Reader scanner, int N) {
         this.N = N;
         this.scanner = scanner;
         this.previous = new Character[N];

@@ -23,6 +23,7 @@ public class Day15 {
             }
         }
 
+
         for (Point sensor : beacons.keySet()) {
             int m = manhattanDistance(sensor, beacons.get(sensor));
             int xAvailable = m - Math.abs(sensor.y - Y);

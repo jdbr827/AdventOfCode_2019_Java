@@ -31,8 +31,6 @@ public class CircularDoublyLinkedList<T> {
     }
 
 
-
-
     public T findNthValueFromHead(int N) {
         CircularDoublyLinkedListNode<T> ptr = findNthElementFromHead(N);
         return ptr.value;

@@ -1,22 +1,13 @@
 package year_2022.day_20;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+Daimport java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Day20 {
     final static Integer DECRYPTION_KEY = 811589153;
-    @NotNull
 
-    private static CircularDoublyLinkedList<Long> mixList(List<Long> inList) {
-        List<CircularDoublyLinkedListNode<Long>> dllNodes = inList.stream().map(CircularDoublyLinkedListNode::new).collect(Collectors.toList());
-        CircularDoublyLinkedList<Long> dll = CircularDoublyLinkedList.fromDllNodes(dllNodes);
-        return mixList(dll, dllNodes, (v) -> (long) v);
-    }
-
-     private static <T> CircularDoublyLinkedList<T> mixList(
+    private static <T> CircularDoublyLinkedList<T> mixList(
              CircularDoublyLinkedList<T> listToMix,
              List<CircularDoublyLinkedListNode<T>> mixingOrder,
              Function<T, Long> mixNumberFunction
@@ -30,9 +21,10 @@ public class Day20 {
 
     public static long part1(String fileName) {
         List<Long> lst = new Day20Scanner(fileName).createListToMix();
-        CircularDoublyLinkedList<Long> dll = mixList(lst);
-
-        dll.setHeadToValue(0L);
+        List<CircularDoublyLinkedListNode<Long>> dllNodes = lst.stream().map(CircularDoublyLinkedListNode::new).collect(Collectors.toList());
+        CircularDoublyLinkedList<Long> dll = mixList(CircularDoublyLinkedList.fromDllNodes(dllNodes), dllNodes, (v) -> v);
+        int zeroI = lst.indexOf(0L);
+        dll.setHeadToNode(dllNodes.get(zeroI));
         return computeGroveCoordinates(dll);
     }
 
@@ -40,27 +32,24 @@ public class Day20 {
         System.out.println((-5) % 3);
         List<Long> lst = new Day20Scanner(fileName).createListToMix();
         // (a*b)%n = ((a%n) * (b%n)) % n
-        int n = lst.size();
         int zeroI = lst.indexOf(0L);
-        List<Long> longList = lst.stream()
-                .map(v -> (long) v * DECRYPTION_KEY)
+
+        List<CircularDoublyLinkedListNode<Long>> dllNodes = lst.stream()
+                .map(v1 -> (long) v1 * DECRYPTION_KEY)
+                .map(CircularDoublyLinkedListNode::new)
                 .collect(Collectors.toList());
-        List<CircularDoublyLinkedListNode<Long>> dllNodes = longList.stream().map(CircularDoublyLinkedListNode::new).collect(Collectors.toList());
+
         CircularDoublyLinkedList<Long> dll = CircularDoublyLinkedList.fromDllNodes(dllNodes);
+
         for (int i=0 ; i<10; i++) {
-            dll = mixList(dll, dllNodes, (v) -> (long) v);
+            mixList(dll, dllNodes, (v) -> (long) v);
         }
+
         dll.setHeadToNode(dllNodes.get(zeroI));
-        System.out.println(dll);
         return computeGroveCoordinates(dll);
     }
 
     private static long computeGroveCoordinates(CircularDoublyLinkedList<Long> dll) {
         return dll.findNthValueFromHead(1000) + dll.findNthValueFromHead(2000) + dll.findNthValueFromHead(3000);
-    }
-
-
-    public static long compute_grove_coordinates_2(String s) {
-        return 0L;
     }
 }
