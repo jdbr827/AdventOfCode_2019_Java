@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{times}
+\usepackage[normalem]{ulem}
+\usepackage{fancyhdr,graphicx,amsmath,amssymb, mathtools, scrextend, titlesec, enumitem}
+\usepackage[ruled,vlined]{algorithm2e} 
+\include{pythonlisting}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\SetKwRepeat{Do}{do}{\nl while}
+
+\title{Advent of Code 2022 Day 6}
+\author{Jacob Reinhart}
+\begin{document}
+\maketitle
+
+\section{Part 1}
+\subsection{Problem Formulation}
+Given a Stream $S$ of characters and an integer $N$, how many characters will need to be streamed from $S$ before the previous $N$ characters are all different? \\
+
+\KwIn{Stream $S$; Integer $N$}
+\KwOut{$C :=$ Smallest $i \geq N$ such that $S[i], S[i-1], ..., S[i-(N-1)]$ all different}
+\\
+\ \\
+\noindent In the problem, $N=4$ and $S$ is the provided file input.\\
+\subsection{Naive Algorithm}
+\noindent For simplicity, assume a data structure wrapping $S$ that has 
+\begin{itemize}
+    \item $S.readNext()$ which scans the next character from $S$ and operates in $O(U)$ time.
+    \item $S.getPrevious(i)$ which, for $1 \leq i \leq N$, returns the char scanned $i$ scans ago, and operates in $O(G)$ time.
+    \item $S.getNumRead()$ which returns the of calls to $S.next()$ made over the course of the algorithm, and can be trivially implemented in constant time.
+    \item a set of underlying data structures that take up $O(P)$ additional space
+\end{itemize}
+\medskip\\
+The most naive implementation would be to read from $S$, and after every read, scan the previous $N$ characters for a duplicate in any other of the previous $N$ characters, stopping when no duplicates are found. This way, we would expect each read take $O(U + N^2G)$ time. \\
+\\
+\pagebreak
+\subsection{Improved Algorithm}
+However, the naive algorithm does a lot of duplicate work because \textbf{any pair of duplicates not involving the most-recently read character \pmb{$(S.getPrevious(1))$} would have been identified on a previous read.}
+Thus, there should be a way to get the solution by only scanning the most recently read character for duplicates against, at most, the rest of the previous $N$.\\
+
+Define a variable $J$ with the invariant over the reading loop that \textbf{\pmb{$J$} is the minimal value such that \pmb{$S.getPrevious(J) = S.getPrevious(i), \exists i<J$}}. Once $J > N$, then there are no duplicates in the previous $N$ reads and the end condition is satisfied.\\
+\\
+Initially, $J=1$. Inductively, when we read another character we would increment $J$, then if $\exists j<J$ such that $S.getPrevious(j) = S.getPrevious(1)$, then we should update $J :=$ the smallest such $j$. This way, we would expect each read to add $O(U + NG)$ time with no additional space compared to the naive method.\\
+
+
+\begin{algorithm}[H]
+\caption{FindStepsUntilLastNAllDiff}
+\KwIn{Stream $S$; Integer $N$}
+\KwOut{$C :=$ Smallest $i \geq N$ such that $S[i], S[i-1], ..., S[i-(N-1)]$ all different}
+\hrulefill \\
+\nl $J := 1$\;
+\nl \While{$J \leq N$}{
+    \nl $J$++\;
+    \nl $S.readNext()$\;
+    \nl $x := S.getPrevious(1)$ \tcp*[r]{the char just scanned}
+    \nl \For{$i=1, ..., J$}{
+            \nl \If{$x = S.getPrevious(i)$} {
+                \nl $J := i$\;
+                \nl $break$\;
+            }
+        }
+    }
+\nl \Return{$S.getNumRead()$}\;
+\hrulefill\\
+\bf{Time:} \textnormal{$O(U+NG)$ per read, so $O(C(U + NG))$ overall.} \\
+\bf{Space:} $O(P)$ 
+\end{algorithm}\\
+
+\pagebreak
+\subsection{Implementing The Reader}
+We now turn our attention to a specific implementation of $S$ to optimize for $G, U,$ and $P$.
+\subsubsection{Naive Implementation}
+\noindent The most naive implementation would be to store $S$ as a basic array:
+\begin{itemize}
+    \item Initialize(): $P := []$ ; $c := 0$;
+    \item Read(): $P.append(scanner.next()); c$++;
+    \item Get($i$): $P[c-i]$
+\end{itemize}
+\\
+\noindent Under this interpretation $G = O(1)$, but $P = O(C)$. We don't know $C$ at the start, but can reasonably infer that $C >> N$, plus we will have to be periodically allocating more memory on each scan, leading to $U = O(1)$ amortized, so this is not a good solution. 
+
+\subsubsection{ Improved Implementation} 
+Another approach might be to recognize that \textit{we never need more than the last $N$ previous}. That would allow us to bound the size of $P$ to $O(N)$. One such implementation looks like this:
+\begin{itemize}
+    \item Initialize(): $P[1, ..., N]$ empty; $c := 0$;
+    \item Scan(): $P[1, ..., N] := P[2, ..., N] + scanner.next()$; $c$++;
+    \item Get($i$): $P[i]$;
+\end{itemize}
+Under this method, we bring the space down to $P=O(N)$, but also bump up the time complexity to $U = O(N)$ because we would have to have $P[1, ..., N-1] := P[2, ..., N];$ in every scan.
+
+\subsubsection{ Efficient Implementation} 
+\noindent A better solution would be to use a ``clock-face" implementation:
+\begin{itemize}
+    \item Initialize(): $headIdx := -1$; $P[0, ..., N-1]$ empty; $c := 0$
+    \item Scan(): $headIdx := (headIdx + 1) \% N$; $P[headIdx] := scanner.next(); c$++; 
+    \item Get(i): $P[(headIdx - i) \% N]$;
+\end{itemize}
+\\
+This solution keeps $P = O(N)$ and leaves us both $U$ and $G$ at constant time.\\
+
+\noindent Thus, most efficient algorithm and most efficient implementation lead to a complexity of \pmb{$O(CN)$} time ($O(N)$ time per read) with \pmb{$O(N)$} additional space.
+\section{Part 2}
+Exactly the same, but with larger $N = 14$.
+
+
+
+
+
+\end{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{FindStepsUntilLastNAllDiff}
+
+\hrulefill \\
+\nl\lFor(\tcp*[f]{Initialize previous}){$i=1, ..., N-1$}{$S.scanNext()$}
+\nl \Do{$\neg allDiff$}{
+    \nl $S.scanNext()$\;
+    \nl $allDiff := true$\;
+    \nl \For{$i=1, ..., N$}{
+        \nl \For{$j=i+1, ..., N$}{
+            \nl \If{$S.getPrevious(i) = S.getPrevious(j)$} {
+                \nl $allDiff := false$\;
+            }
+        }
+    }
+}
+\nl \Return{$S.getNumRead()$}\;
+\hrulefill\\
+\bf{Time:} $O(C(U + N^2G )) $ \\
+\end{algorithm}\\
