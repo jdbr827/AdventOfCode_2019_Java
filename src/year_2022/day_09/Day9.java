@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 public class Day9 {
 
     static int part1(String fileName) throws FileNotFoundException {
-        Rope myRope = new Rope();
+        Rope myRope = new Rope(2);
         Day9Scanner myScanner = new Day9Scanner(fileName);
         Day9InstructionPair instructionPair;
         while ((instructionPair = myScanner.getNextInstruction()) != null) {

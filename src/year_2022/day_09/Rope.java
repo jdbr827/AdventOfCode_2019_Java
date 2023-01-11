@@ -1,5 +1,6 @@
 package year_2022.day_09;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import viewModelUtil.CartesianPoint;
 
@@ -8,77 +9,90 @@ import java.util.Map;
 
 public class Rope {
     ChessKing head = new ChessKing();
-    ChessKing tail = new ChessKing();
+    Rope tail;
+
     Map<CartesianPoint, Boolean> visited = new HashMap<>();
+
     int uniqueVisited = 0;
 
-    Rope() {
-        visited.put(tail.copyPosition(), true);
-        uniqueVisited++;
+
+    Rope(int numTail) {
+
+        if (numTail == 1) {
+            tail = null; // todo fix
+            visited.put(head.copyPosition(), true); // todo fix
+            uniqueVisited++;
+        } else {
+            tail = new Rope(numTail - 1);
+        }
+
     }
 
     int numVisited() {
+        if (tail != null) {
+            return tail.numVisited();
+        }
         return uniqueVisited;
     }
 
+    boolean tailVisited(CartesianPoint point) {
+        if (tail != null) {
+            return tail.tailVisited(point);
+        }
+        return visited.getOrDefault(point, false);
+    }
+
+
     void moveRope(IChessKing.MovementDirection direction) {
         head.move(direction);
-        int dx = head.getPosition().x - tail.getPosition().x;
-        int dy = head.getPosition().y - tail.getPosition().y;
+        if (tail != null) {
+            int dx = head.getPosition().x - tail.head.getPosition().x;
+            int dy = head.getPosition().y - tail.head.getPosition().y;
 
-        if (dx >= 2) {
-            if (dy > 0) {
-                tail.move(IChessKing.MovementDirection.UPRIGHT);
-            }
-            else if (dy < 0) {
-                tail.move(IChessKing.MovementDirection.DOWNRIGHT);
-            }
-            else {
-                tail.move(IChessKing.MovementDirection.RIGHT);
-            }
-        } else if (dx <= -2) {
-            if (dy > 0) {
-                tail.move(IChessKing.MovementDirection.UPLEFT);
-            }
-            else if (dy < 0) {
-                tail.move(IChessKing.MovementDirection.DOWNLEFT);
-            } else {
-                tail.move(IChessKing.MovementDirection.LEFT);
-            }
+            if (dx >= 2) {
+                if (dy > 0) {
+                    tail.moveRope(IChessKing.MovementDirection.UPRIGHT);
+                } else if (dy < 0) {
+                    tail.moveRope(IChessKing.MovementDirection.DOWNRIGHT);
+                } else {
+                    tail.moveRope(IChessKing.MovementDirection.RIGHT);
+                }
+            } else if (dx <= -2) {
+                if (dy > 0) {
+                    tail.moveRope(IChessKing.MovementDirection.UPLEFT);
+                } else if (dy < 0) {
+                    tail.moveRope(IChessKing.MovementDirection.DOWNLEFT);
+                } else {
+                    tail.moveRope(IChessKing.MovementDirection.LEFT);
+                }
 
-        } else if (dy >= 2) {
-            if (dx > 0) {
-                tail.move(IChessKing.MovementDirection.UPRIGHT);
+            } else if (dy >= 2) {
+                if (dx > 0) {
+                    tail.moveRope(IChessKing.MovementDirection.UPRIGHT);
+                } else if (dx < 0) {
+                    tail.moveRope(IChessKing.MovementDirection.UPLEFT);
+                } else {
+                    tail.moveRope(IChessKing.MovementDirection.UP);
+                }
+            } else if (dy <= -2) {
+                if (dx > 0) {
+                    tail.moveRope(IChessKing.MovementDirection.DOWNRIGHT);
+                } else if (dx < 0) {
+                    tail.moveRope(IChessKing.MovementDirection.DOWNLEFT);
+                } else {
+                    tail.moveRope(IChessKing.MovementDirection.DOWN);
+                }
             }
-            else if (dx < 0) {
-                tail.move(IChessKing.MovementDirection.UPLEFT);
-            }
-            else {
-                tail.move(IChessKing.MovementDirection.UP);
-            }
-        } else if (dy <= -2) {
-            if (dx > 0) {
-                tail.move(IChessKing.MovementDirection.DOWNRIGHT);
-            }
-            else if (dx < 0) {
-                tail.move(IChessKing.MovementDirection.DOWNLEFT);
-            }
-            else {
-                tail.move(IChessKing.MovementDirection.DOWN);
+        } else {
+            if (!visited.getOrDefault(head.copyPosition(), false)) {
+                uniqueVisited++;
+                visited.put(head.copyPosition(), true);
             }
         }
-//        System.out.println("MOVE: " + direction.name());
-//        System.out.println("HEAD: " + head.getPosition());
-//        System.out.println("TAIL: " + tail.getPosition());
-        if (!visited.getOrDefault(tail.copyPosition(), false)) {
-            uniqueVisited++;
-            visited.put(tail.copyPosition(), true);
-        }
-        //System.out.println("-----");
     }
 
     public static void main(String[] args) {
-        Rope myRope = new Rope();
+        Rope myRope = new Rope(2);
         myRope.moveRope(IChessKing.MovementDirection.UP);
         myRope.moveRope(IChessKing.MovementDirection.UP);
         myRope.moveRope(IChessKing.MovementDirection.UPRIGHT);

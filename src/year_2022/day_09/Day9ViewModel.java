@@ -19,6 +19,9 @@ public class Day9ViewModel extends CartesianColorTableModel {
 
     @Override
     public Color getBackgroundColorAtCartesian(Point q) {
+        if (controller.tailVisited(q)) {
+            return Color.BLUE;
+        };
         return Color.WHITE;
     }
 
