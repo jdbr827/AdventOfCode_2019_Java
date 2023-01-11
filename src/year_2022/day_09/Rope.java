@@ -26,7 +26,6 @@ public class Rope {
         int dx = head.getPosition().x - tail.getPosition().x;
         int dy = head.getPosition().y - tail.getPosition().y;
 
-        // TODO: FIX
         if (dx >= 2) {
             if (dy > 0) {
                 tail.move(IChessKing.MovementDirection.UPRIGHT);
@@ -38,29 +37,34 @@ public class Rope {
                 tail.move(IChessKing.MovementDirection.RIGHT);
             }
         } else if (dx <= -2) {
-            tail.move(IChessKing.MovementDirection.LEFT);
             if (dy > 0) {
-                tail.move(IChessKing.MovementDirection.UP);
+                tail.move(IChessKing.MovementDirection.UPLEFT);
             }
-            if (dy < 0) {
-                tail.move(IChessKing.MovementDirection.DOWN);
+            else if (dy < 0) {
+                tail.move(IChessKing.MovementDirection.DOWNLEFT);
+            } else {
+                tail.move(IChessKing.MovementDirection.LEFT);
             }
 
         } else if (dy >= 2) {
-            tail.move(IChessKing.MovementDirection.UP);
             if (dx > 0) {
-                tail.move(IChessKing.MovementDirection.RIGHT);
+                tail.move(IChessKing.MovementDirection.UPRIGHT);
             }
-            if (dx < 0) {
-                tail.move(IChessKing.MovementDirection.LEFT);
+            else if (dx < 0) {
+                tail.move(IChessKing.MovementDirection.UPLEFT);
+            }
+            else {
+                tail.move(IChessKing.MovementDirection.UP);
             }
         } else if (dy <= -2) {
-            tail.move(IChessKing.MovementDirection.DOWN);
             if (dx > 0) {
-                tail.move(IChessKing.MovementDirection.RIGHT);
+                tail.move(IChessKing.MovementDirection.DOWNRIGHT);
             }
-            if (dx < 0) {
-                tail.move(IChessKing.MovementDirection.LEFT);
+            else if (dx < 0) {
+                tail.move(IChessKing.MovementDirection.DOWNLEFT);
+            }
+            else {
+                tail.move(IChessKing.MovementDirection.DOWN);
             }
         }
 //        System.out.println("MOVE: " + direction.name());

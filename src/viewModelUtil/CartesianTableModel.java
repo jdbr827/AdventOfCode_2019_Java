@@ -87,6 +87,7 @@ public class CartesianTableModel {
         dtm.setValueAt(value, DTMPoint.x, DTMPoint.y);
     }
 
+
     public void setModelToTable(JTable table1) {
         table1.setModel(dtm);
     }
