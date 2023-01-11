@@ -27,22 +27,15 @@ public class Day9ViewModel extends CartesianColorTableModel {
 
     @Override
     public Color getForegroundColorAtCartesian(Point q) {
-        Rope ptr = controller.myRope;
-        while (ptr != null) {
-            if (q.equals(ptr.head.copyPosition())) {
-                return Color.BLACK;
-            }
-            ptr = ptr.tail;
+        if (controller.ropeContainsPoint(q)) {
+            return Color.BLACK;
         }
         return getBackgroundColorAtCartesian(q);
     }
 
     public void updateRope() {
-        Rope ptr = controller.myRope;
-
-        while (ptr != null) {
-           setValueAtCartesian(ptr.head.copyPosition(), ptr.knotName);
-            ptr = ptr.tail;
+        for (Rope knot : controller.ropePoints()) {
+            setValueAtCartesian(knot.head.copyPosition(), knot.knotName);
         }
     }
 }

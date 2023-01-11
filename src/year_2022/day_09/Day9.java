@@ -1,5 +1,7 @@
 package year_2022.day_09;
 
+import year_2022.day_09.inputScanning.Day9Scanner;
+
 import java.io.FileNotFoundException;
 
 public class Day9 {

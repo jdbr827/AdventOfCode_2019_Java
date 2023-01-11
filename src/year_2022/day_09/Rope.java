@@ -5,6 +5,7 @@ import viewModelUtil.CartesianPoint;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Rope {
     ChessKing head = new ChessKing();
     Rope tail;
@@ -48,7 +49,7 @@ public class Rope {
     }
 
 
-    void moveRope(IChessKing.MovementDirection direction) {
+    public void moveRope(IChessKing.MovementDirection direction) {
         head.move(direction);
         if (tail != null) {
             int dx = head.getPosition().x - tail.head.getPosition().x;

@@ -1,10 +1,9 @@
-package year_2022.day_09;
+package year_2022.day_09.inputScanning;
 
-import javafx.util.Pair;
 import utils.AOCScanner;
 import utils.ReadIn;
+import year_2022.day_09.inputScanning.Day9InstructionPair;
 
-import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

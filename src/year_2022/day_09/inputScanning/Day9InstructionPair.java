@@ -1,6 +1,8 @@
-package year_2022.day_09;
+package year_2022.day_09.inputScanning;
 
 import lombok.AllArgsConstructor;
+import year_2022.day_09.IChessKing;
+import year_2022.day_09.Rope;
 
 import java.util.HashMap;
 import java.util.Map;
