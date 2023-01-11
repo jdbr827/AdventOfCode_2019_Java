@@ -1,6 +1,7 @@
 package year_2022.day_06;
 
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,69 +22,47 @@ import org.jetbrains.annotations.NotNull;
  *
  * we know N is O(C)
  */
-@RequiredArgsConstructor
-public abstract class Day6 {
-    @NotNull Day6DataStream helper;
-    @NotNull Integer N;
-    Integer numScanned = 0;
-
-    public abstract int findStepsUntilLastNAllDiff();
-
-    protected void scanNextChar() {
-        numScanned++;
-        helper.scanNextChar();
-    }
-
-    protected Character getCharScannedXAgo(int x) {
-        if (numScanned <= x) {
-            throw new Error("We haven't scanned enough to go back that far yet.");
-        }
-        return helper.getCharScannedXAgo(x);
-    }
-
+public interface Day6Solver {
+    int findStepsUntilLastNAllDiff(@NotNull Day6DataStream dataStream,  @NotNull Integer N);
 }
 
-class Day6Method1 extends Day6 {
-    public Day6Method1(Day6DataStream of, int n) {
-        super(of, n);
-    }
+@NoArgsConstructor
+class Day6SolverMethod1 implements Day6Solver {
 
     /* O(NU + GC(N^2) + CU) = O(CU + C(N^2)G) bottle-necked at checking for all diff for each new char */
-    public int findStepsUntilLastNAllDiff() {
+    public int findStepsUntilLastNAllDiff(@NotNull Day6DataStream dataStream, @NotNull Integer N) {
 
 
         for (int i = 0; i < N; i++) {                           // O(N)
-            scanNextChar();                                     // O(U)
+            // O(U)
+            dataStream.scanNextChar();
         }
 
         while (true) {                                          // O(C)
             boolean allDiff = true;
             for (int i = 0; i < N; i++) {                           // O(N)
                 for (int j = i + 1; j < N; j++) {                       // O(N)
-                    if (getCharScannedXAgo(i).equals(getCharScannedXAgo(j))) { // O(G)
+                    if (dataStream.getCharScannedXAgo(i).equals(dataStream.getCharScannedXAgo(j))) { // O(G)
                         allDiff = false;
                         break;
                     }
                 }
             }
             if (allDiff) {
-                return numScanned;
+                return dataStream.getNumScanned();
             } else {
-                scanNextChar();                                     // O(U)
+                // O(U)
+                dataStream.scanNextChar();
             }
         }
     }
 }
 
 
-class Day6Method2 extends Day6 {
-
-    public Day6Method2(Day6DataStream of, int n) {
-        super(of, n);
-    }
+class Day6SolverMethod2 implements Day6Solver {
 
     /* O(C(U + NG)), strictly better than method 1 */
-    public int findStepsUntilLastNAllDiff() {
+    public int findStepsUntilLastNAllDiff(@NotNull Day6DataStream dataStream, @NotNull Integer N) {
 
         /*
          * LOOP INVARIANT:
@@ -93,7 +72,8 @@ class Day6Method2 extends Day6 {
          */
         int nearestLater = 0;
         while (nearestLater < N) {                                          // O(C)
-            scanNextChar();                                                      // O(U)
+
+            dataStream.scanNextChar();                                          // O(U)
             nearestLater += 1;
 
             /*
@@ -101,41 +81,39 @@ class Day6Method2 extends Day6 {
              * the most recently scanned char would have been
              * found on a previous iteration
              */
-            Character mostRecentlyScannedChar = getCharScannedXAgo(0);
+            Character mostRecentlyScannedChar = dataStream.getCharScannedXAgo(0);
             for (int j = 1; j < nearestLater; j++) {                            // O(N) worst case but will usually be less
-                if (getCharScannedXAgo(j).equals(mostRecentlyScannedChar)) {        // O(G)
+                if (dataStream.getCharScannedXAgo(j).equals(mostRecentlyScannedChar)) {        // O(G)
                     nearestLater = j;
                     break; // because nearestLater is smallest such j
                 }
             }
         }
 
-        return numScanned;
+        return dataStream.getNumScanned();
     }
 
 }
 
-class Day6Method3 extends Day6 {
-    public Day6Method3(Day6DataStream of, int n) {
-        super(of, n);
-    }
+class Day6SolverMethod3 implements Day6Solver {
 
     /* Also O(CU + CNG), equivalent to Method 2 */
-    public int findStepsUntilLastNAllDiff() {
+    public int findStepsUntilLastNAllDiff(@NotNull Day6DataStream dataStream, @NotNull Integer N) {
 
         int minToScan = N;
         while (minToScan > 0) {                                                 // O(C)
-            scanNextChar();                                                     // O(U)
+            // O(U)
+            dataStream.scanNextChar();
             minToScan -= 1;
 
             for (int i = 1; i < N - minToScan; i++) {                           // O(N)
-                if (getCharScannedXAgo(i).equals(getCharScannedXAgo(0))) {      // O(G)
+                if (dataStream.getCharScannedXAgo(i).equals(dataStream.getCharScannedXAgo(0))) {      // O(G)
                     minToScan = N - i;
                 }
             }
         }
 
-        return numScanned;
+        return dataStream.getNumScanned();
     }
 }
 

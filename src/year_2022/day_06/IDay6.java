@@ -12,20 +12,30 @@ public interface IDay6 {
         return solve(fileName, 14, 3,1);
     }
 
-    static Day6 create(String fileName, int N, int algoMethod, int helperMethod) throws FileNotFoundException {
+
+
+    static int solve(String fileName, int N, int algoMethod, int helperMethod) throws FileNotFoundException {
+        return createDay6Solver(algoMethod).findStepsUntilLastNAllDiff(createDataStream(fileName, N, helperMethod), N);
+    }
+
+    static Day6Solver createDay6Solver(int algoMethod) throws FileNotFoundException {
         switch (algoMethod) {
             case 1:
-                return new Day6Method1(Day6DataStream.of(fileName, N, helperMethod), N);
+                return new Day6SolverMethod1();
             case 2:
-                return new Day6Method2(Day6DataStream.of(fileName, N, helperMethod), N);
+                return new Day6SolverMethod2();
             case 3:
             default:
-                return new Day6Method3(Day6DataStream.of(fileName, N, helperMethod), N);
+                return new Day6SolverMethod3();
         }
     }
 
-    static int solve(String fileName, int N, int algoMethod, int helperMethod) throws FileNotFoundException {
-        return create(fileName, N, algoMethod, helperMethod).findStepsUntilLastNAllDiff();
-    }
 
+    static Day6DataStream createDataStream(String fileName, int N, int method) throws FileNotFoundException {
+        Day6Reader scanner = new Day6Reader(fileName);
+        if (method == 1) {
+            return new Day6DataStream1(scanner, N);
+        }
+        return new Day6DataStream2(scanner, N);
+    }
 }
