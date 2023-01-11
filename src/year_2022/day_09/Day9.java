@@ -14,6 +14,5 @@ public class Day9 {
             }
         }
         return myRope.numVisited();
-
     }
 }

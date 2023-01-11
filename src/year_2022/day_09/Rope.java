@@ -28,14 +28,16 @@ public class Rope {
 
         // TODO: FIX
         if (dx >= 2) {
-            tail.move(IChessKing.MovementDirection.RIGHT);
             if (dy > 0) {
-                tail.move(IChessKing.MovementDirection.UP);
+                tail.move(IChessKing.MovementDirection.UPRIGHT);
             }
-            if (dy < 0) {
-                tail.move(IChessKing.MovementDirection.DOWN);
+            else if (dy < 0) {
+                tail.move(IChessKing.MovementDirection.DOWNRIGHT);
             }
-        } if (dx <= -2) {
+            else {
+                tail.move(IChessKing.MovementDirection.RIGHT);
+            }
+        } else if (dx <= -2) {
             tail.move(IChessKing.MovementDirection.LEFT);
             if (dy > 0) {
                 tail.move(IChessKing.MovementDirection.UP);
@@ -44,8 +46,7 @@ public class Rope {
                 tail.move(IChessKing.MovementDirection.DOWN);
             }
 
-        }
-        if (dy >= 2) {
+        } else if (dy >= 2) {
             tail.move(IChessKing.MovementDirection.UP);
             if (dx > 0) {
                 tail.move(IChessKing.MovementDirection.RIGHT);
@@ -53,7 +54,7 @@ public class Rope {
             if (dx < 0) {
                 tail.move(IChessKing.MovementDirection.LEFT);
             }
-        } if (dy <= -2) {
+        } else if (dy <= -2) {
             tail.move(IChessKing.MovementDirection.DOWN);
             if (dx > 0) {
                 tail.move(IChessKing.MovementDirection.RIGHT);
