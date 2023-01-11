@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Day9Controller {
     private final Day9View view;
-    Rope myRope = new Rope(2);
+    Rope myRope = new Rope(3);
 
 
     public Day9Controller(Day9View day9View) {
@@ -15,20 +15,9 @@ public class Day9Controller {
 
     public void moveRope(IChessKing.MovementDirection direction) {
         myRope.moveRope(direction);
-        view.repaint();
-        view.updateHead();
-        view.updateTail();
+        view.updateRope();
         view.repaint();
     }
-
-    public CartesianPoint copyHeadPosition() {
-        return myRope.head.copyPosition();
-    }
-
-    public CartesianPoint copyTailPosition() {
-        return myRope.tail.head.copyPosition();
-    }
-
 
     public boolean tailVisited(Point q) {
         return myRope.tailVisited(CartesianPoint.fromPoint(q));

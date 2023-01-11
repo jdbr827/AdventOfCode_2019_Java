@@ -26,7 +26,7 @@ public class Day9View {
         viewModel.setController(controller);
 
 
-        viewModel.updateHead(); // to initialize the Head
+        viewModel.updateRope(); // to initialize the Head
 
         rightButton.addActionListener(new ActionListener() {
             @Override
@@ -63,13 +63,10 @@ public class Day9View {
         new Day9View();
     }
 
-    public void updateHead() {
-        viewModel.updateHead();
+    public void updateRope() {
+        viewModel.updateRope();
     }
 
-    public void updateTail() {
-        viewModel.updateTail();
-    }
 
     public void repaint() {
         table1.repaint();

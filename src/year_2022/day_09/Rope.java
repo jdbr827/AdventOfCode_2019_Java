@@ -10,20 +10,27 @@ import java.util.Map;
 public class Rope {
     ChessKing head = new ChessKing();
     Rope tail;
+    String knotName;
 
     Map<CartesianPoint, Boolean> visited = new HashMap<>();
 
     int uniqueVisited = 0;
 
-
     Rope(int numTail) {
+        this(numTail, true);
+    }
+
+
+    Rope(int numTail, boolean isHead) {
 
         if (numTail == 1) {
-            tail = null; // todo fix
-            visited.put(head.copyPosition(), true); // todo fix
+            tail = null;
+            knotName = "T";
+            visited.put(head.copyPosition(), true);
             uniqueVisited++;
         } else {
-            tail = new Rope(numTail - 1);
+            knotName = isHead ? "H" : String.valueOf(numTail);
+            tail = new Rope(numTail - 1, false);
         }
 
     }
