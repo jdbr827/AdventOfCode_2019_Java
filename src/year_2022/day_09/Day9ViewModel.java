@@ -20,7 +20,7 @@ public class Day9ViewModel extends CartesianColorTableModel {
     @Override
     public Color getBackgroundColorAtCartesian(Point q) {
         if (controller.tailVisited(q)) {
-            return Color.BLUE;
+            return Color.CYAN;
         };
         return Color.WHITE;
     }
@@ -39,6 +39,7 @@ public class Day9ViewModel extends CartesianColorTableModel {
 
     public void updateRope() {
         Rope ptr = controller.myRope;
+
         while (ptr != null) {
            setValueAtCartesian(ptr.head.copyPosition(), ptr.knotName);
             ptr = ptr.tail;

@@ -1,7 +1,5 @@
 package year_2022.day_09;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import viewModelUtil.CartesianPoint;
 
 import java.util.HashMap;
@@ -17,11 +15,11 @@ public class Rope {
     int uniqueVisited = 0;
 
     Rope(int numTail) {
-        this(numTail, true);
+        this(numTail, 0);
     }
 
 
-    Rope(int numTail, boolean isHead) {
+    Rope(int numTail, int depth) {
 
         if (numTail == 1) {
             tail = null;
@@ -29,15 +27,15 @@ public class Rope {
             visited.put(head.copyPosition(), true);
             uniqueVisited++;
         } else {
-            knotName = isHead ? "H" : String.valueOf(numTail);
-            tail = new Rope(numTail - 1, false);
+            knotName = depth == 0 ? "H" : String.valueOf(depth);
+            tail = new Rope(numTail - 1, depth + 1);
         }
 
     }
 
-    int numVisited() {
+    int numTailVisited() {
         if (tail != null) {
-            return tail.numVisited();
+            return tail.numTailVisited();
         }
         return uniqueVisited;
     }

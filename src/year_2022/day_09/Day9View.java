@@ -28,30 +28,10 @@ public class Day9View {
 
         viewModel.updateRope(); // to initialize the Head
 
-        rightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.moveRope(IChessKing.MovementDirection.RIGHT);
-            }
-        });
-        lButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.moveRope(IChessKing.MovementDirection.LEFT);
-            }
-        });
-        uButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.moveRope(IChessKing.MovementDirection.UP);
-            }
-        });
-        dButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.moveRope(IChessKing.MovementDirection.DOWN);
-            }
-        });
+        rightButton.addActionListener(e -> controller.moveRope(IChessKing.MovementDirection.RIGHT));
+        lButton.addActionListener(e -> controller.moveRope(IChessKing.MovementDirection.LEFT));
+        uButton.addActionListener(e -> controller.moveRope(IChessKing.MovementDirection.UP));
+        dButton.addActionListener(e -> controller.moveRope(IChessKing.MovementDirection.DOWN));
     }
 
     private void createUIComponents() {
@@ -66,7 +46,6 @@ public class Day9View {
     public void updateRope() {
         viewModel.updateRope();
     }
-
 
     public void repaint() {
         table1.repaint();
