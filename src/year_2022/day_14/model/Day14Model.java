@@ -4,9 +4,11 @@ import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Scanner;
 
 import java.util.Collection;
+import java.util.Set;
+
+import static year_2022.day_14.model.Day14Model.fromRockSet;
 
 public interface Day14Model {
-    Collection<JavaPoint> getRocks();
     boolean isRock(JavaPoint p);
     boolean isAtRest(JavaPoint p);
     boolean endCondition();
@@ -16,15 +18,17 @@ public interface Day14Model {
     Collection<JavaPoint> getCurrentSandPieces();
 
     static Day14Model fromCornerRocksFile(String fileName, int version) {
-        if (version == 1) {
-            return new Day14ModelImpl(new Day14Scanner(fileName).readInRocks());
-        } if (version == 2) {
-            return new Day14ModelImpl2(new Day14Scanner(fileName).readInRocks());
-        } if (version == 3) {
-            return new Day14ModelImpl3(new Day14Scanner(fileName).readInRocks());
-        }
-        return new Day14ModelImpl(new Day14Scanner(fileName).readInRocks());
+        return fromRockSet(new Day14Scanner(fileName).readInRocks(), version);
     }
 
+    static Day14Model fromRockSet(Set<JavaPoint> rocks, int version) {
+        if (version == 1) {
+            return new Day14ModelImpl(rocks);
+        } if (version == 2) {
+            return new Day14ModelImpl2(rocks);
+        } if (version == 3) {
+            return new Day14ModelImpl3(rocks);
+        }
+        return new Day14ModelImpl(rocks);
+    }
 }
-

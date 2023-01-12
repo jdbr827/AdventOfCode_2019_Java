@@ -18,7 +18,7 @@ public class Day14ViewModel extends JavaColorTableModel {
 
     @Override
     public Color getForegroundColorAtJava(JavaPoint javaPoint) {
-        return getBackgroundColorAtJava(javaPoint);
+        return Color.BLACK;
     }
 
     @Override

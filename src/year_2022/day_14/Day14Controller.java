@@ -4,6 +4,8 @@ import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14Model;
 import year_2022.day_14.view.Day14View;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Day14Controller {
@@ -11,14 +13,12 @@ public class Day14Controller {
     Day14Model model;
 
     public Day14Controller(String fileName, int version) {
-         model = Day14Model.fromCornerRocksFile(fileName, version);
-         view = new Day14View(this);
-         addRocksToView();
+        Set<JavaPoint> rocks = new Day14Scanner(fileName).readInRocks();
+        model = Day14Model.fromCornerRocksFile(fileName, version);
+        view = new Day14View(this);
+        rocks.forEach(view::putRock);
     }
 
-    private void addRocksToView() {
-        model.getRocks().forEach(view::putRock);
-    }
 
 
 
