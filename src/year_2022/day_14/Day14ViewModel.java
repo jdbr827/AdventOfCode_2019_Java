@@ -24,6 +24,10 @@ public class Day14ViewModel extends JavaColorTableModel {
 
     @Override
     public Color getBackgroundColorAtJava(JavaPoint javaPoint) {
-        return (controller.isRock(javaPoint)) ? Color.GRAY : Color.WHITE;
+        if (controller.isRock(javaPoint)) { return  Color.GRAY;}
+        if (controller.getCurrentSandPiece().equals(javaPoint)) {return Color.CYAN;}
+
+        return Color.WHITE;
+
     }
 }
