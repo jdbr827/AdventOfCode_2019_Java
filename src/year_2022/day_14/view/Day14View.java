@@ -1,6 +1,8 @@
-package year_2022.day_14;
+package year_2022.day_14.view;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.Day14Controller;
+import year_2022.day_14.view.Day14ViewModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

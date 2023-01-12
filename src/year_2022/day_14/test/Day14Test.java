@@ -2,8 +2,7 @@ package year_2022.day_14.test;
 
 import org.junit.jupiter.api.Test;
 import year_2022.day_14.Day14Controller;
-import year_2022.day_14.Day14Model;
-import year_2022.day_14.IDay14Controller;
+import year_2022.day_14.model.Day14Model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

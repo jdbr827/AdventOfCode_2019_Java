@@ -1,6 +1,7 @@
-package year_2022.day_14;
+package year_2022.day_14.model;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.Day14Scanner;
 
 import java.util.Collection;
 

@@ -1,11 +1,7 @@
-package year_2022.day_14;
+package year_2022.day_14.model;
 
-import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 
 class Day14ModelImpl2 extends Day14ModelImpl {

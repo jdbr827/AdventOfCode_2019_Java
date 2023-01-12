@@ -1,6 +1,8 @@
 package year_2022.day_14;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.Day14Model;
+import year_2022.day_14.view.Day14View;
 
 import java.util.concurrent.TimeUnit;
 

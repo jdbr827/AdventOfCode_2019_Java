@@ -1,9 +1,8 @@
-package year_2022.day_14;
+package year_2022.day_14.view;
 
-import viewModelUtil.CartesianColorTableModel;
-import viewModelUtil.CartesianPoint;
 import viewModelUtil.JavaColorTableModel;
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.Day14Controller;
 
 import java.awt.*;
 
