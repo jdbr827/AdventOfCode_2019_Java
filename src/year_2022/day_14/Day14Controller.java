@@ -2,6 +2,8 @@ package year_2022.day_14;
 
 import viewModelUtil.JavaPoint;
 
+import java.util.concurrent.TimeUnit;
+
 public class Day14Controller {
     Day14View view;
     Day14Model model;
@@ -26,22 +28,11 @@ public class Day14Controller {
         return model.isRock(javaPoint);
     }
 
-    public void putRock(JavaPoint rock) {
-        view.putRock(rock);
-    }
-
-    public boolean moveCurrentSandPiece() {
-       return model.moveCurrentSandPiece();
-    }
-
     public void executeOneTimeStep() {
         if (!model.moveCurrentSandPiece()) {
             model.createNewSandPiece();
         }
         view.repaint();
-
-
-
     }
 
     public JavaPoint getCurrentSandPiece() {
@@ -51,5 +42,16 @@ public class Day14Controller {
 
     public boolean isAtRest(JavaPoint javaPoint) {
         return model.isAtRest(javaPoint);
+    }
+
+    public boolean sandInAbyss() {
+        return model.sandInAbyss();
+    }
+
+    public void autoPilot() throws InterruptedException {
+        while (!sandInAbyss()){
+            executeOneTimeStep();
+            TimeUnit.MILLISECONDS.sleep(20);
+        }
     }
 }

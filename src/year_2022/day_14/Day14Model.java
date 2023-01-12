@@ -1,9 +1,11 @@
 package year_2022.day_14;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public interface Day14Model {
     Day14Controller getController();
     JavaPoint getCurrentSandPiece();
     boolean isAtRest(JavaPoint p);
+    boolean sandInAbyss();
 
     /**
      *
@@ -24,13 +27,14 @@ public interface Day14Model {
 }
 
 class Day14ModelImpl implements Day14Model {
-    @Getter
+    @Getter @NotNull
     Set<JavaPoint> rocks;
     @Getter
     Day14Controller controller;
     @Getter
     JavaPoint currentSandPiece;
     Set<JavaPoint> piecesAtRest = new HashSet<>();
+    int lowestRockY;
 
 
     public Day14ModelImpl(Day14Controller controller, Set<JavaPoint> rocks) {
@@ -38,6 +42,7 @@ class Day14ModelImpl implements Day14Model {
         this.rocks = rocks;
         piecesAtRest.addAll(getRocks());
         createNewSandPiece();
+        lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
     }
 
     @Override
@@ -48,6 +53,11 @@ class Day14ModelImpl implements Day14Model {
     @Override
     public boolean isAtRest(JavaPoint p) {
         return piecesAtRest.contains(p);
+    }
+
+    @Override
+    public boolean sandInAbyss() {
+        return currentSandPiece.y >= lowestRockY;
     }
 
     @Override

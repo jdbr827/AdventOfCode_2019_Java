@@ -10,6 +10,7 @@ public class Day14View {
     private JTable table1;
     private JPanel panel1;
     private JButton executeOneTimeStepButton;
+    private JButton autopilotButton;
     private Day14ViewModel viewModel;
     Day14Controller controller;
 
@@ -27,10 +28,29 @@ public class Day14View {
         executeOneTimeStepButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.executeOneTimeStep();
+                if (!controller.sandInAbyss()) {
+                    controller.executeOneTimeStep();
+                }
+                if (controller.sandInAbyss()) {
+                    executeOneTimeStepButton.setText("DONE!");
+                }
             }
         });
+        autopilotButton.addActionListener(e -> tryAutopilotThread());
     }
+
+    private void tryAutopilotThread() {
+        Thread autopilotThread = new Thread(this::tryAutopilot);
+        autopilotThread.start();
+    }
+
+    private void tryAutopilot() {
+            try {
+                    controller.autoPilot();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
 
 
 
