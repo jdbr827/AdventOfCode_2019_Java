@@ -23,12 +23,11 @@ public class KeepAwaySimulation {
                 .collect(Collectors.toList());
     }
 
-    public int predictMonkeyBusiness() {
-        for (int i=0; i<20; i++) {
-            executeRound();
-        }
+    public long predictMonkeyBusiness(int numRounds) {
+        for (int i=0; i<numRounds; i++) {executeRound();}
+
         return mostActiveMonkeys().stream()
                 .map(m -> m.itemsInspected)
-                .reduce(1, Math::multiplyExact);
+                .reduce(1L, Math::multiplyExact);
     }
 }

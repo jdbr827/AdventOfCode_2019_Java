@@ -40,7 +40,7 @@ public class Day11Scanner extends AOCScanner {
     private Monkey scanNextMonkey() {
         Matcher m = monkeyPattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m, "Could not match ranges pattern");
-        System.out.println(m.group(0));
+        //System.out.println(m.group(0));
 
         Matcher m2 = startingItemsPattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m2, "Could not match starting items pattern");
@@ -48,23 +48,23 @@ public class Day11Scanner extends AOCScanner {
         List<Long> worryList = Stream.of(m2.group(1).split(", ")).map(Long::parseLong).collect(Collectors.toList());
         Queue<Long> worryQ = new LinkedList<>(worryList);
 
-        System.out.println(worryList.toString());
+        //System.out.println(worryList.toString());
 
         Matcher m3 = operationPattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m3, "Could not match operation pattern");
-        System.out.println(m3.group(0));
+        //System.out.println(m3.group(0));
 
         Matcher m4 = testPattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m4, "Could not match test pattern");
-        System.out.println(m4.group(0));
+        //System.out.println(m4.group(0));
 
         Matcher m5 = testTruePattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m5, "Could not match test true pattern");
-        System.out.println(m5.group(0));
+        //System.out.println(m5.group(0));
 
         Matcher m6 = testFalsePattern.matcher(scanner.nextLine());
         ReadIn.findOrElseThrow(m6, "Could not match test false pattern");
-        System.out.println(m6.group(0));
+        //System.out.println(m6.group(0));
 
         if (scanner.hasNextLine()) {
             scanner.nextLine(); // blank
@@ -81,11 +81,5 @@ public class Day11Scanner extends AOCScanner {
 
     public Day11Scanner(String fileName) {
         super(fileName);
-    }
-
-    public static void main(String[] args) {
-        Day11Scanner scanner = new Day11Scanner("src/year_2022/day_11/test/day_11_sample_input.txt");
-        KeepAwaySimulation keepAway = scanner.scanMonkeys();
-        System.out.println(keepAway.predictMonkeyBusiness());
     }
 }

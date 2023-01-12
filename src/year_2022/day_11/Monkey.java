@@ -13,7 +13,7 @@ public class Monkey {
     @NonNull Queue<Long> items;
     @NonNull Function<Long, Long> operation;
     @NonNull Function<Long, Monkey> nextMonkeyFunc;
-    @NonNull Integer itemsInspected = 0;
+    @NonNull Long itemsInspected = 0L;
 
     public void takeTurn() {
         Long item;

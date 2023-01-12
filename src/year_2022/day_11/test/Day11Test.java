@@ -11,15 +11,27 @@ public class Day11Test {
     public static String EXAMPLE_INPUT = "src/year_2022/day_11/test/day_11_sample_input.txt";
     public static String OFFICIAL_INPUT = "src/year_2022/day_11/test/day_11_input.txt";
 
-    public int part1(String fileName) {
+    public long part1(String fileName) {
         Day11Scanner scanner = new Day11Scanner(fileName);
         KeepAwaySimulation keepAway = scanner.scanMonkeys();
-        return keepAway.predictMonkeyBusiness();
+        return keepAway.predictMonkeyBusiness(20);
     }
+
+    public long part2(String fileName) {
+        Day11Scanner scanner = new Day11Scanner(fileName);
+        KeepAwaySimulation keepAway = scanner.scanMonkeys();
+        return keepAway.predictMonkeyBusiness(10000);
+    }
+
     @Test
     void test_part1() {
-        //Day10.part1(DUMMY_INPUT);
         assertEquals(10605, part1(EXAMPLE_INPUT));
         assertEquals(100345, part1(OFFICIAL_INPUT));
+    }
+
+    @Test
+    void test_part2() {
+        assertEquals(2713310158L, part2(EXAMPLE_INPUT));
+        //assertEquals(100345, part1(OFFICIAL_INPUT));
     }
 }
