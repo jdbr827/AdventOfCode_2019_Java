@@ -12,13 +12,13 @@ public class Day11Test {
     public static String OFFICIAL_INPUT = "src/year_2022/day_11/test/day_11_input.txt";
 
     public long part1(String fileName) {
-        Day11Scanner scanner = new Day11Scanner(fileName);
+        Day11Scanner scanner = new Day11Scanner(fileName, 1);
         KeepAwaySimulation keepAway = scanner.scanMonkeys();
         return keepAway.predictMonkeyBusiness(20);
     }
 
     public long part2(String fileName) {
-        Day11Scanner scanner = new Day11Scanner(fileName);
+        Day11Scanner scanner = new Day11Scanner(fileName, 2);
         KeepAwaySimulation keepAway = scanner.scanMonkeys();
         return keepAway.predictMonkeyBusiness(10000);
     }

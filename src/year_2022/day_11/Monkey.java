@@ -6,21 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
 public class Monkey {
-    @NonNull Queue<Long> items;
-    @NonNull Function<Long, Long> operation;
-    @NonNull Function<Long, Monkey> nextMonkeyFunc;
+    @NonNull Queue<Item> items;
+    @NonNull Consumer<Item> operation;
+    @NonNull Function<Item, Monkey> nextMonkeyFunc;
     @NonNull Long itemsInspected = 0L;
 
     public void takeTurn() {
-        Long item;
+        Item item;
         while ((item = items.poll()) != null) {
             itemsInspected++;
-            item = operation.apply(item);
-            item /= 3;
+            operation.accept(item);
+            item.applyRelief();
             nextMonkeyFunc.apply(item).items.add(item);
         }
     }
