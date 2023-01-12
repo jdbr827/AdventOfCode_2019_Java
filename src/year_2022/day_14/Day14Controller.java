@@ -35,7 +35,7 @@ public class Day14Controller {
     }
 
     public void executeOneTimeStep() {
-        if (model.moveCurrentSandPiece()) {
+        if (!model.moveCurrentSandPiece()) {
             model.createNewSandPiece();
         }
         view.repaint();
@@ -47,5 +47,9 @@ public class Day14Controller {
     public JavaPoint getCurrentSandPiece() {
         return model.getCurrentSandPiece();
 
+    }
+
+    public boolean isAtRest(JavaPoint javaPoint) {
+        return model.isAtRest(javaPoint);
     }
 }
