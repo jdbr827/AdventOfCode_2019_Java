@@ -44,7 +44,7 @@ class SimpleItem implements Item {
 class ComplexItem implements Item {
     long worryLevel;
 
-    public Map<Integer, Integer> primeFactorization = Map.of(
+    final public Map<Integer, Integer> primeFactorization = Map.of(
             2, 0,
             3, 0,
             5, 0,
@@ -57,6 +57,7 @@ class ComplexItem implements Item {
 
     @Override
     public long getWorryLevel() {
+        return 0;
     }
 
     @Override
