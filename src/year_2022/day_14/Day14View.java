@@ -30,10 +30,10 @@ public class Day14View {
         executeOneTimeStepButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!controller.sandInAbyss()) {
+                if (!controller.endCondition()) {
                     controller.executeOneTimeStep();
                 }
-                if (controller.sandInAbyss()) {
+                if (controller.endCondition()) {
                     executeOneTimeStepButton.setText("DONE!");
                 }
             }
@@ -62,6 +62,7 @@ public class Day14View {
     }
 
 
+
     public void putRock(JavaPoint rock) {
         viewModel.setValueAtJava(rock, '#');
     }
@@ -72,5 +73,9 @@ public class Day14View {
 
     public void repaint() {
         table1.repaint();
+    }
+
+    public void setCurrentSandPiece(JavaPoint currentSandPiece) {
+        viewModel.setValueAtJava(currentSandPiece, 'o');
     }
 }

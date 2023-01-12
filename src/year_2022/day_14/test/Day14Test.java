@@ -12,7 +12,13 @@ public class Day14Test {
 
     @Test
     void test_part1() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1).runModelOnly());
+    }
+
+     @Test
+    void test_part2() {
+        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2).runModelOnly());
+        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2).runModelOnly());
     }
 }

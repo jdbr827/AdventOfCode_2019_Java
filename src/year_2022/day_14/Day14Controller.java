@@ -9,7 +9,7 @@ public class Day14Controller implements IDay14Controller {
     Day14Model model;
 
     Day14Controller() {
-         model = Day14Model.fromCornerRocksFile("src/year_2022/day_14/test/day_14_input.txt");
+         model = Day14Model.fromCornerRocksFile("src/year_2022/day_14/test/day_14_sample_input.txt", 2);
          view = new Day14View(this);
          addRocksToView();
     }
@@ -44,14 +44,19 @@ public class Day14Controller implements IDay14Controller {
         return model.isAtRest(javaPoint);
     }
 
-    public boolean sandInAbyss() {
-        return model.sandInAbyss();
+    public boolean endCondition() {
+        return model.endCondition();
     }
 
     public void autoPilot() throws InterruptedException {
-        while (!sandInAbyss()){
+        while (!endCondition()){
             executeOneTimeStep();
+            view.setCurrentSandPiece(model.getCurrentSandPiece());
             TimeUnit.MILLISECONDS.sleep(20);
         }
+    }
+
+    public boolean isCurrentSandPiece(JavaPoint javaPoint) {
+        return javaPoint.equals(model.getCurrentSandPiece());
     }
 }
