@@ -2,6 +2,8 @@ package year_2022.day_14.test;
 
 import org.junit.jupiter.api.Test;
 import year_2022.day_14.Day14Controller;
+import year_2022.day_14.model.Day14DataModelImpl;
+import year_2022.day_14.model.Day14DataModelImpl2;
 import year_2022.day_14.model.Day14Model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,26 +15,26 @@ public class Day14Test {
 
     @Test
     void test_part1() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1, null).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1, null).runModelOnly());
     }
 
     @Test
     void test_part2() {
-        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2).runModelOnly());
-        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2).runModelOnly());
+        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2, null).runModelOnly());
+        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2, null).runModelOnly());
     }
 
     @Test
     void test_impl_3() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 3).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 3).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 3, null).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 3, null).runModelOnly());
     }
 
     @Test
     void test_impl_4() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 4).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 4).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 4, new Day14DataModelImpl()).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 4, new Day14DataModelImpl()).runModelOnly());
     }
 
     public static void main(String[] args) {

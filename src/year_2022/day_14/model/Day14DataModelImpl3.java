@@ -13,7 +13,9 @@ public class Day14DataModelImpl3 implements Day14DataModel2 {
     Set<JavaPoint> piecesAtRest = new HashSet<JavaPoint>();
 
 
-    public Day14DataModelImpl3(Set<JavaPoint> rocks) {
+
+    public Day14DataModelImpl3(@NotNull Set<JavaPoint> rocks) {
+        this.rocks = rocks;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class Day14DataModelImpl3 implements Day14DataModel2 {
 
     @Override
     public boolean getIsRock(JavaPoint javaPoint) {
-        return false;
+        return rocks.contains(javaPoint);
     }
 
     @Override

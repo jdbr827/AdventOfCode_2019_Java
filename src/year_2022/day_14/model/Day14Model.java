@@ -15,13 +15,12 @@ public interface Day14Model {
     int getNumSandPiecesFallenSoFar();
     int runModelOnly();
     void executeOneTimeStep();
-    Collection<JavaPoint> getCurrentFallingPieces();
 
-    static Day14Model fromCornerRocksFile(String fileName, int version) {
-        return fromRockSet(new Day14Scanner(fileName).readInRocks(), version);
+    static Day14Model fromCornerRocksFile(String fileName, int version, Day14DataModel dataModel) {
+        return fromRockSet(new Day14Scanner(fileName).readInRocks(), version, dataModel);
     }
 
-    static Day14Model fromRockSet(Set<JavaPoint> rocks, int version) {
+    static Day14Model fromRockSet(Set<JavaPoint> rocks, int version, Day14DataModel dataModel) {
         if (version == 1) {
             return new Day14ModelImpl(rocks);
         } if (version == 2) {
@@ -30,8 +29,11 @@ public interface Day14Model {
             return new Day14ModelImpl3(rocks);
         }
         if (version == 4) {
-            return new Day14ModelImpl4(rocks);
+            return new Day14ModelImpl4(rocks, dataModel);
         }
         return new Day14ModelImpl(rocks);
     }
+
+    boolean isSandFallingAt(JavaPoint javaPoint);
+
 }

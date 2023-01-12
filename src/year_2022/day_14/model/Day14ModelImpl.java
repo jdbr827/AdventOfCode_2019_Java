@@ -74,6 +74,7 @@ class Day14ModelImpl implements Day14Model {
     }
 
 
+
     public void createNewSandPiece() {
         currentSandPiece = new JavaPoint(500, 0);
     }
@@ -91,8 +92,8 @@ class Day14ModelImpl implements Day14Model {
     }
 
     @Override
-    public Collection<JavaPoint> getCurrentFallingPieces() {
-        return List.of(currentSandPiece);
+    public boolean isSandFallingAt(JavaPoint javaPoint) {
+        return javaPoint.equals(currentSandPiece);
     }
 
 

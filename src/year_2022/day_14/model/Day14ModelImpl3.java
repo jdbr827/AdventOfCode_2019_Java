@@ -29,8 +29,8 @@ public class Day14ModelImpl3 extends Day14ModelImpl {
     }
 
     @Override
-    public List<JavaPoint> getCurrentFallingPieces() {
-        return currentFallingPieces;
+    public boolean isSandFallingAt(JavaPoint javaPoint) {
+        return currentFallingPieces.contains(javaPoint);
     }
 
     @Override

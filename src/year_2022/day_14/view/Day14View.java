@@ -70,8 +70,9 @@ public class Day14View {
 
     public void putRock(JavaPoint rock) {
         viewModel.setValueAtJava(rock, "#");
-        viewModel.setColorAtJava(rock, Color.GRAY);
+        //viewModel.setColorAtJava(rock, Color.GRAY);
         resizeTable();
+        repaint();
     }
 
     public void setSandPiecesSoFar(int num) {

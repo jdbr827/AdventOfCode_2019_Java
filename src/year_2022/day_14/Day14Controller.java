@@ -1,6 +1,7 @@
 package year_2022.day_14;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.Day14DataModelImpl2;
 import year_2022.day_14.model.Day14Model;
 import year_2022.day_14.view.Day14View;
 
@@ -13,7 +14,7 @@ public class Day14Controller {
 
     public Day14Controller(String fileName, int version) {
         Set<JavaPoint> rocks = new Day14Scanner(fileName).readInRocks();
-        model = Day14Model.fromCornerRocksFile(fileName, version);
+        model = Day14Model.fromCornerRocksFile(fileName, version, new Day14DataModelImpl2(this));
         view = new Day14View(this);
         rocks.forEach(view::putRock);
     }
@@ -48,7 +49,7 @@ public class Day14Controller {
     }
 
     public boolean isFalling(JavaPoint javaPoint) {
-        return model.getCurrentFallingPieces().contains(javaPoint);
+        return model.isSandFallingAt(javaPoint);
     }
 
     public int getSandPiecesSoFar() {

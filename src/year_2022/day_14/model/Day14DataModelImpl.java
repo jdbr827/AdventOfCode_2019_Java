@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
+public
 class Day14DataModelImpl implements Day14DataModel {
 
     Map<JavaPoint, PointState> stateMap = new HashMap<>();
@@ -15,7 +16,7 @@ class Day14DataModelImpl implements Day14DataModel {
         return stateMap.get(javaPoint).equals(PointState.REST);
     }
 
-    public boolean getIsFalling(JavaPoint javaPoint) {
+    public boolean getIsSandFallingAt(JavaPoint javaPoint) {
         return stateMap.get(javaPoint).equals(PointState.FALLING);
     }
 
