@@ -11,6 +11,7 @@ public class Day14View {
     private JPanel panel1;
     private JButton executeOneTimeStepButton;
     private JButton autopilotButton;
+    private JLabel sandPiecesSoFar;
     private Day14ViewModel viewModel;
     Day14Controller controller;
 
@@ -18,6 +19,7 @@ public class Day14View {
     public Day14View(Day14Controller controller) {
         this.controller = controller;
         JFrame frame = new JFrame("2022 Day 14 Sand");
+        sandPiecesSoFar.setText("0");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -62,6 +64,10 @@ public class Day14View {
 
     public void putRock(JavaPoint rock) {
         viewModel.setValueAtJava(rock, '#');
+    }
+
+    public void setSandPiecesSoFar(int num) {
+        sandPiecesSoFar.setText(String.valueOf(num));
     }
 
     public void repaint() {

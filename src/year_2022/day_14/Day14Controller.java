@@ -4,12 +4,12 @@ import viewModelUtil.JavaPoint;
 
 import java.util.concurrent.TimeUnit;
 
-public class Day14Controller {
+public class Day14Controller implements IDay14Controller {
     Day14View view;
     Day14Model model;
 
     Day14Controller() {
-         model = new Day14ModelImpl(this, new Day14Scanner("src/year_2022/day_14/test/day_14_sample_input.txt").readInRocks());
+         model = Day14Model.fromCornerRocksFile("src/year_2022/day_14/test/day_14_input.txt");
          view = new Day14View(this);
          addRocksToView();
     }
@@ -30,15 +30,15 @@ public class Day14Controller {
 
     public void executeOneTimeStep() {
         if (!model.moveCurrentSandPiece()) {
-            model.createNewSandPiece();
+            view.setSandPiecesSoFar(model.getSandPiecesSoFar());
         }
         view.repaint();
     }
 
     public JavaPoint getCurrentSandPiece() {
         return model.getCurrentSandPiece();
-
     }
+
 
     public boolean isAtRest(JavaPoint javaPoint) {
         return model.isAtRest(javaPoint);

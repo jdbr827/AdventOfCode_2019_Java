@@ -12,7 +12,6 @@ import java.util.Set;
 public interface Day14Model {
     Collection<JavaPoint> getRocks();
     boolean isRock(JavaPoint p);
-    Day14Controller getController();
     JavaPoint getCurrentSandPiece();
     boolean isAtRest(JavaPoint p);
     boolean sandInAbyss();
@@ -23,22 +22,29 @@ public interface Day14Model {
      */
     boolean moveCurrentSandPiece();
 
-    void createNewSandPiece();
+    int getSandPiecesSoFar();
+
+    int runModelOnly();
+
+    static Day14Model fromCornerRocksFile(String fileName) {
+         return new Day14ModelImpl(new Day14Scanner(fileName).readInRocks());
+    }
 }
 
 class Day14ModelImpl implements Day14Model {
     @Getter @NotNull
     Set<JavaPoint> rocks;
     @Getter
-    Day14Controller controller;
-    @Getter
     JavaPoint currentSandPiece;
     Set<JavaPoint> piecesAtRest = new HashSet<>();
     int lowestRockY;
 
+    @Getter
+    int numSandPiecesFallenSoFar = 0;
 
-    public Day14ModelImpl(Day14Controller controller, Set<JavaPoint> rocks) {
-        this.controller = controller;
+
+
+    public Day14ModelImpl(Set<JavaPoint> rocks) {
         this.rocks = rocks;
         piecesAtRest.addAll(getRocks());
         createNewSandPiece();
@@ -60,6 +66,7 @@ class Day14ModelImpl implements Day14Model {
         return currentSandPiece.y >= lowestRockY;
     }
 
+
     @Override
     public boolean moveCurrentSandPiece() {
         JavaPoint down = new JavaPoint(currentSandPiece.x, currentSandPiece.y + 1);
@@ -78,12 +85,27 @@ class Day14ModelImpl implements Day14Model {
         }
 
         piecesAtRest.add(currentSandPiece);
+        numSandPiecesFallenSoFar++;
+        //controller.setSandPiecesSoFar(numSandPiecesFallenSoFar);
+        createNewSandPiece();
         return false;
     }
 
     @Override
+    public int getSandPiecesSoFar() {
+        return getNumSandPiecesFallenSoFar();
+    }
+
+
     public void createNewSandPiece() {
         currentSandPiece = new JavaPoint(500, 0);
+    }
+
+    public int runModelOnly() {
+        while(!sandInAbyss()) {
+            moveCurrentSandPiece();
+        }
+        return getNumSandPiecesFallenSoFar();
     }
 
 
