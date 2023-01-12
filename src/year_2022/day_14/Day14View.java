@@ -7,9 +7,11 @@ public class Day14View {
     private JPanel panel1;
     private JButton button1;
     private Day14ViewModel viewModel;
+    Day14Controller controller;
 
 
-    public Day14View() {
+    public Day14View(Day14Controller controller) {
+        this.controller = controller;
         JFrame frame = new JFrame("2022 Day 14 Sand");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +27,5 @@ public class Day14View {
         table1 = viewModel.createColorJTable();
     }
 
-    public static void main(String[] args) {
-        new Day14View();
-    }
+
 }

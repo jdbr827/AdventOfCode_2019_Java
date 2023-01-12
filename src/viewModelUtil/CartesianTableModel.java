@@ -77,7 +77,7 @@ public class CartesianTableModel {
             for (int i = 0; i < dtm.getColumnCount(); i++) {
                 newRow.add(-1);
             }
-            this.dtm.addRow(newRow);
+            dtm.addRow(newRow);
         }
     }
 
