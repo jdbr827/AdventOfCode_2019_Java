@@ -10,11 +10,10 @@ public interface Day14Model {
     boolean isRock(JavaPoint p);
     boolean isAtRest(JavaPoint p);
     boolean endCondition();
-
-
-    int getSandPiecesSoFar();
-
+    int getNumSandPiecesFallenSoFar();
     int runModelOnly();
+    void executeOneTimeStep();
+    Collection<JavaPoint> getCurrentSandPieces();
 
     static Day14Model fromCornerRocksFile(String fileName, int version) {
         if (version == 1) {
@@ -27,8 +26,5 @@ public interface Day14Model {
         return new Day14ModelImpl(new Day14Scanner(fileName).readInRocks());
     }
 
-    void executeOneTimeStep();
-
-    Collection<JavaPoint> getCurrentSandPieces();
 }
 

@@ -53,6 +53,6 @@ public class Day14Controller {
     }
 
     public int getSandPiecesSoFar() {
-        return model.getSandPiecesSoFar();
+        return model.getNumSandPiecesFallenSoFar();
     }
 }

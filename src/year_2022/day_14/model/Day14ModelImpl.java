@@ -7,17 +7,13 @@ import viewModelUtil.JavaPoint;
 import java.util.*;
 
 class Day14ModelImpl implements Day14Model {
-    @Getter
-    @NotNull
-    Set<JavaPoint> rocks;
-    @Getter
-    JavaPoint currentSandPiece;
+    @Getter @NotNull Set<JavaPoint> rocks;
+    @Getter JavaPoint currentSandPiece;
 
     Set<JavaPoint> piecesAtRest = new HashSet<>();
     int lowestRockY;
 
-    @Getter
-    int numSandPiecesFallenSoFar = 0;
+    @Getter int numSandPiecesFallenSoFar = 0;
 
     public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
@@ -59,11 +55,15 @@ class Day14ModelImpl implements Day14Model {
         } else if (!isAtRest(downRight)) {
             return downRight;
         }
-        piecesAtRest.add(sandPiece);
-        numSandPiecesFallenSoFar++;
+        setPieceToRest(sandPiece);
         return null;
 
-    };
+    }
+
+    private void setPieceToRest(JavaPoint sandPiece) {
+        piecesAtRest.add(sandPiece);
+        numSandPiecesFallenSoFar++;
+    }
 
 
     public void moveCurrentSandPiece() {
@@ -76,11 +76,6 @@ class Day14ModelImpl implements Day14Model {
         currentSandPiece = newSandPiece;
     }
 
-    @Override
-    public int getSandPiecesSoFar() {
-        return getNumSandPiecesFallenSoFar();
-    }
-
 
     public void createNewSandPiece() {
         currentSandPiece = new JavaPoint(500, 0);
@@ -88,7 +83,7 @@ class Day14ModelImpl implements Day14Model {
 
     public int runModelOnly() {
         while (!endCondition()) {
-            moveCurrentSandPiece();
+            executeOneTimeStep();
         }
         return getNumSandPiecesFallenSoFar();
     }

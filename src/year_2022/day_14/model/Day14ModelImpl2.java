@@ -17,11 +17,6 @@ class Day14ModelImpl2 extends Day14ModelImpl {
     }
 
     @Override
-    public boolean isAtRest(JavaPoint p) {
-        return piecesAtRest.contains(p) || isRock(p);
-    }
-
-    @Override
     public boolean endCondition() {
         return isAtRest(SPAWN_POINT);
     }
