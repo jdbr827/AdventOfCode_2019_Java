@@ -14,7 +14,7 @@ public class Day14ViewModel extends JavaColorTableModel {
     public Day14ViewModel(Day14View day14View) {
         view = day14View;
         controller = view.controller;
-        setValueAtCartesian(new CartesianPoint(500, 0), "+");
+        setValueAtJava(new JavaPoint(500, 0), "+");
     }
 
     @Override

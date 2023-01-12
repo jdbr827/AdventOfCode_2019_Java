@@ -16,13 +16,36 @@ public class Day14Scanner extends AOCScanner {
 
     Set<JavaPoint> rockSet = new HashSet<JavaPoint>();
 
-    void readInNextRockLine() {
+    private void readInNextRockLine() {
         if (scanner.hasNextLine()) {
             List<JavaPoint> cornerRocks = Arrays.stream(scanner.nextLine().split(" -> ")).map(
                     this::createJavaPointFromString).collect(Collectors.toList());
-            System.out.println(cornerRocks);
+            //System.out.println(cornerRocks);
+            for (int i=1; i<cornerRocks.size(); i++) {
+                JavaPoint lastRock = cornerRocks.get(i-1);
+                JavaPoint thisRock = cornerRocks.get(i);
+                if (lastRock.x == thisRock.x) {
+                    for (int y = Math.min(lastRock.y, thisRock.y); y<= Math.max(lastRock.y, thisRock.y); y++) {
+                        rockSet.add(new JavaPoint(lastRock.x, y));
+                    }
+                }
+                else if (lastRock.y == thisRock.y) {
+                    for (int x = Math.min(lastRock.x, thisRock.x); x<= Math.max(lastRock.x, thisRock.x); x++) {
+                        rockSet.add(new JavaPoint(x, lastRock.y));
+                    }
+                }
+                else {
+                    throw new Error ("consecutive corner rocks " + lastRock + " and " + thisRock + " not aligned to grid");
+                }
+            }
         }
-
+    }
+    
+    public Set<JavaPoint> readInRocks() {
+        while (scanner.hasNextLine()) {
+            readInNextRockLine();
+        }
+        return rockSet;
     }
 
     private JavaPoint createJavaPointFromString(String s) {

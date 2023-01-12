@@ -1,5 +1,7 @@
 package year_2022.day_14;
 
+import viewModelUtil.JavaPoint;
+
 import javax.swing.*;
 
 public class Day14View {
@@ -28,4 +30,7 @@ public class Day14View {
     }
 
 
+    public void putRock(JavaPoint rock) {
+        viewModel.setValueAtJava(rock, '#');
+    }
 }
