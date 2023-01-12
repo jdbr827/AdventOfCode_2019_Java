@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Day12 {
 
-    static Long part1(String fileName) throws FileNotFoundException {
+    public static Long part1(String fileName) throws FileNotFoundException {
         Day12Matrix matrix = Day12Scanner.readInMatrix(fileName);
 
         // scan to find start and goal O(NM)
@@ -33,7 +33,7 @@ public class Day12 {
         Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
                 Arrays.stream(CardinalDirection.values())
                         .map(d -> p.add(d.velocity))
-                        .filter((nbr) -> matrix.containsPoint(nbr) && matrix.getRelativeHeight(nbr) - (matrix.getRelativeHeight(p)) <= 1)
+                        .filter((nbr) -> matrix.containsPoint(nbr) && (matrix.getRelativeHeight(nbr) - matrix.getRelativeHeight(p)) <= 1)
                 .collect(Collectors.toList()));
 
 
