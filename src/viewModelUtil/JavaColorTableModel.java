@@ -5,12 +5,16 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static viewModelUtil.JavaPoint.convertJavaPointToDTMPoint;
+
 public abstract class JavaColorTableModel extends CartesianTableModel implements ColorTableModel {
     protected Map<JavaPoint, Color> javaColorMap = new HashMap<JavaPoint, Color>();
 
     public void setColorAtJava(JavaPoint desiredPointJava, Color color) {
         addNewJavaPointIfNecessary(dtm, desiredPointJava);
         javaColorMap.put(desiredPointJava, color);
+        DTMPoint dtmPoint = convertJavaPointToDTMPoint(desiredPointJava);
+        dtm.fireTableCellUpdated(dtmPoint.x, dtmPoint.y);
     }
 
     @Override

@@ -5,7 +5,7 @@ import viewModelUtil.JavaPoint;
 import java.util.Set;
 
 public class Day14ModelImpl4 extends Day14ModelImpl3 {
-    private Day14DataModel dataModel;
+    private final Day14DataModel dataModel;
     public Day14ModelImpl4(Set<JavaPoint> rocks, Day14DataModel dataModel) {
         super(rocks);
         this.dataModel = dataModel;
