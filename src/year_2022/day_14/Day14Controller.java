@@ -8,18 +8,14 @@ public class Day14Controller implements IDay14Controller {
     Day14View view;
     Day14Model model;
 
-    Day14Controller() {
-         model = Day14Model.fromCornerRocksFile("src/year_2022/day_14/test/day_14_sample_input.txt", 2);
+    public Day14Controller(String fileName, int version) {
+         model = Day14Model.fromCornerRocksFile(fileName, version);
          view = new Day14View(this);
          addRocksToView();
     }
 
     private void addRocksToView() {
         model.getRocks().forEach(view::putRock);
-    }
-
-    public static void main(String[] args) {
-        new Day14Controller();
     }
 
 

@@ -20,10 +20,10 @@ class Day14ModelImpl implements Day14Model {
     @Getter
     int numSandPiecesFallenSoFar = 0;
 
+    public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
     public Day14ModelImpl(Set<JavaPoint> rocks) {
         this.rocks = rocks;
-        piecesAtRest.addAll(getRocks());
         createNewSandPiece();
         lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
     }
@@ -35,14 +35,13 @@ class Day14ModelImpl implements Day14Model {
 
     @Override
     public boolean isAtRest(JavaPoint p) {
-        return piecesAtRest.contains(p);
+        return piecesAtRest.contains(p) || isRock(p);
     }
 
     @Override
     public boolean endCondition() {
         return currentSandPiece.y >= lowestRockY;
     }
-
 
     @Override
     public boolean moveCurrentSandPiece() {
