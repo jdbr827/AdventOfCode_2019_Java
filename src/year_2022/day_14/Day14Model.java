@@ -4,7 +4,6 @@ import viewModelUtil.JavaPoint;
 
 public interface Day14Model {
     boolean isRock(JavaPoint p);
-    boolean isSand(JavaPoint p);
 
 }
 
