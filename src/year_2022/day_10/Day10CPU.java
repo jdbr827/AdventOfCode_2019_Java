@@ -28,11 +28,7 @@ public class Day10CPU {
         int y = (cycle-1)/40;
         int x = (cycle-1)%40;
         boolean showLight = x-register == 0 || x-register == -1 || x-register == 1;
-        if(showLight) {
-            image[y][x] = '#';
-        } else {
-            image[y][x] = '.';
-        }
+        image[y][x] = showLight ? '#' : '.';
 
         if (Math.floorMod(cycle, 40) == 20) {
             logIfVerbose(3, "During cycle " + cycle + ", X=" + register + ", so signal strength is " + cycle + " * " + register + " = " + (cycle * register));
