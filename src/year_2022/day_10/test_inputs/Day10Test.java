@@ -1,6 +1,7 @@
-package year_2022.day_10;
+package year_2022.day_10.test_inputs;
 
 import org.junit.jupiter.api.Test;
+import year_2022.day_10.Day10;
 
 import java.awt.image.SampleModel;
 

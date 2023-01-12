@@ -2,6 +2,7 @@ package year_2022.day_10;
 
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Function;
@@ -14,6 +15,7 @@ public class Day10CPU {
     int cycle = 1;
     int verbose = Integer.MAX_VALUE;
     int signalStrengthSum = 0;
+    Character[][] image = new Character[6][40];
 
     void executeCycle() {
         logIfVerbose(2, "Beginning cycle " + cycle);
@@ -22,6 +24,16 @@ public class Day10CPU {
             logIfVerbose(2, "Instruction " + currentOperation.name + " begins executing");
         }
         logIfVerbose(2, "During cycle " + cycle + ", X=" + register);
+
+        int y = (cycle-1)/40;
+        int x = (cycle-1)%40;
+        boolean showLight = x-register == 0 || x-register == -1 || x-register == 1;
+        if(showLight) {
+            image[y][x] = '#';
+        } else {
+            image[y][x] = '.';
+        }
+
         if (Math.floorMod(cycle, 40) == 20) {
             logIfVerbose(3, "During cycle " + cycle + ", X=" + register + ", so signal strength is " + cycle + " * " + register + " = " + (cycle * register));
             signalStrengthSum += cycle * register;
@@ -52,6 +64,10 @@ public class Day10CPU {
         while (!(operations.isEmpty() && currentOperation == null)) {
             executeCycle();
         }
+        for (Character[] row : image) {
+            System.out.println(Arrays.toString(row));
+        };
+        System.out.println("");
         return signalStrengthSum;
     }
 }
