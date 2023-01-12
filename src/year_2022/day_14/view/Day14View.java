@@ -74,7 +74,9 @@ public class Day14View {
     }
 
     public void repaint() {
+
         table1.repaint();
+        setSandPiecesSoFar(controller.getSandPiecesSoFar());
     }
 
     public void setCurrentSandPiece(JavaPoint currentSandPiece) {

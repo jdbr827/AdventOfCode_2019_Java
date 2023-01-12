@@ -6,7 +6,7 @@ import year_2022.day_14.view.Day14View;
 
 import java.util.concurrent.TimeUnit;
 
-public class Day14Controller implements IDay14Controller {
+public class Day14Controller {
     Day14View view;
     Day14Model model;
 
@@ -27,15 +27,10 @@ public class Day14Controller implements IDay14Controller {
     }
 
     public void executeOneTimeStep() {
-        if (!model.moveCurrentSandPiece()) {
-            view.setSandPiecesSoFar(model.getSandPiecesSoFar());
-        }
+        model.executeOneTimeStep();
         view.repaint();
     }
 
-    public JavaPoint getCurrentSandPiece() {
-        return model.getCurrentSandPiece();
-    }
 
 
     public boolean isAtRest(JavaPoint javaPoint) {
@@ -49,12 +44,15 @@ public class Day14Controller implements IDay14Controller {
     public void autoPilot() throws InterruptedException {
         while (!endCondition()){
             executeOneTimeStep();
-            view.setCurrentSandPiece(model.getCurrentSandPiece());
             TimeUnit.MILLISECONDS.sleep(20);
         }
     }
 
-    public boolean isCurrentSandPiece(JavaPoint javaPoint) {
-        return javaPoint.equals(model.getCurrentSandPiece());
+    public boolean isFalling(JavaPoint javaPoint) {
+        return model.getCurrentSandPieces().contains(javaPoint);
+    }
+
+    public int getSandPiecesSoFar() {
+        return model.getSandPiecesSoFar();
     }
 }

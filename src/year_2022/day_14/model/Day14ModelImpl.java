@@ -4,9 +4,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 class Day14ModelImpl implements Day14Model {
     @Getter
@@ -14,6 +12,7 @@ class Day14ModelImpl implements Day14Model {
     Set<JavaPoint> rocks;
     @Getter
     JavaPoint currentSandPiece;
+
     Set<JavaPoint> piecesAtRest = new HashSet<>();
     int lowestRockY;
 
@@ -43,28 +42,38 @@ class Day14ModelImpl implements Day14Model {
         return currentSandPiece.y >= lowestRockY;
     }
 
-    @Override
-    public boolean moveCurrentSandPiece() {
-        JavaPoint down = new JavaPoint(currentSandPiece.x, currentSandPiece.y + 1);
-        JavaPoint downLeft = new JavaPoint(currentSandPiece.x - 1, currentSandPiece.y + 1);
-        JavaPoint downRight = new JavaPoint(currentSandPiece.x + 1, currentSandPiece.y + 1);
+    /**
+     *
+     * @param sandPiece piece of sand
+     * @return new location of the sand piece, or null if it did not move.
+     */
+    public JavaPoint moveSandPiece(JavaPoint sandPiece) {
+        JavaPoint down = new JavaPoint(sandPiece.x, sandPiece.y + 1);
+        JavaPoint downLeft = new JavaPoint(sandPiece.x - 1, sandPiece.y + 1);
+        JavaPoint downRight = new JavaPoint(sandPiece.x + 1, sandPiece.y + 1);
 
         if (!isAtRest(down)) {
-            currentSandPiece = down;
-            return true;
+            return down;
         } else if (!isAtRest(downLeft)) {
-            currentSandPiece = downLeft;
-            return true;
+            return downLeft;
         } else if (!isAtRest(downRight)) {
-            currentSandPiece = downRight;
-            return true;
+            return downRight;
+        }
+        piecesAtRest.add(sandPiece);
+        numSandPiecesFallenSoFar++;
+        return null;
+
+    };
+
+
+    public void moveCurrentSandPiece() {
+        JavaPoint newSandPiece = moveSandPiece(currentSandPiece);
+        if (newSandPiece == null) {
+            createNewSandPiece();
+            return;
         }
 
-        piecesAtRest.add(currentSandPiece);
-        numSandPiecesFallenSoFar++;
-        //controller.setSandPiecesSoFar(numSandPiecesFallenSoFar);
-        createNewSandPiece();
-        return false;
+        currentSandPiece = newSandPiece;
     }
 
     @Override
@@ -82,6 +91,16 @@ class Day14ModelImpl implements Day14Model {
             moveCurrentSandPiece();
         }
         return getNumSandPiecesFallenSoFar();
+    }
+
+    @Override
+    public void executeOneTimeStep() {
+        moveCurrentSandPiece();
+    }
+
+    @Override
+    public Collection<JavaPoint> getCurrentSandPieces() {
+        return List.of(currentSandPiece);
     }
 
 

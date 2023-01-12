@@ -23,8 +23,14 @@ public class Day14Test {
         assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2).runModelOnly());
     }
 
+    @Test
+    void test_impl_3() {
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 3).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 3).runModelOnly());
+    }
+
     public static void main(String[] args) {
-        new Day14Controller(EXAMPLE_INPUT, 2);
+        new Day14Controller(EXAMPLE_INPUT, 3);
     };
 
 
