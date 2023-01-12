@@ -29,6 +29,9 @@ public interface Day14Model {
         } if (version == 3) {
             return new Day14ModelImpl3(rocks);
         }
+        if (version == 4) {
+            return new Day14ModelImpl4(rocks);
+        }
         return new Day14ModelImpl(rocks);
     }
 }
