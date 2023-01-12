@@ -5,6 +5,7 @@ import year_2022.day_14.Day14Controller;
 import year_2022.day_14.view.Day14ViewModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -68,13 +69,15 @@ public class Day14View {
 
 
     public void putRock(JavaPoint rock) {
-        viewModel.setValueAtJava(rock, "");
+        viewModel.setValueAtJava(rock, "#");
+        viewModel.setColorAtJava(rock, Color.GRAY);
         resizeTable();
     }
 
     public void setSandPiecesSoFar(int num) {
         sandPiecesSoFar.setText(String.valueOf(num));
     }
+
 
     public void repaint() {
         table1.repaint();
@@ -92,5 +95,13 @@ public class Day14View {
 
     public void setCurrentSandPiece(JavaPoint currentSandPiece) {
         viewModel.setValueAtJava(currentSandPiece, "");
+    }
+
+    public void setToFalling(JavaPoint javaPoint) {
+        viewModel.setColorAtJava(javaPoint, Color.CYAN);
+    }
+
+    public void setToRest(JavaPoint javaPoint) {
+        viewModel.setColorAtJava(javaPoint, Color.ORANGE);
     }
 }

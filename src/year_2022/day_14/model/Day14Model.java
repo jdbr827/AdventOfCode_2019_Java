@@ -15,7 +15,7 @@ public interface Day14Model {
     int getNumSandPiecesFallenSoFar();
     int runModelOnly();
     void executeOneTimeStep();
-    Collection<JavaPoint> getCurrentSandPieces();
+    Collection<JavaPoint> getCurrentFallingPieces();
 
     static Day14Model fromCornerRocksFile(String fileName, int version) {
         return fromRockSet(new Day14Scanner(fileName).readInRocks(), version);

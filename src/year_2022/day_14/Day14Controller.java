@@ -4,7 +4,6 @@ import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14Model;
 import year_2022.day_14.view.Day14View;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -49,10 +48,18 @@ public class Day14Controller {
     }
 
     public boolean isFalling(JavaPoint javaPoint) {
-        return model.getCurrentSandPieces().contains(javaPoint);
+        return model.getCurrentFallingPieces().contains(javaPoint);
     }
 
     public int getSandPiecesSoFar() {
         return model.getNumSandPiecesFallenSoFar();
+    }
+
+    public void setToFalling(JavaPoint javaPoint) {
+        view.setToFalling(javaPoint);
+    }
+
+    public void setToRest(JavaPoint javaPoint) {
+        view.setToRest(javaPoint);
     }
 }

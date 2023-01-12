@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class Day14ModelImpl3 extends Day14ModelImpl {
 
-    List<JavaPoint> currentSandPieces;
+    List<JavaPoint> currentFallingPieces;
 
     public Day14ModelImpl3(Set<JavaPoint> rocks) {
         super(rocks);
@@ -15,26 +15,26 @@ public class Day14ModelImpl3 extends Day14ModelImpl {
 
     @Override
     public void executeOneTimeStep() {
-        currentSandPieces = currentSandPieces.stream().map(this::moveSandPiece).collect(Collectors.toList());
-        currentSandPieces = currentSandPieces.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        currentFallingPieces = currentFallingPieces.stream().map(this::moveSandPiece).collect(Collectors.toList());
+        currentFallingPieces = currentFallingPieces.stream().filter(Objects::nonNull).collect(Collectors.toList());
         createNewSandPiece();
     }
 
     @Override
     public void createNewSandPiece() {
-        if (currentSandPieces == null) {
-            currentSandPieces = new ArrayList<>();
+        if (currentFallingPieces == null) {
+            currentFallingPieces = new ArrayList<>();
         }
-        currentSandPieces.add(SPAWN_POINT);
+        currentFallingPieces.add(SPAWN_POINT);
     }
 
     @Override
-    public List<JavaPoint> getCurrentSandPieces() {
-        return currentSandPieces;
+    public List<JavaPoint> getCurrentFallingPieces() {
+        return currentFallingPieces;
     }
 
     @Override
     public boolean endCondition() {
-        return currentSandPieces.get(0).y >= lowestRockY;
+        return currentFallingPieces.get(0).y >= lowestRockY;
     }
 }

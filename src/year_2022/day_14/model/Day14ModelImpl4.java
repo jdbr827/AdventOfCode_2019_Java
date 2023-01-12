@@ -13,9 +13,9 @@ public class Day14ModelImpl4 extends Day14ModelImpl3 {
     public void executeOneTimeStep() {
 
         JavaPoint leadNext;
-        while ((leadNext = moveSandPiece(currentSandPieces.get(0))) == null) {
-            currentSandPieces.remove(0);
+        while ((leadNext = moveSandPiece(currentFallingPieces.get(0))) == null) {
+            currentFallingPieces.remove(0);
         }
-        currentSandPieces.add(0, leadNext);
+        currentFallingPieces.add(0, leadNext);
     }
 }

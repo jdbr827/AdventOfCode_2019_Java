@@ -1,16 +1,13 @@
 package year_2022.day_14.model;
 
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
 import java.util.*;
 
 class Day14ModelImpl implements Day14Model {
-    @Getter @NotNull Set<JavaPoint> rocks;
+    final Day14DataModel2 day14DataModel;
     @Getter JavaPoint currentSandPiece;
-
-    Set<JavaPoint> piecesAtRest = new HashSet<>();
     int lowestRockY;
 
     @Getter int numSandPiecesFallenSoFar = 0;
@@ -18,19 +15,19 @@ class Day14ModelImpl implements Day14Model {
     public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
     public Day14ModelImpl(Set<JavaPoint> rocks) {
-        this.rocks = rocks;
+        this.day14DataModel = new Day14DataModelImpl3(rocks);
         createNewSandPiece();
         lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
     }
 
     @Override
     public boolean isRock(JavaPoint p) {
-        return rocks.contains(p);
+        return day14DataModel.getIsRock(p);
     }
 
     @Override
     public boolean isAtRest(JavaPoint p) {
-        return piecesAtRest.contains(p) || isRock(p);
+        return day14DataModel.getIsAtRest(p) || isRock(p);
     }
 
     @Override
@@ -61,7 +58,7 @@ class Day14ModelImpl implements Day14Model {
     }
 
     private void setPieceToRest(JavaPoint sandPiece) {
-        piecesAtRest.add(sandPiece);
+        day14DataModel.setToAtRest(sandPiece);
         numSandPiecesFallenSoFar++;
     }
 
@@ -94,7 +91,7 @@ class Day14ModelImpl implements Day14Model {
     }
 
     @Override
-    public Collection<JavaPoint> getCurrentSandPieces() {
+    public Collection<JavaPoint> getCurrentFallingPieces() {
         return List.of(currentSandPiece);
     }
 
