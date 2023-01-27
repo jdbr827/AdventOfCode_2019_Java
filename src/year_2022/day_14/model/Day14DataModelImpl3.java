@@ -26,14 +26,13 @@ public class Day14DataModelImpl3 implements Day14DataModel {
         return piecesAtRest.contains(javaPoint);
     }
 
-    @Override
+
     public boolean getIsSandFallingAt(JavaPoint javaPoint) {
         return javaPoint.equals(currentSandPiece);
     }
 
 
-    @Override
-    public boolean getIsRock(JavaPoint javaPoint) {
+    public boolean isRock(JavaPoint javaPoint) {
         return rocks.contains(javaPoint);
     }
 
@@ -49,7 +48,10 @@ public class Day14DataModelImpl3 implements Day14DataModel {
 
     @Override
     public PointState getStateOfPoint(JavaPoint javaPoint) {
-        if (getIsRock(javaPoint) || getIsFloor(javaPoint)) {
+        if (getIsFloor(javaPoint)) {
+            return PointState.FLOOR;
+        }
+        if (isRock(javaPoint)) {
             return PointState.ROCK;
         }
         if (getIsAtRest(javaPoint)) {

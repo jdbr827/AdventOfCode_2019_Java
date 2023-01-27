@@ -4,7 +4,8 @@ public enum PointState {
     OPEN(0),
     FALLING(1),
     REST(2),
-    ROCK(3);
+    ROCK(3),
+    FLOOR(4);
 
     PointState(int index) {}
 }

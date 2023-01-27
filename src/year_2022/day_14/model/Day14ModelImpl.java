@@ -1,6 +1,7 @@
 package year_2022.day_14.model;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
 import java.util.*;

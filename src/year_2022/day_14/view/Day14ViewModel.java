@@ -34,7 +34,8 @@ public class Day14ViewModel extends JavaColorTableModel {
             PointState.OPEN, Color.WHITE,
             PointState.FALLING, Color.CYAN,
             PointState.REST, Color.ORANGE,
-            PointState.ROCK, Color.GRAY
+            PointState.ROCK, Color.GRAY,
+            PointState.FLOOR, Color.PINK
     );
 
     @Override

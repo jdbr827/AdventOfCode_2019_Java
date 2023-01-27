@@ -107,4 +107,8 @@ public class Day14View {
 
     }
 
+    public void setFloor(int floorY) {
+        noteUpdate(new JavaPoint(0, floorY));
+        resizeTable();
+    }
 }

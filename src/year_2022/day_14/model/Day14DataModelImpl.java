@@ -32,10 +32,6 @@ public class Day14DataModelImpl implements Day14DataModel {
         return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.REST);
     }
 
-    public boolean getIsSandFallingAt(JavaPoint javaPoint) {
-        return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.FALLING);
-    }
-
     public boolean getIsRock(JavaPoint javaPoint) {
         return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.ROCK) || getIsFloor(javaPoint);
     }
@@ -50,6 +46,7 @@ public class Day14DataModelImpl implements Day14DataModel {
 
     @Override
     public PointState getStateOfPoint(JavaPoint javaPoint) {
+
         return stateMap.getOrDefault(javaPoint, PointState.OPEN);
     }
 
