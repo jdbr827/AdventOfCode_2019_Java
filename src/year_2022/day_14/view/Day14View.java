@@ -16,6 +16,7 @@ public class Day14View {
     private JButton executeOneTimeStepButton;
     private JButton autopilotButton;
     private JLabel sandPiecesSoFar;
+    private JScrollPane scrollPane;
     private Day14ViewModel viewModel;
     IDay14Controller controller;
 
@@ -80,6 +81,7 @@ public class Day14View {
     public void repaint() {
         setSandPiecesSoFar(controller.getSandPiecesSoFar());
         table1.repaint();
+        resizeTable();
     }
 
     private void resizeTable() {
@@ -92,6 +94,7 @@ public class Day14View {
             table1.setRowMargin(0);
         }
         table1.setTableHeader(null);
+        scrollPane.getHorizontalScrollBar().setValue(500 * table1.getColumnModel().getColumn(1).getWidth());
 
     }
 
