@@ -39,4 +39,5 @@ public class Day14DataModelImpl implements Day14DataModel {
     public void setToAtRest(JavaPoint javaPoint) {
         stateMap.put(javaPoint, PointState.REST);
     }
+
 }

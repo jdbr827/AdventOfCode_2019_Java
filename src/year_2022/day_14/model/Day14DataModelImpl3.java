@@ -8,11 +8,12 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day14DataModelImpl3 implements Day14DataModel2 {
+public class Day14DataModelImpl3 implements Day14DataModel {
     @Getter
     @NotNull Set<JavaPoint> rocks;
     Set<JavaPoint> piecesAtRest = new HashSet<JavaPoint>();
     int lowestRockY;
+    JavaPoint currentSandPiece;
 
 
     public Day14DataModelImpl3(@NotNull Set<JavaPoint> rocks) {
@@ -25,11 +26,20 @@ public class Day14DataModelImpl3 implements Day14DataModel2 {
         return piecesAtRest.contains(javaPoint);
     }
 
+    @Override
+    public boolean getIsSandFallingAt(JavaPoint javaPoint) {
+        return javaPoint.equals(currentSandPiece);
+    }
 
 
     @Override
     public boolean getIsRock(JavaPoint javaPoint) {
         return rocks.contains(javaPoint);
+    }
+
+    @Override
+    public void setToFalling(JavaPoint javaPoint) {
+        currentSandPiece = javaPoint;
     }
 
     @Override

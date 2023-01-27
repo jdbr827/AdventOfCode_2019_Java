@@ -6,7 +6,7 @@ import viewModelUtil.JavaPoint;
 import java.util.*;
 
 class Day14ModelImpl implements Day14Model {
-    final Day14DataModel2 day14DataModel;
+    final Day14DataModel day14DataModel;
     @Getter JavaPoint currentSandPiece;
     int lowestRockY;
 
@@ -69,6 +69,7 @@ class Day14ModelImpl implements Day14Model {
             createNewSandPiece();
             return;
         }
+        day14DataModel.setToFalling(currentSandPiece);
 
         currentSandPiece = newSandPiece;
     }
@@ -83,6 +84,11 @@ class Day14ModelImpl implements Day14Model {
     @Override
     public void executeOneTimeStep() {
         moveCurrentSandPiece();
+    }
+
+    @Override
+    public int floorY() {
+        return lowestRockY;
     }
 
     @Override

@@ -58,4 +58,6 @@ public interface Day14Model {
         }
         return PointState.OPEN;
     }
+
+    int floorY();
 }

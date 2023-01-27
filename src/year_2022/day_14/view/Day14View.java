@@ -78,6 +78,7 @@ public class Day14View {
 
     public void repaint() {
         setSandPiecesSoFar(controller.getSandPiecesSoFar());
+        table1.repaint();
     }
 
     private void resizeTable() {
@@ -98,6 +99,7 @@ public class Day14View {
     }
 
     public void setToFalling(JavaPoint javaPoint) {
+        viewModel.setValueAtJava(javaPoint, "s");
         viewModel.setColorAtJava(javaPoint, Color.CYAN);
     }
 

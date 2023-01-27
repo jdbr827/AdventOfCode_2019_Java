@@ -18,6 +18,7 @@ public class Day14Controller {
         model = Day14Model.fromCornerRocksFile(fileName, version, new Day14DataModelImpl2(this));
         view = new Day14View(this);
         rocks.forEach(view::putRock);
+        view.putRock(new JavaPoint(0, model.floorY()));
     }
 
 
