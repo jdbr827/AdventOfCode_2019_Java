@@ -13,7 +13,7 @@ class Day14ModelImpl2 extends Day14ModelImpl {
 
     @Override
     public boolean isRock(JavaPoint p) {
-        return day14DataModel.getIsRock(p) || p.y == lowestRockY + 2;
+        return day14DataModel.getIsRock(p) || day14DataModel.getIsFloor(p);
     }
 
     @Override

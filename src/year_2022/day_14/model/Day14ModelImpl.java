@@ -32,7 +32,7 @@ class Day14ModelImpl implements Day14Model {
 
     @Override
     public boolean endCondition() {
-        return day14DataModel.getIsFloor(currentSandPiece);
+        return currentSandPiece.y >= lowestRockY;
     }
 
     /**
