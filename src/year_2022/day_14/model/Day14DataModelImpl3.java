@@ -48,6 +48,20 @@ public class Day14DataModelImpl3 implements Day14DataModel {
     }
 
     @Override
+    public PointState getStateOfPoint(JavaPoint javaPoint) {
+        if (getIsRock(javaPoint)) {
+            return PointState.ROCK;
+        }
+        if (getIsAtRest(javaPoint)) {
+            return PointState.REST;
+        }
+        if (getIsSandFallingAt(javaPoint)) {
+            return PointState.FALLING;
+        }
+        return PointState.OPEN;
+    }
+
+    @Override
     public boolean getIsFloor(JavaPoint javaPoint) {
         return javaPoint.y == lowestRockY + 2;
     }

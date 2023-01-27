@@ -40,4 +40,9 @@ public class Day14DataModelImpl implements Day14DataModel {
         stateMap.put(javaPoint, PointState.REST);
     }
 
+    @Override
+    public PointState getStateOfPoint(JavaPoint javaPoint) {
+        return stateMap.getOrDefault(javaPoint, PointState.OPEN);
+    }
+
 }

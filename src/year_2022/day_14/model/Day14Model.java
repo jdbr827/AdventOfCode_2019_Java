@@ -8,9 +8,7 @@ import java.util.Set;
 import static year_2022.day_14.model.Day14Model.fromRockSet;
 
 public interface Day14Model {
-    boolean isRock(JavaPoint p);
-    boolean isAtRest(JavaPoint p);
-    boolean isSandFallingAt(JavaPoint javaPoint);
+    Day14DataModel getDataModel();
 
 
     boolean endCondition();
@@ -46,16 +44,8 @@ public interface Day14Model {
 
 
     default PointState getStateOfPoint(JavaPoint javaPoint) {
-        if (isRock(javaPoint)) {
-            return PointState.ROCK;
-        }
-        if (isAtRest(javaPoint)) {
-            return PointState.REST;
-        }
-        if (isSandFallingAt(javaPoint)) {
-            return PointState.FALLING;
-        }
-        return PointState.OPEN;
+        return getDataModel().getStateOfPoint(javaPoint);
+
     }
 
     int floorY();

@@ -22,14 +22,18 @@ class Day14ModelImpl implements Day14Model {
         createNewSandPiece();
     }
 
-    @Override
+
     public boolean isRock(JavaPoint p) {
         return day14ModelView.getIsRock(p);
     }
 
-    @Override
     public boolean isAtRest(JavaPoint p) {
         return day14ModelView.getIsAtRest(p) || isRock(p);
+    }
+
+    @Override
+    public Day14DataModel getDataModel() {
+        return day14ModelView.dataModel;
     }
 
     @Override
@@ -93,7 +97,6 @@ class Day14ModelImpl implements Day14Model {
         return lowestRockY;
     }
 
-    @Override
     public boolean isSandFallingAt(JavaPoint javaPoint) {
         return javaPoint.equals(currentSandPiece);
     }
