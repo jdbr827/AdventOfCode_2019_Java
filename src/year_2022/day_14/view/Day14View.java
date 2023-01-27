@@ -102,11 +102,11 @@ public class Day14View {
 
 
     public void setToFalling(JavaPoint javaPoint) {
-        viewModel.setValueAtJava(javaPoint, "~");
+        viewModel.noteUpdateAtJavaPoint(javaPoint);
     }
 
     public void setToRest(JavaPoint javaPoint) {
-        viewModel.setValueAtJava(javaPoint, "o");
+        viewModel.noteUpdateAtJavaPoint(javaPoint);
     }
 
     public void noteUpdate(JavaPoint javaPoint) {
@@ -114,6 +114,6 @@ public class Day14View {
     }
 
     public void setToOpen(JavaPoint p) {
-        viewModel.setValueAtJava(p, " ");
+        viewModel.noteUpdateAtJavaPoint(p);
     }
 }
