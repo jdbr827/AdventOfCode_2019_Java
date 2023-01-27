@@ -2,11 +2,12 @@ package year_2022.day_14.model;
 
 import lombok.Getter;
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.Day14Controller;
 
 import java.util.*;
 
 class Day14ModelImpl implements Day14Model {
-    final Day14DataModel day14DataModel;
+    final Day14ModelView day14ModelView;
     @Getter JavaPoint currentSandPiece;
     int lowestRockY;
 
@@ -14,20 +15,21 @@ class Day14ModelImpl implements Day14Model {
 
     public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
-    public Day14ModelImpl(Set<JavaPoint> rocks) {
+    public Day14ModelImpl(Day14ModelView modelView, Set<JavaPoint> rocks) {
         lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
-        this.day14DataModel = new Day14DataModelImpl3(rocks);
+        this.day14ModelView = modelView;
+        this.day14ModelView.setDataModel(new Day14DataModelImpl3(rocks));
         createNewSandPiece();
     }
 
     @Override
     public boolean isRock(JavaPoint p) {
-        return day14DataModel.getIsRock(p);
+        return day14ModelView.getIsRock(p);
     }
 
     @Override
     public boolean isAtRest(JavaPoint p) {
-        return day14DataModel.getIsAtRest(p) || isRock(p);
+        return day14ModelView.getIsAtRest(p) || isRock(p);
     }
 
     @Override
@@ -58,7 +60,7 @@ class Day14ModelImpl implements Day14Model {
     }
 
     private void setPieceToRest(JavaPoint sandPiece) {
-        day14DataModel.setToAtRest(sandPiece);
+        day14ModelView.setToAtRest(sandPiece);
         numSandPiecesFallenSoFar++;
     }
 
@@ -69,7 +71,7 @@ class Day14ModelImpl implements Day14Model {
             createNewSandPiece();
             return;
         }
-        day14DataModel.setToFalling(currentSandPiece);
+        day14ModelView.setToFalling(currentSandPiece);
 
         currentSandPiece = newSandPiece;
     }

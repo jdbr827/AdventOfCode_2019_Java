@@ -9,8 +9,8 @@ public class Day14ModelImpl3 extends Day14ModelImpl {
 
     List<JavaPoint> currentFallingPieces;
 
-    public Day14ModelImpl3(Set<JavaPoint> rocks) {
-        super(rocks);
+    public Day14ModelImpl3(Day14ModelView modelView, Set<JavaPoint> rocks) {
+        super(modelView, rocks);
     }
 
     @Override

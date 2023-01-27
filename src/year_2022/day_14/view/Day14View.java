@@ -2,6 +2,7 @@ package year_2022.day_14.view;
 
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Controller;
+import year_2022.day_14.IDay14Controller;
 import year_2022.day_14.view.Day14ViewModel;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ public class Day14View {
     private JButton autopilotButton;
     private JLabel sandPiecesSoFar;
     private Day14ViewModel viewModel;
-    Day14Controller controller;
+    IDay14Controller controller;
 
 
     public Day14View(Day14Controller controller) {

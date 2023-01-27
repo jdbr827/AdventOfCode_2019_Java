@@ -7,8 +7,8 @@ import java.util.Set;
 class Day14ModelImpl2 extends Day14ModelImpl {
 
 
-    public Day14ModelImpl2(Set<JavaPoint> rocks) {
-        super(rocks);
+    public Day14ModelImpl2(Day14ModelView modelView, Set<JavaPoint> rocks) {
+        super(modelView, rocks);
     }
 
     @Override
@@ -18,7 +18,7 @@ class Day14ModelImpl2 extends Day14ModelImpl {
 
     @Override
     public boolean isRock(JavaPoint p) {
-        return day14DataModel.getIsRock(p) || day14DataModel.getIsFloor(p);
+        return day14ModelView.getIsRock(p) || day14ModelView.getIsFloor(p);
     }
 
     @Override

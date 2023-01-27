@@ -3,6 +3,7 @@ package year_2022.day_14.view;
 import viewModelUtil.JavaColorTableModel;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Controller;
+import year_2022.day_14.IDay14Controller;
 import year_2022.day_14.model.PointState;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class Day14ViewModel extends JavaColorTableModel {
     Day14View view;
-    Day14Controller controller;
+    IDay14Controller controller;
 
     public Day14ViewModel(Day14View day14View) {
         view = day14View;
