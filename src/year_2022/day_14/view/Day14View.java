@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Day14View {
-    private JTable table1;
+    JTable table1;
     private JPanel panel1;
     private JButton executeOneTimeStepButton;
     private JButton autopilotButton;
@@ -88,7 +88,7 @@ public class Day14View {
 
     }
 
-    private void resizeTable() {
+    void resizeTable() {
         for (int i=0; i<table1.getColumnCount(); i++) {
             table1.getColumnModel().getColumn(i).setPreferredWidth(2);
             table1.getColumnModel().setColumnMargin(0);
@@ -98,8 +98,6 @@ public class Day14View {
             table1.setRowMargin(0);
         }
         table1.setTableHeader(null);
-        scrollPane.getHorizontalScrollBar().setValue(500 * table1.getColumnModel().getColumn(1).getWidth());
-
     }
 
 

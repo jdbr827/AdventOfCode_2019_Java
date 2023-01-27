@@ -12,6 +12,16 @@ import java.util.Map;
 public class Day14ViewModel extends JavaColorTableModel {
     Day14View view;
     IDay14Controller controller;
+    int largestX = 0;
+
+    @Override
+    public void setValueAtJava(JavaPoint javaPoint, Object value) {
+        super.setValueAtJava(javaPoint, value);
+        if (largestX <= javaPoint.x && view.table1 != null) {
+            view.resizeTable();
+            largestX = javaPoint.x;
+        }
+    }
 
     public Day14ViewModel(Day14View day14View) {
         view = day14View;
@@ -34,6 +44,6 @@ public class Day14ViewModel extends JavaColorTableModel {
     @Override
     public Color getBackgroundColorAtJava(JavaPoint javaPoint) {
         return colorCode.get(controller.getStateOfPoint(javaPoint));
-
     }
+
 }
