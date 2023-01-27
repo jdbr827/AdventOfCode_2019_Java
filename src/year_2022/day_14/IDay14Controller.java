@@ -14,5 +14,9 @@ public interface IDay14Controller {
     void setToFalling(JavaPoint javaPoint);
 
     void setToRest(JavaPoint javaPoint);
+
+    void noteUpdate(JavaPoint javaPoint);
+
+    void setToOpen(JavaPoint p);
 }
 

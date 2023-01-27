@@ -3,7 +3,6 @@ package year_2022.day_14.view;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Controller;
 import year_2022.day_14.IDay14Controller;
-import year_2022.day_14.view.Day14ViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,6 +70,8 @@ public class Day14View {
         viewModel.setValueAtJava(rock, "#");
         viewModel.setColorAtJava(rock, Color.GRAY);
         resizeTable();
+        scrollPane.getHorizontalScrollBar().setValue(500 * table1.getColumnModel().getColumn(1).getWidth());
+
     }
 
     public void setSandPiecesSoFar(int num) {
@@ -78,10 +79,13 @@ public class Day14View {
     }
 
 
+
     public void repaint() {
         setSandPiecesSoFar(controller.getSandPiecesSoFar());
-        table1.repaint();
-        resizeTable();
+        //table1.repaint();
+        //resizeTable();
+        scrollPane.getHorizontalScrollBar().setValue(500 * table1.getColumnModel().getColumn(1).getWidth());
+
     }
 
     private void resizeTable() {
@@ -90,7 +94,7 @@ public class Day14View {
             table1.getColumnModel().setColumnMargin(0);
         }
         for (int i=0; i<table1.getRowCount(); i++) {
-            table1.setRowHeight(3);
+            table1.setRowHeight(Math.max(3, Math.floorDiv(scrollPane.getHeight()-scrollPane.getColumnHeader().getHeight(), table1.getRowCount()) - 1));
             table1.setRowMargin(0);
         }
         table1.setTableHeader(null);
@@ -98,16 +102,20 @@ public class Day14View {
 
     }
 
-    public void setCurrentSandPiece(JavaPoint currentSandPiece) {
-        viewModel.setValueAtJava(currentSandPiece, "");
-    }
 
     public void setToFalling(JavaPoint javaPoint) {
-        viewModel.setValueAtJava(javaPoint, "s");
-        viewModel.setColorAtJava(javaPoint, Color.CYAN);
+        viewModel.setValueAtJava(javaPoint, "~");
     }
 
     public void setToRest(JavaPoint javaPoint) {
-        viewModel.setColorAtJava(javaPoint, Color.ORANGE);
+        viewModel.setValueAtJava(javaPoint, "o");
+    }
+
+    public void noteUpdate(JavaPoint javaPoint) {
+        viewModel.noteUpdateAtJavaPoint(javaPoint);
+    }
+
+    public void setToOpen(JavaPoint p) {
+        viewModel.setValueAtJava(p, " ");
     }
 }

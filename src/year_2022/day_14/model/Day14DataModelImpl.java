@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -15,21 +17,28 @@ public class Day14DataModelImpl implements Day14DataModel {
     Map<JavaPoint, PointState> stateMap = new HashMap<>();
     @NotNull Integer lowestRockY;
 
+    public Day14DataModelImpl(@NotNull Set<JavaPoint> rocks) {
+        rocks.forEach((rock) -> stateMap.put(rock, PointState.ROCK));
+        lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
+    }
+
+
     @Override
     public boolean getIsFloor(JavaPoint javaPoint) {
         return javaPoint.y == lowestRockY + 2;
     }
 
     public boolean getIsAtRest(JavaPoint javaPoint) {
-        return stateMap.get(javaPoint).equals(PointState.REST);
+
+        return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.REST);
     }
 
     public boolean getIsSandFallingAt(JavaPoint javaPoint) {
-        return stateMap.get(javaPoint).equals(PointState.FALLING);
+        return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.FALLING);
     }
 
     public boolean getIsRock(JavaPoint javaPoint) {
-        return stateMap.get(javaPoint).equals(PointState.ROCK) || getIsFloor(javaPoint);
+        return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.ROCK) || getIsFloor(javaPoint);
     }
 
     public void setToFalling(JavaPoint javaPoint) {

@@ -19,12 +19,23 @@ public class DummyController implements IDay14Controller {
         return 0;
     }
 
+
     @Override
     public void setToFalling(JavaPoint javaPoint) {
     }
 
     @Override
     public void setToRest(JavaPoint javaPoint) {
+
+    }
+
+    @Override
+    public void noteUpdate(JavaPoint javaPoint) {
+
+    }
+
+    @Override
+    public void setToOpen(JavaPoint p) {
 
     }
 }

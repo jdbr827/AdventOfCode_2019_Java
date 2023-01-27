@@ -83,6 +83,7 @@ public class CartesianTableModel {
 
     public void setValueAtJava(JavaPoint javaPoint, Object value) {
         setValueAtCartesian(convertJavaToCartesian(javaPoint), value);
+        noteUpdateAtJavaPoint(javaPoint);
     }
 
     public void setValueAtCartesian(CartesianPoint droidLocation, Object value) {
@@ -94,5 +95,10 @@ public class CartesianTableModel {
 
     public void setModelToTable(JTable table1) {
         table1.setModel(dtm);
+    }
+
+    public void noteUpdateAtJavaPoint(JavaPoint javaPoint) {
+        DTMPoint dtmPoint = convertJavaPointToDTMPoint(javaPoint);
+        dtm.fireTableCellUpdated(dtmPoint.x, dtmPoint.y);
     }
 }

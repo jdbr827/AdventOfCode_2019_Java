@@ -72,15 +72,18 @@ class Day14ModelImpl implements Day14Model {
     }
 
 
-    public void moveCurrentSandPiece() {
+    private void moveCurrentSandPiece() {
+        JavaPoint previousPoint = new JavaPoint(currentSandPiece.x, currentSandPiece.y);
         JavaPoint newSandPiece = moveSandPiece(currentSandPiece);
         if (newSandPiece == null) {
             createNewSandPiece();
             return;
         }
-        day14ModelView.setToFalling(currentSandPiece);
-
         currentSandPiece = newSandPiece;
+        day14ModelView.setToFalling(currentSandPiece);
+        day14ModelView.setToOpen(previousPoint);
+
+
     }
 
 

@@ -43,12 +43,24 @@ public class Day14Controller implements IDay14Controller {
         return model.getNumSandPiecesFallenSoFar();
     }
 
+
+
     public void setToFalling(JavaPoint javaPoint) {
         view.setToFalling(javaPoint);
     }
 
     public void setToRest(JavaPoint javaPoint) {
         view.setToRest(javaPoint);
+    }
+
+    @Override
+    public void noteUpdate(JavaPoint javaPoint) {
+        view.noteUpdate(javaPoint);
+    }
+
+    @Override
+    public void setToOpen(JavaPoint p) {
+        view.setToOpen(p);
     }
 
     public PointState getStateOfPoint(JavaPoint javaPoint) {

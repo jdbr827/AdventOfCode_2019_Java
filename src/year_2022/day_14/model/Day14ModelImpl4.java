@@ -7,6 +7,7 @@ import java.util.Set;
 public class Day14ModelImpl4 extends Day14ModelImpl3 {
     public Day14ModelImpl4(Day14ModelView modelView, Set<JavaPoint> rocks) {
         super(modelView, rocks);
+        modelView.setDataModel(new Day14DataModelImpl(rocks));
     }
 
     @Override

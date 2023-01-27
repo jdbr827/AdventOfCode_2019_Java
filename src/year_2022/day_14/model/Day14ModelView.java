@@ -29,6 +29,10 @@ public class Day14ModelView {
         controller.setToRest(javaPoint);
     }
 
+    public void noteUpdate(JavaPoint javaPoint) {
+        controller.noteUpdate(javaPoint);
+    }
+
 
     public boolean getIsRock(JavaPoint p) {
         return dataModel.getIsRock(p);
@@ -40,5 +44,9 @@ public class Day14ModelView {
 
     public boolean getIsFloor(JavaPoint p) {
         return dataModel.getIsFloor(p);
+    }
+
+    public void setToOpen(JavaPoint p) {
+        controller.setToOpen(p);
     }
 }
