@@ -11,11 +11,21 @@ import static year_2022.day_14.model.Day14Model.fromRockSet;
 public interface Day14Model {
     boolean isRock(JavaPoint p);
     boolean isAtRest(JavaPoint p);
+    boolean isSandFallingAt(JavaPoint javaPoint);
+
+
     boolean endCondition();
     int getNumSandPiecesFallenSoFar();
-    int runModelOnly();
+
     void executeOneTimeStep();
-    boolean isSandFallingAt(JavaPoint javaPoint);
+
+    default int runModelOnly() {
+        while (!endCondition()) {
+            executeOneTimeStep();
+        }
+        return getNumSandPiecesFallenSoFar();
+    }
+
 
     static Day14Model fromCornerRocksFile(String fileName, int version, Day14DataModel dataModel) {
         return fromRockSet(new Day14Scanner(fileName).readInRocks(), version, dataModel);
