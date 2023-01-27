@@ -29,10 +29,6 @@ public class Day14ViewModel extends JavaColorTableModel {
         setValueAtJava(new JavaPoint(500, 0), "+");
     }
 
-    @Override
-    public Color getForegroundColorAtJava(JavaPoint javaPoint) {
-        return Color.BLACK;
-    }
 
     static Map<PointState, Color> colorCode = Map.of(
             PointState.OPEN, Color.WHITE,

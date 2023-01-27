@@ -22,7 +22,9 @@ public abstract class JavaColorTableModel extends CartesianTableModel implements
         return l;
     }
 
-    public abstract Color getForegroundColorAtJava(JavaPoint javaPoint);
+    public Color getForegroundColorAtJava(JavaPoint javaPoint) {
+        return getBackgroundColorAtJava(javaPoint);
+    }
 
     public abstract Color getBackgroundColorAtJava(JavaPoint javaPoint);
 }

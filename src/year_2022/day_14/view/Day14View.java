@@ -102,7 +102,9 @@ public class Day14View {
 
 
     public void noteUpdate(JavaPoint javaPoint) {
+        viewModel.setValueAtJava(javaPoint, "dummy");
         viewModel.noteUpdateAtJavaPoint(javaPoint);
+
     }
 
 }
