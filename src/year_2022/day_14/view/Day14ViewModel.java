@@ -3,8 +3,10 @@ package year_2022.day_14.view;
 import viewModelUtil.JavaColorTableModel;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Controller;
+import year_2022.day_14.model.PointState;
 
 import java.awt.*;
+import java.util.Map;
 
 public class Day14ViewModel extends JavaColorTableModel {
     Day14View view;
@@ -21,13 +23,16 @@ public class Day14ViewModel extends JavaColorTableModel {
         return Color.BLACK;
     }
 
+    static Map<PointState, Color> colorCode = Map.of(
+            PointState.OPEN, Color.WHITE,
+            PointState.FALLING, Color.CYAN,
+            PointState.REST, Color.ORANGE,
+            PointState.ROCK, Color.GRAY
+    );
+
     @Override
     public Color getBackgroundColorAtJava(JavaPoint javaPoint) {
-        if (controller.isRock(javaPoint)) { return  Color.GRAY;}
-        if (controller.isFalling(javaPoint)) {return Color.CYAN;}
-        if (controller.isAtRest(javaPoint)) { return Color.ORANGE; }
-
-        return Color.WHITE;
+        return colorCode.get(controller.getStateOfPoint(javaPoint));
 
     }
 }

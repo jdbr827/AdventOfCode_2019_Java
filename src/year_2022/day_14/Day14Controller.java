@@ -3,6 +3,7 @@ package year_2022.day_14;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14DataModelImpl2;
 import year_2022.day_14.model.Day14Model;
+import year_2022.day_14.model.PointState;
 import year_2022.day_14.view.Day14View;
 
 import java.util.Set;
@@ -20,22 +21,11 @@ public class Day14Controller {
     }
 
 
-
-
-    public boolean isRock(JavaPoint javaPoint) {
-        return model.isRock(javaPoint);
-    }
-
     public void executeOneTimeStep() {
         model.executeOneTimeStep();
         view.repaint();
     }
 
-
-
-    public boolean isAtRest(JavaPoint javaPoint) {
-        return model.isAtRest(javaPoint);
-    }
 
     public boolean endCondition() {
         return model.endCondition();
@@ -48,10 +38,6 @@ public class Day14Controller {
         }
     }
 
-    public boolean isFalling(JavaPoint javaPoint) {
-        return model.isSandFallingAt(javaPoint);
-    }
-
     public int getSandPiecesSoFar() {
         return model.getNumSandPiecesFallenSoFar();
     }
@@ -62,5 +48,9 @@ public class Day14Controller {
 
     public void setToRest(JavaPoint javaPoint) {
         view.setToRest(javaPoint);
+    }
+
+    public PointState getStateOfPoint(JavaPoint javaPoint) {
+        return model.getStateOfPoint(javaPoint);
     }
 }

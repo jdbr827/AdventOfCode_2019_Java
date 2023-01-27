@@ -15,6 +15,7 @@ public interface Day14Model {
     int getNumSandPiecesFallenSoFar();
     int runModelOnly();
     void executeOneTimeStep();
+    boolean isSandFallingAt(JavaPoint javaPoint);
 
     static Day14Model fromCornerRocksFile(String fileName, int version, Day14DataModel dataModel) {
         return fromRockSet(new Day14Scanner(fileName).readInRocks(), version, dataModel);
@@ -34,6 +35,17 @@ public interface Day14Model {
         return new Day14ModelImpl(rocks);
     }
 
-    boolean isSandFallingAt(JavaPoint javaPoint);
 
+    default PointState getStateOfPoint(JavaPoint javaPoint) {
+        if (isRock(javaPoint)) {
+            return PointState.ROCK;
+        }
+        if (isAtRest(javaPoint)) {
+            return PointState.REST;
+        }
+        if (isSandFallingAt(javaPoint)) {
+            return PointState.FALLING;
+        }
+        return PointState.OPEN;
+    }
 }

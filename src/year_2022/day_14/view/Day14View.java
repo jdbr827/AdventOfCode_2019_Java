@@ -63,16 +63,12 @@ public class Day14View {
         viewModel = new Day14ViewModel(this);
         table1 = viewModel.createColorJTable();
 
-
     }
-
-
 
     public void putRock(JavaPoint rock) {
         viewModel.setValueAtJava(rock, "#");
         viewModel.setColorAtJava(rock, Color.GRAY);
         resizeTable();
-        //repaint();
     }
 
     public void setSandPiecesSoFar(int num) {
@@ -81,17 +77,20 @@ public class Day14View {
 
 
     public void repaint() {
-        //table1.repaint();
         setSandPiecesSoFar(controller.getSandPiecesSoFar());
     }
 
     private void resizeTable() {
         for (int i=0; i<table1.getColumnCount(); i++) {
-            table1.getColumnModel().getColumn(i).setPreferredWidth(10);
+            table1.getColumnModel().getColumn(i).setPreferredWidth(2);
+            table1.getColumnModel().setColumnMargin(0);
         }
         for (int i=0; i<table1.getRowCount(); i++) {
-            table1.setRowHeight(5);
+            table1.setRowHeight(3);
+            table1.setRowMargin(0);
         }
+        table1.setTableHeader(null);
+
     }
 
     public void setCurrentSandPiece(JavaPoint currentSandPiece) {
