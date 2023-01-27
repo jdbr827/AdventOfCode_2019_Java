@@ -79,12 +79,6 @@ class Day14ModelImpl implements Day14Model {
         currentSandPiece = new JavaPoint(500, 0);
     }
 
-    public int runModelOnly() {
-        while (!endCondition()) {
-            executeOneTimeStep();
-        }
-        return getNumSandPiecesFallenSoFar();
-    }
 
     @Override
     public void executeOneTimeStep() {
