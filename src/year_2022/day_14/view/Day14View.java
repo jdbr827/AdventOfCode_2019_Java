@@ -101,19 +101,8 @@ public class Day14View {
     }
 
 
-    public void setToFalling(JavaPoint javaPoint) {
-        viewModel.noteUpdateAtJavaPoint(javaPoint);
-    }
-
-    public void setToRest(JavaPoint javaPoint) {
-        viewModel.noteUpdateAtJavaPoint(javaPoint);
-    }
-
     public void noteUpdate(JavaPoint javaPoint) {
         viewModel.noteUpdateAtJavaPoint(javaPoint);
     }
 
-    public void setToOpen(JavaPoint p) {
-        viewModel.noteUpdateAtJavaPoint(p);
-    }
 }

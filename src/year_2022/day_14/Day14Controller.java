@@ -46,11 +46,11 @@ public class Day14Controller implements IDay14Controller {
 
 
     public void setToFalling(JavaPoint javaPoint) {
-        view.setToFalling(javaPoint);
+        view.noteUpdate(javaPoint);
     }
 
     public void setToRest(JavaPoint javaPoint) {
-        view.setToRest(javaPoint);
+        view.noteUpdate(javaPoint);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Day14Controller implements IDay14Controller {
 
     @Override
     public void setToOpen(JavaPoint p) {
-        view.setToOpen(p);
+        view.noteUpdate(p);
     }
 
     public PointState getStateOfPoint(JavaPoint javaPoint) {
