@@ -15,9 +15,9 @@ class Day14ModelImpl implements Day14Model {
     public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
     public Day14ModelImpl(Set<JavaPoint> rocks) {
+        lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
         this.day14DataModel = new Day14DataModelImpl3(rocks);
         createNewSandPiece();
-        lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
     }
 
     @Override
@@ -32,7 +32,7 @@ class Day14ModelImpl implements Day14Model {
 
     @Override
     public boolean endCondition() {
-        return currentSandPiece.y >= lowestRockY;
+        return day14DataModel.getIsFloor(currentSandPiece);
     }
 
     /**
@@ -75,7 +75,7 @@ class Day14ModelImpl implements Day14Model {
 
 
 
-    public void createNewSandPiece() {
+    protected void createNewSandPiece() {
         currentSandPiece = new JavaPoint(500, 0);
     }
 

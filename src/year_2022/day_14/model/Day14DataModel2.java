@@ -6,4 +6,5 @@ public interface Day14DataModel2 {
     boolean getIsAtRest(JavaPoint javaPoint);
     boolean getIsRock(JavaPoint javaPoint);
     void setToAtRest(JavaPoint javaPoint);
+    boolean getIsFloor(JavaPoint javaPoint);
 }

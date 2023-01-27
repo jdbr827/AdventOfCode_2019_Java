@@ -4,6 +4,7 @@ import viewModelUtil.JavaPoint;
 
 // each point always goes from nothing --> falling --> atRest (unless a rock)
 public interface Day14DataModel extends Day14DataModel2 {
+    boolean getIsFloor(JavaPoint javaPoint);
     boolean getIsAtRest(JavaPoint javaPoint);
     boolean getIsSandFallingAt(JavaPoint javaPoint);
     boolean getIsRock(JavaPoint javaPoint);
