@@ -23,7 +23,7 @@ class Day14ModelImpl2 extends Day14ModelImpl {
 
     @Override
     public boolean endCondition() {
-        return isAtRest(SPAWN_POINT);
+        return !allowsSand(SPAWN_POINT);
     }
 
 }

@@ -22,14 +22,6 @@ class Day14ModelImpl implements Day14Model {
     }
 
 
-    public boolean isRock(JavaPoint p) {
-        return day14ModelView.getIsRock(p);
-    }
-
-    public boolean isAtRest(JavaPoint p) {
-        return day14ModelView.getIsAtRest(p) || isRock(p);
-    }
-
     @Override
     public Day14DataModel getDataModel() {
         return day14ModelView.dataModel;

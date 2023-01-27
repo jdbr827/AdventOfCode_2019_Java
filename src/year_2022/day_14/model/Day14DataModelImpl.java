@@ -29,7 +29,6 @@ public class Day14DataModelImpl implements Day14DataModel {
     }
 
     public boolean getIsAtRest(JavaPoint javaPoint) {
-
         return stateMap.getOrDefault(javaPoint, PointState.OPEN).equals(PointState.REST);
     }
 
