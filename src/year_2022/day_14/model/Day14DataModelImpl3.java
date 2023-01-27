@@ -49,7 +49,7 @@ public class Day14DataModelImpl3 implements Day14DataModel {
 
     @Override
     public PointState getStateOfPoint(JavaPoint javaPoint) {
-        if (getIsRock(javaPoint)) {
+        if (getIsRock(javaPoint) || getIsFloor(javaPoint)) {
             return PointState.ROCK;
         }
         if (getIsAtRest(javaPoint)) {

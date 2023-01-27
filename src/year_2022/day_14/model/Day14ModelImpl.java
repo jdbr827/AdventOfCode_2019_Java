@@ -97,9 +97,5 @@ class Day14ModelImpl implements Day14Model {
         return lowestRockY;
     }
 
-    public boolean isSandFallingAt(JavaPoint javaPoint) {
-        return javaPoint.equals(currentSandPiece);
-    }
-
 
 }

@@ -29,11 +29,6 @@ public class Day14ModelImpl3 extends Day14ModelImpl {
     }
 
     @Override
-    public boolean isSandFallingAt(JavaPoint javaPoint) {
-        return currentFallingPieces.contains(javaPoint);
-    }
-
-    @Override
     public boolean endCondition() {
         return currentFallingPieces.get(0).y >= lowestRockY;
     }

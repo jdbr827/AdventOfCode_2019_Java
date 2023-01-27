@@ -17,7 +17,7 @@ public class Day14DataModelImpl implements Day14DataModel {
 
     @Override
     public boolean getIsFloor(JavaPoint javaPoint) {
-        return javaPoint.y == lowestRockY;
+        return javaPoint.y == lowestRockY + 2;
     }
 
     public boolean getIsAtRest(JavaPoint javaPoint) {
@@ -29,7 +29,7 @@ public class Day14DataModelImpl implements Day14DataModel {
     }
 
     public boolean getIsRock(JavaPoint javaPoint) {
-        return stateMap.get(javaPoint).equals(PointState.ROCK);
+        return stateMap.get(javaPoint).equals(PointState.ROCK) || getIsFloor(javaPoint);
     }
 
     public void setToFalling(JavaPoint javaPoint) {
