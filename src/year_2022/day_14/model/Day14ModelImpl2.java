@@ -17,8 +17,8 @@ class Day14ModelImpl2 extends Day14ModelImpl {
     }
 
     @Override
-    public boolean isRock(JavaPoint p) {
-        return day14ModelView.getIsRock(p) || day14ModelView.getIsFloor(p);
+    public boolean allowsSand(JavaPoint p) {
+        return super.allowsSand(p) && !day14ModelView.getIsFloor(p);
     }
 
     @Override

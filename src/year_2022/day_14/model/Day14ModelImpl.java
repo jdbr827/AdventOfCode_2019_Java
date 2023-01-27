@@ -2,7 +2,6 @@ package year_2022.day_14.model;
 
 import lombok.Getter;
 import viewModelUtil.JavaPoint;
-import year_2022.day_14.Day14Controller;
 
 import java.util.*;
 
@@ -41,6 +40,10 @@ class Day14ModelImpl implements Day14Model {
         return currentSandPiece.y >= lowestRockY;
     }
 
+    public boolean allowsSand(JavaPoint javaPoint) {
+        return !day14ModelView.getIsRock(javaPoint) && !day14ModelView.getIsAtRest(javaPoint);
+    }
+
     /**
      *
      * @param sandPiece piece of sand
@@ -51,11 +54,11 @@ class Day14ModelImpl implements Day14Model {
         JavaPoint downLeft = new JavaPoint(sandPiece.x - 1, sandPiece.y + 1);
         JavaPoint downRight = new JavaPoint(sandPiece.x + 1, sandPiece.y + 1);
 
-        if (!isAtRest(down)) {
+        if (allowsSand(down)) {
             return down;
-        } else if (!isAtRest(downLeft)) {
+        } else if (allowsSand(downLeft)) {
             return downLeft;
-        } else if (!isAtRest(downRight)) {
+        } else if (allowsSand(downRight)) {
             return downRight;
         }
         setPieceToRest(sandPiece);
