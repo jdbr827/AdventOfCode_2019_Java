@@ -5,9 +5,7 @@ import viewModelUtil.JavaPoint;
 public interface IDay14Model extends Day14Model {
 
 
-    default boolean allowsSand(JavaPoint javaPoint) {
-        return !getModelView().getIsRock(javaPoint) && !getModelView().getIsAtRest(javaPoint);
-    }
+    boolean allowsSand(JavaPoint javaPoint);
 
     /**
      *

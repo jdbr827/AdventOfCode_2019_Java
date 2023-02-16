@@ -12,16 +12,18 @@ interface Day14Model {
 }
 
 interface IDay14Model {
-+ allowsSand(javaPoint)
-+ moveSandPiece(sandPiece)
-+ {abstract} setPieceToRest(sandPiece)
++ {abstract} allowsSand(p)
++ moveSandPiece(p)
++ {abstract} setPieceToRest(p)
 + getModelView()
 }
 
 Day14Model --|> IDay14Model
 class Day14ModelImpl {
+
 + currentSandPiece
 + NumSandPiecesFallenSoFar
++ allowsSand(p)
 + getDataModel()
 + endCondition()
 + getLowestRockY()
@@ -59,6 +61,7 @@ interface Day14DataModel {
 
 IDay14Model ..|> Day14ModelImpl
 
+Day14Model -* Day14DataModel
 Day14ModelImpl --|> Day14ModelImpl2
 
 class Day14ModelImpl2 {

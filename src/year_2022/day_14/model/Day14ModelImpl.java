@@ -19,6 +19,10 @@ class Day14ModelImpl implements IDay14Model {
         createNewSandPiece();
     }
 
+    public boolean allowsSand(JavaPoint javaPoint) {
+        return !getModelView().getIsRock(javaPoint) && !getModelView().getIsAtRest(javaPoint);
+    }
+
 
     @Override
     public Day14DataModel getDataModel() {
