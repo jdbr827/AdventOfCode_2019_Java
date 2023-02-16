@@ -1,0 +1,21 @@
+We know that for each chemical other than ore, there is exactly one reaction to create that chemical.
+
+Reformat Part 1 to think about: How much ore might we find if we destroyed one fuel?
+
+Keep track of the amount of each chemical available: Starting with FUEL=1 and all else 0
+
+if we come across a chemical other than ore with available amount > 0, we apply a reaction
+to destroy that chemical (the "reverse" of the unique reaction used to create it).
+
+It's fine if a chemical amount is < 0, as this is the amount "extra" of the chemical we would expect
+to make with our ore while making fuel. A problem might arise if the chemical amount is negative
+and less than the amount we would create in its reaction, but this can never happen because
+the only way to lower the amount of a chemical is to destroy it, and we will only destroy it
+if its amount is > 0.
+
+Once ORE is the only chemical with a positive available amount, that amount of ore is the least amount of
+ore that can be used to create one fuel. It clearly can't be more than that, since we just decomposed
+a fuel into that much ore. If the correct answer were smaller, we would expect to not need to do
+one of the intermediate reactions, but from above we can prove that's not the case either.
+
+
