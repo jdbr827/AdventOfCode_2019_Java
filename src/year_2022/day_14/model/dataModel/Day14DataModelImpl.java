@@ -67,6 +67,9 @@ public class Day14DataModelImpl implements Day14DataModel {
 
     @Override
     public PointState getStateOfPoint(JavaPoint javaPoint) {
+        if (getIsFloor(javaPoint)) {
+            return PointState.FLOOR;
+        }
         return stateMap.getOrDefault(javaPoint, PointState.OPEN);
     }
 

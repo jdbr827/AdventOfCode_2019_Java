@@ -44,7 +44,7 @@ public class Day14Test {
 
 
     public static void main(String[] args) {
-        new Day14Controller(EXAMPLE_INPUT, 1, 3);
+        new Day14Controller(EXAMPLE_INPUT, 2, 3);
         //new Day14Controller(OFFICIAL_INPUT, 4);
     };
 
