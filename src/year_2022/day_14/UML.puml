@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+interface Day14Model {
++ {abstract} endCondition()
++ {abstract} executeOneTimeStep()
++ {abstract} getNumSandPiecesFallenSoFar()
++ {abstract} floorY()
++ {abstract} getDataModel()
++ {static} fromRockSet
+}
+
+interface IDay14Model {
++ allowsSand(javaPoint)
++ moveSandPiece(sandPiece)
++ {abstract} setPieceToRest(sandPiece)
++ getModelView()
+}
+
+Day14Model --|> IDay14Model
+class Day14ModelImpl {
++ currentSandPiece
++ NumSandPiecesFallenSoFar
++ getDataModel()
++ endCondition()
++ getLowestRockY()
++ setPieceToRest(p);
+- moveCurrentSandPiece();
+# createNewSandPiece()
++ executeOneTimeStep()
++ floorY()
+}
+
+IDay14Model -* Day14ModelView
+
+class Day14ModelView {
++ setToFalling(p));
++ setToAtRest(p);
++ noteUpdate(p);
++ getIsRock(p);
++ getIsAtRest(p);
++ getIsFloor(p);
++ setToOpen(p);
+}
+
+IDay14Controller *-- Day14ModelView
+Day14ModelView *- Day14DataModel
+
+interface Day14DataModel {
++ {abstract} getStateOfPoint(p);
++ {abstract} getIsFloor(p);
++ {abstract} getIsAtRest(p);
++ {abstract} setToFalling(p);
++ {abstract} setToAtRest(p);
++ getIsRock(p);
++ getLowestRockY();
+}
+
+IDay14Model ..|> Day14ModelImpl
+
+Day14ModelImpl --|> Day14ModelImpl2
+
+class Day14ModelImpl2 {
++ floorY();
++ allowsSand(p);
++ endCondition();
+}
+@enduml

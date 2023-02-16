@@ -41,7 +41,6 @@ class Day14ModelImpl implements IDay14Model {
         numSandPiecesFallenSoFar++;
     }
 
-
     private void moveCurrentSandPiece() {
         JavaPoint previousPoint = new JavaPoint(currentSandPiece.x, currentSandPiece.y);
         JavaPoint newSandPiece = moveSandPiece(currentSandPiece);
