@@ -13,9 +13,9 @@ public class Day14Controller implements IDay14Controller {
     Day14View view;
     Day14Model model;
 
-    public Day14Controller(String fileName, int version) {
+    public Day14Controller(String fileName, int part, int solutionMethodId) {
         Set<JavaPoint> rocks = new Day14Scanner(fileName).readInRocks();
-        model = Day14Model.fromCornerRocksFile(fileName, version, new Day14ModelView(this));
+        model = Day14Model.fromCornerRocksFile(fileName, part, solutionMethodId, new Day14ModelView(this));
         view = new Day14View(this);
         rocks.forEach(view::putRock);
 

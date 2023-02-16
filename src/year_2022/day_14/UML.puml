@@ -2,39 +2,36 @@
 'https://plantuml.com/class-diagram
 
 
-interface Day14Model {
-+ {abstract} endCondition()
-+ {abstract} executeOneTimeStep()
-+ {abstract} getNumSandPiecesFallenSoFar()
-+ {abstract} floorY()
-+ {abstract} getDataModel()
-+ {static} fromRockSet
+class Day14Model {
++ {static} fromRockSet(rocks, part, solution method)
+
+
 }
 
-interface IDay14Model {
-+ {abstract} allowsSand(p)
+Day14Model --* SolutionMethod
+
+interface SolutionMethod {
 + moveSandPiece(p)
-+ {abstract} setPieceToRest(p)
-+ getModelView()
++{abstract} executeOneTimeStep()
++{abstract} setCurrentSandPiece(p)
++ getNumSandPiecesFallenSoFar()
++{abstract} setPieceToRest(p)
 }
 
-Day14Model --|> IDay14Model
-class Day14ModelImpl {
 
+
+SolutionMethod ..|> NaiveSolutionMethod
+class NaiveSolutionMethod {
++ {static} SPAWN_POINT
 + currentSandPiece
 + NumSandPiecesFallenSoFar
-+ allowsSand(p)
-+ getDataModel()
-+ endCondition()
-+ getLowestRockY()
 + setPieceToRest(p);
 - moveCurrentSandPiece();
 # createNewSandPiece()
 + executeOneTimeStep()
-+ floorY()
 }
 
-IDay14Model -* Day14ModelView
+SolutionMethod -* Day14ModelView
 
 class Day14ModelView {
 + setToFalling(p));
@@ -44,29 +41,53 @@ class Day14ModelView {
 + getIsAtRest(p);
 + getIsFloor(p);
 + setToOpen(p);
++ setCurrentSandPiece(p);
 }
 
-IDay14Controller *-- Day14ModelView
-Day14ModelView *- Day14DataModel
+Day14Model --* Day14DataModel
 
+IDay14Controller *-- Day14ModelView
+Day14ModelView -* Day14DataModel
 interface Day14DataModel {
++ <<get/set>> currentSandPiece;
 + {abstract} getStateOfPoint(p);
 + {abstract} getIsFloor(p);
 + {abstract} getIsAtRest(p);
 + {abstract} setToFalling(p);
 + {abstract} setToAtRest(p);
++ {abstract} getNumPiecesAtRest();
 + getIsRock(p);
-+ getLowestRockY();
++ {abstract}getLowestRockY();
 }
 
-IDay14Model ..|> Day14ModelImpl
 
-Day14Model -* Day14DataModel
-Day14ModelImpl --|> Day14ModelImpl2
 
-class Day14ModelImpl2 {
+NaiveSolutionMethod --|> Day14ModelImpl2
+
+
+interface PartConstraint {
++ {abstract} floorY();
++ {abstract} allowsSand(p);
++ {abstract} endCondition();
+}
+
+PartConstraint ..> PartConstraint2
+PartConstraint ..> PartConstraint1
+
+class PartConstraint1 {
+    +floorY();
+    +allowsSand(p);
+    +endCondition();
+}
+class PartConstraint2 {
 + floorY();
 + allowsSand(p);
 + endCondition();
 }
+SolutionMethod -* PartConstraint
+PartConstraint1 --* Day14DataModel
+PartConstraint2 --* Day14DataModel
+
+IDay14Controller --> Day14ModelView : "creates"
+Day14Model <- IDay14Controller: "creates"
 @enduml

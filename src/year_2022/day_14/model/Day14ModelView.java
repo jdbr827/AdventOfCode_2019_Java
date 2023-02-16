@@ -18,6 +18,9 @@ public class Day14ModelView {
     }
 
 
+    public void setCurrentSandPiece(JavaPoint p) {
+        dataModel.setCurrentSandPiece(p);
+    }
 
     public void setToFalling(JavaPoint javaPoint) {
         dataModel.setToFalling(javaPoint);
@@ -47,6 +50,7 @@ public class Day14ModelView {
     }
 
     public void setToOpen(JavaPoint p) {
+        dataModel.setToOpen(p);
         controller.setToOpen(p);
     }
 }

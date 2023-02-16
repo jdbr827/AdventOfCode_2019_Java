@@ -16,31 +16,35 @@ public class Day14Test {
 
     @Test
     void test_part1() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1, new Day14ModelView(new DummyController())).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1, 1, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1, 1, new Day14ModelView(new DummyController())).runModelOnly());
     }
 
     @Test
     void test_part2() {
-        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2, new Day14ModelView(new DummyController())).runModelOnly());
-        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2, 1, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2, 1, new Day14ModelView(new DummyController())).runModelOnly());
     }
 
     @Test
     void test_impl_3() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 3, new Day14ModelView(new DummyController())).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 3, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1, 2,  new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1, 2, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2, 2,  new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2, 2, new Day14ModelView(new DummyController())).runModelOnly());
     }
 
     @Test
     void test_impl_4() {
-        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 4, new Day14ModelView(new DummyController())).runModelOnly());
-        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 4, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(24, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 1, 3,  new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(817, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 1, 3, new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(93, Day14Model.fromCornerRocksFile(EXAMPLE_INPUT, 2, 3,  new Day14ModelView(new DummyController())).runModelOnly());
+        assertEquals(23416, Day14Model.fromCornerRocksFile(OFFICIAL_INPUT, 2, 3, new Day14ModelView(new DummyController())).runModelOnly());
     }
 
 
     public static void main(String[] args) {
-        new Day14Controller(EXAMPLE_INPUT, 1);
+        new Day14Controller(EXAMPLE_INPUT, 1, 3);
         //new Day14Controller(OFFICIAL_INPUT, 4);
     };
 

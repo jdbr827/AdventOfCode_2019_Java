@@ -16,9 +16,15 @@ public interface Day14DataModel {
     boolean getIsAtRest(JavaPoint javaPoint);
     void setToFalling(JavaPoint javaPoint);
     void setToAtRest(JavaPoint javaPoint);
+    int getNumAtRest();
 
     default boolean getIsRock(JavaPoint javaPoint) {
         return getStateOfPoint(javaPoint).equals(PointState.ROCK);
     }
+
+    void setCurrentSandPiece(JavaPoint p);
+    JavaPoint getCurrentSandPiece();
+
+    void setToOpen(JavaPoint p);
 }
 

@@ -1,6 +1,7 @@
 package year_2022.day_14.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
@@ -13,7 +14,7 @@ public class Day14DataModelImpl3 implements Day14DataModel {
     @NotNull Set<JavaPoint> rocks;
     Set<JavaPoint> piecesAtRest = new HashSet<JavaPoint>();
     int lowestRockY;
-    JavaPoint currentSandPiece;
+    @Getter @Setter JavaPoint currentSandPiece;
 
 
     public Day14DataModelImpl3(@NotNull Set<JavaPoint> rocks) {
@@ -44,6 +45,16 @@ public class Day14DataModelImpl3 implements Day14DataModel {
     @Override
     public void setToAtRest(JavaPoint javaPoint) {
         piecesAtRest.add(javaPoint);
+    }
+
+    @Override
+    public int getNumAtRest() {
+        return piecesAtRest.size();
+    }
+
+    @Override
+    public void setToOpen(JavaPoint p) {
+        // it is already no longer the current sand piece or anything else
     }
 
     @Override

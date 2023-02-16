@@ -1,51 +1,70 @@
 package year_2022.day_14.model;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Scanner;
 
 import java.util.Set;
 
-import static year_2022.day_14.model.Day14Model.fromRockSet;
+import static year_2022.day_14.model.Day14ModelImpl.SPAWN_POINT;
 
-public interface Day14Model {
+@RequiredArgsConstructor
+public class Day14Model {
+    @NotNull Day14SolutionMethod solutionMethod;
+    @NotNull Day14ModelPartConstraint partConstraint;
+    @NotNull @Getter Day14DataModel dataModel;
 
-    boolean endCondition();
-    int getNumSandPiecesFallenSoFar();
-    void executeOneTimeStep();
+    public boolean endCondition() {
+        return partConstraint.endCondition();
+    }
 
-    default PointState getStateOfPoint(JavaPoint javaPoint) {
+    public int getNumSandPiecesFallenSoFar() {
+        return solutionMethod.getNumSandPiecesFallenSoFar();
+    }
+
+    boolean allowsSand(JavaPoint javaPoint) {
+        return partConstraint.allowsSand(javaPoint);
+    }
+
+    public PointState getStateOfPoint(JavaPoint javaPoint) {
         return getDataModel().getStateOfPoint(javaPoint);
     }
 
-    int floorY();
-    Day14DataModel getDataModel();
 
-    default int runModelOnly() {
+    public int floorY() {
+        return partConstraint.floorY();
+    }
+
+
+    public int runModelOnly() {
+        dataModel.setCurrentSandPiece(SPAWN_POINT);
         while (!endCondition()) {
             executeOneTimeStep();
         }
         return getNumSandPiecesFallenSoFar();
     }
 
-
-    static Day14Model fromCornerRocksFile(String fileName, int version, Day14ModelView dataModel) {
-        return fromRockSet(new Day14Scanner(fileName).readInRocks(), version, dataModel);
+    public static Day14Model fromCornerRocksFile(String fileName,int part, int solutionMethodId, Day14ModelView modelView) {
+        Set<JavaPoint> rocks = new Day14Scanner(fileName).readInRocks();
+        Day14DataModel dataModel = new Day14DataModelImpl(rocks);
+        modelView.setDataModel(dataModel);
+        return fromDataModel(dataModel, part, solutionMethodId, modelView);
     }
 
-    static Day14Model fromRockSet(Set<JavaPoint> rocks, int version, Day14ModelView modelView) {
-        if (version == 1) {
-            return new Day14ModelImpl(modelView, rocks);
-        } if (version == 2) {
-            return new Day14ModelImpl2(modelView, rocks);
-        } if (version == 3) {
-            return new Day14ModelImpl3(modelView, rocks);
-        }
-        if (version == 4) {
-            return new Day14ModelImpl4(modelView, rocks);
-        }
-        return new Day14ModelImpl(modelView, rocks);
+    static Day14Model fromDataModel(Day14DataModel dataModel, int part, int solutionMethodId, Day14ModelView modelView) {
+        Day14ModelPartConstraint partConstraint = Day14ModelPartConstraint.createNew(part, dataModel);
+        Day14SolutionMethod solutionMethod = Day14SolutionMethod.createNew(solutionMethodId, modelView, partConstraint);
+
+        return new Day14Model(solutionMethod, partConstraint, dataModel);
+
     }
 
 
 
+
+    public void executeOneTimeStep() {
+        solutionMethod.executeOneTimeStep();
+    }
 }

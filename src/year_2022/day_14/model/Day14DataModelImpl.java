@@ -1,7 +1,9 @@
 package year_2022.day_14.model;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 
@@ -13,6 +15,18 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Day14DataModelImpl implements Day14DataModel {
+
+    @Getter int numAtRest = 0;
+
+    @Override
+    public void setToOpen(JavaPoint p) {
+        stateMap.put(p, PointState.OPEN);
+    }
+
+
+    @Getter
+    @Setter
+    JavaPoint currentSandPiece;
 
     Map<JavaPoint, PointState> stateMap = new HashMap<>();
     @NotNull Integer lowestRockY;
@@ -46,6 +60,7 @@ public class Day14DataModelImpl implements Day14DataModel {
 
     public void setToAtRest(JavaPoint javaPoint) {
         stateMap.put(javaPoint, PointState.REST);
+        numAtRest++;
     }
 
     @Override
