@@ -3,14 +3,12 @@ package year_2022.day_14.model;
 import lombok.Setter;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.IDay14Controller;
-import year_2022.day_14.model.dataModel.Day14DataModel;
+import year_2022.day_14.model.dataModel.Day14DataWriter;
 
 public class Day14ModelView {
 
     IDay14Controller controller;
-    @Setter
-    public
-    Day14DataModel dataModel;
+    @Setter public Day14DataWriter dataWriter;
 
     public Day14ModelView(IDay14Controller controller) {
         this.controller = controller;
@@ -18,38 +16,21 @@ public class Day14ModelView {
 
 
     public void setCurrentSandPiece(JavaPoint p) {
-        dataModel.setCurrentSandPiece(p);
+        dataWriter.setCurrentSandPiece(p);
     }
 
     public void setToFalling(JavaPoint javaPoint) {
-        dataModel.setToFalling(javaPoint);
+        dataWriter.setToFalling(javaPoint);
         controller.setToFalling(javaPoint);
     }
 
     public void setToAtRest(JavaPoint javaPoint) {
-        dataModel.setToAtRest(javaPoint);
+        dataWriter.setToAtRest(javaPoint);
         controller.setToRest(javaPoint);
     }
 
-    public void noteUpdate(JavaPoint javaPoint) {
-        controller.noteUpdate(javaPoint);
-    }
-
-
-    public boolean getIsRock(JavaPoint p) {
-        return dataModel.getIsRock(p);
-    }
-
-    public boolean getIsAtRest(JavaPoint p) {
-        return dataModel.getIsAtRest(p);
-    }
-
-    public boolean getIsFloor(JavaPoint p) {
-        return dataModel.getIsFloor(p);
-    }
-
     public void setToOpen(JavaPoint p) {
-        dataModel.setToOpen(p);
+        dataWriter.setToOpen(p);
         controller.setToOpen(p);
     }
 }

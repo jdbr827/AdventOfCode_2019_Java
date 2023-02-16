@@ -2,6 +2,7 @@ package year_2022.day_14.model.solutionMethod;
 
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14ModelView;
+import year_2022.day_14.model.dataModel.Day14DataReader;
 import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 import java.util.Stack;
@@ -17,8 +18,8 @@ public class Day14ModelSolutionMethod3 extends Day14NaiveSolution {
 
     Stack<JavaPoint> currentFallingPieces = new Stack<>();
 
-    public Day14ModelSolutionMethod3(Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
-        super(modelView, partConstraint);
+    public Day14ModelSolutionMethod3(Day14ModelView modelView, Day14ModelPartConstraint partConstraint, Day14DataReader dataReader) {
+        super(modelView, partConstraint, dataReader);
         currentFallingPieces.add(SPAWN_POINT);
     }
 

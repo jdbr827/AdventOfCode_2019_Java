@@ -14,9 +14,6 @@ interface SolutionMethod {
 + {static} SPAWN_POINT
 + moveSandPiece(p)
 +{abstract} executeOneTimeStep()
-+{abstract} setCurrentSandPiece(p)
-+ getNumSandPiecesFallenSoFar()
-
 }
 
 DataReader --> Day14DataModel
@@ -34,9 +31,6 @@ class Day14ModelView {
 + setToFalling(p));
 + setToAtRest(p);
 + noteUpdate(p);
-+ getIsRock(p);
-+ getIsAtRest(p);
-+ getIsFloor(p);
 + setToOpen(p);
 + setCurrentSandPiece(p);
 }

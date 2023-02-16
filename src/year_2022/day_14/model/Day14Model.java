@@ -1,6 +1,5 @@
 package year_2022.day_14.model;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
@@ -27,7 +26,7 @@ public class Day14Model {
     }
 
     public int getNumSandPiecesFallenSoFar() {
-        return solutionMethod.getNumSandPiecesFallenSoFar();
+        return dataReader.getNumAtRest();
     }
 
     public PointState getStateOfPoint(JavaPoint javaPoint) {
@@ -51,13 +50,13 @@ public class Day14Model {
     public static Day14Model fromCornerRocksFile(String fileName,int part, int solutionMethodId, Day14ModelView modelView) {
         Set<JavaPoint> rocks = new Day14Scanner(fileName).readInRocks();
         Day14DataModel dataModel = new Day14DataModelImpl(rocks);
-        modelView.setDataModel(dataModel);
+        modelView.setDataWriter(dataModel);
         return fromDataModel(dataModel, part, solutionMethodId, modelView);
     }
 
     static Day14Model fromDataModel(Day14DataModel dataModel, int part, int solutionMethodId, Day14ModelView modelView) {
         Day14ModelPartConstraint partConstraint = Day14ModelPartConstraint.createNew(part, dataModel);
-        Day14SolutionMethod solutionMethod = Day14SolutionMethod.createNew(solutionMethodId, modelView, partConstraint);
+        Day14SolutionMethod solutionMethod = Day14SolutionMethod.createNew(solutionMethodId, modelView, partConstraint, dataModel);
 
         return new Day14Model(solutionMethod, partConstraint, dataModel, modelView);
 

@@ -2,6 +2,7 @@ package year_2022.day_14.model.solutionMethod;
 
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14ModelView;
+import year_2022.day_14.model.dataModel.Day14DataReader;
 import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 import java.util.*;
@@ -19,8 +20,8 @@ public class Day14ModelSolutionMethod2 extends Day14NaiveSolution {
 
     List<JavaPoint> currentFallingPieces = new ArrayList<>();
 
-    public Day14ModelSolutionMethod2(Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
-        super(modelView, partConstraint);
+    public Day14ModelSolutionMethod2(Day14ModelView modelView, Day14ModelPartConstraint partConstraint, Day14DataReader dataReader) {
+        super(modelView, partConstraint, dataReader);
         setCurrentSandPiece(SPAWN_POINT);
         currentFallingPieces = new ArrayList<>();
     }
