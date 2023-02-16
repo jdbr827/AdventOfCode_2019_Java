@@ -16,9 +16,11 @@ interface SolutionMethod {
 +{abstract} executeOneTimeStep()
 +{abstract} setCurrentSandPiece(p)
 + getNumSandPiecesFallenSoFar()
-+{abstract} setPieceToRest(p)
+
 }
 
+DataReader --> Day14DataModel
+DataWriter --> Day14DataModel
 
 
 SolutionMethod ..|> NaiveSolutionMethod
@@ -26,7 +28,7 @@ class NaiveSolutionMethod {
 + executeOneTimeStep()
 }
 
-SolutionMethod -* Day14ModelView
+Day14ModelView *- SolutionMethod
 
 class Day14ModelView {
 + setToFalling(p));
@@ -39,21 +41,28 @@ class Day14ModelView {
 + setCurrentSandPiece(p);
 }
 
-Day14Model --* Day14DataModel
+Day14Model --* Day14ModelView
 
 IDay14Controller *-- Day14ModelView
-Day14ModelView -* Day14DataModel
-interface Day14DataModel {
-+ <<get/set>> currentSandPiece;
+Day14ModelView --* DataWriter
+
+interface DataReader {
 + {abstract} getStateOfPoint(p);
 + {abstract} getIsFloor(p);
 + {abstract} getIsAtRest(p);
-+ {abstract} setToFalling(p);
-+ {abstract} setToAtRest(p);
++ {abstract} getCurrentSandPiece();
 + {abstract} getNumPiecesAtRest();
 + getIsRock(p);
 + {abstract}getLowestRockY();
 }
+
+interface DataWriter {
++ {abstract} setCurrentSandPiece(p);
++ {abstract} setToFalling(p);
++ {abstract} setToAtRest(p);
+
+}
+interface Day14DataModel {}
 
 
 
@@ -77,9 +86,11 @@ class PartConstraint2 {
 + endCondition();
 }
 SolutionMethod -* PartConstraint
-PartConstraint1 --* Day14DataModel
-PartConstraint2 --* Day14DataModel
+PartConstraint1 --* DataReader
+PartConstraint2 --* DataReader
 
 IDay14Controller --> Day14ModelView : "creates"
-Day14Model <- IDay14Controller: "creates"
+IDay14Controller -> Day14Model: "creates"
+Day14Model -* DataReader
+Day14Model --* PartConstraint
 @enduml

@@ -7,6 +7,7 @@ import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Scanner;
 import year_2022.day_14.model.dataModel.Day14DataModel;
 import year_2022.day_14.model.dataModel.Day14DataModelImpl;
+import year_2022.day_14.model.dataModel.Day14DataReader;
 import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 import year_2022.day_14.model.solutionMethod.Day14SolutionMethod;
 
@@ -18,8 +19,8 @@ import static year_2022.day_14.model.solutionMethod.Day14SolutionMethod.SPAWN_PO
 public class Day14Model {
     @NotNull Day14SolutionMethod solutionMethod;
     @NotNull Day14ModelPartConstraint partConstraint;
-    @NotNull @Getter
-    Day14DataModel dataModel;
+    @NotNull Day14DataReader dataReader;
+    @NotNull Day14ModelView modelView;
 
     public boolean endCondition() {
         return partConstraint.endCondition();
@@ -29,12 +30,8 @@ public class Day14Model {
         return solutionMethod.getNumSandPiecesFallenSoFar();
     }
 
-    boolean allowsSand(JavaPoint javaPoint) {
-        return partConstraint.allowsSand(javaPoint);
-    }
-
     public PointState getStateOfPoint(JavaPoint javaPoint) {
-        return getDataModel().getStateOfPoint(javaPoint);
+        return dataReader.getStateOfPoint(javaPoint);
     }
 
 
@@ -44,7 +41,7 @@ public class Day14Model {
 
 
     public int runModelOnly() {
-        dataModel.setCurrentSandPiece(SPAWN_POINT);
+        modelView.setCurrentSandPiece(SPAWN_POINT);
         while (!endCondition()) {
             executeOneTimeStep();
         }
@@ -62,7 +59,7 @@ public class Day14Model {
         Day14ModelPartConstraint partConstraint = Day14ModelPartConstraint.createNew(part, dataModel);
         Day14SolutionMethod solutionMethod = Day14SolutionMethod.createNew(solutionMethodId, modelView, partConstraint);
 
-        return new Day14Model(solutionMethod, partConstraint, dataModel);
+        return new Day14Model(solutionMethod, partConstraint, dataModel, modelView);
 
     }
 

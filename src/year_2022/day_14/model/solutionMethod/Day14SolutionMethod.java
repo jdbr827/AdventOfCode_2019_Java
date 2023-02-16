@@ -6,6 +6,11 @@ import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 public interface Day14SolutionMethod {
 
+    Day14ModelPartConstraint getPartConstraint();
+    Day14ModelView getModelView();
+
+    void executeOneTimeStep();
+
     JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
     static Day14SolutionMethod createNew(int solutionMethodId, Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
@@ -21,7 +26,7 @@ public interface Day14SolutionMethod {
         }
     }
 
-    void executeOneTimeStep();
+
 
     default int getNumSandPiecesFallenSoFar() {
         return getModelView().dataModel.getNumAtRest();
@@ -54,9 +59,5 @@ public interface Day14SolutionMethod {
 
     }
 
-    Day14ModelPartConstraint getPartConstraint();
 
-
-
-    Day14ModelView getModelView();
 }
