@@ -11,6 +11,7 @@ class Day14Model {
 Day14Model --* SolutionMethod
 
 interface SolutionMethod {
++ {static} SPAWN_POINT
 + moveSandPiece(p)
 +{abstract} executeOneTimeStep()
 +{abstract} setCurrentSandPiece(p)
@@ -22,12 +23,6 @@ interface SolutionMethod {
 
 SolutionMethod ..|> NaiveSolutionMethod
 class NaiveSolutionMethod {
-+ {static} SPAWN_POINT
-+ currentSandPiece
-+ NumSandPiecesFallenSoFar
-+ setPieceToRest(p);
-- moveCurrentSandPiece();
-# createNewSandPiece()
 + executeOneTimeStep()
 }
 

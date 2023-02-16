@@ -3,28 +3,20 @@ package year_2022.day_14.model.solutionMethod;
 import lombok.Getter;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.model.Day14ModelView;
-import year_2022.day_14.model.dataModel.Day14DataModel;
 import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
-class Day14ModelImpl implements Day14SolutionMethod {
+class Day14NaiveSolution implements Day14SolutionMethod {
     @Getter final Day14ModelView modelView;
-    @Getter
-    Day14ModelPartConstraint partConstraint;
+    @Getter Day14ModelPartConstraint partConstraint;
 
-    public Day14ModelImpl(Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
+    public Day14NaiveSolution(Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
         this.modelView = modelView;
         this.partConstraint = partConstraint;
         createNewSandPiece();
     }
 
 
-    public Day14DataModel getDataModel() {
-        return modelView.dataModel;
-    }
-
-
-
-    JavaPoint getCurrentSandPiece() {
+    private JavaPoint getCurrentSandPiece() {
         return modelView.dataModel.getCurrentSandPiece();
     }
 

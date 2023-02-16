@@ -15,7 +15,7 @@ Furthermore, since each moment of falling increases Y by exactly 1 (unless the s
 we can keep a list of falling pieces where List[-i] = the piece of sand falling at y=i.
  */
 
-public class Day14ModelSolutionMethod2 extends Day14ModelImpl {
+public class Day14ModelSolutionMethod2 extends Day14NaiveSolution {
 
     List<JavaPoint> currentFallingPieces = new ArrayList<>();
 

@@ -11,7 +11,7 @@ public interface Day14SolutionMethod {
     static Day14SolutionMethod createNew(int solutionMethodId, Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
         switch (solutionMethodId) {
             case 1:
-                return new Day14ModelImpl(modelView, partConstraint);
+                return new Day14NaiveSolution(modelView, partConstraint);
             case 2:
                 return new Day14ModelSolutionMethod2(modelView, partConstraint);
             case 3:

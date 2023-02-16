@@ -13,7 +13,7 @@ import java.util.Stack;
  *
  * from y=0 to y=Y-1
  */
-public class Day14ModelSolutionMethod3 extends Day14ModelImpl {
+public class Day14ModelSolutionMethod3 extends Day14NaiveSolution {
 
     Stack<JavaPoint> currentFallingPieces = new Stack<>();
 
