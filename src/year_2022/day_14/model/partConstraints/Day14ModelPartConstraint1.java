@@ -1,8 +1,9 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.partConstraints;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.dataModel.Day14DataModel;
 
 @RequiredArgsConstructor
 public class Day14ModelPartConstraint1 implements Day14ModelPartConstraint {

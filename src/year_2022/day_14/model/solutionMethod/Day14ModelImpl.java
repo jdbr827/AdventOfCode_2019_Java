@@ -1,16 +1,15 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.solutionMethod;
 
 import lombok.Getter;
 import viewModelUtil.JavaPoint;
-
-import java.awt.*;
-import java.util.*;
+import year_2022.day_14.model.Day14ModelView;
+import year_2022.day_14.model.dataModel.Day14DataModel;
+import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 class Day14ModelImpl implements Day14SolutionMethod {
     @Getter final Day14ModelView modelView;
-    @Getter Day14ModelPartConstraint partConstraint;
-
-    @Getter public static final JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
+    @Getter
+    Day14ModelPartConstraint partConstraint;
 
     public Day14ModelImpl(Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
         this.modelView = modelView;

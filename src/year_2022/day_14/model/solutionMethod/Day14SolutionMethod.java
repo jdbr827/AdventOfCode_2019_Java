@@ -1,8 +1,12 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.solutionMethod;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.Day14ModelView;
+import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 public interface Day14SolutionMethod {
+
+    JavaPoint SPAWN_POINT = new JavaPoint(500, 0);
 
     static Day14SolutionMethod createNew(int solutionMethodId, Day14ModelView modelView, Day14ModelPartConstraint partConstraint) {
         switch (solutionMethodId) {

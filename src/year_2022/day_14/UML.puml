@@ -62,9 +62,6 @@ interface Day14DataModel {
 
 
 
-NaiveSolutionMethod --|> Day14ModelImpl2
-
-
 interface PartConstraint {
 + {abstract} floorY();
 + {abstract} allowsSand(p);

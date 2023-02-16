@@ -1,9 +1,11 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.dataModel;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.PointState;
+import year_2022.day_14.model.dataModel.Day14DataModel;
 
 import java.util.Comparator;
 import java.util.HashSet;

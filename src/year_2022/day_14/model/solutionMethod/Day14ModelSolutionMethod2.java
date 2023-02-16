@@ -1,6 +1,8 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.solutionMethod;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.Day14ModelView;
+import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
 
 import java.util.*;
 import java.util.stream.Collectors;

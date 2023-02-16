@@ -1,6 +1,7 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.dataModel;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.PointState;
 
 // each point always goes from nothing --> falling --> atRest (unless a rock)
 

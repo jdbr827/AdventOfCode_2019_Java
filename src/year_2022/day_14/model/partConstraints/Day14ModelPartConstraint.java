@@ -1,6 +1,7 @@
-package year_2022.day_14.model;
+package year_2022.day_14.model.partConstraints;
 
 import viewModelUtil.JavaPoint;
+import year_2022.day_14.model.dataModel.Day14DataModel;
 
 public interface Day14ModelPartConstraint {
     static Day14ModelPartConstraint createNew(int part, Day14DataModel dataModel) {

@@ -5,16 +5,21 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Scanner;
+import year_2022.day_14.model.dataModel.Day14DataModel;
+import year_2022.day_14.model.dataModel.Day14DataModelImpl;
+import year_2022.day_14.model.partConstraints.Day14ModelPartConstraint;
+import year_2022.day_14.model.solutionMethod.Day14SolutionMethod;
 
 import java.util.Set;
 
-import static year_2022.day_14.model.Day14ModelImpl.SPAWN_POINT;
+import static year_2022.day_14.model.solutionMethod.Day14SolutionMethod.SPAWN_POINT;
 
 @RequiredArgsConstructor
 public class Day14Model {
     @NotNull Day14SolutionMethod solutionMethod;
     @NotNull Day14ModelPartConstraint partConstraint;
-    @NotNull @Getter Day14DataModel dataModel;
+    @NotNull @Getter
+    Day14DataModel dataModel;
 
     public boolean endCondition() {
         return partConstraint.endCondition();
