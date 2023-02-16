@@ -1,6 +1,7 @@
 package year_2022.day_14.model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Delegate;
 import org.jetbrains.annotations.NotNull;
 import viewModelUtil.JavaPoint;
 import year_2022.day_14.Day14Scanner;
@@ -16,35 +17,22 @@ import static year_2022.day_14.model.solutionMethod.Day14SolutionMethod.SPAWN_PO
 
 @RequiredArgsConstructor
 public class Day14Model {
-    @NotNull Day14SolutionMethod solutionMethod;
-    @NotNull Day14ModelPartConstraint partConstraint;
-    @NotNull Day14DataReader dataReader;
+    @NotNull @Delegate Day14SolutionMethod solutionMethod;
+    @NotNull @Delegate Day14ModelPartConstraint partConstraint;
+    @NotNull @Delegate Day14DataReader dataReader;
     @NotNull Day14ModelView modelView;
-
-    public boolean endCondition() {
-        return partConstraint.endCondition();
-    }
-
-    public int getNumSandPiecesFallenSoFar() {
-        return dataReader.getNumAtRest();
-    }
-
-    public PointState getStateOfPoint(JavaPoint javaPoint) {
-        return dataReader.getStateOfPoint(javaPoint);
-    }
-
-
-    public int floorY() {
-        return partConstraint.floorY();
-    }
 
 
     public int runModelOnly() {
         modelView.setCurrentSandPiece(SPAWN_POINT);
         while (!endCondition()) {
-            executeOneTimeStep();
+            solutionMethod.executeOneTimeStep();
         }
         return getNumSandPiecesFallenSoFar();
+    }
+
+    public int getNumSandPiecesFallenSoFar() {
+        return dataReader.getNumAtRest();
     }
 
     public static Day14Model fromCornerRocksFile(String fileName,int part, int solutionMethodId, Day14ModelView modelView) {
@@ -64,8 +52,4 @@ public class Day14Model {
 
 
 
-
-    public void executeOneTimeStep() {
-        solutionMethod.executeOneTimeStep();
-    }
 }
