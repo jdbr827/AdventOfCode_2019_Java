@@ -8,13 +8,17 @@ import java.util.Set;
 import static year_2022.day_14.model.Day14Model.fromRockSet;
 
 public interface Day14Model {
-    Day14DataModel getDataModel();
-
 
     boolean endCondition();
     int getNumSandPiecesFallenSoFar();
-
     void executeOneTimeStep();
+
+    default PointState getStateOfPoint(JavaPoint javaPoint) {
+        return getDataModel().getStateOfPoint(javaPoint);
+    }
+
+    int floorY();
+    Day14DataModel getDataModel();
 
     default int runModelOnly() {
         while (!endCondition()) {
@@ -43,10 +47,5 @@ public interface Day14Model {
     }
 
 
-    default PointState getStateOfPoint(JavaPoint javaPoint) {
-        return getDataModel().getStateOfPoint(javaPoint);
 
-    }
-
-    int floorY();
 }

@@ -22,6 +22,10 @@ public class Day14DataModelImpl implements Day14DataModel {
         lowestRockY = rocks.stream().max(Comparator.comparing(p -> p.y)).get().y;
     }
 
+    @Override
+    public int getLowestRockY() {
+        return lowestRockY;
+    }
 
     @Override
     public boolean getIsFloor(JavaPoint javaPoint) {
@@ -46,7 +50,6 @@ public class Day14DataModelImpl implements Day14DataModel {
 
     @Override
     public PointState getStateOfPoint(JavaPoint javaPoint) {
-
         return stateMap.getOrDefault(javaPoint, PointState.OPEN);
     }
 

@@ -13,17 +13,17 @@ class Day14ModelImpl2 extends Day14ModelImpl {
 
     @Override
     public int floorY() {
-        return lowestRockY + 2;
+        return getLowestRockY() + 2;
     }
 
     @Override
     public boolean allowsSand(JavaPoint p) {
-        return super.allowsSand(p) && !day14ModelView.getIsFloor(p);
+        return super.allowsSand(p) && !this.getModelView().getIsFloor(p);
     }
 
     @Override
     public boolean endCondition() {
-        return !allowsSand(SPAWN_POINT);
+        return !allowsSand(getSPAWN_POINT());
     }
 
 }

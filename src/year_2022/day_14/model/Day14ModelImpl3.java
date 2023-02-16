@@ -30,6 +30,6 @@ public class Day14ModelImpl3 extends Day14ModelImpl {
 
     @Override
     public boolean endCondition() {
-        return currentFallingPieces.get(0).y >= lowestRockY;
+        return currentFallingPieces.get(0).y >= getLowestRockY();
     }
 }

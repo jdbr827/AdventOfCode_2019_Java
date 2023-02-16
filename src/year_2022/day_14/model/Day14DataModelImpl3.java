@@ -67,4 +67,9 @@ public class Day14DataModelImpl3 implements Day14DataModel {
     public boolean getIsFloor(JavaPoint javaPoint) {
         return javaPoint.y == lowestRockY + 2;
     }
+
+    @Override
+    public int getLowestRockY() {
+        return lowestRockY;
+    }
 }
