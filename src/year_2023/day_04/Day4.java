@@ -22,21 +22,22 @@ public class Day4 {
         return new Day4Scanner(filename).scan().determineTotalNumberOfScratchcards();
     }
 
+    int determineTotalScratchCardValue() {
+        return scratchcards.stream().map(Day4Scratchcard::findValue).reduce(0, Math::addExact);
+    }
+
     private int determineTotalNumberOfScratchcards() {
         int n = scratchcards.size();
-        int[] cardsGeneratedByCard = new int[n];
-        for (int i=n-1; i>=0; i--) {
+        int[] cardsGeneratedByCard = new int[n];                                    // O(N) space
+        for (int i=n-1; i>=0; i--) {                                                // O(N) time
             cardsGeneratedByCard[i] = 1;
-            for (int m=1; m <= scratchcards.get(i).findNumMatches(); m++) {
+            for (int m=1; m <= scratchcards.get(i).findNumMatches(); m++) {         // O(N) time + time for findNumMatches worst case, way less practical
                 cardsGeneratedByCard[i] += cardsGeneratedByCard[i+m];
             }
         }
         return Arrays.stream(cardsGeneratedByCard).sum();
     }
 
-    int determineTotalScratchCardValue() {
-        return scratchcards.stream().map(Day4Scratchcard::findValue).reduce(0, Math::addExact);
-    }
 }
 
 
