@@ -1,6 +1,8 @@
 package year_2023.day_04;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import utils.AOCScanner;
 
 import java.util.ArrayList;
@@ -14,6 +16,22 @@ public class Day4 {
 
     static int day_4_part_1_2023(String filename) {
         return new Day4Scanner(filename).scan().determineTotalScratchCardValue();
+    }
+
+    public static int day_4_part_2_2023(String filename) {
+        return new Day4Scanner(filename).scan().determineTotalNumberOfScratchcards();
+    }
+
+    private int determineTotalNumberOfScratchcards() {
+        int n = scratchcards.size();
+        int[] cardsGeneratedByCard = new int[n];
+        for (int i=n-1; i>=0; i--) {
+            cardsGeneratedByCard[i] = 1;
+            for (int m=1; m <= scratchcards.get(i).findNumMatches(); m++) {
+                cardsGeneratedByCard[i] += cardsGeneratedByCard[i+m];
+            }
+        }
+        return Arrays.stream(cardsGeneratedByCard).sum();
     }
 
     int determineTotalScratchCardValue() {
@@ -46,12 +64,12 @@ class Day4Scanner extends AOCScanner {
     }
 }
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 class Day4Scratchcard {
-    List<Integer> winningNumbers;
-    List<Integer> yourNumbers;
+    @NonNull List<Integer> winningNumbers;
+    @NonNull List<Integer> yourNumbers;
 
-    int findMatches() {
+    int findNumMatches() {
         int matches = 0;
         for (Integer number : yourNumbers) {
             if (winningNumbers.contains(number)) {
@@ -62,7 +80,7 @@ class Day4Scratchcard {
     }
 
     int findValue() {
-        int matches = findMatches();
+        int matches = findNumMatches();
         if (matches == 0) {
             return 0;
         }

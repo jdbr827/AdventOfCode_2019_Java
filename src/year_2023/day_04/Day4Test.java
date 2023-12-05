@@ -15,4 +15,10 @@ public class Day4Test {
         assertEquals(22488, Day4.day_4_part_1_2023(INPUT));
     }
 
+     @Test
+    public void test_day4_part2() {
+        assertEquals(30, Day4.day_4_part_2_2023(SMALL_INPUT));
+        assertEquals(7013204, Day4.day_4_part_2_2023(INPUT));
+    }
+
 }
