@@ -4,6 +4,7 @@ import utils.AOCScanner;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 public class CalibrationDocumentReader {
 
@@ -39,9 +40,9 @@ class Day1Scanner extends AOCScanner {
             String data = scanner.nextLine();
             int total;
             if (usePart2) {
-                total = getCalibrationValue_part2(data);
+                total = getCalibrationValue(data, true);
             } else {
-                total = getCalibrationValue(data);
+                total = getCalibrationValue(data, false);
             }
             grandTotal += total;
         }
@@ -49,16 +50,26 @@ class Day1Scanner extends AOCScanner {
         return grandTotal;
     }
 
-    private int getCalibrationValue(String data) {
+    static int getCalibrationValue(String data, boolean includeSpelledOut) {
         int firstNumber = 0;
         int lastNumber = 0;
+
+        BiFunction<String, Integer, Integer> startChecker = includeSpelledOut
+                ? Day1Scanner::char_at_i_is_or_starts_number
+                : Day1Scanner::char_at_i_is_number;
+
+
+        BiFunction<String, Integer, Integer> endChecker = includeSpelledOut
+                ? Day1Scanner::char_at_i_is_or_ends_number
+                : Day1Scanner::char_at_i_is_number;
+
         for (int i=0; i<data.length(); i++) {
-            if ((firstNumber = char_at_i_is_number(data, i)) != -1) {
+            if ((firstNumber = startChecker.apply(data, i)) != -1) {
                 break;
             }
         }
         for (int i = data.length() - 1; i>=0; i--) {
-            if ((lastNumber = char_at_i_is_number(data, i)) != -1) {
+            if ((lastNumber = endChecker.apply(data, i)) != -1) {
                 break;
             }
         }
@@ -66,22 +77,6 @@ class Day1Scanner extends AOCScanner {
         return firstNumber * 10 + lastNumber;
     }
 
-    static int getCalibrationValue_part2(String data) {
-        int firstNumber = 0;
-        int lastNumber = 0;
-        for (int i=0; i<data.length(); i++) {
-            if ((firstNumber = char_at_i_is_or_starts_number(data, i)) != -1) {
-                break;
-            }
-        }
-        for (int i = data.length() - 1; i>=0; i--) {
-            if ((lastNumber = char_at_i_is_or_ends_number(data, i)) != -1) {
-                break;
-            }
-        }
-
-        return firstNumber * 10 + lastNumber;
-    }
 
     static final Map<String, Integer> SPELLED_OUT_INTEGERS = Map.of(
             "one", 1,

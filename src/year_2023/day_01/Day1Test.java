@@ -36,7 +36,7 @@ public class Day1Test {
 
     @Test
     public void test_get_calibration_value_part_2() {
-        assertEquals(29, Day1Scanner.getCalibrationValue_part2("two1nine"));
+        assertEquals(29, Day1Scanner.getCalibrationValue("two1nine", true));
     }
 
     @Test
