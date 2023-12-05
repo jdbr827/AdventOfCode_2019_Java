@@ -16,12 +16,40 @@ public class Day3 {
     // 1 pass to get schematic number info and symbol locations
     List<Point> symbolLocations;
     List<SchematicNumber> schematicNumberList;
+    List<Point> gearLocations;
 
 
     public static int day_3_part_1_2023(String filename) {
         Day3 day3 = new Day3(filename);
         day3.markPartNumbers();
         return day3.sumPartNumbers();
+    }
+
+    public static int day_3_part_2_2023(String filename) {
+        Day3 day3 = new Day3(filename);
+        return day3.determineAndSumGearRatios();
+    }
+
+    private int determineAndSumGearRatios() {
+        int totalGearRatio = 0;
+        for (Point gearLocation : gearLocations) {
+            int numTouching = 0;
+            int gearRatio = 1;
+            for (SchematicNumber schematicNumber : schematicNumberList) {
+                if (schematicNumber.isTouchedBySymbolAt(gearLocation)) {
+                    numTouching += 1;
+                    if (numTouching > 2) {
+                        break;
+                    }
+                    gearRatio *= schematicNumber.value;
+                }
+            }
+
+            if (numTouching == 2) {
+                totalGearRatio += gearRatio;
+            }
+        }
+        return totalGearRatio;
     }
 
     public Day3(String filename) {
@@ -31,6 +59,7 @@ public class Day3 {
 
         List<Point> symbolLocations = new ArrayList<>();
         List<SchematicNumber> schematicNumberList = new ArrayList<>();
+        List<Point> gearLocations = new ArrayList<>();
 
 
         for (int row = 0; row < numRows; row++) {
@@ -56,9 +85,12 @@ public class Day3 {
                     }
                     if (thisChar != '.') { // it is a symbol
                         symbolLocations.add(new Point(row, col));
+
+                        if (thisChar == '*') { // it is a gear
+                            gearLocations.add(new Point(row, col));
+                        }
                     }
                 }
-
             }
 
             //schematic number ending at end of row use case
@@ -70,6 +102,7 @@ public class Day3 {
 
         this.symbolLocations = symbolLocations;
         this.schematicNumberList = schematicNumberList;
+        this.gearLocations = gearLocations;
     }
 
         //System.out.println(schematicNumberList);
@@ -78,13 +111,8 @@ public class Day3 {
     void markPartNumbers() {    // go through all symbols, marking schematic numbers that are touching
         for (Point symbol : symbolLocations) {
             for (SchematicNumber schematicNumber : schematicNumberList) {
-                if (List.of(symbol.x - 1, symbol.x, symbol.x + 1).contains(schematicNumber.row)) {
-                    for (int schemCol = schematicNumber.colStart; schemCol <= schematicNumber.colEnd; schemCol++) {
-                        if (List.of(symbol.y - 1, symbol.y, symbol.y + 1).contains(schemCol)) {
-                            schematicNumber.isPartNumber = true;
-                            break;
-                        }
-                    }
+                if (schematicNumber.isTouchedBySymbolAt(symbol)) {
+                    schematicNumber.isPartNumber = true;
                 }
             }
         }
@@ -118,4 +146,14 @@ class SchematicNumber {
         this(value, row, colStart, colEnd, false);
     }
 
+    boolean isTouchedBySymbolAt(Point symbol) {
+        if (List.of(symbol.x - 1, symbol.x, symbol.x + 1).contains(row)) {
+            for (int schemCol = colStart; schemCol <= colEnd; schemCol++) {
+                if (List.of(symbol.y - 1, symbol.y, symbol.y + 1).contains(schemCol)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
