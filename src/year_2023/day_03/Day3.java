@@ -12,6 +12,7 @@ import static year_2023.day_01.Day1Scanner.NOT_A_NUMBER;
 
 
 
+@AllArgsConstructor
 public class Day3 {
     // 1 pass to get schematic number info and symbol locations
     List<Point> symbolLocations;
@@ -20,13 +21,13 @@ public class Day3 {
 
 
     public static int day_3_part_1_2023(String filename) {
-        Day3 day3 = new Day3(filename);
+        Day3 day3 = new Day3Scanner(filename).scan();
         day3.markPartNumbers();
         return day3.sumPartNumbers();
     }
 
     public static int day_3_part_2_2023(String filename) {
-        Day3 day3 = new Day3(filename);
+        Day3 day3 = new Day3Scanner(filename).scan();
         return day3.determineAndSumGearRatios();
     }
 
@@ -52,58 +53,7 @@ public class Day3 {
         return totalGearRatio;
     }
 
-    public Day3(String filename) {
-        List<List<Character>> charMatrix = new Day3Scanner(filename).scanAsCharMatrix();
-        int numRows = charMatrix.size();
-        int numCols = charMatrix.get(0).size();
 
-        List<Point> symbolLocations = new ArrayList<>();
-        List<SchematicNumber> schematicNumberList = new ArrayList<>();
-        List<Point> gearLocations = new ArrayList<>();
-
-
-        for (int row = 0; row < numRows; row++) {
-            int currentNumberValue = 0;
-            int startOfNumber = -1;
-
-            List<Character> charRow = charMatrix.get(row);
-            for (int col = 0; col < numRows; col++) {
-                Character thisChar = charRow.get(col);
-                int thisNum;
-                if ((thisNum = Day1Scanner.number_char_is_if_any(thisChar)) != NOT_A_NUMBER) {
-                    if (startOfNumber == -1) {
-                        startOfNumber = col;
-                    }
-                    currentNumberValue *= 10;
-                    currentNumberValue += thisNum;
-                } else {
-                    if (startOfNumber != -1) {
-                        int endOfNumber = col - 1;
-                        schematicNumberList.add(new SchematicNumber(currentNumberValue, row, startOfNumber, endOfNumber));
-                        currentNumberValue = 0;
-                        startOfNumber = -1;
-                    }
-                    if (thisChar != '.') { // it is a symbol
-                        symbolLocations.add(new Point(row, col));
-
-                        if (thisChar == '*') { // it is a gear
-                            gearLocations.add(new Point(row, col));
-                        }
-                    }
-                }
-            }
-
-            //schematic number ending at end of row use case
-            if (startOfNumber != -1) {
-                int endOfNumber = numCols - 1;
-                schematicNumberList.add(new SchematicNumber(currentNumberValue, row, startOfNumber, endOfNumber));
-            }
-        }
-
-        this.symbolLocations = symbolLocations;
-        this.schematicNumberList = schematicNumberList;
-        this.gearLocations = gearLocations;
-    }
 
         //System.out.println(schematicNumberList);
 
