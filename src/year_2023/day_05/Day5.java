@@ -21,8 +21,14 @@ public class Day5 {
 
     public static long day_5_part_2(String filename) {
         Day5 day5 = new Day5Scanner(filename).scan();
-        List<Long> candidateSeeds = day5.createCandidateSeedsList();
-        return day5.findLowestLocationNumber(candidateSeeds);
+        for (long l=0L; true; l++) {
+            if (day5.isCandidateSeed(day5.findSeedNumberForLocation(l))) {
+                return l;
+            }
+        }
+//        List<Long> candidateSeeds = day5.createCandidateSeedsList();
+//        System.out.println(candidateSeeds.size());
+//        return day5.findLowestLocationNumber(candidateSeeds);
     }
 
     private List<Long> createCandidateSeedsList() {
@@ -35,6 +41,17 @@ public class Day5 {
         return candidateSeeds;
     }
 
+    private boolean isCandidateSeed(long num) {
+        for (int i=0; i<seeds.size(); i+=2) {
+            if (num < seeds.get(i)) {
+                continue;
+            } if (num - seeds.get(i) < seeds.get(i+1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public long findLowestLocationNumber(List<Long> candidateSeeds) {
         return candidateSeeds.stream().mapToLong(this::findLocationNumberForSeed).min().getAsLong();
     }
@@ -44,6 +61,15 @@ public class Day5 {
         Long sourceVal = seed;
         for (AlmanacMap map : almanac) {
             sourceVal = map.apply(sourceVal);
+        }
+        return sourceVal;
+    }
+
+    // only works because almanac happens to be in perfect order
+    public long findSeedNumberForLocation(Long location) {
+        Long sourceVal = location;
+        for (int i=almanac.size()-1; i>=0 ; i--) {
+            sourceVal = almanac.get(i).invert(sourceVal);
         }
         return sourceVal;
     }
@@ -69,8 +95,20 @@ class AlmanacMap {
                 return rule.destinationRangeStart + delta;
             }
         }
-
         return sourceNumber;
+    }
+
+     long invert(long destinationNumber) {
+        for (AlmanacMapRule rule : rules) {
+            if (destinationNumber < rule.destinationRangeStart) {
+                continue;
+            }
+            long delta = destinationNumber - rule.destinationRangeStart;
+            if (delta < rule.rangeLength) {
+                return rule.sourceRangeStart + delta;
+            }
+        }
+        return destinationNumber;
     }
 }
 
