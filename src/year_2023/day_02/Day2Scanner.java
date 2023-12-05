@@ -13,15 +13,16 @@ public class Day2Scanner extends AOCScanner {
         super(fileName);
     }
 
-    int scan() {
-        int total = 0;
+    static Day2 scanDay2(String fileName) {
+        return new Day2Scanner(fileName).scan();
+    }
+
+    Day2 scan() {
+        List<Day2GameInfo> gameInfos = new ArrayList<>();
         while (scanner.hasNextLine()) {
-            Day2GameInfo gameInfo = parseLine(scanner.nextLine());
-            if (gameInfo.isGamePossible()) {
-                total += gameInfo.gameId;
-            }
+            gameInfos.add(parseLine(scanner.nextLine()));
         }
-        return total;
+        return new Day2(gameInfos);
     }
 
     Day2GameInfo parseLine(String line) {
