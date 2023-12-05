@@ -1,7 +1,6 @@
 package year_2023.day_01;
 
 import org.junit.jupiter.api.Test;
-import year_2020.Day1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,16 +20,16 @@ public class Day1Test {
 
     @Test
     public void test_char_starts_number() {
-        assertEquals(2, Day1Scanner.charStartsNumber("two1nine", 0));
-        assertEquals(-1, Day1Scanner.charStartsNumber("oone2nine", 0));
-         assertEquals(1, Day1Scanner.charStartsNumber("oone2nine", 1));
+        assertEquals(2, Day1Scanner.char_is_on_boundary_of_number("two1nine", 0, true));
+        assertEquals(-1, Day1Scanner.char_is_on_boundary_of_number("oone2nine", 0, true));
+         assertEquals(1, Day1Scanner.char_is_on_boundary_of_number("oone2nine", 1, true));
     }
 
      @Test
     public void test_char_ends_number() {
-        assertEquals(9, Day1Scanner.charEndsNumber("two1nine", 8));
-        assertEquals(-1, Day1Scanner.charEndsNumber("oone2ninee", 10));
-        assertEquals(9, Day1Scanner.charEndsNumber("oone2ninee", 9));
+        assertEquals(9, Day1Scanner.char_is_on_boundary_of_number("two1nine", 7, false));
+        assertEquals(-1, Day1Scanner.char_is_on_boundary_of_number("oone2ninee", 9, false));
+        assertEquals(9, Day1Scanner.char_is_on_boundary_of_number("oone2ninee", 8, false));
     }
 
 

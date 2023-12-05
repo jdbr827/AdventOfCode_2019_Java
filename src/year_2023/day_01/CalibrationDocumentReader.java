@@ -5,6 +5,8 @@ import utils.AOCScanner;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class CalibrationDocumentReader {
 
@@ -90,64 +92,30 @@ class Day1Scanner extends AOCScanner {
             "nine", 9
     );
 
-    static int charStartsNumber(String data, int i) {
+    static int char_is_on_boundary_of_number(String data, int i, boolean checkStart) {
         int n = data.length();
-        if (i > n-3) {
-            return -1;
-        }
-        String sub3 = data.substring(i, i+3);
-        int val3 = SPELLED_OUT_INTEGERS.getOrDefault(sub3, -1);
-        if (val3 != -1) {
-            return val3;
-        }
 
-        if (i > n-4) {
-            return -1;
+        Predicate<Integer> boundary = checkStart
+            ? (d -> i > n-d)
+            : (d -> i+1 < d);
+
+        Function<Integer, String> subStr = checkStart
+            ? d -> data.substring(i, i+d)
+            : d -> data.substring(i-d+1, i+1);
+
+        for (int delta=3; delta<6; delta++) { // since all digits contain between 3 and 5 letters
+            if (boundary.test(delta)) {
+                return -1;
+            }
+            String sub = subStr.apply(delta);
+            int val = SPELLED_OUT_INTEGERS.getOrDefault(sub, -1);
+            if (val != -1) {
+                return val;
+            }
         }
-
-        String sub4 = data.substring(i, i+4);
-        int val4 = SPELLED_OUT_INTEGERS.getOrDefault(sub4, -1);
-        if (val4 != -1) {
-            return val4;
-        }
-
-
-         if (i > n-5) {
-            return -1;
-        }
-
-        String sub5 = data.substring(i, i+5);
-        return SPELLED_OUT_INTEGERS.getOrDefault(sub5, -1);
+        return -1;
     }
 
-    static int charEndsNumber(String data, int i) {
-        if (i < 3) {
-            return -1;
-        }
-        String sub3 = data.substring(i-3, i);
-        int val3 = SPELLED_OUT_INTEGERS.getOrDefault(sub3, -1);
-        if (val3 != -1) {
-            return val3;
-        }
-
-        if (i < 4) {
-            return -1;
-        }
-
-        String sub4 = data.substring(i-4, i);
-        int val4 = SPELLED_OUT_INTEGERS.getOrDefault(sub4, -1);
-        if (val4 != -1) {
-            return val4;
-        }
-
-
-         if (i < 5) {
-            return -1;
-        }
-
-        String sub5 = data.substring(i-5, i);
-        return SPELLED_OUT_INTEGERS.getOrDefault(sub5, -1);
-    }
 
 
      static int char_at_i_is_or_is_boundary_of_number(String data, int i, boolean checkStart) {
@@ -155,10 +123,12 @@ class Day1Scanner extends AOCScanner {
         if ((charAsNumber = char_at_i_is_number(data, i)) != -1) {
             return charAsNumber;
         }
-        return checkStart ? charStartsNumber(data, i) : charEndsNumber(data, i+1);
+        return char_is_on_boundary_of_number(data, i, checkStart);
 
 
     }
+
+
     static int char_at_i_is_or_starts_number(String data, int i) {
         return char_at_i_is_or_is_boundary_of_number(data, i, true);
     }
