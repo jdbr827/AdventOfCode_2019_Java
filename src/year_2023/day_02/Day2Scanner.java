@@ -13,10 +13,6 @@ public class Day2Scanner extends AOCScanner {
         super(fileName);
     }
 
-    static Day2 scanDay2(String fileName) {
-        return new Day2Scanner(fileName).scan();
-    }
-
     Day2 scan() {
         List<Day2GameInfo> gameInfos = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -29,6 +25,8 @@ public class Day2Scanner extends AOCScanner {
         String[] parsedLine1 = line.split(": ");
 
         int gameId = Integer.parseInt(parsedLine1[0].split(" ")[1]);
+
+
         List<Day2BagPull> pulls = new ArrayList<>();
 
 
