@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class AOCScanner {
     protected final Scanner scanner;
@@ -14,6 +15,12 @@ public class AOCScanner {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
            throw new Error("Did not recognize file name " + fileName);
+        }
+    }
+
+    public void forEachLine(Consumer<String> processLine) {
+        while (scanner.hasNextLine()) {
+            processLine.accept(scanner.nextLine());
         }
     }
 

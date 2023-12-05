@@ -48,9 +48,7 @@ class Day4Scanner extends AOCScanner {
 
     Day4 scan() {
         List<Day4Scratchcard> scratchcards = new ArrayList<>();
-        while(scanner.hasNextLine()) {
-            scratchcards.add(scanLine(scanner.nextLine()));
-        }
+        forEachLine(line -> scratchcards.add(scanLine(line)));
         return new Day4(scratchcards);
     }
 
