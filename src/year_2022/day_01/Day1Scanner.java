@@ -13,6 +13,7 @@ public class Day1Scanner extends AOCScanner implements Iterator<Integer> {
         super(fileName);
     }
 
+
     public int getNextElfCalories() {
         int total = 0;
         while (scanner.hasNextLine()) {
