@@ -1,25 +1,52 @@
 package year_2023.day_05;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class Day5 {
+    List<Long> seeds;
+    List<AlmanacMap> almanac;
+
+    static long day_5_part_1(String filename) {
+        Day5 day5 = new Day5Scanner(filename).scan();
+        return day5.findLowestLocationNumber();
+    }
+
+    public long findLowestLocationNumber() {
+        return seeds.stream().mapToLong(this::findLocationNumberForSeed).min().getAsLong();
+    }
+
+    // only works because almanac happens to be in perfect order
+    public long findLocationNumberForSeed(Long seed) {
+        Long sourceVal = seed;
+        for (AlmanacMap map : almanac) {
+            sourceVal = map.apply(sourceVal);
+        }
+        return sourceVal;
+    }
+
 }
 
+
 @AllArgsConstructor
+@RequiredArgsConstructor
 class AlmanacMap {
     String sourceCategory;
     String destinationCategory;
-    List<AlmanacMapRule> rules;
+    @NotNull List<AlmanacMapRule> rules;
 
 
-    int apply(int sourceNumber) {
+    long apply(long sourceNumber) {
         for (AlmanacMapRule rule : rules) {
             if (sourceNumber < rule.sourceRangeStart) {
                 continue;
             }
-            int delta = sourceNumber - rule.sourceRangeStart;
+            long delta = sourceNumber - rule.sourceRangeStart;
             if (delta < rule.rangeLength) {
                 return rule.destinationRangeStart + delta;
             }
@@ -32,7 +59,7 @@ class AlmanacMap {
 
 @AllArgsConstructor
 class AlmanacMapRule {
-    int destinationRangeStart;
-    int sourceRangeStart;
-    int rangeLength;
+    long destinationRangeStart;
+    long sourceRangeStart;
+    long rangeLength;
 }
