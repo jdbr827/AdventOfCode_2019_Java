@@ -53,14 +53,12 @@ class Day1Scanner extends AOCScanner {
         int firstNumber = 0;
         int lastNumber = 0;
         for (int i=0; i<data.length(); i++) {
-            char x = data.charAt(i);
-            if ((firstNumber = charIsNumber(x)) != -1) {
+            if ((firstNumber = char_at_i_is_number(data, i)) != -1) {
                 break;
             }
         }
         for (int i = data.length() - 1; i>=0; i--) {
-            char x = data.charAt(i);
-            if ((lastNumber = charIsNumber(x)) != -1) {
+            if ((lastNumber = char_at_i_is_number(data, i)) != -1) {
                 break;
             }
         }
