@@ -50,27 +50,39 @@ class Day1Scanner extends AOCScanner {
     }
 
     private int getCalibrationValue(String data) {
-        Integer firstNumber = 0;
-        Integer lastNumber = 0;
-        for (char x : data.toCharArray()) {
-            int charAsNumber;
-            if ((charAsNumber = charIsNumber(x)) != -1) {
-                firstNumber = charAsNumber;
+        int firstNumber = 0;
+        int lastNumber = 0;
+        for (int i=0; i<data.length(); i++) {
+            char x = data.charAt(i);
+            if ((firstNumber = charIsNumber(x)) != -1) {
                 break;
             }
         }
         for (int i = data.length() - 1; i>=0; i--) {
             char x = data.charAt(i);
-            int charAsNumber = charIsNumber(x);
-            if (charAsNumber != -1) {
-                lastNumber = charAsNumber;
+            if ((lastNumber = charIsNumber(x)) != -1) {
                 break;
             }
         }
 
-        int total = firstNumber * 10 + lastNumber;
+        return firstNumber * 10 + lastNumber;
+    }
 
-        return total;
+    static int getCalibrationValue_part2(String data) {
+        int firstNumber = 0;
+        int lastNumber = 0;
+        for (int i=0; i<data.length(); i++) {
+            if ((firstNumber = char_at_i_is_or_starts_number(data, i)) != -1) {
+                break;
+            }
+        }
+        for (int i = data.length() - 1; i>=0; i--) {
+            if ((lastNumber = char_at_i_is_or_ends_number(data, i)) != -1) {
+                break;
+            }
+        }
+
+        return firstNumber * 10 + lastNumber;
     }
 
     static final Map<String, Integer> SPELLED_OUT_INTEGERS = Map.of(
@@ -144,37 +156,31 @@ class Day1Scanner extends AOCScanner {
         return SPELLED_OUT_INTEGERS.getOrDefault(sub5, -1);
     }
 
-     static int getCalibrationValue_part2(String data) {
-        Integer firstNumber = 0;
-        Integer lastNumber = 0;
-        for (int i=0; i<data.length(); i++) {
-            char x = data.charAt(i);
-            int charIsNumber = charIsNumber(x);
-            if (charIsNumber == -1) {
-                charIsNumber = charStartsNumber(data, i);
-            }
-            if (charIsNumber != -1) {
-                firstNumber = charIsNumber;
-                break;
-            }
+
+     static int char_at_i_is_or_is_boundary_of_number(String data, int i, boolean checkStart) {
+        int charAsNumber;
+        if ((charAsNumber = char_at_i_is_number(data, i)) != -1) {
+            return charAsNumber;
         }
-        for (int i = data.length() - 1; i>=0; i--) {
-            char x = data.charAt(i);
-            int charIsNumber = charIsNumber(x);
-            if (charIsNumber == -1) {
-                charIsNumber = charEndsNumber(data, i+1);
-            }
-            if (charIsNumber != -1) {
-                lastNumber = charIsNumber;
-                break;
-            }
-        }
+        return checkStart ? charStartsNumber(data, i) : charEndsNumber(data, i+1);
 
 
-        int total = firstNumber * 10 + lastNumber;
-        //System.out.println(data + " " + total);
-        return total;
     }
+    static int char_at_i_is_or_starts_number(String data, int i) {
+        return char_at_i_is_or_is_boundary_of_number(data, i, true);
+    }
+
+    static int char_at_i_is_number(String data, int i) {
+        char x = data.charAt(i);
+        return charIsNumber(x);
+    }
+
+    static int char_at_i_is_or_ends_number(String data, int i) {
+       return char_at_i_is_or_is_boundary_of_number(data, i, false);
+
+    }
+
+
 
 
 }
