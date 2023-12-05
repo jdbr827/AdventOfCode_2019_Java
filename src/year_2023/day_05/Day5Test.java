@@ -30,4 +30,12 @@ public class Day5Test {
         assertEquals(35, Day5.day_5_part_1(SMALL_INPUT));
         assertEquals(1181555926, Day5.day_5_part_1(INPUT));
     }
+
+
+    @Test
+    public void test_part_2() {
+        assertEquals(46, Day5.day_5_part_2(SMALL_INPUT));
+       // System.out.println(Day5.day_5_part_2(INPUT));
+        //assertEquals(1181555926, Day5.day_5_part_2(INPUT));
+    }
 }
