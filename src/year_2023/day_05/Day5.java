@@ -5,8 +5,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,19 +24,6 @@ public class Day5 {
                 return l;
             }
         }
-//        List<Long> candidateSeeds = day5.createCandidateSeedsList();
-//        System.out.println(candidateSeeds.size());
-//        return day5.findLowestLocationNumber(candidateSeeds);
-    }
-
-    private List<Long> createCandidateSeedsList() {
-        List<Long> candidateSeeds = new LinkedList<>();
-        for (int i=0; i<seeds.size(); i+=2) {
-            for (int s=0; s<seeds.get(i + 1); s++) {
-                candidateSeeds.add(seeds.get(i) + s);
-            }
-        }
-        return candidateSeeds;
     }
 
     private boolean isCandidateSeed(long num) {
