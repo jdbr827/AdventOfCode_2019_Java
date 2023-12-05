@@ -1,6 +1,7 @@
 package year_2023.day_03;
 
 import utils.AOCScanner;
+import utils.AOCScanner_2023;
 import year_2023.day_01.Day1Scanner;
 
 import java.awt.*;
@@ -9,7 +10,7 @@ import java.util.List;
 
 import static year_2023.day_01.Day1Scanner.NOT_A_NUMBER;
 
-public class Day3Scanner extends AOCScanner {
+public class Day3Scanner extends AOCScanner_2023<Day3> {
 
 
     public Day3Scanner(String fileName) {

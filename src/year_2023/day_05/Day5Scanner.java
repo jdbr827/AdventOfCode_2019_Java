@@ -1,6 +1,7 @@
 package year_2023.day_05;
 
 import utils.AOCScanner;
+import utils.AOCScanner_2023;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,14 +9,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Day5Scanner extends AOCScanner {
+public class Day5Scanner extends AOCScanner_2023<Day5> {
 
 
     public Day5Scanner(String fileName) {
         super(fileName);
     }
 
-    Day5 scan() {
+    public Day5 scan() {
         String seedsLine = scanner.nextLine();
 
         List<Long> seeds = Arrays.stream(seedsLine.split(": ")[1].split("\\s+")).map(Long::parseLong).collect(Collectors.toList());

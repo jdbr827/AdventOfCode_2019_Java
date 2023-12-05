@@ -1,19 +1,18 @@
 package year_2023.day_02;
 
-import utils.AOCScanner;
+import utils.AOCScanner_2023;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
-public class Day2Scanner extends AOCScanner {
+public class Day2Scanner extends AOCScanner_2023<Day2> {
 
     public Day2Scanner(String fileName) {
         super(fileName);
     }
 
-    Day2 scan() {
+    @Override
+    public Day2 scan() {
         List<Day2GameInfo> gameInfos = new ArrayList<>();
         forEachLine((line) -> gameInfos.add(parseLine(line)));
         return new Day2(gameInfos);

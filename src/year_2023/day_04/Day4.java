@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import utils.AOCScanner;
+import utils.AOCScanner_2023;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,28 +41,6 @@ public class Day4 {
 
 }
 
-
-class Day4Scanner extends AOCScanner {
-
-    public Day4Scanner(String fileName) {
-        super(fileName);
-    }
-
-    Day4 scan() {
-        List<Day4Scratchcard> scratchcards = new ArrayList<>();
-        forEachLine(line -> scratchcards.add(scanLine(line)));
-        return new Day4(scratchcards);
-    }
-
-    private Day4Scratchcard scanLine(String line) {
-        String[] numbers = line.split(":\\s+")[1].split("\\s+\\|\\s+");
-
-        List<Integer> winningNumbers = Arrays.stream(numbers[0].split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
-        List<Integer> yourNumbers = Arrays.stream(numbers[1].split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
-
-        return new Day4Scratchcard(winningNumbers, yourNumbers);
-    }
-}
 
 @RequiredArgsConstructor
 class Day4Scratchcard {
