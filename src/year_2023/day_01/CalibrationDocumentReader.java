@@ -23,6 +23,8 @@ class Day1Scanner extends AOCScanner {
         super(fileName);
     }
 
+    public static final int NOT_A_NUMBER = -1;
+
     public static final List<Character> INTEGERS = List.of('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
     static int charIsNumber(char c) {
@@ -66,12 +68,12 @@ class Day1Scanner extends AOCScanner {
                 : Day1Scanner::char_at_i_is_number;
 
         for (int i=0; i<data.length(); i++) {
-            if ((firstNumber = startChecker.apply(data, i)) != -1) {
+            if ((firstNumber = startChecker.apply(data, i)) != NOT_A_NUMBER) {
                 break;
             }
         }
         for (int i = data.length() - 1; i>=0; i--) {
-            if ((lastNumber = endChecker.apply(data, i)) != -1) {
+            if ((lastNumber = endChecker.apply(data, i)) != NOT_A_NUMBER) {
                 break;
             }
         }
@@ -94,6 +96,7 @@ class Day1Scanner extends AOCScanner {
 
     static int char_is_on_boundary_of_number(String data, int i, boolean checkStart) {
         int n = data.length();
+        int val;
 
         Predicate<Integer> boundary = checkStart
             ? (d -> i > n-d)
@@ -105,22 +108,21 @@ class Day1Scanner extends AOCScanner {
 
         for (int delta=3; delta<6; delta++) { // since all digits contain between 3 and 5 letters
             if (boundary.test(delta)) {
-                return -1;
+                return NOT_A_NUMBER;
             }
             String sub = subStr.apply(delta);
-            int val = SPELLED_OUT_INTEGERS.getOrDefault(sub, -1);
-            if (val != -1) {
+            if ((val = SPELLED_OUT_INTEGERS.getOrDefault(sub, NOT_A_NUMBER)) != NOT_A_NUMBER) {
                 return val;
             }
         }
-        return -1;
+        return NOT_A_NUMBER;
     }
 
 
 
      static int char_at_i_is_or_is_boundary_of_number(String data, int i, boolean checkStart) {
         int charAsNumber;
-        if ((charAsNumber = char_at_i_is_number(data, i)) != -1) {
+        if ((charAsNumber = char_at_i_is_number(data, i)) != NOT_A_NUMBER) {
             return charAsNumber;
         }
         return char_is_on_boundary_of_number(data, i, checkStart);
