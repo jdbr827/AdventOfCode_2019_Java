@@ -15,9 +15,7 @@ public class Day2Scanner extends AOCScanner {
 
     Day2 scan() {
         List<Day2GameInfo> gameInfos = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            gameInfos.add(parseLine(scanner.nextLine()));
-        }
+        forEachLine((line) -> gameInfos.add(parseLine(line)));
         return new Day2(gameInfos);
     }
 
