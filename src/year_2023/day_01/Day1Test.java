@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Day1Test {
 
     @Test
-    public void test_char_is_int(){
-        assertEquals(1, Day1Scanner.charIsNumber('1'));
-        assertEquals(-1, Day1Scanner.charIsNumber('a'));
+    public void test_char_at_i_is_number_(){
+        assertEquals(1, Day1Scanner.number_char_at_i_is_if_any("1", 0));
+        assertEquals(-1, Day1Scanner.number_char_at_i_is_if_any("a", 0));
     }
 
     @Test
@@ -20,16 +20,16 @@ public class Day1Test {
 
     @Test
     public void test_char_starts_number() {
-        assertEquals(2, Day1Scanner.char_is_on_boundary_of_number("two1nine", 0, true));
-        assertEquals(-1, Day1Scanner.char_is_on_boundary_of_number("oone2nine", 0, true));
-         assertEquals(1, Day1Scanner.char_is_on_boundary_of_number("oone2nine", 1, true));
+        assertEquals(2, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("two1nine", 0, true));
+        assertEquals(-1, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("oone2nine", 0, true));
+         assertEquals(1, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("oone2nine", 1, true));
     }
 
      @Test
     public void test_char_ends_number() {
-        assertEquals(9, Day1Scanner.char_is_on_boundary_of_number("two1nine", 7, false));
-        assertEquals(-1, Day1Scanner.char_is_on_boundary_of_number("oone2ninee", 9, false));
-        assertEquals(9, Day1Scanner.char_is_on_boundary_of_number("oone2ninee", 8, false));
+        assertEquals(9, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("two1nine", 7, false));
+        assertEquals(-1, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("oone2ninee", 9, false));
+        assertEquals(9, Day1Scanner.number_char_at_i_is_at_boundary_of_if_any("oone2ninee", 8, false));
     }
 
 

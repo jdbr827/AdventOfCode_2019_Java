@@ -24,65 +24,9 @@ class Day1Scanner extends AOCScanner {
     }
 
     public static final int NOT_A_NUMBER = -1;
-
     public static final List<Character> INTEGERS = List.of('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
-    static int charIsNumber(char c) {
-        if (INTEGERS.contains(c)) {
-            return Integer.parseInt(String.valueOf(c));
-        }
-        return -1;
-    }
-
-    int scan() {
-        return scan(false);
-    }
-
-    int scan(boolean usePart2) {
-        int grandTotal = 0;
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            int total;
-            if (usePart2) {
-                total = getCalibrationValue(data, true);
-            } else {
-                total = getCalibrationValue(data, false);
-            }
-            grandTotal += total;
-        }
-        System.out.println(grandTotal);
-        return grandTotal;
-    }
-
-    static int getCalibrationValue(String data, boolean includeSpelledOut) {
-        int firstNumber = 0;
-        int lastNumber = 0;
-
-        BiFunction<String, Integer, Integer> startChecker = includeSpelledOut
-                ? Day1Scanner::char_at_i_is_or_starts_number
-                : Day1Scanner::char_at_i_is_number;
-
-
-        BiFunction<String, Integer, Integer> endChecker = includeSpelledOut
-                ? Day1Scanner::char_at_i_is_or_ends_number
-                : Day1Scanner::char_at_i_is_number;
-
-        for (int i=0; i<data.length(); i++) {
-            if ((firstNumber = startChecker.apply(data, i)) != NOT_A_NUMBER) {
-                break;
-            }
-        }
-        for (int i = data.length() - 1; i>=0; i--) {
-            if ((lastNumber = endChecker.apply(data, i)) != NOT_A_NUMBER) {
-                break;
-            }
-        }
-
-        return firstNumber * 10 + lastNumber;
-    }
-
-
-    static final Map<String, Integer> SPELLED_OUT_INTEGERS = Map.of(
+     static final Map<String, Integer> SPELLED_OUT_INTEGERS = Map.of(
             "one", 1,
             "two", 2,
             "three", 3,
@@ -94,7 +38,114 @@ class Day1Scanner extends AOCScanner {
             "nine", 9
     );
 
-    static int char_is_on_boundary_of_number(String data, int i, boolean checkStart) {
+    int scan() {
+        return scan(false);
+    }
+
+    int scan(boolean includeSpelledOut) {
+        int grandTotal = 0;
+        while (scanner.hasNextLine()) {
+            String data = scanner.nextLine();
+            int total = getCalibrationValue(data, includeSpelledOut);
+            grandTotal += total;
+        }
+        System.out.println(grandTotal);
+        return grandTotal;
+    }
+
+    /**
+     * Returns the calibration value (the first number, then the last number) for a given line
+     * @param data the given line
+     * @param includeSpelledOut whether to count a spelled out number (e.g. "two") as a number
+     * @return The calibration value for the line.
+     */
+    static int getCalibrationValue(String data, boolean includeSpelledOut) {
+        int firstNumber = getFirstNumber(data, includeSpelledOut);
+        int lastNumber = getLastNumber(data, includeSpelledOut);
+        return firstNumber * 10 + lastNumber;
+    }
+
+    /**
+     * Returns the first available number in the given line
+     * @param data the given line
+     * @param includeSpelledOut whether to count a spelled out number (e.g. "two") as a number
+     * @return the integer value of the first number in the given line
+     */
+    static int getFirstNumber(String data, boolean includeSpelledOut) {
+         int firstNumber;
+
+         BiFunction<String, Integer, Integer> checkFirstNumber = includeSpelledOut
+                ? Day1Scanner::number_char_at_i_is_or_starts_if_any
+                : Day1Scanner::number_char_at_i_is_if_any;
+
+         for (int i=0; i<data.length(); i++) {
+            if ((firstNumber = checkFirstNumber.apply(data, i)) != NOT_A_NUMBER) {
+                return firstNumber;
+            }
+        }
+
+         // Problem statement guarantees we never get here.
+        return NOT_A_NUMBER;
+    }
+
+
+     /**
+     * Returns the last available number in the given line
+     * @param data the given line
+     * @param includeSpelledOut whether to count a spelled out number (e.g. "two") as a number
+     * @return the integer value of the last number in the given line
+     */
+    static int getLastNumber(String data, boolean includeSpelledOut) {
+        int lastNumber;
+
+        BiFunction<String, Integer, Integer> checkLastNumber = includeSpelledOut
+                ? Day1Scanner::number_char_at_i_is_or_ends_if_any
+                : Day1Scanner::number_char_at_i_is_if_any;
+
+        for (int i = data.length() - 1; i>=0; i--) { // going backwards
+            if ((lastNumber = checkLastNumber.apply(data, i)) != NOT_A_NUMBER) {
+                return lastNumber;
+            }
+        }
+
+        return NOT_A_NUMBER;
+    }
+
+
+
+    static int number_char_at_i_is_if_any(String data, int i) {
+        char x = data.charAt(i);
+        if (INTEGERS.contains(x)) {
+            return Integer.parseInt(String.valueOf(x));
+        }
+        return NOT_A_NUMBER;
+    }
+
+
+
+     static int number_char_at_i_is_or_is_at_boundary_of_if_any(String data, int i, boolean checkStart) {
+        int charAsNumber;
+        if ((charAsNumber = number_char_at_i_is_if_any(data, i)) != NOT_A_NUMBER) {
+            return charAsNumber;
+        }
+        return number_char_at_i_is_at_boundary_of_if_any(data, i, checkStart);
+
+
+    }
+
+
+    static int number_char_at_i_is_or_starts_if_any(String data, int i) {
+        return number_char_at_i_is_or_is_at_boundary_of_if_any(data, i, true);
+    }
+
+
+
+    static int number_char_at_i_is_or_ends_if_any(String data, int i) {
+       return number_char_at_i_is_or_is_at_boundary_of_if_any(data, i, false);
+    }
+
+
+    static int number_char_at_i_is_at_boundary_of_if_any(String data, int i, boolean checkStart) {
         int n = data.length();
         int val;
 
@@ -116,33 +167,6 @@ class Day1Scanner extends AOCScanner {
             }
         }
         return NOT_A_NUMBER;
-    }
-
-
-
-     static int char_at_i_is_or_is_boundary_of_number(String data, int i, boolean checkStart) {
-        int charAsNumber;
-        if ((charAsNumber = char_at_i_is_number(data, i)) != NOT_A_NUMBER) {
-            return charAsNumber;
-        }
-        return char_is_on_boundary_of_number(data, i, checkStart);
-
-
-    }
-
-
-    static int char_at_i_is_or_starts_number(String data, int i) {
-        return char_at_i_is_or_is_boundary_of_number(data, i, true);
-    }
-
-    static int char_at_i_is_number(String data, int i) {
-        char x = data.charAt(i);
-        return charIsNumber(x);
-    }
-
-    static int char_at_i_is_or_ends_number(String data, int i) {
-       return char_at_i_is_or_is_boundary_of_number(data, i, false);
-
     }
 
 
