@@ -13,6 +13,10 @@ class Day4Scanner extends AOCScanner_2023<Day4> {
         super(fileName);
     }
 
+    public static Day4 createAndScan(String fileName){
+        return new Day4Scanner(fileName).scan();
+    }
+
     public Day4 scan() {
         List<Day4Scratchcard> scratchcards = new ArrayList<>();
         forEachLine(line -> scratchcards.add(scanLine(line)));

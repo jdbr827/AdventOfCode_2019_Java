@@ -15,8 +15,12 @@ import java.util.stream.Collectors;
 public class Day4 {
     List<Day4Scratchcard> scratchcards;
 
+    static Day4 fromFile(String fileName) {
+        return Day4Scanner.createAndScan(fileName);
+    }
+
     static int day_4_part_1_2023(String filename) {
-        return new Day4Scanner(filename).scan().determineTotalScratchCardValue();
+        return Day4.fromFile(filename).determineTotalScratchCardValue();
     }
 
     public static int day_4_part_2_2023(String filename) {
