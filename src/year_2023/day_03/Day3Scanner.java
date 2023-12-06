@@ -10,16 +10,11 @@ import java.util.List;
 
 import static year_2023.day_01.Day1Scanner.NOT_A_NUMBER;
 
-public class Day3Scanner extends AOCScanner_2023<Day3> {
+public class Day3Scanner {
 
-
-    public Day3Scanner(String fileName) {
-        super(fileName);
-    }
-
-
-    public Day3 scan() {
-        List<List<Character>> charMatrix = this.scanAsCharMatrix();
+    public static Day3 scan(String fileName) {
+        AOCScanner scanner = new AOCScanner(fileName);
+        List<List<Character>> charMatrix = scanner.scanAsCharMatrix();
         int numRows = charMatrix.size();
         int numCols = charMatrix.get(0).size();
 

@@ -12,12 +12,12 @@ public class Day2 {
 
 
     static int day_2_part_1_2023(String fileName) {
-        Day2 day2 = new Day2Scanner(fileName).scan();
+        Day2 day2 = Day2Scanner.scan(fileName);
         return day2.id_sum_of_possible_games();
     }
 
      static int day_2_part_2_2023(String fileName) {
-        Day2 day2 = new Day2Scanner(fileName).scan();
+        Day2 day2 = Day2Scanner.scan(fileName);
         return day2.sum_of_power_of_minimum_possible_setups();
     }
 

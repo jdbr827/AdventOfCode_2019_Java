@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Day5Scanner extends AOCScanner_2023<Day5> {
+public class Day5Scanner {
 
 
-    public Day5Scanner(String fileName) {
-        super(fileName);
-    }
-
-    public Day5 scan() {
+    public static Day5 scan(String fileName) {
+        AOCScanner scanner = new AOCScanner(fileName);
         String seedsLine = scanner.nextLine();
 
         List<Long> seeds = Arrays.stream(seedsLine.split(": ")[1].split("\\s+")).map(Long::parseLong).collect(Collectors.toList());

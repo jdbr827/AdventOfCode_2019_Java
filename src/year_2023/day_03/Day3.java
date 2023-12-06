@@ -17,12 +17,12 @@ public class Day3 {
 
 
     public static int day_3_part_1_2023(String filename) {
-        Day3 day3 = new Day3Scanner(filename).scan();
+        Day3 day3 = Day3Scanner.scan(filename);
         return day3.getSumOfPartNumbers();
     }
 
     public static int day_3_part_2_2023(String filename) {
-        Day3 day3 = new Day3Scanner(filename).scan();
+        Day3 day3 = Day3Scanner.scan(filename);
         return day3.determineAndSumGearRatios();
     }
 

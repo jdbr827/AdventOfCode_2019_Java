@@ -18,6 +18,14 @@ public class AOCScanner {
         }
     }
 
+    public boolean hasNextLine() {
+        return scanner.hasNextLine();
+    }
+
+    public String nextLine() {
+        return scanner.nextLine();
+    }
+
     public void forEachLine(Consumer<String> processLine) {
         while (scanner.hasNextLine()) {
             processLine.accept(scanner.nextLine());

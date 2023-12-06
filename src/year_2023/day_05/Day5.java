@@ -13,12 +13,12 @@ public class Day5 {
     List<AlmanacMap> almanac;
 
     static long day_5_part_1(String filename) {
-        Day5 day5 = new Day5Scanner(filename).scan();
+        Day5 day5 = Day5Scanner.scan(filename);
         return day5.findLowestLocationNumber(day5.seeds);
     }
 
     public static long day_5_part_2(String filename) {
-        Day5 day5 = new Day5Scanner(filename).scan();
+        Day5 day5 = Day5Scanner.scan(filename);
         for (long l=0L; true; l++) {
             if (day5.isCandidateSeed(day5.findSeedNumberForLocation(l))) {
                 return l;

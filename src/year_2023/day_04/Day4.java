@@ -16,7 +16,7 @@ public class Day4 {
     List<Day4Scratchcard> scratchcards;
 
     static Day4 fromFile(String fileName) {
-        return Day4Scanner.createAndScan(fileName);
+        return Day4Scanner.scan(fileName);
     }
 
     static int day_4_part_1_2023(String filename) {
@@ -24,7 +24,7 @@ public class Day4 {
     }
 
     public static int day_4_part_2_2023(String filename) {
-        return new Day4Scanner(filename).scan().determineTotalNumberOfScratchcards();
+        return Day4.fromFile(filename).determineTotalNumberOfScratchcards();
     }
 
     int determineTotalScratchCardValue() {

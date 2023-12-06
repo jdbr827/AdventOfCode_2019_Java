@@ -39,7 +39,7 @@ public class Day5Test {
     @Test
     public void test_part_2() {
         assertEquals(46, Day5.day_5_part_2(SMALL_INPUT));
-        assertEquals(13, new Day5Scanner(SMALL_INPUT).scan().findSeedNumberForLocation(35L));
+        assertEquals(13, Day5Scanner.scan(SMALL_INPUT).findSeedNumberForLocation(35L));
         assertEquals(37806486, Day5.day_5_part_2(INPUT));
     }
 }
