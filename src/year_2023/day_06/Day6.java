@@ -18,4 +18,21 @@ public class Day6 {
         }
         return 1 + largestWin - smallestWin;
     }
+
+      public static int marginOfErrorToBeatRecordLong(int time, long record) {
+        double sqrtAmnt = Math.sqrt(Math.pow(time, 2) - 4*record);
+
+        double smallerRoot = (time - sqrtAmnt) / 2;
+        int smallestWin = (int) Math.ceil(smallerRoot);
+        if (smallerRoot == smallestWin) {
+            smallestWin++;
+        }
+
+        double largerRoot = (time + sqrtAmnt) / 2;
+        int largestWin = (int) Math.floor((time + sqrtAmnt) / 2 );
+        if (largerRoot == largestWin) {
+            largestWin--;
+        }
+        return 1 + largestWin - smallestWin;
+    }
 }
