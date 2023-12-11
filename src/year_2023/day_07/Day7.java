@@ -3,21 +3,25 @@ package year_2023.day_07;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import utils.FrequencyTableUtil;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Day7 {
 
     public static long day_7_part_1(String filename) {
-        return computeTotalWinnings(Day7Scanner.scan(filename));
+        return computeTotalWinnings(Day7Scanner.scan(filename, false));
+    }
+
+    public static long day_7_part_2(String filename) {
+        return computeTotalWinnings(Day7Scanner.scan(filename, true));
     }
 
     static long computeTotalWinnings(Collection<CamelCardsGame> games) {
-        List<CamelCardsGame> sortedGames = games.stream().sorted(CamelCardsGame::compareTo).collect(Collectors.toList());
+        List<CamelCardsGame> sortedGames = games.stream()
+                .sorted(CamelCardsGame::compareTo)
+                .collect(Collectors.toList());
         System.out.println(sortedGames.stream().map(CamelCardsGame::getHand).collect(Collectors.toList()));
         long total = 0L;
         for (int i=1; i<=sortedGames.size(); i++) {
@@ -50,6 +54,7 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
     @Getter
     String hand;
     int bid;
+    boolean jokers;
 
 
     static final Map<Character, Integer> cardValue = Map.ofEntries(
@@ -68,24 +73,41 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
             Map.entry('A', 14)
     );
 
-
+    public Integer getCardValue(Character c) {
+        if (jokers && c == 'J') {
+            return 1;
+        } else {
+            return cardValue.get(c);
+        }
+    }
 
     public static CamelCardsGameHandType getHandType(String hand) {
-        Map<Character, Integer> frequencyTable = new HashMap<>();
-        for (Character card : hand.toCharArray()) {
-            frequencyTable.put(card, frequencyTable.getOrDefault(card, 0) + 1);
+        return getHandType(hand, false);
+    }
+
+    public static CamelCardsGameHandType getHandType(String hand, boolean jokers) {
+        Map<Character, Integer> frequencyTable = FrequencyTableUtil.decomposeStringToFrequencyTable(hand);
+
+        int numJokers = 0;
+        if (jokers && frequencyTable.containsKey('J')) {
+            numJokers = frequencyTable.remove('J');
         }
 
-        Collection<Integer> values = frequencyTable.values();
+        List<Integer> values = frequencyTable.values().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 
-        Map<Integer, Integer> valueFrequencyTable = new HashMap<>();
-        for (Integer value: values) {
-            valueFrequencyTable.put(value, valueFrequencyTable.getOrDefault(value, 0) + 1);
-        }
-
-        if (valueFrequencyTable.getOrDefault(5, 0) > 0) {
+        if (values.isEmpty()) { // five jokers case
             return CamelCardsGameHandType.FIVE_OF_A_KIND;
         }
+
+        if (jokers) {
+            values.set(0, values.get(0) + numJokers);
+        }
+
+        if (values.get(0) >= 5) {
+            return CamelCardsGameHandType.FIVE_OF_A_KIND;
+        }
+
+        Map<Integer, Integer> valueFrequencyTable = FrequencyTableUtil.createFrequencyTable(values);
 
         if (valueFrequencyTable.getOrDefault(4, 0) > 0) {
             return CamelCardsGameHandType.FOUR_OF_A_KIND;
@@ -113,13 +135,13 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
 
     @Override
     public int compareTo(@NotNull CamelCardsGame o) {
-        int handTypeDiff = getHandType(this.getHand()).compareTo(getHandType(o.getHand()));
+        int handTypeDiff = getHandType(this.getHand(), jokers).compareTo(getHandType(o.getHand(), jokers));
         if (handTypeDiff != 0) {
             return handTypeDiff;
         }
 
         for (int i = 0; i < 5; i++) {
-            int charAtiDiff = cardValue.get(o.getHand().charAt(i)) - cardValue.get(getHand().charAt(i));
+            int charAtiDiff = getCardValue(o.getHand().charAt(i)) - getCardValue(getHand().charAt(i));
             if (charAtiDiff != 0) {
                 return charAtiDiff;
             }

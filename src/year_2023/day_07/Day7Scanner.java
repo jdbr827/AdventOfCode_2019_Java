@@ -8,7 +8,7 @@ import java.util.Collection;
 public class Day7Scanner {
 
 
-    public static Collection<CamelCardsGame> scan(String filename) {
+    public static Collection<CamelCardsGame> scan(String filename, boolean jokers) {
         AOCScanner scanner = new AOCScanner(filename);
 
         Collection<CamelCardsGame> games = new ArrayList<>();
@@ -17,7 +17,7 @@ public class Day7Scanner {
 
             String hand = splitLine[0];
             int bid = Integer.parseInt(splitLine[1]);
-            games.add(new CamelCardsGame(hand, bid));
+            games.add(new CamelCardsGame(hand, bid, jokers));
         });
 
         return games;
