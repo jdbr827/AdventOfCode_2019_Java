@@ -12,8 +12,8 @@ public class Day7Test {
 
     @Test
     public void test_handType() {
-        assertEquals(CamelCardsGameHandType.FIVE_OF_A_KIND, CamelCardsGame.getHandType("AAAAA"));
-        assertEquals(CamelCardsGameHandType.FOUR_OF_A_KIND, CamelCardsGame.getHandType("AA8AA"));
+        assertEquals(CamelCardsGameHandType.FIVE_OF_A_KIND, CamelCardsGame.getHandType("AAAAA", false));
+        assertEquals(CamelCardsGameHandType.FOUR_OF_A_KIND, CamelCardsGame.getHandType("AA8AA", false));
         assertEquals(CamelCardsGameHandType.FIVE_OF_A_KIND, CamelCardsGame.getHandType("AAJAA", true));
         assertEquals(CamelCardsGameHandType.FIVE_OF_A_KIND, CamelCardsGame.getHandType("JJJJJ", true));
         assertEquals(CamelCardsGameHandType.THREE_OF_A_KIND, CamelCardsGame.getHandType("JJ345", true));

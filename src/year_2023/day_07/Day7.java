@@ -22,7 +22,7 @@ public class Day7 {
         List<CamelCardsGame> sortedGames = games.stream()
                 .sorted(CamelCardsGame::compareTo)
                 .collect(Collectors.toList());
-        System.out.println(sortedGames.stream().map(CamelCardsGame::getHand).collect(Collectors.toList()));
+
         long total = 0L;
         for (int i=1; i<=sortedGames.size(); i++) {
             total += (long) i *sortedGames.get(sortedGames.size() - i).bid;
@@ -54,10 +54,10 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
     @Getter
     String hand;
     int bid;
-    boolean jokers;
+    boolean jIsJoker;
 
 
-    static final Map<Character, Integer> cardValue = Map.ofEntries(
+    private static final Map<Character, Integer> cardValue = Map.ofEntries(
             Map.entry('2', 2),
             Map.entry('3', 3),
             Map.entry('4', 4),
@@ -74,7 +74,7 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
     );
 
     public Integer getCardValue(Character c) {
-        if (jokers && c == 'J') {
+        if (jIsJoker && c == 'J') {
             return 1;
         } else {
             return cardValue.get(c);
@@ -85,11 +85,14 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
         return getHandType(hand, false);
     }
 
-    public static CamelCardsGameHandType getHandType(String hand, boolean jokers) {
+
+
+    public static CamelCardsGameHandType getHandType(String hand, boolean jIsJoker) {
         Map<Character, Integer> frequencyTable = FrequencyTableUtil.decomposeStringToFrequencyTable(hand);
 
         int numJokers = 0;
-        if (jokers && frequencyTable.containsKey('J')) {
+
+        if (jIsJoker && frequencyTable.containsKey('J')) {
             numJokers = frequencyTable.remove('J');
         }
 
@@ -99,7 +102,7 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
             return CamelCardsGameHandType.FIVE_OF_A_KIND;
         }
 
-        if (jokers) {
+        if (jIsJoker) {
             values.set(0, values.get(0) + numJokers);
         }
 
@@ -135,7 +138,7 @@ class CamelCardsGame implements Comparable<CamelCardsGame> {
 
     @Override
     public int compareTo(@NotNull CamelCardsGame o) {
-        int handTypeDiff = getHandType(this.getHand(), jokers).compareTo(getHandType(o.getHand(), jokers));
+        int handTypeDiff = getHandType(this.getHand(), jIsJoker).compareTo(getHandType(o.getHand(), jIsJoker));
         if (handTypeDiff != 0) {
             return handTypeDiff;
         }
