@@ -15,4 +15,11 @@ public class Day9Test {
         assertEquals(114, Day9.part1(SMALL_INPUT));
         assertEquals(1916822650, Day9.part1(INPUT));
     }
+
+
+     @Test
+    public void test_part2() {
+        assertEquals(2, Day9.part2(SMALL_INPUT));
+        assertEquals(966, Day9.part2(INPUT));
+    }
 }
