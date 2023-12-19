@@ -10,8 +10,10 @@ public class Day11 {
     List<Point> galaxyLocations;
     List<Integer> emptyRows;
     List<Integer> emptyColumns;
+    int emptyDistance;
 
-    public Day11(String fileName) {
+    public Day11(String fileName, int emptyDistance) {
+        this.emptyDistance = emptyDistance;
         AOCScanner scanner = new AOCScanner(fileName);
         galaxyLocations = new ArrayList<>();
         emptyRows = new ArrayList<>();
@@ -45,8 +47,8 @@ public class Day11 {
         }
     }
 
-    public int sumOfShortestDistancePairs() {
-        int total = 0;
+    public long sumOfShortestDistancePairs() {
+        long total = 0L;
         for (int idx1=0; idx1<galaxyLocations.size(); idx1++) {
             for (int idx2 = idx1+1; idx2 < galaxyLocations.size(); idx2 ++) {
                 total += shortestDistance(galaxyLocations.get(idx1), galaxyLocations.get(idx2));
@@ -55,11 +57,11 @@ public class Day11 {
         return total;
     }
 
-    private int shortestDistance(Point point1, Point point2) {
-        int distance = 0;
+    private long shortestDistance(Point point1, Point point2) {
+        long distance = 0L;
         for (int i=Math.min(point1.x, point2.x)+1; i<=Math.max(point1.x, point2.x); i++) {
             if (isEmptyRow(i)) {
-                distance += 2;
+                distance += emptyDistance;
             } else {
                 distance += 1;
             }
@@ -68,7 +70,7 @@ public class Day11 {
 
         for (int j=Math.min(point1.y, point2.y)+1; j<=Math.max(point1.y, point2.y); j++) {
             if (isEmptyCol(j)) {
-                distance += 2;
+                distance += emptyDistance;
             } else {
                 distance += 1;
             }

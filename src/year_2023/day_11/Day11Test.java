@@ -11,8 +11,14 @@ public class Day11Test {
 
     @Test
     public void test_part1() {
-        assertEquals(374, new Day11(SMALL_INPUT).sumOfShortestDistancePairs());
-        assertEquals(9522407, new Day11(INPUT).sumOfShortestDistancePairs());
+        assertEquals(374, new Day11(SMALL_INPUT, 2).sumOfShortestDistancePairs());
+        assertEquals(9522407, new Day11(INPUT, 2).sumOfShortestDistancePairs());
     }
 
+    @Test
+    public void test_part2() {
+        assertEquals(1030, new Day11(SMALL_INPUT, 10).sumOfShortestDistancePairs());
+        assertEquals(8410, new Day11(SMALL_INPUT, 100).sumOfShortestDistancePairs());
+        assertEquals(544723432977L, new Day11(INPUT, 1000000).sumOfShortestDistancePairs());
+    }
 }
