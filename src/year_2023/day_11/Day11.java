@@ -8,16 +8,14 @@ import java.util.List;
 
 public class Day11 {
     List<Point> galaxyLocations;
-    List<Integer> emptyRows;
-    List<Integer> emptyColumns;
+    Boolean[] emptyRows;
+    Boolean[] emptyColumns;
     int emptyDistance;
 
     public Day11(String fileName, int emptyDistance) {
         this.emptyDistance = emptyDistance;
         AOCScanner scanner = new AOCScanner(fileName);
         galaxyLocations = new ArrayList<>();
-        emptyRows = new ArrayList<>();
-        emptyColumns = new ArrayList<>();
 
         int N = 0; int M = 0;
         for (int i=0; scanner.hasNextLine(); i++) {
@@ -32,18 +30,16 @@ public class Day11 {
         }
         N++;
 
+        emptyRows = new Boolean[N];
+        emptyColumns = new Boolean[M];
         for (int i=0; i<N; i++) {
             int finalI = i;
-            if (galaxyLocations.stream().noneMatch(location -> location.getX() == finalI)) {
-                emptyRows.add(i);
-            }
+            emptyRows[i] = (galaxyLocations.stream().noneMatch(location -> location.getX() == finalI));
         }
 
         for (int j=0; j<M; j++) {
             int finalJ = j;
-            if (galaxyLocations.stream().noneMatch(location -> location.getY() == finalJ)) {
-                emptyColumns.add(j);
-            }
+            emptyColumns[j] = (galaxyLocations.stream().noneMatch(location -> location.getY() == finalJ));
         }
     }
 
@@ -80,10 +76,10 @@ public class Day11 {
     }
 
     private boolean isEmptyCol(int j) {
-        return emptyColumns.contains(j);
+        return emptyColumns[j];
     }
 
     private boolean isEmptyRow(int i) {
-        return emptyRows.contains(i);
+        return emptyRows[i];
     }
 }
