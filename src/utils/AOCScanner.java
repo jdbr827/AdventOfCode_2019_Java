@@ -1,5 +1,6 @@
 package utils;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -43,6 +44,23 @@ public class AOCScanner {
             matrix.add(row);
         }
         return matrix;
+    }
+
+
+     public Character[][] scanAsChar2DArray() {
+        List<Character[]> matrix = new java.util.ArrayList<>(List.of());
+        while (scanner.hasNextLine()) {
+           Character[] row = scanner.nextLine().chars().mapToObj(c -> (char)c).toArray(Character[]::new);
+           matrix.add(row);
+        }
+        int Nrows = matrix.size();
+        int Ncols = matrix.get(0).length;
+
+        Character[][] arr = new Character[Nrows][Ncols];
+        for (int i=0; i<Nrows; i++) {
+            arr[i] = matrix.get(i);
+        }
+        return arr;
     }
 }
 
