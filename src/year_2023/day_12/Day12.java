@@ -71,14 +71,23 @@ class SpringRow {
         int N = rawReport.length();
         int M = contiguousGroupReport.size();
 
-        long[][] dpMatrix = new long[N + 1][M + 1]; // Initialized to all 0
+        long[] lastArray = new long[N+1];
+        long[] thisArray = new long[N+1];
 
 
-        dpMatrix[0][0] = 1L;
+
+        /*
+         At Iteration c:
+          thisArray[r] = # of arrangements of the first r characters of the raw report that satisfy the first c contiguous groups
+          lastArray[r] = # of arrangments of the first r characters of the raw report that satisfy the first c-1 contiguous groups
+         */
+
+
+        lastArray[0] = 1L;
         // Case of prefix of no #s
         for (int r=1; r<=N; r++) {
             if (springMightBeOperational(r)) {
-                dpMatrix[r][0] = 1L;
+                lastArray[r] = 1L;
             } else {
                 break;
             }
@@ -90,27 +99,34 @@ class SpringRow {
             int thisContiguousGroupSize = contiguousGroupReport.get(c - 1);
             for (int r = 1; r <= N; r++) {
                 if (springMightBeOperational(r)) {
-                    dpMatrix[r][c] += dpMatrix[r - 1][c];
+                    thisArray[r] += thisArray[r - 1];
                 }
                 if (springMightBeDamaged(r)) {
-                    int delta = r - thisContiguousGroupSize;
-                    if (delta >= 0) {
-                        if (IntStream.rangeClosed(r - thisContiguousGroupSize + 1, r).allMatch(this::springMightBeDamaged)) {
-                            if (delta == 0) { // We have covered the whole row
-                                dpMatrix[r][c] += (c == 1) ? 1 : 0; // check if any contiguous groups left
-                            } else if (springMightBeOperational(r - thisContiguousGroupSize)) {
+                    int startOfDamagedGroup = r - thisContiguousGroupSize;
+                    if (startOfDamagedGroup >= 0) {
+                        if (springMightEndDamagedGroupOfAtLeastLength(r, thisContiguousGroupSize)) {
+                            if (startOfDamagedGroup == 0) { // We have covered the whole row
+                                thisArray[r] += (c == 1) ? 1 : 0; // check if any contiguous groups left
+                            } else if (springMightBeOperational(r - thisContiguousGroupSize)) { // make sure group is not longer
                                 // check the rest of the row and the rest of the contiguous groups
-                                dpMatrix[r][c] += dpMatrix[r - thisContiguousGroupSize - 1][c - 1];
+                                thisArray[r] += lastArray[startOfDamagedGroup - 1];
                             }
                         }
                     }
                 }
             }
 
+            lastArray = thisArray.clone();
+            thisArray = new long[N+1];
+
 
         }
 
-        return dpMatrix[N][M];
+        return lastArray[N];
+    }
+
+    private boolean springMightEndDamagedGroupOfAtLeastLength(int r, int length) {
+        return r >= length && IntStream.rangeClosed(r - length + 1, r).allMatch(this::springMightBeDamaged);
     }
 
     private boolean springMightBeDamaged(int r) {
