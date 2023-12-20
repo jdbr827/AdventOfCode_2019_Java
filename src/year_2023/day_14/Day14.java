@@ -2,8 +2,18 @@ package year_2023.day_14;
 
 import utils.AOCScanner;
 
+import java.util.Arrays;
+
 public class Day14 {
     Character[][] rockPlatform;
+
+    int numRows() {
+        return rockPlatform.length;
+    }
+
+    int numCols() {
+        return rockPlatform[0].length;
+    }
 
 
     public Day14(String fileName) {
@@ -13,29 +23,35 @@ public class Day14 {
 
     public int calculateLoadOnNorthSupportBeams() {
         int total = 0;
-        for (int col=0; col<rockPlatform.length; col++) {
-            total += calculateLoadOnNorthSupportBeamsFromColumn(col);
+        tiltNorth();
+         for (int i=0; i<numRows(); i++) {
+            for (int j=0; j<numCols(); j++) {
+                if (rockPlatform[i][j] == 'O') {
+                    total += numRows() - i;
+                }
+            }
         }
-        return total;
+         return total;
+
     }
 
-    private int calculateLoadOnNorthSupportBeamsFromColumn(int col) {
-        int total = 0;
-        int numRows = rockPlatform[0].length;
-        int lastCube = numRows + 1;
-        int roundRocksFoundSinceLastCubeRock = 0;
-        for (int i=0; i<numRows; i++) {
-            if (rockPlatform[i][col] == 'O') {
-                roundRocksFoundSinceLastCubeRock++;
-                total += lastCube - roundRocksFoundSinceLastCubeRock;
-            }
-            if (rockPlatform[i][col] == '#') {
-                lastCube = numRows - i;
-                roundRocksFoundSinceLastCubeRock = 0;
+    private void tiltNorth() {
+        int[] lastRock = new int[numCols()];
+        Arrays.fill(lastRock, -1);
+
+
+        for (int i=0; i<numRows(); i++) {
+            for (int j=0; j<numCols(); j++) {
+                if (rockPlatform[i][j] == 'O') {
+                    int newI = lastRock[j] + 1;
+                    rockPlatform[i][j] = '.';
+                    rockPlatform[newI][j] = 'O';
+                    lastRock[j] = newI;
+                }
+                if (rockPlatform[i][j] == '#') {
+                    lastRock[j] = i;
+                }
             }
         }
-
-
-        return total;
     }
 }
