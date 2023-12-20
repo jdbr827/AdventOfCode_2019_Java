@@ -18,4 +18,10 @@ public class Day13Test {
     }
 
 
+     @Test
+    public void test_part2() {
+        assertEquals(400, new Day13(SMALL_INPUT).getReflectionTotalWithSmudge());
+        assertEquals(31108, new Day13(INPUT).getReflectionTotalWithSmudge());
+    }
+
 }
