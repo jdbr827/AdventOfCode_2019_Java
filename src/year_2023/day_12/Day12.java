@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class Day12 {
@@ -61,7 +62,7 @@ class SpringRow {
     String rawReport;
     List<Integer> contiguousGroupReport;
 
-      Character getRawReportCharAt1Index(int index) {
+      Character reportIndex(int index) {
             return rawReport.charAt(index - 1);
         }
 
@@ -69,21 +70,15 @@ class SpringRow {
     public long getArrangementCount() {
         int N = rawReport.length();
         int M = contiguousGroupReport.size();
-        Long[][] dpMatrix = new Long[N + 1][M + 1];
 
-        for (int r = 0; r <= N; r++) {
-            for (int c = 0; c <= M; c++)
-                dpMatrix[r][c] = 0L;
-        }
+        long[][] dpMatrix = new long[N + 1][M + 1]; // Initialized to all 0
+
 
         dpMatrix[0][0] = 1L;
-
         // Case of prefix of no #s
-        int firstIdxOfKnownBrokenSpring = 0;
         for (int r=1; r<=N; r++) {
-            if (getRawReportCharAt1Index(r) != '#') {
+            if (springMightBeOperational(r)) {
                 dpMatrix[r][0] = 1L;
-                firstIdxOfKnownBrokenSpring++;
             } else {
                 break;
             }
@@ -94,23 +89,17 @@ class SpringRow {
         for (int c = 1; c <= M; c++) {
             int thisContiguousGroupSize = contiguousGroupReport.get(c - 1);
             for (int r = 1; r <= N; r++) {
-                if (getRawReportCharAt1Index(r) != '#') {
+                if (springMightBeOperational(r)) {
                     dpMatrix[r][c] += dpMatrix[r - 1][c];
                 }
-                if (getRawReportCharAt1Index(r) != '.') {
+                if (springMightBeDamaged(r)) {
                     int delta = r - thisContiguousGroupSize;
                     if (delta >= 0) {
-                        boolean candidateFlag = true;
-                        for (int i = 0; i < thisContiguousGroupSize; i++) {
-                            if (getRawReportCharAt1Index(r - i) == '.') {
-                                candidateFlag = false;
-                                break;
-                            }
-                        }
-                        if (candidateFlag) {
-                            if (delta == 0) {
-                                dpMatrix[r][c] += (c == 1) ? 1 : 0;
-                            } else if (getRawReportCharAt1Index(r - thisContiguousGroupSize) != '#') {
+                        if (IntStream.rangeClosed(r - thisContiguousGroupSize + 1, r).allMatch(this::springMightBeDamaged)) {
+                            if (delta == 0) { // We have covered the whole row
+                                dpMatrix[r][c] += (c == 1) ? 1 : 0; // check if any contiguous groups left
+                            } else if (springMightBeOperational(r - thisContiguousGroupSize)) {
+                                // check the rest of the row and the rest of the contiguous groups
                                 dpMatrix[r][c] += dpMatrix[r - thisContiguousGroupSize - 1][c - 1];
                             }
                         }
@@ -122,6 +111,14 @@ class SpringRow {
         }
 
         return dpMatrix[N][M];
+    }
+
+    private boolean springMightBeDamaged(int r) {
+        return reportIndex(r) != '.';
+    }
+
+    private boolean springMightBeOperational(int r) {
+        return reportIndex(r) != '#';
     }
 }
 
