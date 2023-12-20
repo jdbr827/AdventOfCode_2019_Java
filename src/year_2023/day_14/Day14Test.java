@@ -16,4 +16,13 @@ public class Day14Test {
         assertEquals(136, new Day14(SMALL_INPUT).calculateLoadOnNorthSupportBeams());
         assertEquals(109833, new Day14(INPUT).calculateLoadOnNorthSupportBeams());
     }
+
+      @Test
+    public void test_part2() {
+        Day14 smallInput = new Day14(SMALL_INPUT);
+        smallInput.runCycle(1000000000);
+        assertEquals(64, smallInput.calculateLoadOnNorthSupportBeams());
+
+        assertEquals(109833, new Day14(INPUT).calculateLoadOnNorthSupportBeams());
+    }
 }
