@@ -82,15 +82,18 @@ public class Day13 {
         int M = formation.get(0).length();
 
         for (int i=1; i<N; i++) {
-            boolean candidateFlag = true;
+            boolean couldBeMirror = true;
             boolean smudgeFound = false;
-            for (int di = 0; i - di - 1 >= 0 && i + di < N; di++) {
-                int row_less_than_i = i - di - 1;
-                int row_greater_than_i = i + di;
+
+
+            for (int row_less_than_i = i-1, row_greater_than_i = i;
+                 row_less_than_i >= 0 && row_greater_than_i < N;
+                 row_less_than_i--, row_greater_than_i++) {
+
                 for (int j=0; j<M; j++) {
                     if (formation.get(row_less_than_i).charAt(j) != formation.get(row_greater_than_i).charAt(j)) {
                         if (smudgeFound) {
-                            candidateFlag = false;
+                            couldBeMirror = false;
                             break;
                         } else {
                             smudgeFound = true;
@@ -99,7 +102,7 @@ public class Day13 {
                 }
             }
 
-            if (candidateFlag && smudgeFound) {
+            if (couldBeMirror && smudgeFound) {
                 return 100 * i;
             }
         }
