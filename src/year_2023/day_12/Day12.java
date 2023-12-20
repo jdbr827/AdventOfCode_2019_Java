@@ -87,26 +87,29 @@ class SpringRow {
 
 
         for (int c = 1; c <= M; c++) {
+            long temp = 0L;
             int thisContiguousGroupSize = contiguousGroupReport.get(c - 1);
             for (int r = 1; r <= N; r++) {
+                dpMatrix[r-1][c] = temp;
+                temp = 0L;
                 if (springMightBeOperational(r)) {
-                    dpMatrix[r][c] += dpMatrix[r - 1][c];
+                    temp += dpMatrix[r - 1][c];
                 }
                 if (springMightBeDamaged(r)) {
                     int delta = r - thisContiguousGroupSize;
                     if (delta >= 0) {
                         if (IntStream.rangeClosed(r - thisContiguousGroupSize + 1, r).allMatch(this::springMightBeDamaged)) {
                             if (delta == 0) { // We have covered the whole row
-                                dpMatrix[r][c] += (c == 1) ? 1 : 0; // check if any contiguous groups left
+                                temp += (c == 1) ? 1 : 0; // check if any contiguous groups left
                             } else if (springMightBeOperational(r - thisContiguousGroupSize)) {
                                 // check the rest of the row and the rest of the contiguous groups
-                                dpMatrix[r][c] += dpMatrix[r - thisContiguousGroupSize - 1][c - 1];
+                                temp += dpMatrix[r - thisContiguousGroupSize - 1][c - 1];
                             }
                         }
                     }
                 }
             }
-
+            dpMatrix[N][c] = temp;
 
         }
 
