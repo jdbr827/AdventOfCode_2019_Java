@@ -14,15 +14,21 @@ public class Day12Test {
 
      @Test
     void test_get_arrangement_counts() {
-        //assertEquals(1, new SpringRow("???.###", List.of(1,1,3)).getArrangementCount());
+        assertEquals(1, new SpringRow("???.###", List.of(1,1,3)).getArrangementCount());
         assertEquals(2, new SpringRow(".??", List.of(1)).getArrangementCount());
         assertEquals(4, new SpringRow(".??..??...?##.", List.of(1, 1, 3)).getArrangementCount());
     }
 
     @Test
     void test_part1() {
-        assertEquals(21, new Day12(SMALL_INPUT).sumOfArrangementCounts());
-        assertEquals(7718, new Day12(INPUT).sumOfArrangementCounts());
+        assertEquals(21, Day12.createNewDay12(SMALL_INPUT).sumOfArrangementCounts());
+        assertEquals(7718, Day12.createNewDay12(INPUT).sumOfArrangementCounts());
+    }
+
+     @Test
+    void test_part2() {
+        assertEquals(525152, Day12.createDay12Part2(SMALL_INPUT).sumOfArrangementCounts());
+        assertEquals(128741994134728L, Day12.createDay12Part2(INPUT).sumOfArrangementCounts());
     }
 }
 

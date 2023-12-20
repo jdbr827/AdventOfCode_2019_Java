@@ -2,32 +2,57 @@ package year_2023.day_12;
 
 import lombok.AllArgsConstructor;
 import utils.AOCScanner;
-import year_2022.day_12.Matrix2D;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class Day12 {
     Collection<SpringRow> springRowCollection;
 
-    public Day12(String fileName) {
+
+    static Day12 createNewDay12(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
-        springRowCollection = new ArrayList<>();
+        Collection<SpringRow> springRowCollection = new ArrayList<>();
         scanner.forEachLine(line -> {
             String[] splitLine = line.split(" ");
             String rawReport = splitLine[0];
             List<Integer> contiguousGroupReport = Arrays.stream(splitLine[1].split(",")).map(Integer::parseInt).collect(Collectors.toList());
             springRowCollection.add(new SpringRow(rawReport, contiguousGroupReport));
         });
+        return new Day12(springRowCollection);
     }
 
-    public int sumOfArrangementCounts() {
-        List<Integer> arrangementCounts = springRowCollection.stream().map(SpringRow::getArrangementCount).collect(Collectors.toList());
-        return arrangementCounts.stream().reduce(0, Math::addExact);
+    static Day12 createDay12Part2(String fileName) {
+        AOCScanner scanner = new AOCScanner(fileName);
+        Collection<SpringRow> springRowCollection = new ArrayList<>();
+        scanner.forEachLine(line -> {
+            String[] splitLine = line.split(" ");
+            String rawReport = splitLine[0];
+            List<Integer> contiguousGroupReport = Arrays.stream(splitLine[1].split(",")).map(Integer::parseInt).collect(Collectors.toList());
+
+            StringBuilder unfoldedRawReport = new StringBuilder(rawReport);
+            List<Integer> unfoldedContiguousGroupReport = new ArrayList<>(contiguousGroupReport);
+            for (int i=0; i<4; i++) {
+                unfoldedRawReport.append("?");
+                unfoldedRawReport.append(rawReport);
+                unfoldedContiguousGroupReport.addAll(contiguousGroupReport);
+            }
+
+            springRowCollection.add(new SpringRow(unfoldedRawReport.toString(), unfoldedContiguousGroupReport));
+        });
+        return new Day12(springRowCollection);
+
+    }
+
+    public long sumOfArrangementCounts() {
+        return springRowCollection.stream()
+                .map(SpringRow::getArrangementCount)
+                .reduce(0L, Math::addExact);
+
     }
 }
 
@@ -41,21 +66,24 @@ class SpringRow {
         }
 
 
-    public int getArrangementCount() {
+    public long getArrangementCount() {
         int N = rawReport.length();
         int M = contiguousGroupReport.size();
-        Integer[][] dpMatrix = new Integer[N + 1][M + 1];
+        Long[][] dpMatrix = new Long[N + 1][M + 1];
 
         for (int r = 0; r <= N; r++) {
             for (int c = 0; c <= M; c++)
-                dpMatrix[r][c] = 0;
+                dpMatrix[r][c] = 0L;
         }
 
-        dpMatrix[0][0] = 1;
+        dpMatrix[0][0] = 1L;
 
+        // Case of prefix of no #s
+        int firstIdxOfKnownBrokenSpring = 0;
         for (int r=1; r<=N; r++) {
             if (getRawReportCharAt1Index(r) != '#') {
-                dpMatrix[r][0] = 1;
+                dpMatrix[r][0] = 1L;
+                firstIdxOfKnownBrokenSpring++;
             } else {
                 break;
             }
@@ -81,7 +109,7 @@ class SpringRow {
                         }
                         if (candidateFlag) {
                             if (delta == 0) {
-                                dpMatrix[r][c] += dpMatrix[0][c - 1];
+                                dpMatrix[r][c] += (c == 1) ? 1 : 0;
                             } else if (getRawReportCharAt1Index(r - thisContiguousGroupSize) != '#') {
                                 dpMatrix[r][c] += dpMatrix[r - thisContiguousGroupSize - 1][c - 1];
                             }
