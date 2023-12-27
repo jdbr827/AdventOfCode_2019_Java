@@ -4,7 +4,6 @@ package year_2019.day11;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.C;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -39,6 +38,7 @@ public class RotatingMovingRobot {
     public void rotateCounterclockwise() {
         setFacing(CardinalDirection.values()[Math.floorMod(getFacing().ordinal() - 1, 4)]);
     }
+
 
 
 }

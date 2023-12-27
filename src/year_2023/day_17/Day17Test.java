@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day17Test {
 
     public static final String SMALL_INPUT = "src/year_2023/day_17/day_17_small_input.txt";
-    public static final String INPUT = "src/year_2023/day_17/day_17_small_input.txt";
+    public static final String INPUT = "src/year_2023/day_17/day_17_input.txt";
 
     @Test
     public void test_part1() {
