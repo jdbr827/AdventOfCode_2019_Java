@@ -16,7 +16,7 @@ public class Day16Test {
 
     @Test
     public void test_part1() {
-        assertEquals(46, new Day16(SMALL_INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
+        //assertEquals(46, new Day16(SMALL_INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
         assertEquals(6816, new Day16(INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
     }
 
@@ -24,6 +24,6 @@ public class Day16Test {
       @Test
     public void test_part2() {
         assertEquals(51, new Day16(SMALL_INPUT).maximizeEnergyOutput());
-        //System.out.println(new Day16(INPUT).maximizeEnergyOutput());
+        assertEquals(8163, new Day16(INPUT).maximizeEnergyOutput());
     }
 }

@@ -1,6 +1,7 @@
 package year_2023.day_16;
 
-import org.checkerframework.checker.units.qual.C;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import utils.AOCScanner;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
@@ -21,6 +22,49 @@ public class Day16 {
         return lightContraption[position.x][position.y];
     }
 
+
+    public Day16(String fileName) {
+        AOCScanner scanner = new AOCScanner(fileName);
+        Character[][] matrix = scanner.scanAsChar2DArray();
+        N = matrix.length;
+        M = matrix[0].length;
+        lightContraption = constructLightContraption(matrix);
+    }
+
+    private ContraptionComponent[][] constructLightContraption(Character[][] matrix) {
+        ContraptionComponent[][] lightContraption = new ContraptionComponent[N][M];
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < M; y++) {
+                switch (matrix[x][y]) {
+                    case '\\':
+                        lightContraption[x][y] = MajorDiagonalMirror.getMAJOR_DIAGONAL_MIRROR();
+                        break;
+                    case '/':
+                        lightContraption[x][y] = MinorDiagonalMirror.getMINOR_DIAGONAL_MIRROR();
+                        break;
+                    case '|':
+                        lightContraption[x][y] = VerticalSplitter.getVERTICAL_SPLITTER();
+                        break;
+                    case '-':
+                        lightContraption[x][y] = new HorizontalSplitter();
+                        break;
+                    case '.':
+                        lightContraption[x][y] = EmptySpace.getEMPTY_SPACE();
+                        break;
+                }
+            }
+        }
+        return lightContraption;
+    }
+
+    public int runEnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
+        return new EnergyTest(initialPosition, initiallyFacing).count_energized_tiles();
+    }
+
+    public int runEnergyTest(JavaRotatingMovingRobot startingRobot) {
+        return runEnergyTest(startingRobot.getPosition(), startingRobot.getFacing());
+    }
+
     public int maximizeEnergyOutput() {
        List<JavaRotatingMovingRobot> candidateRobots = new ArrayList<>();
 
@@ -34,6 +78,7 @@ public class Day16 {
            candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, M-1), WEST));
        }
 
+       System.out.println(candidateRobots.size());
        return candidateRobots.stream().map(this::runEnergyTest).max(Comparator.naturalOrder()).get();
 
     }
@@ -82,95 +127,49 @@ public class Day16 {
             }
         }
 
-        class Beam extends JavaRotatingMovingRobot {
+        @AllArgsConstructor
+        class Beam {
             JavaRotatingMovingRobot robot;
 
             Beam(CartesianPoint position, CardinalDirection initiallyFacing) {
-                super(initiallyFacing);
-                this.position = position;
+                robot = new JavaRotatingMovingRobot(position, initiallyFacing);
             }
 
-            Beam(JavaRotatingMovingRobot robot) {
-                this(robot.getPosition(), robot.getFacing());
-            }
-
-            protected Beam(CardinalDirection initiallyFacing) {
-                super(initiallyFacing);
-            }
 
             public void track() {
-                while (position.isInBoundariesInclusive(0, N - 1, 0, M - 1) && !currentStateIsVisited()) {
+                while (robotInBounds() && !currentStateIsVisited()) {
                     markCurrentStateAsVisited();
                     markCurrentPositionAsVisited();
                     processLightContraptionAtCurrentLocation();
-                    moveForward();
+                    robot.moveForward();
                 }
+            }
+
+            private boolean robotInBounds() {
+                return robot.getPosition().isInBoundariesInclusive(0, N - 1, 0, M - 1);
             }
 
             private void processLightContraptionAtCurrentLocation() {
-                getLightContraptionAtCurrentLocation().handleBeam(this);
+                getLightContraptionAtCurrentLocation().handleBeam(this.robot);
             }
 
             private ContraptionComponent getLightContraptionAtCurrentLocation() {
-                return getLightContraptionAtLocation(position);
+                return getLightContraptionAtLocation(robot.getPosition());
             }
 
             private void markCurrentPositionAsVisited() {
-                markPositionAsVisited(position);
+                markPositionAsVisited(robot.getPosition());
             }
 
             private boolean currentStateIsVisited() {
-                return isStateVisited(position, getFacing());
+                return isStateVisited(robot.getPosition(), robot.getFacing());
             }
 
             private void markCurrentStateAsVisited() {
-                markStateAsVisited(position, getFacing());
+                markStateAsVisited(robot.getPosition(), robot.getFacing());
             }
         }
 
-    }
-
-
-    public Day16(String fileName) {
-        AOCScanner scanner = new AOCScanner(fileName);
-        Character[][] matrix = scanner.scanAsChar2DArray();
-        N = matrix.length;
-        M = matrix[0].length;
-        lightContraption = constructLightContraption(matrix);
-    }
-
-    private ContraptionComponent[][] constructLightContraption(Character[][] matrix) {
-        ContraptionComponent[][] lightContraption = new ContraptionComponent[N][M];
-        for (int x = 0; x < N; x++) {
-            for (int y = 0; y < M; y++) {
-                switch (matrix[x][y]) {
-                    case '\\':
-                        lightContraption[x][y] = new MajorDiagonalMirror();
-                        break;
-                    case '/':
-                        lightContraption[x][y] = new MinorDiagonalMirror();
-                        break;
-                    case '|':
-                        lightContraption[x][y] = new VerticalSplitter();
-                        break;
-                    case '-':
-                        lightContraption[x][y] = new HorizontalSplitter();
-                        break;
-                    case '.':
-                        lightContraption[x][y] = new EmptySpace();
-                        break;
-                }
-            }
-        }
-        return lightContraption;
-    }
-
-    public int runEnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
-        return new EnergyTest(initialPosition, initiallyFacing).count_energized_tiles();
-    }
-
-    public int runEnergyTest(JavaRotatingMovingRobot startingRobot) {
-        return runEnergyTest(startingRobot.getPosition(), startingRobot.getFacing());
     }
 
 
@@ -183,7 +182,12 @@ public class Day16 {
         void clearSplitBeams();
     }
 
-    class MajorDiagonalMirror implements ContraptionComponent {
+    static class MajorDiagonalMirror implements ContraptionComponent {
+
+        @Getter private static final MajorDiagonalMirror MAJOR_DIAGONAL_MIRROR = new MajorDiagonalMirror();
+        private MajorDiagonalMirror() {};
+
+
 
         @Override
         public void handleBeam(JavaRotatingMovingRobot beam) {
@@ -214,7 +218,13 @@ public class Day16 {
         }
     }
 
-    class MinorDiagonalMirror implements ContraptionComponent {
+    static class MinorDiagonalMirror implements ContraptionComponent {
+
+        @Getter
+        private static final MinorDiagonalMirror MINOR_DIAGONAL_MIRROR = new MinorDiagonalMirror();
+
+        private MinorDiagonalMirror() {};
+
 
         @Override
         public void handleBeam(JavaRotatingMovingRobot beam) {
@@ -245,7 +255,12 @@ public class Day16 {
         }
     }
 
-    class EmptySpace implements ContraptionComponent {
+    static class EmptySpace implements ContraptionComponent {
+
+        @Getter
+        private static final EmptySpace EMPTY_SPACE = new EmptySpace();
+        private EmptySpace() {}
+
         @Override
         public void handleBeam(JavaRotatingMovingRobot beam) {
             // do nothing;
@@ -262,8 +277,12 @@ public class Day16 {
         }
     }
 
-    class VerticalSplitter implements ContraptionComponent {
+    static class VerticalSplitter implements ContraptionComponent {
         List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
+
+        @Getter
+        private static final VerticalSplitter VERTICAL_SPLITTER = new VerticalSplitter();
+        private VerticalSplitter(){}
 
         @Override
         public void handleBeam(JavaRotatingMovingRobot beam) {
@@ -285,8 +304,12 @@ public class Day16 {
         }
     }
 
-    class HorizontalSplitter implements ContraptionComponent {
+    static class HorizontalSplitter implements ContraptionComponent {
         List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
+
+        @Getter
+        private static final HorizontalSplitter HORIZONTAL_SPLITTER = new HorizontalSplitter();
+        private HorizontalSplitter(){};
 
         @Override
         public void handleBeam(JavaRotatingMovingRobot beam) {
