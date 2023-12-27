@@ -12,11 +12,10 @@ public class Day16 {
     List<Beam> beamList = new ArrayList<>();
     int N;
     int M;
-    ContraptionComponent[][] lightContraption;
+    final ContraptionComponent[][] lightContraption;
     boolean[][][] visitedState;
     boolean[][] visitedPosition;
     int numVisited = 0;
-
 
 
     public Day16(String fileName) {
@@ -24,7 +23,16 @@ public class Day16 {
         Character[][] matrix = scanner.scanAsChar2DArray();
         N = matrix.length;
         M = matrix[0].length;
-        lightContraption = new ContraptionComponent[N][M];
+        lightContraption = constructLightContraption(matrix);
+
+        beamList.add(new Beam(EAST));
+
+        visitedState = new boolean[N][M][4];
+        visitedPosition = new boolean[N][M];
+    }
+
+    private ContraptionComponent[][] constructLightContraption(Character[][] matrix) {
+        ContraptionComponent[][] lightContraption = new ContraptionComponent[N][M];
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < M; y++) {
                 switch (matrix[x][y]) {
@@ -46,11 +54,7 @@ public class Day16 {
                 }
             }
         }
-
-        beamList.add(new Beam(EAST));
-
-        visitedState = new boolean[N][M][4];
-        visitedPosition = new boolean[N][M];
+        return lightContraption;
     }
 
     public int count_energized_tiles() {
