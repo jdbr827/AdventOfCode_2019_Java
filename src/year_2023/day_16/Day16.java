@@ -5,6 +5,7 @@ import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static year_2019.day15.model.CardinalDirection.*;
 
@@ -16,6 +17,10 @@ public class Day16 {
     boolean[][][] visitedState;
     boolean[][] visitedPosition;
     int numVisited = 0;
+
+     private ContraptionComponent getLightContraptionAtLocation(CartesianPoint position) {
+        return lightContraption[position.x][position.y];
+    }
 
     private void markPositionAsVisited(CartesianPoint position) {
           if (!visitedPosition[position.x][position.y]) {
@@ -84,7 +89,7 @@ public class Day16 {
     private void addBeamsFromSplitters() {
         for (int x=0; x<N; x++) {
             for (int y=0; y<M; y++) {
-                beamList.addAll(lightContraption[x][y].getSplitBeams());
+                beamList.addAll(lightContraption[x][y].getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
                 lightContraption[x][y].clearSplitBeams();
             }
         }
@@ -92,8 +97,8 @@ public class Day16 {
 
 
     interface ContraptionComponent {
-        void handleBeam(Beam beam);
-        List<Beam> getSplitBeams();
+        void handleBeam(JavaRotatingMovingRobot beam);
+        List<JavaRotatingMovingRobot> getSplitBeams();
 
         void clearSplitBeams();
     }
@@ -101,7 +106,7 @@ public class Day16 {
     class MajorDiagonalMirror implements ContraptionComponent {
 
         @Override
-        public void handleBeam(Beam beam) {
+        public void handleBeam(JavaRotatingMovingRobot beam) {
             switch (beam.getFacing()) {
                 case EAST:
                     beam.setFacing(SOUTH);
@@ -119,7 +124,7 @@ public class Day16 {
         }
 
         @Override
-        public List<Beam> getSplitBeams() {
+        public List<JavaRotatingMovingRobot> getSplitBeams() {
             return new ArrayList<>();
         }
 
@@ -132,7 +137,7 @@ public class Day16 {
     class MinorDiagonalMirror implements ContraptionComponent {
 
         @Override
-        public void handleBeam(Beam beam) {
+        public void handleBeam(JavaRotatingMovingRobot beam) {
             switch (beam.getFacing()) {
                 case EAST:
                     beam.setFacing(NORTH);
@@ -150,7 +155,7 @@ public class Day16 {
         }
 
         @Override
-        public List<Beam> getSplitBeams() {
+        public List<JavaRotatingMovingRobot> getSplitBeams() {
             return new ArrayList<>();
         }
 
@@ -162,12 +167,12 @@ public class Day16 {
 
     class EmptySpace implements ContraptionComponent {
         @Override
-        public void handleBeam(Beam beam) {
+        public void handleBeam(JavaRotatingMovingRobot beam) {
             // do nothing;
         }
 
         @Override
-        public List<Beam> getSplitBeams() {
+        public List<JavaRotatingMovingRobot> getSplitBeams() {
             return new ArrayList<>();
         }
 
@@ -178,10 +183,10 @@ public class Day16 {
     }
 
     class VerticalSplitter implements ContraptionComponent {
-        List<Beam> splitterBeamList = new ArrayList<>();
+        List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
 
         @Override
-        public void handleBeam(Beam beam) {
+        public void handleBeam(JavaRotatingMovingRobot beam) {
             if (beam.getFacing() == EAST || beam.getFacing() == WEST) {
                 beam.setFacing(NORTH);
                 Beam newBeam = new Beam(beam.getPosition(), SOUTH);
@@ -191,7 +196,7 @@ public class Day16 {
         }
 
         @Override
-        public List<Beam> getSplitBeams() {
+        public List<JavaRotatingMovingRobot> getSplitBeams() {
             return splitterBeamList;
         }
 
@@ -202,10 +207,10 @@ public class Day16 {
     }
 
     class HorizontalSplitter implements ContraptionComponent {
-        List<Beam> splitterBeamList = new ArrayList<>();
+        List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
 
         @Override
-        public void handleBeam(Beam beam) {
+        public void handleBeam(JavaRotatingMovingRobot beam) {
             if (beam.getFacing() == NORTH || beam.getFacing() == SOUTH) {
                 beam.setFacing(EAST);
                 Beam newBeam = new Beam(beam.getPosition(), WEST);
@@ -214,7 +219,7 @@ public class Day16 {
         }
 
         @Override
-        public List<Beam> getSplitBeams() {
+        public List<JavaRotatingMovingRobot> getSplitBeams() {
             return splitterBeamList;
         }
 
@@ -232,6 +237,10 @@ public class Day16 {
             this.position = position;
         }
 
+        Beam(JavaRotatingMovingRobot robot) {
+            this(robot.getPosition(), robot.getFacing());
+        }
+
         protected Beam(CardinalDirection initiallyFacing) {
             super(initiallyFacing);
         }
@@ -240,9 +249,17 @@ public class Day16 {
             while(position.isInBoundariesInclusive(0, N-1, 0, M-1) && !currentStateIsVisited()) {
                 markCurrentStateAsVisited();
                 markCurrentPositionAsVisited();
-                lightContraption[position.x][position.y].handleBeam(this);
+                processLightContraptionAtCurrentLocation();
                 moveForward();
             }
+         }
+
+         private void processLightContraptionAtCurrentLocation() {
+             getLightContraptionAtCurrentLocation().handleBeam(this);
+         }
+
+         private ContraptionComponent getLightContraptionAtCurrentLocation() {
+             return getLightContraptionAtLocation(position);
          }
 
          private void markCurrentPositionAsVisited() {
@@ -257,6 +274,8 @@ public class Day16 {
            markStateAsVisited(position, getFacing());
          }
      }
+
+
 
 }
 
