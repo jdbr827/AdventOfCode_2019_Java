@@ -1,5 +1,6 @@
 package year_2023.day_16;
 
+import org.checkerframework.checker.units.qual.C;
 import utils.AOCScanner;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
@@ -18,6 +19,23 @@ public class Day16 {
 
     private ContraptionComponent getLightContraptionAtLocation(CartesianPoint position) {
         return lightContraption[position.x][position.y];
+    }
+
+    public int maximizeEnergyOutput() {
+       List<JavaRotatingMovingRobot> candidateRobots = new ArrayList<>();
+
+       for (int y=0; y<M; y++) {
+           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(0, y), SOUTH));
+           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(N-1, y), NORTH));
+       }
+
+       for (int x=0; x<N; x++) {
+           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, 0), EAST));
+           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, M-1), WEST));
+       }
+
+       return candidateRobots.stream().map(this::runEnergyTest).max(Comparator.naturalOrder()).get();
+
     }
 
     class EnergyTest {
@@ -150,6 +168,11 @@ public class Day16 {
     public int runEnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
         return new EnergyTest(initialPosition, initiallyFacing).count_energized_tiles();
     }
+
+    public int runEnergyTest(JavaRotatingMovingRobot startingRobot) {
+        return runEnergyTest(startingRobot.getPosition(), startingRobot.getFacing());
+    }
+
 
 
     interface ContraptionComponent {
