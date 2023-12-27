@@ -10,6 +10,10 @@ public class JavaRotatingMovingRobot extends RotatingMovingRobot {
         super(initiallyFacing);
     }
 
+    JavaRotatingMovingRobot(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
+        super(initialPosition, initiallyFacing);
+    }
+
     public void moveForward() {
         position = new CartesianPoint(getPosition().x - facing.velocity.y, getPosition().y + facing.velocity.x);
     }

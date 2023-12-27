@@ -10,33 +10,107 @@ import java.util.stream.Collectors;
 import static year_2019.day15.model.CardinalDirection.*;
 
 public class Day16 {
-    List<Beam> beamList = new ArrayList<>();
+
     int N;
     int M;
-    final ContraptionComponent[][] lightContraption;
-    boolean[][][] visitedState;
-    boolean[][] visitedPosition;
-    int numVisited = 0;
 
-     private ContraptionComponent getLightContraptionAtLocation(CartesianPoint position) {
+    final ContraptionComponent[][] lightContraption;
+
+    private ContraptionComponent getLightContraptionAtLocation(CartesianPoint position) {
         return lightContraption[position.x][position.y];
     }
 
-    private void markPositionAsVisited(CartesianPoint position) {
-          if (!visitedPosition[position.x][position.y]) {
-                 numVisited++;
-                 visitedPosition[position.x][position.y] = true;
-             }
-    }
+    class EnergyTest {
+        List<Beam> beamList = new ArrayList<>();
+        boolean[][][] visitedState;
+        boolean[][] visitedPosition;
+        int numVisited = 0;
 
-    private void markStateAsVisited(CartesianPoint position, CardinalDirection facing) {
-         visitedState[position.x][position.y][facing.ordinal()] = true;
-    }
+        EnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
+            beamList.add(new Beam(initialPosition, initiallyFacing));
+            visitedState = new boolean[N][M][4];
+            visitedPosition = new boolean[N][M];
+        }
 
-    private boolean isStateVisited(CartesianPoint position, CardinalDirection facing) {
-        return visitedState[position.x][position.y][facing.ordinal()];
-    }
+        private void markPositionAsVisited(CartesianPoint position) {
+            if (!visitedPosition[position.x][position.y]) {
+                numVisited++;
+                visitedPosition[position.x][position.y] = true;
+            }
+        }
 
+        private void markStateAsVisited(CartesianPoint position, CardinalDirection facing) {
+            visitedState[position.x][position.y][facing.ordinal()] = true;
+        }
+
+        private boolean isStateVisited(CartesianPoint position, CardinalDirection facing) {
+            return visitedState[position.x][position.y][facing.ordinal()];
+        }
+
+        public int count_energized_tiles() {
+            while (!beamList.isEmpty()) {
+                beamList.remove(0).track();
+                addBeamsFromSplitters();
+            }
+            return numVisited;
+        }
+
+        private void addBeamsFromSplitters() {
+            for (int x = 0; x < N; x++) {
+                for (int y = 0; y < M; y++) {
+                    beamList.addAll(lightContraption[x][y].getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
+                    lightContraption[x][y].clearSplitBeams();
+                }
+            }
+        }
+
+        class Beam extends JavaRotatingMovingRobot {
+            JavaRotatingMovingRobot robot;
+
+            Beam(CartesianPoint position, CardinalDirection initiallyFacing) {
+                super(initiallyFacing);
+                this.position = position;
+            }
+
+            Beam(JavaRotatingMovingRobot robot) {
+                this(robot.getPosition(), robot.getFacing());
+            }
+
+            protected Beam(CardinalDirection initiallyFacing) {
+                super(initiallyFacing);
+            }
+
+            public void track() {
+                while (position.isInBoundariesInclusive(0, N - 1, 0, M - 1) && !currentStateIsVisited()) {
+                    markCurrentStateAsVisited();
+                    markCurrentPositionAsVisited();
+                    processLightContraptionAtCurrentLocation();
+                    moveForward();
+                }
+            }
+
+            private void processLightContraptionAtCurrentLocation() {
+                getLightContraptionAtCurrentLocation().handleBeam(this);
+            }
+
+            private ContraptionComponent getLightContraptionAtCurrentLocation() {
+                return getLightContraptionAtLocation(position);
+            }
+
+            private void markCurrentPositionAsVisited() {
+                markPositionAsVisited(position);
+            }
+
+            private boolean currentStateIsVisited() {
+                return isStateVisited(position, getFacing());
+            }
+
+            private void markCurrentStateAsVisited() {
+                markStateAsVisited(position, getFacing());
+            }
+        }
+
+    }
 
 
     public Day16(String fileName) {
@@ -45,11 +119,6 @@ public class Day16 {
         N = matrix.length;
         M = matrix[0].length;
         lightContraption = constructLightContraption(matrix);
-
-        beamList.add(new Beam(EAST));
-
-        visitedState = new boolean[N][M][4];
-        visitedPosition = new boolean[N][M];
     }
 
     private ContraptionComponent[][] constructLightContraption(Character[][] matrix) {
@@ -78,26 +147,14 @@ public class Day16 {
         return lightContraption;
     }
 
-    public int count_energized_tiles() {
-        while(!beamList.isEmpty()) {
-            beamList.remove(0).track();
-            addBeamsFromSplitters();
-        }
-        return numVisited;
-    }
-
-    private void addBeamsFromSplitters() {
-        for (int x=0; x<N; x++) {
-            for (int y=0; y<M; y++) {
-                beamList.addAll(lightContraption[x][y].getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
-                lightContraption[x][y].clearSplitBeams();
-            }
-        }
+    public int runEnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
+        return new EnergyTest(initialPosition, initiallyFacing).count_energized_tiles();
     }
 
 
     interface ContraptionComponent {
         void handleBeam(JavaRotatingMovingRobot beam);
+
         List<JavaRotatingMovingRobot> getSplitBeams();
 
         void clearSplitBeams();
@@ -189,8 +246,7 @@ public class Day16 {
         public void handleBeam(JavaRotatingMovingRobot beam) {
             if (beam.getFacing() == EAST || beam.getFacing() == WEST) {
                 beam.setFacing(NORTH);
-                Beam newBeam = new Beam(beam.getPosition(), SOUTH);
-
+                JavaRotatingMovingRobot newBeam = new JavaRotatingMovingRobot(beam.getPosition(), SOUTH);
                 splitterBeamList.add(newBeam);
             }
         }
@@ -213,7 +269,7 @@ public class Day16 {
         public void handleBeam(JavaRotatingMovingRobot beam) {
             if (beam.getFacing() == NORTH || beam.getFacing() == SOUTH) {
                 beam.setFacing(EAST);
-                Beam newBeam = new Beam(beam.getPosition(), WEST);
+                JavaRotatingMovingRobot newBeam = new JavaRotatingMovingRobot(beam.getPosition(), WEST);
                 splitterBeamList.add(newBeam);
             }
         }
@@ -229,52 +285,6 @@ public class Day16 {
 
         }
     }
-
-     class Beam extends JavaRotatingMovingRobot {
-
-        Beam(CartesianPoint position, CardinalDirection initiallyFacing) {
-            super(initiallyFacing);
-            this.position = position;
-        }
-
-        Beam(JavaRotatingMovingRobot robot) {
-            this(robot.getPosition(), robot.getFacing());
-        }
-
-        protected Beam(CardinalDirection initiallyFacing) {
-            super(initiallyFacing);
-        }
-
-         public void track() {
-            while(position.isInBoundariesInclusive(0, N-1, 0, M-1) && !currentStateIsVisited()) {
-                markCurrentStateAsVisited();
-                markCurrentPositionAsVisited();
-                processLightContraptionAtCurrentLocation();
-                moveForward();
-            }
-         }
-
-         private void processLightContraptionAtCurrentLocation() {
-             getLightContraptionAtCurrentLocation().handleBeam(this);
-         }
-
-         private ContraptionComponent getLightContraptionAtCurrentLocation() {
-             return getLightContraptionAtLocation(position);
-         }
-
-         private void markCurrentPositionAsVisited() {
-           markPositionAsVisited(position);
-         }
-
-         private boolean currentStateIsVisited() {
-            return isStateVisited(position, getFacing());
-         }
-
-         private void markCurrentStateAsVisited() {
-           markStateAsVisited(position, getFacing());
-         }
-     }
-
 
 
 }
