@@ -120,7 +120,7 @@ public class Day16 {
             return numVisited;
         }
 
-        private void addBeamsFromSplitter(ContraptionComponent splitter) {
+        private void addBeamsFromSplitter(Splitter splitter) {
             beamList.addAll(splitter.getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
             splitter.clearSplitBeams();
         }
@@ -180,9 +180,13 @@ public class Day16 {
     interface ContraptionComponent {
         void handleBeam(JavaRotatingMovingRobot beam);
 
-        List<JavaRotatingMovingRobot> getSplitBeams();
 
+    }
+
+    interface Splitter extends ContraptionComponent {
+        List<JavaRotatingMovingRobot> getSplitBeams();
         void clearSplitBeams();
+
     }
 
     static class MajorDiagonalMirror implements ContraptionComponent {
@@ -208,16 +212,6 @@ public class Day16 {
                     beam.setFacing(WEST);
                     break;
             }
-        }
-
-        @Override
-        public List<JavaRotatingMovingRobot> getSplitBeams() {
-            return new ArrayList<>();
-        }
-
-        @Override
-        public void clearSplitBeams() {
-
         }
     }
 
@@ -246,16 +240,6 @@ public class Day16 {
                     break;
             }
         }
-
-        @Override
-        public List<JavaRotatingMovingRobot> getSplitBeams() {
-            return new ArrayList<>();
-        }
-
-        @Override
-        public void clearSplitBeams() {
-
-        }
     }
 
     static class EmptySpace implements ContraptionComponent {
@@ -269,18 +253,9 @@ public class Day16 {
             // do nothing;
         }
 
-        @Override
-        public List<JavaRotatingMovingRobot> getSplitBeams() {
-            return new ArrayList<>();
-        }
-
-        @Override
-        public void clearSplitBeams() {
-
-        }
     }
 
-    static class VerticalSplitter implements ContraptionComponent {
+    static class VerticalSplitter implements Splitter {
         List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
 
         @Getter
@@ -307,7 +282,7 @@ public class Day16 {
         }
     }
 
-    static class HorizontalSplitter implements ContraptionComponent {
+    static class HorizontalSplitter implements Splitter {
         List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
 
         @Getter
