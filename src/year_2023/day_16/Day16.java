@@ -46,7 +46,7 @@ public class Day16 {
                         lightContraption[x][y] = VerticalSplitter.getVERTICAL_SPLITTER();
                         break;
                     case '-':
-                        lightContraption[x][y] = new HorizontalSplitter();
+                        lightContraption[x][y] = HorizontalSplitter.getHORIZONTAL_SPLITTER();
                         break;
                     case '.':
                         lightContraption[x][y] = EmptySpace.getEMPTY_SPACE();
@@ -112,19 +112,22 @@ public class Day16 {
 
         public int count_energized_tiles() {
             while (!beamList.isEmpty()) {
-                beamList.remove(0).track();
+                while (!beamList.isEmpty()) {
+                    beamList.remove(0).track();
+                }
                 addBeamsFromSplitters();
             }
             return numVisited;
         }
 
+        private void addBeamsFromSplitter(ContraptionComponent splitter) {
+            beamList.addAll(splitter.getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
+            splitter.clearSplitBeams();
+        }
+
         private void addBeamsFromSplitters() {
-            for (int x = 0; x < N; x++) {
-                for (int y = 0; y < M; y++) {
-                    beamList.addAll(lightContraption[x][y].getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
-                    lightContraption[x][y].clearSplitBeams();
-                }
-            }
+           addBeamsFromSplitter(HorizontalSplitter.getHORIZONTAL_SPLITTER());
+           addBeamsFromSplitter(VerticalSplitter.getVERTICAL_SPLITTER());
         }
 
         @AllArgsConstructor
