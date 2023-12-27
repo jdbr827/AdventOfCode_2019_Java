@@ -34,4 +34,5 @@ public enum CardinalDirection {
     public char getShortName() {
         return shortName;
     }
+
 }
