@@ -33,6 +33,7 @@ public class Day16 {
     }
 
 
+
     public Day16(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
         Character[][] matrix = scanner.scanAsChar2DArray();
@@ -75,13 +76,26 @@ public class Day16 {
     public int count_energized_tiles() {
         while(!beamList.isEmpty()) {
             beamList.remove(0).track();
+            addBeamsFromSplitters();
         }
         return numVisited;
+    }
+
+    private void addBeamsFromSplitters() {
+        for (int x=0; x<N; x++) {
+            for (int y=0; y<M; y++) {
+                beamList.addAll(lightContraption[x][y].getSplitBeams());
+                lightContraption[x][y].clearSplitBeams();
+            }
+        }
     }
 
 
     interface ContraptionComponent {
         void handleBeam(Beam beam);
+        List<Beam> getSplitBeams();
+
+        void clearSplitBeams();
     }
 
     class MajorDiagonalMirror implements ContraptionComponent {
@@ -102,6 +116,16 @@ public class Day16 {
                     beam.setFacing(WEST);
                     break;
             }
+        }
+
+        @Override
+        public List<Beam> getSplitBeams() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void clearSplitBeams() {
+
         }
     }
 
@@ -124,6 +148,16 @@ public class Day16 {
                     break;
             }
         }
+
+        @Override
+        public List<Beam> getSplitBeams() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void clearSplitBeams() {
+
+        }
     }
 
     class EmptySpace implements ContraptionComponent {
@@ -131,9 +165,20 @@ public class Day16 {
         public void handleBeam(Beam beam) {
             // do nothing;
         }
+
+        @Override
+        public List<Beam> getSplitBeams() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void clearSplitBeams() {
+
+        }
     }
 
     class VerticalSplitter implements ContraptionComponent {
+        List<Beam> splitterBeamList = new ArrayList<>();
 
         @Override
         public void handleBeam(Beam beam) {
@@ -141,20 +186,42 @@ public class Day16 {
                 beam.setFacing(NORTH);
                 Beam newBeam = new Beam(beam.getPosition(), SOUTH);
 
-                beamList.add(newBeam);
+                splitterBeamList.add(newBeam);
             }
+        }
+
+        @Override
+        public List<Beam> getSplitBeams() {
+            return splitterBeamList;
+        }
+
+        @Override
+        public void clearSplitBeams() {
+            splitterBeamList.clear();
         }
     }
 
     class HorizontalSplitter implements ContraptionComponent {
+        List<Beam> splitterBeamList = new ArrayList<>();
 
-         @Override
+        @Override
         public void handleBeam(Beam beam) {
             if (beam.getFacing() == NORTH || beam.getFacing() == SOUTH) {
                 beam.setFacing(EAST);
                 Beam newBeam = new Beam(beam.getPosition(), WEST);
-                beamList.add(newBeam);
+                splitterBeamList.add(newBeam);
             }
+        }
+
+        @Override
+        public List<Beam> getSplitBeams() {
+            return splitterBeamList;
+        }
+
+        @Override
+        public void clearSplitBeams() {
+            splitterBeamList.clear();
+
         }
     }
 
