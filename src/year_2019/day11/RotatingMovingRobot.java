@@ -4,6 +4,7 @@ package year_2019.day11;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.units.qual.C;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
@@ -12,13 +13,15 @@ import year_2019.day15.model.CardinalDirection;
  * - Rotate Clockwise or Counterclockwise 90 degrees at a time
  * - Move Forward in whatever direction they are facing.
  */
+@AllArgsConstructor
 public class RotatingMovingRobot {
 
-    protected CartesianPoint position = new CartesianPoint(0, 0);
+    protected CartesianPoint position;
     @Getter @Setter protected CardinalDirection facing;
 
+
     protected RotatingMovingRobot(CardinalDirection initiallyFacing) {
-        facing = initiallyFacing;
+        this(new CartesianPoint(0, 0), initiallyFacing);
     }
 
     public CartesianPoint getPosition() {
