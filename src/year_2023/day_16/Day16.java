@@ -17,6 +17,21 @@ public class Day16 {
     boolean[][] visitedPosition;
     int numVisited = 0;
 
+    private void markPositionAsVisited(CartesianPoint position) {
+          if (!visitedPosition[position.x][position.y]) {
+                 numVisited++;
+                 visitedPosition[position.x][position.y] = true;
+             }
+    }
+
+    private void markStateAsVisited(CartesianPoint position, CardinalDirection facing) {
+         visitedState[position.x][position.y][facing.ordinal()] = true;
+    }
+
+    private boolean isStateVisited(CartesianPoint position, CardinalDirection facing) {
+        return visitedState[position.x][position.y][facing.ordinal()];
+    }
+
 
     public Day16(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
@@ -164,18 +179,15 @@ public class Day16 {
          }
 
          private void markCurrentPositionAsVisited() {
-             if (!visitedPosition[position.x][position.y]) {
-                 numVisited++;
-                 visitedPosition[position.x][position.y] = true;
-             }
+           markPositionAsVisited(position);
          }
 
          private boolean currentStateIsVisited() {
-            return visitedState[position.x][position.y][getFacing().ordinal()];
+            return isStateVisited(position, getFacing());
          }
 
          private void markCurrentStateAsVisited() {
-            visitedState[position.x][position.y][getFacing().ordinal()] = true;
+           markStateAsVisited(position, getFacing());
          }
      }
 
