@@ -1,7 +1,6 @@
 package year_2023.day_16;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import utils.AOCScanner;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
@@ -15,46 +14,15 @@ public class Day16 {
 
     int N;
     int M;
-
-    final ContraptionComponent[][] lightContraption;
-
-    private ContraptionComponent getLightContraptionAtLocation(CartesianPoint position) {
-        return lightContraption[position.x][position.y];
-    }
+    LightContraption lightContraption;
 
 
     public Day16(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
         Character[][] matrix = scanner.scanAsChar2DArray();
-        N = matrix.length;
-        M = matrix[0].length;
-        lightContraption = constructLightContraption(matrix);
-    }
-
-    private ContraptionComponent[][] constructLightContraption(Character[][] matrix) {
-        ContraptionComponent[][] lightContraption = new ContraptionComponent[N][M];
-        for (int x = 0; x < N; x++) {
-            for (int y = 0; y < M; y++) {
-                switch (matrix[x][y]) {
-                    case '\\':
-                        lightContraption[x][y] = MajorDiagonalMirror.getMAJOR_DIAGONAL_MIRROR();
-                        break;
-                    case '/':
-                        lightContraption[x][y] = MinorDiagonalMirror.getMINOR_DIAGONAL_MIRROR();
-                        break;
-                    case '|':
-                        lightContraption[x][y] = VerticalSplitter.getVERTICAL_SPLITTER();
-                        break;
-                    case '-':
-                        lightContraption[x][y] = HorizontalSplitter.getHORIZONTAL_SPLITTER();
-                        break;
-                    case '.':
-                        lightContraption[x][y] = EmptySpace.getEMPTY_SPACE();
-                        break;
-                }
-            }
-        }
-        return lightContraption;
+        this.N = matrix.length;
+        this.M = matrix[0].length;
+        lightContraption = new LightContraption(matrix);
     }
 
     public int runEnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
@@ -66,20 +34,20 @@ public class Day16 {
     }
 
     public int maximizeEnergyOutput() {
-       List<JavaRotatingMovingRobot> candidateRobots = new ArrayList<>();
+        List<JavaRotatingMovingRobot> candidateRobots = new ArrayList<>();
 
-       for (int y=0; y<M; y++) {
-           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(0, y), SOUTH));
-           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(N-1, y), NORTH));
-       }
+        for (int y = 0; y < M; y++) {
+            candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(0, y), SOUTH));
+            candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(N - 1, y), NORTH));
+        }
 
-       for (int x=0; x<N; x++) {
-           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, 0), EAST));
-           candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, M-1), WEST));
-       }
+        for (int x = 0; x < N; x++) {
+            candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, 0), EAST));
+            candidateRobots.add(new JavaRotatingMovingRobot(new CartesianPoint(x, M - 1), WEST));
+        }
 
-       System.out.println(candidateRobots.size());
-       return candidateRobots.stream().map(this::runEnergyTest).max(Comparator.naturalOrder()).get();
+        return candidateRobots.stream().map(this::runEnergyTest).max(Comparator.naturalOrder())
+                .orElseThrow(() -> new Error("No Candidate Robots were made."));
 
     }
 
@@ -90,7 +58,7 @@ public class Day16 {
         int numVisited = 0;
 
         EnergyTest(CartesianPoint initialPosition, CardinalDirection initiallyFacing) {
-            beamList.add(new Beam(initialPosition, initiallyFacing));
+            beamList.add(new Beam(new JavaRotatingMovingRobot(initialPosition, initiallyFacing)));
             visitedState = new boolean[N][M][4];
             visitedPosition = new boolean[N][M];
         }
@@ -120,23 +88,19 @@ public class Day16 {
             return numVisited;
         }
 
+        private void addBeamsFromSplitters() {
+            addBeamsFromSplitter(HorizontalSplitter.getHORIZONTAL_SPLITTER());
+            addBeamsFromSplitter(VerticalSplitter.getVERTICAL_SPLITTER());
+        }
+
         private void addBeamsFromSplitter(Splitter splitter) {
             beamList.addAll(splitter.getSplitBeams().stream().map(Beam::new).collect(Collectors.toList()));
             splitter.clearSplitBeams();
         }
 
-        private void addBeamsFromSplitters() {
-           addBeamsFromSplitter(HorizontalSplitter.getHORIZONTAL_SPLITTER());
-           addBeamsFromSplitter(VerticalSplitter.getVERTICAL_SPLITTER());
-        }
-
         @AllArgsConstructor
         class Beam {
             JavaRotatingMovingRobot robot;
-
-            Beam(CartesianPoint position, CardinalDirection initiallyFacing) {
-                robot = new JavaRotatingMovingRobot(position, initiallyFacing);
-            }
 
 
             public void track() {
@@ -157,7 +121,7 @@ public class Day16 {
             }
 
             private ContraptionComponent getLightContraptionAtCurrentLocation() {
-                return getLightContraptionAtLocation(robot.getPosition());
+                return lightContraption.getLightContraptionAtLocation(robot.getPosition());
             }
 
             private void markCurrentPositionAsVisited() {
@@ -172,144 +136,10 @@ public class Day16 {
                 markStateAsVisited(robot.getPosition(), robot.getFacing());
             }
         }
-
     }
-
-
-
-    interface ContraptionComponent {
-        void handleBeam(JavaRotatingMovingRobot beam);
-
-
-    }
-
-    interface Splitter extends ContraptionComponent {
-        List<JavaRotatingMovingRobot> getSplitBeams();
-        void clearSplitBeams();
-
-    }
-
-    static class MajorDiagonalMirror implements ContraptionComponent {
-
-        @Getter private static final MajorDiagonalMirror MAJOR_DIAGONAL_MIRROR = new MajorDiagonalMirror();
-        private MajorDiagonalMirror() {};
-
-
-
-        @Override
-        public void handleBeam(JavaRotatingMovingRobot beam) {
-            switch (beam.getFacing()) {
-                case EAST:
-                    beam.setFacing(SOUTH);
-                    break;
-                case SOUTH:
-                    beam.setFacing(EAST);
-                    break;
-                case WEST:
-                    beam.setFacing(NORTH);
-                    break;
-                case NORTH:
-                    beam.setFacing(WEST);
-                    break;
-            }
-        }
-    }
-
-    static class MinorDiagonalMirror implements ContraptionComponent {
-
-        @Getter
-        private static final MinorDiagonalMirror MINOR_DIAGONAL_MIRROR = new MinorDiagonalMirror();
-
-        private MinorDiagonalMirror() {};
-
-
-        @Override
-        public void handleBeam(JavaRotatingMovingRobot beam) {
-            switch (beam.getFacing()) {
-                case EAST:
-                    beam.setFacing(NORTH);
-                    break;
-                case NORTH:
-                    beam.setFacing(EAST);
-                    break;
-                case WEST:
-                    beam.setFacing(SOUTH);
-                    break;
-                case SOUTH:
-                    beam.setFacing(WEST);
-                    break;
-            }
-        }
-    }
-
-    static class EmptySpace implements ContraptionComponent {
-
-        @Getter
-        private static final EmptySpace EMPTY_SPACE = new EmptySpace();
-        private EmptySpace() {}
-
-        @Override
-        public void handleBeam(JavaRotatingMovingRobot beam) {
-            // do nothing;
-        }
-
-    }
-
-    static class VerticalSplitter implements Splitter {
-        List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
-
-        @Getter
-        private static final VerticalSplitter VERTICAL_SPLITTER = new VerticalSplitter();
-        private VerticalSplitter(){}
-
-        @Override
-        public void handleBeam(JavaRotatingMovingRobot beam) {
-            if (beam.getFacing() == EAST || beam.getFacing() == WEST) {
-                beam.setFacing(NORTH);
-                JavaRotatingMovingRobot newBeam = new JavaRotatingMovingRobot(beam.getPosition(), SOUTH);
-                splitterBeamList.add(newBeam);
-            }
-        }
-
-        @Override
-        public List<JavaRotatingMovingRobot> getSplitBeams() {
-            return splitterBeamList;
-        }
-
-        @Override
-        public void clearSplitBeams() {
-            splitterBeamList.clear();
-        }
-    }
-
-    static class HorizontalSplitter implements Splitter {
-        List<JavaRotatingMovingRobot> splitterBeamList = new ArrayList<>();
-
-        @Getter
-        private static final HorizontalSplitter HORIZONTAL_SPLITTER = new HorizontalSplitter();
-        private HorizontalSplitter(){};
-
-        @Override
-        public void handleBeam(JavaRotatingMovingRobot beam) {
-            if (beam.getFacing() == NORTH || beam.getFacing() == SOUTH) {
-                beam.setFacing(EAST);
-                JavaRotatingMovingRobot newBeam = new JavaRotatingMovingRobot(beam.getPosition(), WEST);
-                splitterBeamList.add(newBeam);
-            }
-        }
-
-        @Override
-        public List<JavaRotatingMovingRobot> getSplitBeams() {
-            return splitterBeamList;
-        }
-
-        @Override
-        public void clearSplitBeams() {
-            splitterBeamList.clear();
-
-        }
-    }
-
-
 }
+
+
+
+
 

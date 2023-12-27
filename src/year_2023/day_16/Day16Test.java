@@ -2,7 +2,6 @@ package year_2023.day_16;
 
 import org.junit.jupiter.api.Test;
 import viewModelUtil.CartesianPoint;
-import year_2019.day15.model.CardinalDirection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static year_2019.day15.model.CardinalDirection.EAST;
@@ -16,7 +15,7 @@ public class Day16Test {
 
     @Test
     public void test_part1() {
-        //assertEquals(46, new Day16(SMALL_INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
+        assertEquals(46, new Day16(SMALL_INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
         assertEquals(6816, new Day16(INPUT).runEnergyTest(new CartesianPoint(0, 0), EAST));
     }
 
