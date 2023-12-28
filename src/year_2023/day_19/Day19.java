@@ -1,7 +1,6 @@
 package year_2023.day_19;
 
 import lombok.AllArgsConstructor;
-import org.junit.jupiter.api.Test;
 import utils.AOCScanner;
 
 import java.util.*;
@@ -10,8 +9,10 @@ import java.util.regex.Pattern;
 
 public class Day19 {
     Map<String, Workflow> workflowMap = new HashMap<>();
+    Collection<MachinePart> machineParts;
 
     private static final Pattern rulePattern = Pattern.compile("([xmsa])([><])([\\d]+):([\\w]+)");
+    private static final Pattern machinePattern = Pattern.compile("\\{x=([\\d]+),m=([\\d]+),a=([\\d]+),s=([\\d]+)}");
 
     public Day19(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
@@ -23,7 +24,7 @@ public class Day19 {
             String[] splitRules = splitLine[1].split(",");
             List<Rule> rules = new ArrayList<>();
             for (int i=0; i<splitRules.length - 1; i++) {
-                Matcher m = rulePattern.matcher(line);
+                Matcher m = rulePattern.matcher(splitRules[i]);
                 if (m.find()) {
                     String fieldName = m.group(1);
                     boolean greaterThan = m.group(2).equals(">");
@@ -33,17 +34,30 @@ public class Day19 {
                     rules.add(rule);
                 }
             }
-            String defaultAction = splitRules[splitRules.length - 1];
+            String defaultAction = splitRules[splitRules.length - 1].substring(0, splitRules[splitRules.length-1].length() - 1);
 
             Workflow workflow = new Workflow(rules, defaultAction);
 
             workflowMap.put(workflowName, workflow);
         }
 
+        machineParts = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            line = scanner.nextLine();
+            Matcher m = machinePattern.matcher(line);
+                if (m.find()) {
+                    machineParts.add(new MachinePart(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))));
+                }
+
+        }
+
     }
 
     public int sumRatingNumbersOfAcceptedMachineParts() {
-        return 0;
+        return machineParts.stream()
+                .filter(MachinePart::check)
+                .map(MachinePart::getRatingNumber)
+                .reduce(0, Math::addExact);
     }
 
 
@@ -51,8 +65,8 @@ public class Day19 {
     class MachinePart {
         int x;
         int m;
-        int s;
         int a;
+        int s;
 
         int getField(String c) {
             switch (c) {
@@ -60,10 +74,10 @@ public class Day19 {
                     return x;
                 case "m":
                     return m;
-                case "s":
-                    return s;
                 case "a":
                     return a;
+                case "s":
+                    return s;
             }
             return 0; // Should never get here
         }
@@ -73,8 +87,11 @@ public class Day19 {
             while (!(workflow.equals("R") || workflow.equals("A"))) {
                 workflow = workflowMap.get(workflow).applyTo(this);
             }
-
             return workflow.equals("A");
+        }
+
+        public int getRatingNumber() {
+            return x + m + a + s;
         }
     }
 
@@ -106,6 +123,10 @@ public class Day19 {
         String applyTo(MachinePart machinePart) {
             if (greaterThan) {
                 if (machinePart.getField(fieldName) > testNum) {
+                    return action;
+                }
+            } else {
+                if (machinePart.getField(fieldName) < testNum) {
                     return action;
                 }
             }
