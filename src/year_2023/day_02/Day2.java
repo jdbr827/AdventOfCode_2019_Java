@@ -50,9 +50,9 @@ class Day2GameInfo {
 
     Day2BagPull minimumPossibleSetup() {
         return new Day2BagPull(
-                bagPulls.stream().map(Day2BagPull::getRed).max(Comparator.naturalOrder()).get(),
-                bagPulls.stream().map(Day2BagPull::getGreen).max(Comparator.naturalOrder()).get(),
-                bagPulls.stream().map(Day2BagPull::getBlue).max(Comparator.naturalOrder()).get()
+                bagPulls.stream().map(Day2BagPull::getRed).max(Comparator.naturalOrder()).orElseThrow(() -> new Error("No bag pulls")),
+                bagPulls.stream().map(Day2BagPull::getGreen).max(Comparator.naturalOrder()).orElseThrow(() -> new Error("No bag pulls")),
+                bagPulls.stream().map(Day2BagPull::getBlue).max(Comparator.naturalOrder()).orElseThrow(() -> new Error("No bag pulls"))
         );
     }
 
