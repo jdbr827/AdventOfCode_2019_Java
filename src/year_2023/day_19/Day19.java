@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import utils.AOCScanner;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +87,7 @@ public class Day19 {
         boolean check() {
             String workflow = "in";
             while (!(workflow.equals("R") || workflow.equals("A"))) {
-                workflow = workflowMap.get(workflow).applyTo(this);
+                workflow = workflowMap.get(workflow).apply(this);
             }
             return workflow.equals("A");
         }
@@ -96,11 +98,11 @@ public class Day19 {
     }
 
     @AllArgsConstructor
-    class Workflow {
+    class Workflow implements Function<MachinePart, String> {
         List<Rule> rules;
         String defaultAction;
 
-        String applyTo(MachinePart machinePart) {
+        public String apply(MachinePart machinePart) {
             String action;
             for (Rule rule : rules) {
                 if ((action = rule.applyTo(machinePart)) != null) {
@@ -119,18 +121,23 @@ public class Day19 {
         int testNum;
         String action;
 
+        Predicate<MachinePart> condition() {
+            return greaterThan
+                    ? machinePart -> machinePart.getField(fieldName) > testNum
+                    : machinePart -> machinePart.getField(fieldName) < testNum;
 
+        }
+
+
+        /**
+         * If the condition applies to the machine part, returns the next workflow to send to, otherwise null.
+         * @param machinePart the machine part under test
+         * @return the next workflow to send the machine part to, if applicable, otherwise null.
+         */
         String applyTo(MachinePart machinePart) {
-            if (greaterThan) {
-                if (machinePart.getField(fieldName) > testNum) {
-                    return action;
-                }
-            } else {
-                if (machinePart.getField(fieldName) < testNum) {
-                    return action;
-                }
-            }
-            return null;
+            return condition().test(machinePart)
+                    ? action
+                    : null;
         }
     }
 }
