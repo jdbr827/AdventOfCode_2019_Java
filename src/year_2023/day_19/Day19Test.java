@@ -18,8 +18,9 @@ public class Day19Test {
 
     @Test
     public void test_part2() {
+
+       // System.out.println(new Day19.MachinePartSpace(0, 100, 0, 100, 0, 100, 0, 100, "in").applyRule(new Day19.Rule()))
         assertEquals(167409079868000L, new Day19(SMALL_INPUT).countDistinctAcceptedMachineParts());
-        System.out.println(new Day19(INPUT).countDistinctAcceptedMachineParts());
-        //assertEquals(449531, new Day19(INPUT).countDistinctAcceptedMachineParts());
+        assertEquals(122756210763577L, new Day19(INPUT).countDistinctAcceptedMachineParts());
     }
 }

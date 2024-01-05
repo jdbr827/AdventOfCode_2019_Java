@@ -1,6 +1,8 @@
 package year_2023.day_19;
 
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import utils.AOCScanner;
 
 import java.util.*;
@@ -12,6 +14,9 @@ import java.util.regex.Pattern;
 public class Day19 {
     Map<String, Workflow> workflowMap = new HashMap<>();
     Collection<MachinePart> machineParts;
+
+    // Part 2 Only;
+    Queue<MachinePartSpace> machinePartSpaces = new LinkedList<>();
 
     private static final Pattern rulePattern = Pattern.compile("([xmsa])([><])([\\d]+):([\\w]+)");
     private static final Pattern machinePattern = Pattern.compile("\\{x=([\\d]+),m=([\\d]+),a=([\\d]+),s=([\\d]+)}");
@@ -63,16 +68,43 @@ public class Day19 {
     }
 
     public long countDistinctAcceptedMachineParts() {
-        return 0;
+        MachinePartSpace mps = new MachinePartSpace(1, 4000, 1, 4000, 1, 4000, 1, 4000, "in");
+        machinePartSpaces.add(mps);
+        long total = 0;
+        while (!machinePartSpaces.isEmpty()) {
+            MachinePartSpace thisMps = machinePartSpaces.remove();
+            if (!thisMps.currentWorkflow.equals("R")) {
+                if (thisMps.currentWorkflow.equals("A")) {
+                    total += thisMps.getArea();
+                } else {
+                    Workflow workflow = workflowMap.get(thisMps.currentWorkflow);
+
+                    boolean flag = false;
+                    for (Rule rule : workflow.rules) {
+                        if (!thisMps.applyRule(rule)) {
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        thisMps.currentWorkflow = workflow.defaultAction;
+                        machinePartSpaces.add(thisMps);
+                    }
+                }
+            }
+        }
+        return total;
+
+
     }
 
 
     @AllArgsConstructor
     class MachinePart {
-        int x;
-        int m;
-        int a;
-        int s;
+        final int x;
+        final int m;
+        final int a;
+        final int s;
 
         int getField(String c) {
             switch (c) {
@@ -103,8 +135,8 @@ public class Day19 {
 
     @AllArgsConstructor
     class Workflow implements Function<MachinePart, String> {
-        List<Rule> rules;
-        String defaultAction;
+        final List<Rule> rules;
+        final String defaultAction;
 
         public String apply(MachinePart machinePart) {
             String action;
@@ -120,10 +152,10 @@ public class Day19 {
 
     @AllArgsConstructor
     class Rule {
-        String fieldName;
-        boolean greaterThan;
-        int testNum;
-        String action;
+        final String fieldName;
+        final boolean greaterThan;
+        final int testNum;
+        final String action;
 
         Predicate<MachinePart> condition() {
             return greaterThan
@@ -142,6 +174,143 @@ public class Day19 {
             return condition().test(machinePart)
                     ? action
                     : null;
+        }
+    }
+
+    @AllArgsConstructor
+    @Data
+    class MachinePartSpace {
+        int xMin;
+        int xMax;
+        int mMin;
+        int mMax;
+        int aMin;
+        int aMax;
+        int sMin;
+        int sMax;
+        String currentWorkflow;
+
+        /**
+         * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
+         * to to the queue.
+         * If a subset of the space is false to the rule, edits this to be that subset
+         * @param rule the rule being applies
+         * @return whether or not we need to keep processing this MPS
+         */
+        boolean applyRule(Rule rule) {
+            if (rule.greaterThan) {
+                if (getMin(rule.fieldName) > rule.testNum) { // already true
+                    MachinePartSpace newMps = this.copy();
+                    newMps.setCurrentWorkflow(rule.action);
+                    machinePartSpaces.add(newMps);
+                    return false;
+                } else if (getMax(rule.fieldName) > rule.testNum) { // need to split
+                    MachinePartSpace newMpsTrue = this.copy();
+                    newMpsTrue.setMin(rule.fieldName, rule.testNum + 1);
+                    newMpsTrue.setCurrentWorkflow(rule.action);
+                    machinePartSpaces.add(newMpsTrue);
+
+                    this.setMax(rule.fieldName, rule.testNum);
+                    return true;
+                }
+                // else already false, dead end do nothing
+                return false;
+            } else {
+                if (getMax(rule.fieldName) < rule.testNum) { // already true
+                    MachinePartSpace newMps = this.copy();
+                    newMps.setCurrentWorkflow(rule.action);
+                    machinePartSpaces.add(newMps);
+                    return false;
+                } else if (getMin(rule.fieldName) < rule.testNum) { // need to split
+                    MachinePartSpace newMpsTrue = this.copy();
+                    newMpsTrue.setMax(rule.fieldName, rule.testNum - 1);
+                    newMpsTrue.setCurrentWorkflow(rule.action);
+                    machinePartSpaces.add(newMpsTrue);
+
+
+                    this.setMin(rule.fieldName, rule.testNum);
+                    return true;
+                }
+                // else already false, dead end do nothing
+                return false;
+            }
+        }
+
+        private void setMax(String fieldName, int i) {
+            switch (fieldName) {
+                case "x":
+                    setXMax(i);
+                    break;
+                case "m":
+                    setMMax(i);
+                    break;
+                case "a":
+                    setAMax(i);
+                    break;
+                case "s":
+                    setSMax(i);
+                    break;
+            }
+            // Should never get here
+        }
+
+        private void setMin(String fieldName, int i) {
+             switch (fieldName) {
+                case "x":
+                    setXMin(i);
+                    break;
+                case "m":
+                    setMMin(i);
+                    break;
+                case "a":
+                    setAMin(i);
+                    break;
+                case "s":
+                    setSMin(i);
+                    break;
+            }
+            // Should never get here
+        }
+
+        private int getMax(String fieldName) {
+            switch (fieldName) {
+                case "x":
+                    return xMax;
+                case "m":
+                    return mMax;
+                case "a":
+                    return aMax;
+                case "s":
+                    return sMax;
+            }
+            return 0; // Should never get here
+        }
+
+        private MachinePartSpace copy() {
+            return new MachinePartSpace(xMin, xMax, mMin, mMax, aMin, aMax, sMin, sMax, currentWorkflow);
+        }
+
+        private int getMin(String fieldName) {
+            switch (fieldName) {
+                case "x":
+                    return xMin;
+                case "m":
+                    return mMin;
+                case "a":
+                    return aMin;
+                case "s":
+                    return sMin;
+            }
+            return 0; // Should never get here
+        }
+
+
+        public long getArea() {
+            long xDim = (long) (xMax - xMin + 1);
+            long mDim = (long) (mMax- mMin + 1);
+            long aDim = (long) (aMax - aMin + 1);
+            long sDim = (long) (sMax - sMin + 1);
+            return Math.multiplyExact(Math.multiplyExact(xDim, mDim), Math.multiplyExact(aDim, sDim));
         }
     }
 }
