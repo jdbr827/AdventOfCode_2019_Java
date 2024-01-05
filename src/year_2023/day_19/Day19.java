@@ -79,14 +79,13 @@ public class Day19 {
             } else if (!thisMps.currentWorkflow.equals("R")) {
                 Workflow workflow = workflowMap.get(thisMps.currentWorkflow);
 
-                boolean flag = false;
                 for (Rule rule : workflow.rules) {
-                    if (!rule.applyRule(thisMps)) {
-                        flag = true;
+                    thisMps = rule.applyRule(thisMps);
+                    if (thisMps == null) {
                         break;
                     }
                 }
-                if (!flag) {
+                if (thisMps != null) {
                     thisMps.currentWorkflow = workflow.defaultAction;
                     machinePartSpaces.add(thisMps);
                 }
@@ -190,43 +189,46 @@ public class Day19 {
          * If a non-empty subset of the space disobeys the rule, edits the space to become that disobeying subset (keeping the same workflow)
          * If the entire space disobeys the rule, note that
          * @param machinePartSpace the space which we are splitting
-         * @return whether the entire MachinePartSpace obeyed the rule (meaning we can stop processing it)
+         * @return the subset of the MachinePartSpace that disobeys the rule.
          */
-        boolean applyRule(MachinePartSpace machinePartSpace) {
+        MachinePartSpace applyRule(MachinePartSpace machinePartSpace) {
             if (greaterThan) {
                 if (machinePartSpace.getMin(fieldName) > testNum) { // already true
                     MachinePartSpace newMps = machinePartSpace.copy();
                     newMps.setCurrentWorkflow(action);
                     machinePartSpaces.add(newMps);
-                    return false;
+                    return null;
                 } else if (machinePartSpace.getMax(fieldName) > testNum) { // need to split
                     MachinePartSpace newMpsTrue = machinePartSpace.copy();
                     newMpsTrue.setMin(fieldName, testNum + 1);
                     newMpsTrue.setCurrentWorkflow(action);
                     machinePartSpaces.add(newMpsTrue);
 
-                    machinePartSpace.setMax(fieldName, testNum);
-                    return true;
+                    MachinePartSpace newMpsFalse = machinePartSpace.copy();
+                    newMpsFalse.setMax(fieldName, testNum);
+                    return newMpsFalse;
                 }
                 // else already false, dead end do nothing
-                return false;
+                return machinePartSpace;
             } else {
                 if (machinePartSpace.getMax(fieldName) < testNum) { // already true
                     MachinePartSpace newMps = machinePartSpace.copy();
                     newMps.setCurrentWorkflow(action);
                     machinePartSpaces.add(newMps);
-                    return false;
+                    return null;
                 } else if (machinePartSpace.getMin(fieldName) < testNum) { // need to split
                     MachinePartSpace newMpsTrue = machinePartSpace.copy();
                     newMpsTrue.setMax(fieldName, testNum - 1);
                     newMpsTrue.setCurrentWorkflow(action);
                     machinePartSpaces.add(newMpsTrue);
 
-                    machinePartSpace.setMin(fieldName, testNum);
-                    return true;
+
+                    MachinePartSpace newMpsFalse = machinePartSpace.copy();
+                    newMpsFalse.setMin(fieldName, testNum);
+                    return newMpsFalse;
                 }
                 // else already false, dead end do nothing
-                return true;
+                return machinePartSpace;
             }
         }
     }
