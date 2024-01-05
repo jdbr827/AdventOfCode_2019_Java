@@ -62,6 +62,10 @@ public class Day19 {
                 .reduce(0, Math::addExact);
     }
 
+    public long countDistinctAcceptedMachineParts() {
+        return 0;
+    }
+
 
     @AllArgsConstructor
     class MachinePart {

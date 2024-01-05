@@ -13,6 +13,13 @@ public class Day19Test {
     public void test_part1() {
         assertEquals(19114, new Day19(SMALL_INPUT).sumRatingNumbersOfAcceptedMachineParts());
         assertEquals(449531, new Day19(INPUT).sumRatingNumbersOfAcceptedMachineParts());
+    }
 
+
+    @Test
+    public void test_part2() {
+        assertEquals(167409079868000L, new Day19(SMALL_INPUT).countDistinctAcceptedMachineParts());
+        System.out.println(new Day19(INPUT).countDistinctAcceptedMachineParts());
+        //assertEquals(449531, new Day19(INPUT).countDistinctAcceptedMachineParts());
     }
 }
