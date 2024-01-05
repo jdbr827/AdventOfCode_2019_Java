@@ -25,6 +25,10 @@ public abstract class CommunicationModule {
 
     }
 
+    void addInputModule(String moduleName) {
+
+    }
+
     protected abstract void receiveMessage(Day20.Message message);
 
 }
@@ -50,20 +54,26 @@ class FlipFlopModule extends CommunicationModule {
 
 class ConjunctionModule extends CommunicationModule {
 
-    Map<String, Day20.Pulse> rememberedModules;
+    Map<String, Day20.Pulse> rememberedModules = new HashMap<>();
     public ConjunctionModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
         super(name, destinationModules, messageQueue);
-
-        rememberedModules = new HashMap<>();
-        Arrays.stream(destinationModules).forEach((module) -> {
-            rememberedModules.put(module, Day20.Pulse.LOW);
-        });
     }
+
+    @Override
+    void addInputModule(String moduleName) {
+        rememberedModules.put(moduleName, Day20.Pulse.LOW);
+    }
+
 
 
     @Override
     protected void receiveMessage(Day20.Message message) {
-
+        rememberedModules.put(message.sender, message.pulse);
+        if (rememberedModules.values().stream().allMatch(pulse -> pulse == Day20.Pulse.HIGH)) {
+            sendPulse(Day20.Pulse.LOW);
+        } else {
+            sendPulse(Day20.Pulse.HIGH);
+        }
     }
 }
 

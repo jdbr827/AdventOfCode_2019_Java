@@ -14,7 +14,7 @@ public class Day20Test {
     public void test_part1() {
         assertEquals(32000000, Day20Scanner.scan(SMALL_INPUT).getPulseProduct(1000));
         assertEquals(11687500, Day20Scanner.scan(MEDIUM_INPUT).getPulseProduct(1000));
-        System.out.println(Day20Scanner.scan(INPUT).getPulseProduct(1000));
+        assertEquals(788848550, Day20Scanner.scan(INPUT).getPulseProduct(1000));
     }
 
 }

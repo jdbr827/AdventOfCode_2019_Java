@@ -29,7 +29,9 @@ public class Day20 {
                 }
 
                 CommunicationModule destinationModule = moduleLibrary.get(message.destination);
-                destinationModule.receiveMessage(message);
+                if (destinationModule != null) {
+                    destinationModule.receiveMessage(message);
+                }
             }
             System.out.println("------END OF BUTTON PRESS--------");
         }
