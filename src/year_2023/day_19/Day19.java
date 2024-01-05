@@ -70,25 +70,16 @@ public class Day19 {
 
     public long countDistinctAcceptedMachineParts() {
         MachinePartSpace mps = new MachinePartSpace(1, 4000, 1, 4000, 1, 4000, 1, 4000, "in");
-        machinePartSpaces.add(mps);
         long total = 0;
+        machinePartSpaces.add(mps);
         while (!machinePartSpaces.isEmpty()) {
             MachinePartSpace thisMps = machinePartSpaces.remove();
+
             if (thisMps.currentWorkflow.equals("A")) {
                 total += thisMps.getArea();
             } else if (!thisMps.currentWorkflow.equals("R")) {
                 Workflow workflow = workflowMap.get(thisMps.currentWorkflow);
-
-                for (Rule rule : workflow.rules) {
-                    thisMps = rule.applyRule(thisMps);
-                    if (thisMps == null) {
-                        break;
-                    }
-                }
-                if (thisMps != null) {
-                    thisMps.currentWorkflow = workflow.defaultAction;
-                    machinePartSpaces.add(thisMps);
-                }
+                workflow.applyToMachinePartSpace(thisMps);
             }
         }
         return total;
@@ -145,6 +136,19 @@ public class Day19 {
             }
             return defaultAction;
         }
+
+        private void applyToMachinePartSpace(MachinePartSpace thisMps) {
+            for (Rule rule : rules) {
+                thisMps = rule.applyRule(thisMps);
+                if (thisMps == null) {
+                    break;
+                }
+            }
+            if (thisMps != null) {
+                thisMps.currentWorkflow = defaultAction;
+                machinePartSpaces.add(thisMps);
+            }
+        }
     }
 
 
@@ -186,17 +190,14 @@ public class Day19 {
         /**
          * Splits the MachinePartSpace according to the rule.
          * If a subset of the space is obeys the rule, queues a MachinePartSpace with that subset and the appropriate workflow.
-         * If a non-empty subset of the space disobeys the rule, edits the space to become that disobeying subset (keeping the same workflow)
-         * If the entire space disobeys the rule, note that
          * @param machinePartSpace the space which we are splitting
-         * @return the subset of the MachinePartSpace that disobeys the rule.
+         * @return the subset of the MachinePartSpace that disobeys the rule, or null if no such part exists.
          */
         MachinePartSpace applyRule(MachinePartSpace machinePartSpace) {
             if (greaterThan) {
                 if (machinePartSpace.getMin(fieldName) > testNum) { // already true
-                    MachinePartSpace newMps = machinePartSpace.copy();
-                    newMps.setCurrentWorkflow(action);
-                    machinePartSpaces.add(newMps);
+                    machinePartSpace.setCurrentWorkflow(action);
+                    machinePartSpaces.add(machinePartSpace);
                     return null;
                 } else if (machinePartSpace.getMax(fieldName) > testNum) { // need to split
                     MachinePartSpace newMpsTrue = machinePartSpace.copy();
@@ -204,17 +205,15 @@ public class Day19 {
                     newMpsTrue.setCurrentWorkflow(action);
                     machinePartSpaces.add(newMpsTrue);
 
-                    MachinePartSpace newMpsFalse = machinePartSpace.copy();
-                    newMpsFalse.setMax(fieldName, testNum);
-                    return newMpsFalse;
+                    machinePartSpace.setMax(fieldName, testNum);
+                    return machinePartSpace;
                 }
-                // else already false, dead end do nothing
+                // else already false
                 return machinePartSpace;
             } else {
                 if (machinePartSpace.getMax(fieldName) < testNum) { // already true
-                    MachinePartSpace newMps = machinePartSpace.copy();
-                    newMps.setCurrentWorkflow(action);
-                    machinePartSpaces.add(newMps);
+                    machinePartSpace.setCurrentWorkflow(action);
+                    machinePartSpaces.add(machinePartSpace);
                     return null;
                 } else if (machinePartSpace.getMin(fieldName) < testNum) { // need to split
                     MachinePartSpace newMpsTrue = machinePartSpace.copy();
@@ -227,7 +226,7 @@ public class Day19 {
                     newMpsFalse.setMin(fieldName, testNum);
                     return newMpsFalse;
                 }
-                // else already false, dead end do nothing
+                // else already false
                 return machinePartSpace;
             }
         }
