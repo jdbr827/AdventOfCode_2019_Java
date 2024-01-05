@@ -177,18 +177,35 @@ public class Day19 {
         }
     }
 
-    @AllArgsConstructor
     @Data
     class MachinePartSpace {
-        int xMin;
-        int xMax;
-        int mMin;
-        int mMax;
-        int aMin;
-        int aMax;
-        int sMin;
-        int sMax;
+        MachinePartSpaceDimension x;
+        MachinePartSpaceDimension m;
+        MachinePartSpaceDimension a;
+        MachinePartSpaceDimension s;
         String currentWorkflow;
+
+        public MachinePartSpace(int xMin, int xMax, int mMin, int mMax, int aMin, int aMax, int sMin, int sMax, String currentWorkflow) {
+            x = new MachinePartSpaceDimension(xMin, xMax);
+            m = new MachinePartSpaceDimension(mMin, mMax);
+            a = new MachinePartSpaceDimension(aMin, aMax);
+            s = new MachinePartSpaceDimension(sMin, sMax);
+            this.currentWorkflow = currentWorkflow;
+        }
+
+        public MachinePartSpaceDimension getField(String fieldName) {
+            switch(fieldName) {
+                case "x":
+                    return x;
+                case "m":
+                    return m;
+                case "a":
+                    return a;
+                case "s":
+                    return s;
+            }
+            throw new Error("Did not recognize field name \"" + fieldName + "\". fieldName should only be one of x, m, a, s");
+        }
 
         /**
          * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
@@ -237,80 +254,44 @@ public class Day19 {
         }
 
         private void setMax(String fieldName, int i) {
-            switch (fieldName) {
-                case "x":
-                    setXMax(i);
-                    break;
-                case "m":
-                    setMMax(i);
-                    break;
-                case "a":
-                    setAMax(i);
-                    break;
-                case "s":
-                    setSMax(i);
-                    break;
-            }
-            // Should never get here
+            getField(fieldName).setMaxInclusive(i);
         }
 
         private void setMin(String fieldName, int i) {
-             switch (fieldName) {
-                case "x":
-                    setXMin(i);
-                    break;
-                case "m":
-                    setMMin(i);
-                    break;
-                case "a":
-                    setAMin(i);
-                    break;
-                case "s":
-                    setSMin(i);
-                    break;
-            }
-            // Should never get here
+            getField(fieldName).setMinInclusive(i);
         }
 
         private int getMax(String fieldName) {
-            switch (fieldName) {
-                case "x":
-                    return xMax;
-                case "m":
-                    return mMax;
-                case "a":
-                    return aMax;
-                case "s":
-                    return sMax;
-            }
-            return 0; // Should never get here
+            return getField(fieldName).getMaxInclusive();
         }
 
         private MachinePartSpace copy() {
-            return new MachinePartSpace(xMin, xMax, mMin, mMax, aMin, aMax, sMin, sMax, currentWorkflow);
+            return new MachinePartSpace(x.minInclusive, x.maxInclusive, m.minInclusive, m.maxInclusive, a.minInclusive, a.maxInclusive, s.minInclusive, s.maxInclusive, currentWorkflow);
         }
 
         private int getMin(String fieldName) {
-            switch (fieldName) {
-                case "x":
-                    return xMin;
-                case "m":
-                    return mMin;
-                case "a":
-                    return aMin;
-                case "s":
-                    return sMin;
-            }
-            return 0; // Should never get here
+            return getField(fieldName).getMinInclusive();
         }
 
 
         public long getArea() {
-            long xDim = xMax - xMin + 1;
-            long mDim = mMax- mMin + 1;
-            long aDim = aMax - aMin + 1;
-            long sDim = sMax - sMin + 1;
+            long xDim = x.getLength();
+            long mDim = m.getLength();
+            long aDim = a.getLength();
+            long sDim = s.getLength();
             return Math.multiplyExact(Math.multiplyExact(xDim, mDim), Math.multiplyExact(aDim, sDim));
+        }
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    class MachinePartSpaceDimension {
+        int minInclusive;
+        int maxInclusive;
+
+        public long getLength() {
+            return maxInclusive - minInclusive + 1;
         }
     }
 }
