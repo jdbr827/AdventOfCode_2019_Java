@@ -20,7 +20,7 @@ class MachinePartSpace {
     }
 
 
-    private MachinePartSpaceDimension getField(String fieldName) {
+    MachinePartSpaceDimension getField(String fieldName) {
         switch (fieldName) {
             case "x":
                 return x;
@@ -67,6 +67,10 @@ class MachinePartSpace {
 
         long getLength() {
             return maxInclusive - minInclusive + 1;
+        }
+
+        boolean hasPositiveLength() {
+            return maxInclusive > minInclusive;
         }
     }
 }

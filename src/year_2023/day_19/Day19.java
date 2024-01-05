@@ -185,13 +185,12 @@ public class Day19 {
 
 
         /**
-         * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
-         * to the queue.
-         * If a subset of the space is false to the rule, edits this to be that subset
-         *
-         *
-         * @param machinePartSpace the space which we are applying this to
-         * @return whether we need to keep processing this MPS
+         * Splits the MachinePartSpace according to the rule.
+         * If a subset of the space is obeys the rule, queues a MachinePartSpace with that subset and the appropriate workflow.
+         * If a non-empty subset of the space disobeys the rule, edits the space to become that disobeying subset (keeping the same workflow)
+         * If the entire space disobeys the rule, note that
+         * @param machinePartSpace the space which we are splitting
+         * @return whether the entire MachinePartSpace obeyed the rule (meaning we can stop processing it)
          */
         boolean applyRule(MachinePartSpace machinePartSpace) {
             if (greaterThan) {
@@ -227,7 +226,7 @@ public class Day19 {
                     return true;
                 }
                 // else already false, dead end do nothing
-                return false;
+                return true;
             }
         }
     }
