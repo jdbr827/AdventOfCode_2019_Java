@@ -3,6 +3,9 @@ package year_2023.day_20;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 @AllArgsConstructor
@@ -22,19 +25,8 @@ public abstract class CommunicationModule {
 
     }
 
-    void receivePulse(Day20.Pulse pulse) {
-        if (pulse == Day20.Pulse.HIGH) {
-            receiveHighPulse();
-        } else {
-            receiveLowPulse();
-        }
+    protected abstract void receiveMessage(Day20.Message message);
 
-    }
-
-
-    protected abstract void receiveHighPulse();
-
-    protected abstract void receiveLowPulse();
 }
 
 class FlipFlopModule extends CommunicationModule {
@@ -47,31 +39,30 @@ class FlipFlopModule extends CommunicationModule {
 
 
     @Override
-    public void receiveHighPulse() {
-        // do nothing;
-    }
-
-    @Override
-    public void receiveLowPulse() {
-        isOn = !isOn;
-        sendPulse(isOn ? Day20.Pulse.HIGH : Day20.Pulse.LOW);
+    protected void receiveMessage(Day20.Message message) {
+        if (message.pulse == Day20.Pulse.LOW) {
+            isOn = !isOn;
+            sendPulse(isOn ? Day20.Pulse.HIGH : Day20.Pulse.LOW);
+        }
 
     }
 }
 
 class ConjunctionModule extends CommunicationModule {
 
+    Map<String, Day20.Pulse> rememberedModules;
     public ConjunctionModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
         super(name, destinationModules, messageQueue);
+
+        rememberedModules = new HashMap<>();
+        Arrays.stream(destinationModules).forEach((module) -> {
+            rememberedModules.put(module, Day20.Pulse.LOW);
+        });
     }
 
-    @Override
-    protected void receiveHighPulse() {
-
-    }
 
     @Override
-    protected void receiveLowPulse() {
+    protected void receiveMessage(Day20.Message message) {
 
     }
 }
@@ -83,16 +74,10 @@ class BroadcasterModule extends CommunicationModule {
         super(name, destinationModules, messageQueue);
     }
 
-    @Override
-    protected void receiveHighPulse() {
-        sendPulse(Day20.Pulse.HIGH);
-
-    }
 
     @Override
-    protected void receiveLowPulse() {
-        sendPulse(Day20.Pulse.LOW);
-
+    protected void receiveMessage(Day20.Message message) {
+        sendPulse(message.pulse);
     }
 }
 
@@ -106,13 +91,9 @@ class ButtonModule extends CommunicationModule {
         sendPulse(Day20.Pulse.LOW);
     }
 
-    @Override
-    protected void receiveHighPulse() {
-
-    }
 
     @Override
-    protected void receiveLowPulse() {
-
+    protected void receiveMessage(Day20.Message message) {
+        // never happens
     }
 }
