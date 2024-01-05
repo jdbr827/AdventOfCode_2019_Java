@@ -12,9 +12,9 @@ public class Day20Test {
 
     @Test
     public void test_part1() {
-        assertEquals(32000000, new Day20(SMALL_INPUT).getPulseProduct(1000));
-        assertEquals(11687500, new Day20(MEDIUM_INPUT).getPulseProduct(1000));
-        System.out.println(new Day20(INPUT).getPulseProduct(1000));
+        assertEquals(32000000, Day20Scanner.scan(SMALL_INPUT).getPulseProduct(1000));
+        assertEquals(11687500, Day20Scanner.scan(MEDIUM_INPUT).getPulseProduct(1000));
+        System.out.println(Day20Scanner.scan(INPUT).getPulseProduct(1000));
     }
 
 }
