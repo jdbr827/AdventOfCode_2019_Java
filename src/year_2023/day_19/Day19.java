@@ -82,7 +82,7 @@ public class Day19 {
 
                 boolean flag = false;
                 for (Rule rule : workflow.rules) {
-                    if (!thisMps.applyRule(rule)) {
+                    if (!rule.applyRule(thisMps)) {
                         flag = true;
                         break;
                     }
@@ -183,10 +183,58 @@ public class Day19 {
                     ? action
                     : null;
         }
+
+
+        /**
+         * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
+         * to the queue.
+         * If a subset of the space is false to the rule, edits this to be that subset
+         *
+         *
+         * @param machinePartSpace the space which we are applying this to
+         * @return whether we need to keep processing this MPS
+         */
+        boolean applyRule(MachinePartSpace machinePartSpace) {
+            if (greaterThan) {
+                if (machinePartSpace.getMin(fieldName) > testNum) { // already true
+                    MachinePartSpace newMps = machinePartSpace.copy();
+                    newMps.setCurrentWorkflow(action);
+                    machinePartSpaces.add(newMps);
+                    return false;
+                } else if (machinePartSpace.getMax(fieldName) > testNum) { // need to split
+                    MachinePartSpace newMpsTrue = machinePartSpace.copy();
+                    newMpsTrue.setMin(fieldName, testNum + 1);
+                    newMpsTrue.setCurrentWorkflow(action);
+                    machinePartSpaces.add(newMpsTrue);
+
+                    machinePartSpace.setMax(fieldName, testNum);
+                    return true;
+                }
+                // else already false, dead end do nothing
+                return false;
+            } else {
+                if (machinePartSpace.getMax(fieldName) < testNum) { // already true
+                    MachinePartSpace newMps = machinePartSpace.copy();
+                    newMps.setCurrentWorkflow(action);
+                    machinePartSpaces.add(newMps);
+                    return false;
+                } else if (machinePartSpace.getMin(fieldName) < testNum) { // need to split
+                    MachinePartSpace newMpsTrue = machinePartSpace.copy();
+                    newMpsTrue.setMax(fieldName, testNum - 1);
+                    newMpsTrue.setCurrentWorkflow(action);
+                    machinePartSpaces.add(newMpsTrue);
+
+                    machinePartSpace.setMin(fieldName, testNum);
+                    return true;
+                }
+                // else already false, dead end do nothing
+                return false;
+            }
+        }
     }
 
     @Data
-    class MachinePartSpace {
+    static class MachinePartSpace {
         MachinePartSpaceDimension x;
         MachinePartSpaceDimension m;
         MachinePartSpaceDimension a;
@@ -199,53 +247,6 @@ public class Day19 {
             a = new MachinePartSpaceDimension(aMin, aMax);
             s = new MachinePartSpaceDimension(sMin, sMax);
             this.currentWorkflow = currentWorkflow;
-        }
-
-        /**
-         * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
-         * to the queue.
-         * If a subset of the space is false to the rule, edits this to be that subset
-         *
-         * @param rule the rule being applies
-         * @return whether we need to keep processing this MPS
-         */
-        boolean applyRule(Rule rule) {
-            if (rule.greaterThan) {
-                if (getMin(rule.fieldName) > rule.testNum) { // already true
-                    MachinePartSpace newMps = this.copy();
-                    newMps.setCurrentWorkflow(rule.action);
-                    machinePartSpaces.add(newMps);
-                    return false;
-                } else if (getMax(rule.fieldName) > rule.testNum) { // need to split
-                    MachinePartSpace newMpsTrue = this.copy();
-                    newMpsTrue.setMin(rule.fieldName, rule.testNum + 1);
-                    newMpsTrue.setCurrentWorkflow(rule.action);
-                    machinePartSpaces.add(newMpsTrue);
-
-                    this.setMax(rule.fieldName, rule.testNum);
-                    return true;
-                }
-                // else already false, dead end do nothing
-                return false;
-            } else {
-                if (getMax(rule.fieldName) < rule.testNum) { // already true
-                    MachinePartSpace newMps = this.copy();
-                    newMps.setCurrentWorkflow(rule.action);
-                    machinePartSpaces.add(newMps);
-                    return false;
-                } else if (getMin(rule.fieldName) < rule.testNum) { // need to split
-                    MachinePartSpace newMpsTrue = this.copy();
-                    newMpsTrue.setMax(rule.fieldName, rule.testNum - 1);
-                    newMpsTrue.setCurrentWorkflow(rule.action);
-                    machinePartSpaces.add(newMpsTrue);
-
-
-                    this.setMin(rule.fieldName, rule.testNum);
-                    return true;
-                }
-                // else already false, dead end do nothing
-                return false;
-            }
         }
 
 
@@ -262,7 +263,6 @@ public class Day19 {
             }
             throw new Error("Did not recognize field name \"" + fieldName + "\". fieldName should only be one of x, m, a, s");
         }
-
 
         private void setMax(String fieldName, int i) {
             getField(fieldName).setMaxInclusive(i);
