@@ -151,19 +151,13 @@ public class Day19 {
         }
     }
 
-
+    @AllArgsConstructor
     class Rule {
         final String fieldName;
         final boolean greaterThan;
         final int testNum;
         final String action;
 
-        Rule(String fieldName, boolean greaterThan, int testNum, String action) {
-            this.fieldName = fieldName;
-            this.greaterThan = greaterThan;
-            this.testNum = testNum;
-            this.action = action;
-        }
 
         Predicate<MachinePart> condition() {
 
