@@ -11,6 +11,8 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+@AllArgsConstructor
 public class Day19 {
     Map<String, Workflow> workflowMap = new HashMap<>();
     Collection<MachinePart> machineParts;
@@ -30,7 +32,7 @@ public class Day19 {
             String workflowName = splitLine[0];
             String[] splitRules = splitLine[1].split(",");
             List<Rule> rules = new ArrayList<>();
-            for (int i=0; i<splitRules.length - 1; i++) {
+            for (int i = 0; i < splitRules.length - 1; i++) {
                 Matcher m = rulePattern.matcher(splitRules[i]);
                 if (m.find()) {
                     String fieldName = m.group(1);
@@ -41,7 +43,7 @@ public class Day19 {
                     rules.add(rule);
                 }
             }
-            String defaultAction = splitRules[splitRules.length - 1].substring(0, splitRules[splitRules.length-1].length() - 1);
+            String defaultAction = splitRules[splitRules.length - 1].substring(0, splitRules[splitRules.length - 1].length() - 1);
 
             Workflow workflow = new Workflow(rules, defaultAction);
 
@@ -52,9 +54,9 @@ public class Day19 {
         while (scanner.hasNextLine()) {
             line = scanner.nextLine();
             Matcher m = machinePattern.matcher(line);
-                if (m.find()) {
-                    machineParts.add(new MachinePart(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))));
-                }
+            if (m.find()) {
+                machineParts.add(new MachinePart(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))));
+            }
 
         }
 
@@ -73,23 +75,21 @@ public class Day19 {
         long total = 0;
         while (!machinePartSpaces.isEmpty()) {
             MachinePartSpace thisMps = machinePartSpaces.remove();
-            if (!thisMps.currentWorkflow.equals("R")) {
-                if (thisMps.currentWorkflow.equals("A")) {
-                    total += thisMps.getArea();
-                } else {
-                    Workflow workflow = workflowMap.get(thisMps.currentWorkflow);
+            if (thisMps.currentWorkflow.equals("A")) {
+                total += thisMps.getArea();
+            } else if (!thisMps.currentWorkflow.equals("R")) {
+                Workflow workflow = workflowMap.get(thisMps.currentWorkflow);
 
-                    boolean flag = false;
-                    for (Rule rule : workflow.rules) {
-                        if (!thisMps.applyRule(rule)) {
-                            flag=true;
-                            break;
-                        }
+                boolean flag = false;
+                for (Rule rule : workflow.rules) {
+                    if (!thisMps.applyRule(rule)) {
+                        flag = true;
+                        break;
                     }
-                    if (!flag) {
-                        thisMps.currentWorkflow = workflow.defaultAction;
-                        machinePartSpaces.add(thisMps);
-                    }
+                }
+                if (!flag) {
+                    thisMps.currentWorkflow = workflow.defaultAction;
+                    machinePartSpaces.add(thisMps);
                 }
             }
         }
@@ -150,14 +150,21 @@ public class Day19 {
     }
 
 
-    @AllArgsConstructor
     class Rule {
         final String fieldName;
         final boolean greaterThan;
         final int testNum;
         final String action;
 
+        Rule(String fieldName, boolean greaterThan, int testNum, String action) {
+            this.fieldName = fieldName;
+            this.greaterThan = greaterThan;
+            this.testNum = testNum;
+            this.action = action;
+        }
+
         Predicate<MachinePart> condition() {
+
             return greaterThan
                     ? machinePart -> machinePart.getField(fieldName) > testNum
                     : machinePart -> machinePart.getField(fieldName) < testNum;
@@ -167,6 +174,7 @@ public class Day19 {
 
         /**
          * If the condition applies to the machine part, returns the next workflow to send to, otherwise null.
+         *
          * @param machinePart the machine part under test
          * @return the next workflow to send the machine part to, if applicable, otherwise null.
          */
@@ -193,24 +201,11 @@ public class Day19 {
             this.currentWorkflow = currentWorkflow;
         }
 
-        public MachinePartSpaceDimension getField(String fieldName) {
-            switch(fieldName) {
-                case "x":
-                    return x;
-                case "m":
-                    return m;
-                case "a":
-                    return a;
-                case "s":
-                    return s;
-            }
-            throw new Error("Did not recognize field name \"" + fieldName + "\". fieldName should only be one of x, m, a, s");
-        }
-
         /**
          * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
          * to the queue.
          * If a subset of the space is false to the rule, edits this to be that subset
+         *
          * @param rule the rule being applies
          * @return whether we need to keep processing this MPS
          */
@@ -253,6 +248,22 @@ public class Day19 {
             }
         }
 
+
+        private MachinePartSpaceDimension getField(String fieldName) {
+            switch (fieldName) {
+                case "x":
+                    return x;
+                case "m":
+                    return m;
+                case "a":
+                    return a;
+                case "s":
+                    return s;
+            }
+            throw new Error("Did not recognize field name \"" + fieldName + "\". fieldName should only be one of x, m, a, s");
+        }
+
+
         private void setMax(String fieldName, int i) {
             getField(fieldName).setMaxInclusive(i);
         }
@@ -265,28 +276,26 @@ public class Day19 {
             return getField(fieldName).getMaxInclusive();
         }
 
-        private MachinePartSpace copy() {
-            return new MachinePartSpace(x.minInclusive, x.maxInclusive, m.minInclusive, m.maxInclusive, a.minInclusive, a.maxInclusive, s.minInclusive, s.maxInclusive, currentWorkflow);
-        }
-
         private int getMin(String fieldName) {
             return getField(fieldName).getMinInclusive();
         }
 
+        private MachinePartSpace copy() {
+            return new MachinePartSpace(x.minInclusive, x.maxInclusive, m.minInclusive, m.maxInclusive, a.minInclusive, a.maxInclusive, s.minInclusive, s.maxInclusive, currentWorkflow);
+        }
+
+
+
 
         public long getArea() {
-            long xDim = x.getLength();
-            long mDim = m.getLength();
-            long aDim = a.getLength();
-            long sDim = s.getLength();
-            return Math.multiplyExact(Math.multiplyExact(xDim, mDim), Math.multiplyExact(aDim, sDim));
+            return x.getLength() * m.getLength() * a.getLength() * s.getLength();
         }
     }
 
 
     @Data
     @AllArgsConstructor
-    class MachinePartSpaceDimension {
+    static class MachinePartSpaceDimension {
         int minInclusive;
         int maxInclusive;
 
