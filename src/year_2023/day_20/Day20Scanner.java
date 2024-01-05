@@ -25,20 +25,20 @@ public class Day20Scanner {
             line = scanner.nextLine();
             Matcher m = rulePattern.matcher(line);
                 if (m.find()) {
-                    System.out.println(m.group(0));
+                    //System.out.println(m.group(0));
                     String moduleType = m.group(1);
-                    System.out.println(moduleType);
+                    //System.out.println(moduleType);
                     String moduleName = m.group(2);
-                    System.out.println(moduleName);
+                    //System.out.println(moduleName);
                     String[] destinationModules = m.group(3).split(", ");
-                    for (String destinationModule : destinationModules) {
-                        System.out.println(destinationModule);
-                    }
+                    //for (String destinationModule : destinationModules) {
+                        //System.out.println(destinationModule);
+                    //}
 
                     CommunicationModule newModule = createCommunicationModule(moduleType, moduleName, destinationModules, messageQueue);
                     moduleLibrary.put(moduleName, newModule);
 
-                    System.out.println(m.groupCount());
+                    //System.out.println(m.groupCount());
                 }
         };
 

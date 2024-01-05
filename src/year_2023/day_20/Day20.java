@@ -51,7 +51,8 @@ public class Day20 {
 
     enum Pulse {
         HIGH,
-        LOW
+        LOW;
+
     }
 
 

@@ -43,18 +43,18 @@ class FlipFlopModule extends CommunicationModule {
         super(name, destinationModules, messageQueue);
     }
 
-    @Override
-    public void sendPulse(Day20.Pulse pulse) {
+    boolean isOn = false;
 
-    }
 
     @Override
     public void receiveHighPulse() {
-
+        // do nothing;
     }
 
     @Override
     public void receiveLowPulse() {
+        isOn = !isOn;
+        sendPulse(isOn ? Day20.Pulse.HIGH : Day20.Pulse.LOW);
 
     }
 }
@@ -85,11 +85,13 @@ class BroadcasterModule extends CommunicationModule {
 
     @Override
     protected void receiveHighPulse() {
+        sendPulse(Day20.Pulse.HIGH);
 
     }
 
     @Override
     protected void receiveLowPulse() {
+        sendPulse(Day20.Pulse.LOW);
 
     }
 }
