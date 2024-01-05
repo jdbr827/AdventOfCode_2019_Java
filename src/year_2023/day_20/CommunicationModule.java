@@ -8,6 +8,7 @@ import java.util.Queue;
 @AllArgsConstructor
 public abstract class CommunicationModule {
 
+    String name;
 
     @Getter
     String[] destinationModules;
@@ -16,21 +17,30 @@ public abstract class CommunicationModule {
 
     void sendPulse(Day20.Pulse pulse) {
         for (String module : getDestinationModules()) {
-            messageQueue.add(new Day20.Message(module, pulse));
+            messageQueue.add(new Day20.Message(name, module, pulse));
+        }
+
+    }
+
+    void receivePulse(Day20.Pulse pulse) {
+        if (pulse == Day20.Pulse.HIGH) {
+            receiveHighPulse();
+        } else {
+            receiveLowPulse();
         }
 
     }
 
 
-    abstract void receiveHighPulse();
+    protected abstract void receiveHighPulse();
 
-    abstract void receiveLowPulse();
+    protected abstract void receiveLowPulse();
 }
 
 class FlipFlopModule extends CommunicationModule {
 
-    public FlipFlopModule(String[] destinationModules, Queue<Day20.Message> messageQueue) {
-        super(destinationModules, messageQueue);
+    public FlipFlopModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
+        super(name, destinationModules, messageQueue);
     }
 
     @Override
@@ -51,17 +61,17 @@ class FlipFlopModule extends CommunicationModule {
 
 class ConjunctionModule extends CommunicationModule {
 
-    public ConjunctionModule(String[] destinationModules, Queue<Day20.Message> messageQueue) {
-        super(destinationModules, messageQueue);
+    public ConjunctionModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
+        super(name, destinationModules, messageQueue);
     }
 
     @Override
-    void receiveHighPulse() {
+    protected void receiveHighPulse() {
 
     }
 
     @Override
-    void receiveLowPulse() {
+    protected void receiveLowPulse() {
 
     }
 }
@@ -69,17 +79,17 @@ class ConjunctionModule extends CommunicationModule {
 
 class BroadcasterModule extends CommunicationModule {
 
-    public BroadcasterModule(String[] destinationModules, Queue<Day20.Message> messageQueue) {
-        super(destinationModules, messageQueue);
+    public BroadcasterModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
+        super(name, destinationModules, messageQueue);
     }
 
     @Override
-    void receiveHighPulse() {
+    protected void receiveHighPulse() {
 
     }
 
     @Override
-    void receiveLowPulse() {
+    protected void receiveLowPulse() {
 
     }
 }
@@ -87,20 +97,20 @@ class BroadcasterModule extends CommunicationModule {
 class ButtonModule extends CommunicationModule {
 
     public ButtonModule(Queue<Day20.Message> messageQueue) {
-        super(new String[]{"broadcaster"}, messageQueue);
+        super("button", new String[]{"broadcaster"}, messageQueue);
     }
 
     void pushButton() {
-        sendPulse(Day20.Pulse.LOW_PULSE);
+        sendPulse(Day20.Pulse.LOW);
     }
 
     @Override
-    void receiveHighPulse() {
+    protected void receiveHighPulse() {
 
     }
 
     @Override
-    void receiveLowPulse() {
+    protected void receiveLowPulse() {
 
     }
 }

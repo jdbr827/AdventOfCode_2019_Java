@@ -1,34 +1,57 @@
 package year_2023.day_20;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+
 import java.util.Map;
 import java.util.Queue;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Day20 {
-    Queue<Message> messageQueue = new LinkedList<>();
+    final Queue<Message> messageQueue;
     final Map<String, CommunicationModule> moduleLibrary;
 
 
     public Number getPulseProduct(int buttonPresses) {
-        return 0;
+        ButtonModule buttonModule = (ButtonModule) moduleLibrary.get("button");
+        int highPulsesSent = 0;
+        int lowPulsesSent = 0;
+        for (int i=0; i<buttonPresses; i++) {
+            buttonModule.pushButton();
+            while (!messageQueue.isEmpty()) {
+                Message message = messageQueue.remove();
+                message.logMessage();
+
+                if (message.pulse == Pulse.HIGH) {
+                    highPulsesSent++;
+                } else {
+                    lowPulsesSent++;
+                }
+
+                CommunicationModule destinationModule = moduleLibrary.get(message.destination);
+                destinationModule.receivePulse(message.pulse);
+            }
+            System.out.println("------END OF BUTTON PRESS--------");
+        }
+        return highPulsesSent * lowPulsesSent;
     }
 
 
     @AllArgsConstructor
     static class Message {
+        String sender;
         String destination;
         Pulse pulse;
+
+
+        void logMessage() {
+            System.out.println(sender + " --" + pulse.toString() + "--> " + destination);
+        }
     }
 
     enum Pulse {
-        HIGH_PULSE,
-        LOW_PULSE
+        HIGH,
+        LOW
     }
 
 

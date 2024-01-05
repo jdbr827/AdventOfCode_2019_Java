@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class Day20Scanner {
 
-    private static final Pattern rulePattern = Pattern.compile("([%&]?)([\\w]+) -> ([\\w]+], ]*[\\w]+])");
+    private static final Pattern rulePattern = Pattern.compile("([%&]?)([\\w]+) -> ([[[\\w]+], ]*)");
 
     public static Day20 scan(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
@@ -20,9 +20,9 @@ public class Day20Scanner {
         Map<String, CommunicationModule> moduleLibrary = new HashMap<>();
         moduleLibrary.put("button", new ButtonModule(messageQueue));
 
-
-
-        scanner.forEachLine(line -> {
+        String line;
+        while (scanner.hasNextLine()) {
+            line = scanner.nextLine();
             Matcher m = rulePattern.matcher(line);
                 if (m.find()) {
                     System.out.println(m.group(0));
@@ -40,19 +40,19 @@ public class Day20Scanner {
 
                     System.out.println(m.groupCount());
                 }
-        });
+        };
 
-        return new Day20(moduleLibrary);
+        return new Day20(messageQueue, moduleLibrary);
 
     }
 
     private static CommunicationModule createCommunicationModule(String typeCode, String moduleName, String[] destinationModules, Queue<Day20.Message> messageQueue) {
         if (typeCode.equals("%")) {
-                return new FlipFlopModule(destinationModules, messageQueue);
+                return new FlipFlopModule(moduleName, destinationModules, messageQueue);
         } else if (typeCode.equals("&")) {
-            return new ConjunctionModule(destinationModules, messageQueue);
+            return new ConjunctionModule(moduleName, destinationModules, messageQueue);
         } else if (moduleName.equals("broadcaster")) {
-            return new BroadcasterModule(destinationModules, messageQueue);
+            return new BroadcasterModule(moduleName, destinationModules, messageQueue);
         }
         throw new Error ("Do not recognize communication module " + typeCode + moduleName);
     }
