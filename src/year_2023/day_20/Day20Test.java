@@ -17,5 +17,11 @@ public class Day20Test {
         assertEquals(788848550, Day20Scanner.scan(INPUT).getPulseProduct(1000));
     }
 
+
+     @Test
+    public void test_part2() {
+        System.out.println(Day20Scanner.scan(INPUT).fewestPressesToSendLowToRx());
+    }
+
 }
 

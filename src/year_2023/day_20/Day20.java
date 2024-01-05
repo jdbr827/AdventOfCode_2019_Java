@@ -38,6 +38,30 @@ public class Day20 {
         return highPulsesSent * lowPulsesSent;
     }
 
+    public int fewestPressesToSendLowToRx() {
+        ButtonModule buttonModule = (ButtonModule) moduleLibrary.get("button");
+        int buttonPresses = 0;
+        while (true) {
+            buttonPresses++;
+            buttonModule.pushButton();
+            while (!messageQueue.isEmpty()) {
+                Message message = messageQueue.remove();
+                //message.logMessage();
+
+                if (message.destination.equals("rx") && message.pulse == Pulse.LOW) {
+                    return buttonPresses;
+                }
+
+                CommunicationModule destinationModule = moduleLibrary.get(message.destination);
+                if (destinationModule != null) {
+                    destinationModule.receiveMessage(message);
+                }
+            }
+            //System.out.println("------END OF BUTTON PRESS--------");
+        }
+
+    }
+
 
     @AllArgsConstructor
     static class Message {
