@@ -1,6 +1,6 @@
 package year_2023.day_19;
 
-import javafx.util.Pair;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import utils.AOCScanner;
@@ -192,10 +192,10 @@ public class Day19 {
 
         /**
          * If a subset of the space is true to the rule, adds an MPS with that subset and the workflow it should go
-         * to to the queue.
+         * to the queue.
          * If a subset of the space is false to the rule, edits this to be that subset
          * @param rule the rule being applies
-         * @return whether or not we need to keep processing this MPS
+         * @return whether we need to keep processing this MPS
          */
         boolean applyRule(Rule rule) {
             if (rule.greaterThan) {
@@ -306,10 +306,10 @@ public class Day19 {
 
 
         public long getArea() {
-            long xDim = (long) (xMax - xMin + 1);
-            long mDim = (long) (mMax- mMin + 1);
-            long aDim = (long) (aMax - aMin + 1);
-            long sDim = (long) (sMax - sMin + 1);
+            long xDim = xMax - xMin + 1;
+            long mDim = mMax- mMin + 1;
+            long aDim = aMax - aMin + 1;
+            long sDim = sMax - sMin + 1;
             return Math.multiplyExact(Math.multiplyExact(xDim, mDim), Math.multiplyExact(aDim, sDim));
         }
     }
