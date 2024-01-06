@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 
 public class Day21 {
     Character[][] garden;
+    int N;
+    int M;
 
 
     public Day21(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
         garden = scanner.scanAsChar2DArray();
+        N = garden.length;
+        M = garden[0].length;
     }
 
 
@@ -63,5 +67,41 @@ public class Day21 {
 
         return pointsIStepsAway.size();
     }
+
+    public int getStepsInfiniteMap(int numSteps) {
+
+        //find origin
+        CartesianPoint origin = findOrigin();
+
+
+         Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
+                Arrays.stream(CardinalDirection.values())
+                        .map(d -> p.add(d.velocity))
+                        .filter((nbr) -> garden[positiveModulus(nbr.x, N)][positiveModulus(nbr.y, M)] != '#')
+                        .collect(Collectors.toList()));
+
+         List<CartesianPoint> pointsIStepsAway = List.of(origin);
+        List<CartesianPoint> pointsIPlusOneStepsAway = new ArrayList<>();
+         for (int i=0; i<numSteps; i++) {
+            pointsIPlusOneStepsAway = new ArrayList<>(pointsIStepsAway.stream()
+                    .map(neighborFunction)
+                    .reduce(new HashSet<>(), (acc, elm) -> {
+                        acc.addAll(elm);
+                        return acc;
+                    }));
+
+            pointsIStepsAway = pointsIPlusOneStepsAway;
+        }
+         return pointsIStepsAway.size();
+    }
+
+    int positiveModulus(int num, int mod) {
+        int remainder = num % mod;
+        if (remainder < 0) {
+            remainder += mod;
+        }
+        return remainder;
+    }
+
 }
 
