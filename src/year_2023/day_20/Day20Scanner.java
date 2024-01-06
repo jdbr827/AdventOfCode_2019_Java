@@ -44,7 +44,7 @@ public class Day20Scanner {
 
         for (CommunicationModule module: moduleLibrary.values()) {
             for (String destinationModule: module.getDestinationModules()) {
-                moduleLibrary.getOrDefault(destinationModule, new ButtonModule(messageQueue)).addInputModule(module.name);
+                moduleLibrary.getOrDefault(destinationModule, new ButtonModule(messageQueue)).addInputModule(module);
             }
         }
 

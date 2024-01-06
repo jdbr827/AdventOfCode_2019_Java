@@ -3,6 +3,7 @@ package year_2023.day_20;
 import lombok.AllArgsConstructor;
 
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Queue;
 
@@ -16,24 +17,34 @@ public class Day20 {
         ButtonModule buttonModule = (ButtonModule) moduleLibrary.get("button");
         int highPulsesSent = 0;
         int lowPulsesSent = 0;
-        for (int i=0; i<buttonPresses; i++) {
+        for (int i = 0; i < buttonPresses; i++) {
             buttonModule.pushButton();
             while (!messageQueue.isEmpty()) {
                 Message message = messageQueue.remove();
-                message.logMessage();
 
                 if (message.pulse == Pulse.HIGH) {
-                    highPulsesSent++;
+                    highPulsesSent += message.sender.destinationModules.length;
                 } else {
-                    lowPulsesSent++;
+                    lowPulsesSent += message.sender.destinationModules.length;
                 }
 
-                CommunicationModule destinationModule = moduleLibrary.get(message.destination);
-                if (destinationModule != null) {
-                    destinationModule.receiveMessage(message);
+                message.sender.lastPulseSent = message.pulse;
+
+
+                for (String destination : message.sender.destinationModules) {
+                    //System.out.println(message.sender.name + " --" + message.pulse.toString() + "--> " + destination);
+
+                    if (destination.equals("rx") && message.pulse == Pulse.LOW) {
+                        return buttonPresses;
+                    }
+
+                    CommunicationModule destinationModule = moduleLibrary.get(destination);
+                    if (destinationModule != null) {
+                        destinationModule.receiveMessage(message);
+                    }
                 }
             }
-            System.out.println("------END OF BUTTON PRESS--------");
+            //System.out.println("------END OF BUTTON PRESS--------");
         }
         return highPulsesSent * lowPulsesSent;
     }
@@ -46,15 +57,19 @@ public class Day20 {
             buttonModule.pushButton();
             while (!messageQueue.isEmpty()) {
                 Message message = messageQueue.remove();
-                //message.logMessage();
 
-                if (message.destination.equals("rx") && message.pulse == Pulse.LOW) {
-                    return buttonPresses;
-                }
+                message.sender.lastPulseSent = message.pulse;
+                for (String destination : message.sender.destinationModules) {
+                    //System.out.println(message.sender.name + " --" + message.pulse.toString() + "--> " + destination);
 
-                CommunicationModule destinationModule = moduleLibrary.get(message.destination);
-                if (destinationModule != null) {
-                    destinationModule.receiveMessage(message);
+                    if (destination.equals("rx") && message.pulse == Pulse.LOW) {
+                        return buttonPresses;
+                    }
+
+                    CommunicationModule destinationModule = moduleLibrary.get(destination);
+                    if (destinationModule != null) {
+                        destinationModule.receiveMessage(message);
+                    }
                 }
             }
             //System.out.println("------END OF BUTTON PRESS--------");
@@ -65,14 +80,10 @@ public class Day20 {
 
     @AllArgsConstructor
     static class Message {
-        String sender;
-        String destination;
+        CommunicationModule sender;
         Pulse pulse;
 
 
-        void logMessage() {
-            System.out.println(sender + " --" + pulse.toString() + "--> " + destination);
-        }
     }
 
     enum Pulse {
@@ -80,7 +91,6 @@ public class Day20 {
         LOW;
 
     }
-
 
 
 }

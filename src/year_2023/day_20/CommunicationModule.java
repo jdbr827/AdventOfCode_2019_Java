@@ -2,30 +2,28 @@ package year_2023.day_20;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public abstract class CommunicationModule {
 
-    String name;
+    @NonNull  String name;
 
     @Getter
-    String[] destinationModules;
+    @NonNull  String[] destinationModules;
 
-    Queue<Day20.Message> messageQueue;
+    @NonNull  Queue<Day20.Message> messageQueue;
+
+    Day20.Pulse lastPulseSent = Day20.Pulse.LOW;
 
     void sendPulse(Day20.Pulse pulse) {
-        for (String module : getDestinationModules()) {
-            messageQueue.add(new Day20.Message(name, module, pulse));
-        }
-
+        messageQueue.add(new Day20.Message(this, pulse));
     }
 
-    void addInputModule(String moduleName) {
+    void addInputModule(CommunicationModule module) {
 
     }
 
@@ -39,14 +37,11 @@ class FlipFlopModule extends CommunicationModule {
         super(name, destinationModules, messageQueue);
     }
 
-    boolean isOn = false;
-
 
     @Override
     protected void receiveMessage(Day20.Message message) {
         if (message.pulse == Day20.Pulse.LOW) {
-            isOn = !isOn;
-            sendPulse(isOn ? Day20.Pulse.HIGH : Day20.Pulse.LOW);
+            sendPulse(lastPulseSent == Day20.Pulse.HIGH ? Day20.Pulse.LOW : Day20.Pulse.HIGH);
         }
 
     }
@@ -54,22 +49,21 @@ class FlipFlopModule extends CommunicationModule {
 
 class ConjunctionModule extends CommunicationModule {
 
-    Map<String, Day20.Pulse> rememberedModules = new HashMap<>();
+    List<CommunicationModule> rememberedModules = new ArrayList<>();
     public ConjunctionModule(String name, String[] destinationModules, Queue<Day20.Message> messageQueue) {
         super(name, destinationModules, messageQueue);
     }
 
     @Override
-    void addInputModule(String moduleName) {
-        rememberedModules.put(moduleName, Day20.Pulse.LOW);
+    void addInputModule(CommunicationModule module) {
+        rememberedModules.add(module);
     }
 
 
 
     @Override
     protected void receiveMessage(Day20.Message message) {
-        rememberedModules.put(message.sender, message.pulse);
-        if (rememberedModules.values().stream().allMatch(pulse -> pulse == Day20.Pulse.HIGH)) {
+        if (rememberedModules.stream().allMatch(module -> module.lastPulseSent == Day20.Pulse.HIGH)) {
             sendPulse(Day20.Pulse.LOW);
         } else {
             sendPulse(Day20.Pulse.HIGH);
