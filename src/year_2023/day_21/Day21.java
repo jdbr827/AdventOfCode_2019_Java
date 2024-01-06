@@ -46,7 +46,7 @@ public class Day21 {
         //find origin
         CartesianPoint origin = findOrigin();
 
-          Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
+        Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
                 Arrays.stream(CardinalDirection.values())
                         .map(d -> p.add(d.velocity))
                         .filter((nbr) -> nbr.isInBoundariesInclusive(0, N - 1, 0, M - 1) && garden[nbr.x][nbr.y] != '#')
@@ -54,7 +54,7 @@ public class Day21 {
 
         List<CartesianPoint> pointsIStepsAway = List.of(origin);
         List<CartesianPoint> pointsIPlusOneStepsAway = new ArrayList<>();
-        for (int i=0; i<numSteps; i++) {
+        for (int i = 0; i < numSteps; i++) {
             pointsIPlusOneStepsAway = new ArrayList<>(pointsIStepsAway.stream()
                     .map(neighborFunction)
                     .reduce(new HashSet<>(), (acc, elm) -> {
@@ -74,25 +74,37 @@ public class Day21 {
         CartesianPoint origin = findOrigin();
 
 
-         Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
+        Function<CartesianPoint, Collection<CartesianPoint>> neighborFunction = (p ->
                 Arrays.stream(CardinalDirection.values())
                         .map(d -> p.add(d.velocity))
                         .filter((nbr) -> garden[positiveModulus(nbr.x, N)][positiveModulus(nbr.y, M)] != '#')
                         .collect(Collectors.toList()));
 
-         List<CartesianPoint> pointsIStepsAway = List.of(origin);
-        List<CartesianPoint> pointsIPlusOneStepsAway = new ArrayList<>();
-         for (int i=0; i<numSteps; i++) {
-            pointsIPlusOneStepsAway = new ArrayList<>(pointsIStepsAway.stream()
-                    .map(neighborFunction)
-                    .reduce(new HashSet<>(), (acc, elm) -> {
-                        acc.addAll(elm);
-                        return acc;
-                    }));
-
+        List<CartesianPoint> pointsIStepsAway = List.of(origin);
+        List<CartesianPoint> pointsIPlusOneStepsAway;
+        Map<CartesianPoint, Integer> shortestOddLengthDistance = new HashMap<>();
+        Map<CartesianPoint, Integer> shortestEvenLengthDistance = new HashMap<>();
+        shortestEvenLengthDistance.put(origin, 0);
+        for (int i = 1; i <= numSteps; i++) {
+            pointsIPlusOneStepsAway = new ArrayList<>();
+            for (CartesianPoint v : pointsIStepsAway) {
+                for (CartesianPoint nbr : neighborFunction.apply(v)) {
+                    if (i % 2 == 1) {
+                        if (!shortestOddLengthDistance.containsKey(nbr)) {
+                            shortestOddLengthDistance.put(nbr, i);
+                            pointsIPlusOneStepsAway.add(nbr);
+                        }
+                    } else {
+                        if (!shortestEvenLengthDistance.containsKey(nbr)) {
+                            shortestEvenLengthDistance.put(nbr, i);
+                            pointsIPlusOneStepsAway.add(nbr);
+                        }
+                    }
+                }
+            }
             pointsIStepsAway = pointsIPlusOneStepsAway;
         }
-         return pointsIStepsAway.size();
+        return shortestEvenLengthDistance.size();
     }
 
     int positiveModulus(int num, int mod) {
