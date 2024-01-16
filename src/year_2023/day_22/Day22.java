@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class Day22 {
     private static final Brick GROUND = new Brick(List.of(0, 0, 0), List.of(Integer.MAX_VALUE, Integer.MAX_VALUE, 0));
     Collection<Brick> bricks = new ArrayList<>();
+    Brick[][] highestSettled;
      int xMax;
      int yMax;
 
@@ -21,6 +22,12 @@ public class Day22 {
         });
         xMax = bricks.stream().map(brick -> brick.x2).max(Comparator.naturalOrder()).get();
         yMax = bricks.stream().map(brick -> brick.y2).max(Comparator.naturalOrder()).get();
+        highestSettled = new Brick[xMax+1][yMax+1];
+          for (int x=0; x<xMax+1; x++) {
+            for (int y=0; y<yMax+1; y++) {
+                highestSettled[x][y] = GROUND;
+            }
+        }
 
     }
 
@@ -34,12 +41,6 @@ public class Day22 {
     }
 
     private void simulateBrickFalling() {
-        Brick[][] highestSettled = new Brick[xMax+1][yMax+1];
-        for (int x=0; x<xMax+1; x++) {
-            for (int y=0; y<yMax+1; y++) {
-                highestSettled[x][y] = GROUND;
-            }
-        }
         List<Brick> unsettledBricks = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
         while (!unsettledBricks.isEmpty()) {
             for (Brick brick : unsettledBricks) {
