@@ -91,8 +91,8 @@ public class Day22 {
     public static class Brick {
         int brickId;
         String originalLocation;
-        public Set<Brick> supportedBy = new HashSet<>();
-        public Set<Brick> supporting = new HashSet<>();
+        public Set<Brick> bricksThisIsSupportedBy = new HashSet<>();
+        public Set<Brick> bricksThisSupports = new HashSet<>();
         @NonNull final Integer x1;
         @NonNull final Integer y1;
         @NonNull Integer z1;
@@ -147,24 +147,24 @@ public class Day22 {
         }
 
         public boolean isSafeToDisintegrate() {
-            for (Brick brickThisIsSupporting : supporting) {
-                if (brickThisIsSupporting.supportedBy.equals(Set.of(this))) {
+            for (Brick brickThisIsSupporting : bricksThisSupports) {
+                if (brickThisIsSupporting.bricksThisIsSupportedBy.equals(Set.of(this))) {
                     return false;
                 }
             }
             return true;
         }
 
-        private void markBrickIsSupportedBy(Brick highestSettledAtThisPoint) {
-            supportedBy.add(highestSettledAtThisPoint);
-            highestSettledAtThisPoint.supporting.add(this);
+        private void markBrickIsSupportedBy(Brick supportingBrick) {
+            bricksThisIsSupportedBy.add(supportingBrick);
+            supportingBrick.bricksThisSupports.add(this);
         }
 
         public int numOtherBricksThatFallIfDisintegrated() {
             int total = 0;
             falling.add(this);
-            for (Brick supported : this.supporting) {
-                if (falling.containsAll(supported.supportedBy))
+            for (Brick supported : this.bricksThisSupports) {
+                if (falling.containsAll(supported.bricksThisIsSupportedBy))
                     total += 1 + supported.numOtherBricksThatFallIfDisintegrated();
             }
             return total;
