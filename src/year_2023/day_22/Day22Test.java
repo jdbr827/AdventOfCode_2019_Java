@@ -12,11 +12,22 @@ public class Day22Test {
     @Test
     public void test_part1_example() {
         assertEquals(5, new Day22(SMALL_INPUT).getNumToSafelyDisintegrate());
-        //System.out.println(new Day22(INPUT).getNumToSafelyDisintegrate());
+
     }
 
     @Test
     public void test_part1_real() {
           assertEquals(407, new Day22(INPUT).getNumToSafelyDisintegrate());
+    }
+
+    @Test
+    public void test_part2_example() {
+        assertEquals(7, new Day22(SMALL_INPUT).getBiggestChainReactionNum());
+        //System.out.println(new Day22(INPUT).getNumToSafelyDisintegrate());
+    }
+
+    @Test
+    public void test_part2_real() {
+          System.out.println(new Day22(INPUT).getBiggestChainReactionNum());
     }
 }

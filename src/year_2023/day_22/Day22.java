@@ -87,9 +87,12 @@ public class Day22 {
         });
     }
 
+    public int getBiggestChainReactionNum() {
+        return 0;
+    }
+
 
     public static class Brick {
-        static int id=1;
         int brickId;
         public Set<Brick> supportedBy = new HashSet<>();
         public Set<Brick> supporting = new HashSet<>();
