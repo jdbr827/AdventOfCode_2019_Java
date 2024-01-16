@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day22 {
-    private static final Brick GROUND = new Brick(List.of(0, 0, 0), List.of(Integer.MAX_VALUE, Integer.MAX_VALUE, 0));
+    private static final Brick GROUND = new Brick("0,0,0~1000,1000,0");
     Collection<Brick> bricks = new ArrayList<>();
     Brick[][] highestSettled;
      int xMax;
@@ -18,7 +18,7 @@ public class Day22 {
     public Day22(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
         scanner.forEachLine(line -> {
-            bricks.add(Brick.scanIn(line));
+            bricks.add(new Brick(line));
         });
         xMax = bricks.stream().map(brick -> brick.x2).max(Comparator.naturalOrder()).get();
         yMax = bricks.stream().map(brick -> brick.y2).max(Comparator.naturalOrder()).get();
@@ -37,6 +37,7 @@ public class Day22 {
     }
 
     private int countNumToSafelyDisintegrate() {
+        bricks.stream().filter(Brick::isSafeToDisintegrate).forEach(brick -> System.out.println(brick.line));
         return (int) bricks.stream().filter(Brick::isSafeToDisintegrate).count();
     }
 
@@ -66,8 +67,15 @@ public class Day22 {
         @NonNull Integer x2;
         @NonNull Integer y2;
         @NonNull Integer z2;
+        String line;
 
-        Brick(List<Integer> p1, List<Integer> p2) {
+
+        Brick(String line) {
+            this.line = line;
+            String[] splitLine = line.split("~");
+            String point1 = splitLine[0];
+            List<Integer> p1 = Arrays.stream(point1.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+            List<Integer> p2 = Arrays.stream(splitLine[1].split(",")).map(Integer::parseInt).collect(Collectors.toList());
             x1 = p1.get(0);
             y1 = p1.get(1);
             z1 = p1.get(2);
@@ -76,22 +84,14 @@ public class Day22 {
             z2 = p2.get(2);
         }
 
-        static Brick scanIn(String line) {
-            String[] splitLine = line.split("~");
-            String point1 = splitLine[0];
-            List<Integer> p1 = Arrays.stream(point1.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-            List<Integer> p2 = Arrays.stream(splitLine[1].split(",")).map(Integer::parseInt).collect(Collectors.toList());
-            return new Brick(p1, p2);
-        }
-
         public int lowestZ() {
             return Math.min(z1, z2);
         }
 
         public Iterable<Point> getCrossSection() {
             Collection<Point> points = new ArrayList<>();
-            for (int x=x1; x<=x2; x++){
-                for (int y=y1; y<=y2; y++) {
+            for (int x=Math.min(x1, x2); x<=Math.max(x1, x2); x++){
+                for (int y=Math.min(y1, y2); y<=Math.max(y1, y2); y++) {
                     points.add(new Point(x, y));
                 }
             }
