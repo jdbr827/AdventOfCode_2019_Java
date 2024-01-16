@@ -28,6 +28,6 @@ public class Day22Test {
 
     @Test
     public void test_part2_real() {
-          System.out.println(new Day22(INPUT).getBiggestChainReactionNum());
+          assertEquals(59266, new Day22(INPUT).getBiggestChainReactionNum());
     }
 }

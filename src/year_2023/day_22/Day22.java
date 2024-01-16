@@ -14,8 +14,9 @@ public class Day22 {
     private static final Brick GROUND = new Brick("0,0,0~1000,1000,0", 0);
     Collection<Brick> bricks = new ArrayList<>();
     Brick[][] highestSettled;
-     int xMax;
-     int yMax;
+    int xMax;
+    int yMax;
+    static Set<Brick> falling = new HashSet<>();
 
     public Day22(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
@@ -51,7 +52,7 @@ public class Day22 {
                         sb.append(supBy.brickId);
                         sb.append(",");
                     }
-                    System.out.println(sb.toString());
+                    System.out.println(sb);
                 });
         return (int) bricks.stream().filter(Brick::isSafeToDisintegrate).count();
     }
@@ -71,10 +72,7 @@ public class Day22 {
     }
 
     private void markAsSettled(Brick brick) {
-        //unsettledBricks.remove(brick);
-        brick.getXyCrossSection().forEach(pt -> {
-            highestSettled[pt.x][pt.y] = brick;
-        });
+        brick.getXyCrossSection().forEach(pt -> highestSettled[pt.x][pt.y] = brick);
     }
 
     private void checkIfSupported(Brick brick) {
@@ -87,7 +85,13 @@ public class Day22 {
     }
 
     public int getBiggestChainReactionNum() {
-        return 0;
+        int total = 0;
+        simulateBrickFalling();
+        for (Brick toDisintegrate : bricks) {
+            falling = new HashSet<>();
+            total += toDisintegrate.numOtherBricksThatFallIfDisintegrated();
+        }
+        return total;
     }
 
 
@@ -166,5 +170,14 @@ public class Day22 {
             return !supportedBy.isEmpty();
         }
 
+        public int numOtherBricksThatFallIfDisintegrated() {
+            int total = 0;
+            falling.add(this);
+            for (Brick supported : this.supporting) {
+                if (falling.containsAll(supported.supportedBy))
+                    total += 1 + supported.numOtherBricksThatFallIfDisintegrated();
+            }
+            return total;
+        }
     }
 }
