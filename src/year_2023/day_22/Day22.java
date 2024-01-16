@@ -1,14 +1,12 @@
 package year_2023.day_22;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import utils.AOCScanner;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Day22 {
     private static final Brick GROUND = new Brick(List.of(0, 0, 0), List.of(Integer.MAX_VALUE, Integer.MAX_VALUE, 0));
@@ -46,9 +44,9 @@ public class Day22 {
         while (!unsettledBricks.isEmpty()) {
             for (Brick brick : unsettledBricks) {
                 brick.getCrossSection().forEach(pt -> {
-                    if (highestSettled[pt.x][pt.y].highestZ() == brick.lowestZ() - 1){
-                        brick.supportedBy.add(highestSettled[pt.x][pt.y]);
-                        highestSettled[pt.x][pt.y].supporting.add(brick);
+                    Brick highestSettledAtThisPoint = highestSettled[pt.x][pt.y];
+                    if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
+                        brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
                     }
                 });
                 if (!brick.supportedBy.isEmpty()) {
@@ -123,6 +121,11 @@ public class Day22 {
                 }
             }
             return true;
+        }
+
+        private void markBrickIsSupportedBy(Brick highestSettledAtThisPoint) {
+            supportedBy.add(highestSettledAtThisPoint);
+            highestSettledAtThisPoint.supporting.add(this);
         }
     }
 }
