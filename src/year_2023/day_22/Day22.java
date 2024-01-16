@@ -49,7 +49,7 @@ public class Day22 {
                         brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
                     }
                 });
-                if (!brick.supportedBy.isEmpty()) {
+                if (brick.isSupported()) {
                     //unsettledBricks.remove(brick);
                     brick.getCrossSection().forEach(pt -> {
                         highestSettled[pt.x][pt.y] = brick;
@@ -59,7 +59,7 @@ public class Day22 {
                 }
             }
 
-            unsettledBricks = unsettledBricks.stream().filter(brick -> brick.supportedBy.isEmpty()).collect(Collectors.toList());
+            unsettledBricks = unsettledBricks.stream().filter(brick -> !brick.isSupported()).collect(Collectors.toList());
         }
     }
 
@@ -126,6 +126,10 @@ public class Day22 {
         private void markBrickIsSupportedBy(Brick highestSettledAtThisPoint) {
             supportedBy.add(highestSettledAtThisPoint);
             highestSettledAtThisPoint.supporting.add(this);
+        }
+
+        private boolean isSupported() {
+            return !supportedBy.isEmpty();
         }
     }
 }
