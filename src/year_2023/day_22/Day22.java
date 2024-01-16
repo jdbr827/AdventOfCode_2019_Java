@@ -12,61 +12,58 @@ import java.util.stream.Collectors;
 
 public class Day22 {
     private static final Brick GROUND = new Brick("0,0,0~1000,1000,0", 0);
-    Collection<Brick> bricks = new ArrayList<>();
+    Collection<Brick> bricks;
     Brick[][] highestSettled;
-    int xMax;
-    int yMax;
     static Set<Brick> falling = new HashSet<>();
 
     public Day22(String fileName) {
+        readInBricks(fileName);
+        initializeHighestSettled();
+    }
+
+    private void initializeHighestSettled() {
+        int xMax = bricks.stream().map(brick -> brick.x2).max(Comparator.naturalOrder()).get();
+        int yMax = bricks.stream().map(brick -> brick.y2).max(Comparator.naturalOrder()).get();
+        highestSettled = new Brick[xMax+1][yMax+1];
+        for (int x=0; x<xMax+1; x++) {
+          for (int y=0; y<yMax+1; y++) {
+              highestSettled[x][y] = GROUND;
+          }
+      }
+    }
+
+    private void readInBricks(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
         AtomicInteger id= new AtomicInteger(1);
+        bricks = new ArrayList<>();
         scanner.forEachLine(line -> {
             bricks.add(new Brick(line, id.get()));
             id.getAndIncrement();
         });
-        xMax = bricks.stream().map(brick -> brick.x2).max(Comparator.naturalOrder()).get();
-        yMax = bricks.stream().map(brick -> brick.y2).max(Comparator.naturalOrder()).get();
-        highestSettled = new Brick[xMax+1][yMax+1];
-          for (int x=0; x<xMax+1; x++) {
-            for (int y=0; y<yMax+1; y++) {
-                highestSettled[x][y] = GROUND;
-            }
-        }
-
     }
 
     public int getNumToSafelyDisintegrate() {
-        simulateBrickFalling();
+        simulateBricksFalling();
         return countNumToSafelyDisintegrate();
     }
 
     private int countNumToSafelyDisintegrate() {
-        bricks.stream()
-                .sorted(Comparator.comparing(Brick::lowestZ))
-                //.filter(Brick::isSafeToDisintegrate)
-                .forEach(brick -> {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(brick.brickId).append(" | ").append(brick.line).append(" --> ").append(brick.getCurrentLocation()).append(" | ");
-                    for (Brick supBy : brick.supportedBy) {
-                        sb.append(supBy.brickId);
-                        sb.append(",");
-                    }
-                    System.out.println(sb);
-                });
         return (int) bricks.stream().filter(Brick::isSafeToDisintegrate).count();
     }
 
-    private void simulateBrickFalling() {
-        List<Brick> bricksOrderedByLowestZ = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
-        for (Brick brick : bricksOrderedByLowestZ) {
-            while (!brick.isSupported()) {
-                checkIfSupported(brick);
-                if (brick.isSupported()) {
-                    markAsSettled(brick);
-                } else {
-                    brick.descend();
-                }
+    private void simulateBricksFalling() {
+        bricks.stream()
+                .sorted(Comparator.comparing(Brick::lowestZ))
+                .forEachOrdered(this::simulateBrickFalling);
+    }
+
+    private void simulateBrickFalling(Brick brick) {
+        while (!brick.isSupported()) {
+            checkIfSupported(brick);
+            if (brick.isSupported()) {
+                markAsSettled(brick);
+            } else {
+                brick.descend();
             }
         }
     }
@@ -77,7 +74,7 @@ public class Day22 {
 
     private void checkIfSupported(Brick brick) {
         brick.getXyCrossSection().forEach(pt -> {
-            Brick highestSettledAtThisPoint = this.highestSettled[pt.x][pt.y];
+            Brick highestSettledAtThisPoint = highestSettled[pt.x][pt.y];
             if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
                 brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
             }
@@ -86,7 +83,7 @@ public class Day22 {
 
     public int getBiggestChainReactionNum() {
         int total = 0;
-        simulateBrickFalling();
+        simulateBricksFalling();
         for (Brick toDisintegrate : bricks) {
             falling = new HashSet<>();
             total += toDisintegrate.numOtherBricksThatFallIfDisintegrated();
