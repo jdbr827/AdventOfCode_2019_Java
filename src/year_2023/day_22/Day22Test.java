@@ -10,8 +10,13 @@ public class Day22Test {
     public static final String INPUT = "src/year_2023/day_22/day_22_2023_input.txt";
 
     @Test
-    public void test_part1() {
+    public void test_part1_example() {
         assertEquals(5, new Day22(SMALL_INPUT).getNumToSafelyDisintegrate());
+        //System.out.println(new Day22(INPUT).getNumToSafelyDisintegrate());
+    }
+
+    @Test
+    public void test_part1_real() {
         System.out.println(new Day22(INPUT).getNumToSafelyDisintegrate());
     }
 }
