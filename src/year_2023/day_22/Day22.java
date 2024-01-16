@@ -1,5 +1,6 @@
 package year_2023.day_22;
 
+import lombok.Getter;
 import lombok.NonNull;
 import utils.AOCScanner;
 
@@ -56,8 +57,8 @@ public class Day22 {
     }
 
     private void simulateBrickFalling() {
-        List<Brick> unsettledBricks = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
-        for (Brick brick : unsettledBricks) {
+        List<Brick> bricksOrderedByLowestZ = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
+        for (Brick brick : bricksOrderedByLowestZ) {
             while (!brick.isSupported()) {
                 checkIfSupported(brick);
                 if (brick.isSupported()) {
@@ -67,19 +68,17 @@ public class Day22 {
                 }
             }
         }
-
-            //unsettledBricks = unsettledBricks.stream().filter(brick -> !brick.isSupported()).collect(Collectors.toList());
     }
 
     private void markAsSettled(Brick brick) {
         //unsettledBricks.remove(brick);
-        brick.getCrossSection().forEach(pt -> {
+        brick.getXyCrossSection().forEach(pt -> {
             highestSettled[pt.x][pt.y] = brick;
         });
     }
 
     private void checkIfSupported(Brick brick) {
-        brick.getCrossSection().forEach(pt -> {
+        brick.getXyCrossSection().forEach(pt -> {
             Brick highestSettledAtThisPoint = this.highestSettled[pt.x][pt.y];
             if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
                 brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
@@ -104,6 +103,9 @@ public class Day22 {
         @NonNull Integer z2;
         String line;
 
+        @Getter
+        Iterable<Point> xyCrossSection;
+
 
         Brick(String line, int brickId) {
             this.line = line;
@@ -119,6 +121,14 @@ public class Day22 {
             y2 = p2.get(1);
             z2 = p2.get(2);
 
+            Collection<Point> points = new ArrayList<>();
+            for (int x=Math.min(x1, x2); x<=Math.max(x1, x2); x++){
+                for (int y=Math.min(y1, y2); y<=Math.max(y1, y2); y++) {
+                    points.add(new Point(x, y));
+                }
+            }
+            xyCrossSection = points;
+
         }
 
         String getCurrentLocation() {
@@ -127,16 +137,6 @@ public class Day22 {
 
         public int lowestZ() {
             return Math.min(z1, z2);
-        }
-
-        public Iterable<Point> getCrossSection() {
-            Collection<Point> points = new ArrayList<>();
-            for (int x=Math.min(x1, x2); x<=Math.max(x1, x2); x++){
-                for (int y=Math.min(y1, y2); y<=Math.max(y1, y2); y++) {
-                    points.add(new Point(x, y));
-                }
-            }
-            return points;
         }
 
         public int highestZ() {
