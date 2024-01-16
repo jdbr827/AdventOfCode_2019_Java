@@ -59,9 +59,11 @@ public class Day22 {
 
     private void simulateBrickFalling(Brick brick) {
         while (!brick.isSupported()) {
-            checkIfSupported(brick);
-            if (brick.isSupported()) {
+            Set<Brick> supporting = getAllSupporting(brick);
+            if (!supporting.isEmpty()) {
+                supporting.forEach(brick::markBrickIsSupportedBy);
                 markAsSettled(brick);
+                break;
             } else {
                 brick.descend();
             }
@@ -72,13 +74,16 @@ public class Day22 {
         brick.getXyCrossSection().forEach(pt -> highestSettled[pt.x][pt.y] = brick);
     }
 
-    private void checkIfSupported(Brick brick) {
+    private Set<Brick> getAllSupporting(Brick brick) {
+        Set<Brick> supporting = new HashSet<>();
         brick.getXyCrossSection().forEach(pt -> {
             Brick highestSettledAtThisPoint = highestSettled[pt.x][pt.y];
             if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
-                brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
+                supporting.add(highestSettledAtThisPoint);
+                //brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
             }
         });
+        return supporting;
     }
 
     public int getBiggestChainReactionNum() {
@@ -94,6 +99,7 @@ public class Day22 {
 
     public static class Brick {
         int brickId;
+        String originalLocation;
         public Set<Brick> supportedBy = new HashSet<>();
         public Set<Brick> supporting = new HashSet<>();
         @NonNull final Integer x1;
@@ -102,14 +108,14 @@ public class Day22 {
         @NonNull final Integer x2;
         @NonNull final Integer y2;
         @NonNull Integer z2;
-        String line;
+
 
         @Getter
         Iterable<Point> xyCrossSection;
 
 
         Brick(String line, int brickId) {
-            this.line = line;
+            this.originalLocation = line;
             this.brickId = brickId;
             String[] splitLine = line.split("~");
             String point1 = splitLine[0];
