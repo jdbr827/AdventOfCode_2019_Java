@@ -58,16 +58,12 @@ public class Day22 {
     }
 
     private void simulateBrickFalling(Brick brick) {
-        while (!brick.isSupported()) {
-            Set<Brick> supporting = getAllSupporting(brick);
-            if (!supporting.isEmpty()) {
-                supporting.forEach(brick::markBrickIsSupportedBy);
-                markAsSettled(brick);
-                break;
-            } else {
-                brick.descend();
-            }
+        Set<Brick> supporting; // invar: the set of bricks supporting this one at any point in its descent;
+        while ((supporting = getAllSupporting(brick)).isEmpty()) {
+            brick.descend();
         }
+        supporting.forEach(brick::markBrickIsSupportedBy);
+        markAsSettled(brick);
     }
 
     private void markAsSettled(Brick brick) {
