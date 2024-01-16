@@ -6,10 +6,11 @@ import utils.AOCScanner;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Day22 {
-    private static final Brick GROUND = new Brick("0,0,0~1000,1000,0");
+    private static final Brick GROUND = new Brick("0,0,0~1000,1000,0", 0);
     Collection<Brick> bricks = new ArrayList<>();
     Brick[][] highestSettled;
      int xMax;
@@ -17,8 +18,10 @@ public class Day22 {
 
     public Day22(String fileName) {
         AOCScanner scanner = new AOCScanner(fileName);
+        AtomicInteger id= new AtomicInteger(1);
         scanner.forEachLine(line -> {
-            bricks.add(new Brick(line));
+            bricks.add(new Brick(line, id.get()));
+            id.getAndIncrement();
         });
         xMax = bricks.stream().map(brick -> brick.x2).max(Comparator.naturalOrder()).get();
         yMax = bricks.stream().map(brick -> brick.y2).max(Comparator.naturalOrder()).get();
@@ -37,41 +40,71 @@ public class Day22 {
     }
 
     private int countNumToSafelyDisintegrate() {
-        bricks.stream().filter(Brick::isSafeToDisintegrate).forEach(brick -> System.out.println(brick.line));
+        bricks.stream()
+                .sorted(Comparator.comparing(Brick::lowestZ))
+                //.filter(Brick::isSafeToDisintegrate)
+                .forEach(brick -> {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(brick.brickId).append(" | ").append(brick.line).append(" --> ").append(brick.getCurrentLocation()).append(" | ");
+                    for (Brick supBy : brick.supportedBy) {
+                        sb.append(supBy.brickId);
+                        sb.append(",");
+                    }
+                    System.out.println(sb.toString());
+                });
         return (int) bricks.stream().filter(Brick::isSafeToDisintegrate).count();
     }
 
     private void simulateBrickFalling() {
         List<Brick> unsettledBricks = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
-        while (!unsettledBricks.isEmpty()) {
-            for (Brick brick : unsettledBricks) {
-                brick.checkIfSupported(this);
+        for (Brick brick : unsettledBricks) {
+            while (!brick.isSupported()) {
+                checkIfSupported(brick);
                 if (brick.isSupported()) {
-                    brick.markAsSettled(this);
+                    markAsSettled(brick);
                 } else {
                     brick.descend();
                 }
             }
-
-            unsettledBricks = unsettledBricks.stream().filter(brick -> !brick.isSupported()).collect(Collectors.toList());
         }
+
+            //unsettledBricks = unsettledBricks.stream().filter(brick -> !brick.isSupported()).collect(Collectors.toList());
+    }
+
+    private void markAsSettled(Brick brick) {
+        //unsettledBricks.remove(brick);
+        brick.getCrossSection().forEach(pt -> {
+            highestSettled[pt.x][pt.y] = brick;
+        });
+    }
+
+    private void checkIfSupported(Brick brick) {
+        brick.getCrossSection().forEach(pt -> {
+            Brick highestSettledAtThisPoint = this.highestSettled[pt.x][pt.y];
+            if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
+                brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
+            }
+        });
     }
 
 
     public static class Brick {
-        public List<Brick> supportedBy = new ArrayList<>();
-        public List<Brick> supporting = new ArrayList<>();
-        @NonNull Integer x1;
-        @NonNull Integer y1;
+        static int id=1;
+        int brickId;
+        public Set<Brick> supportedBy = new HashSet<>();
+        public Set<Brick> supporting = new HashSet<>();
+        @NonNull final Integer x1;
+        @NonNull final Integer y1;
         @NonNull Integer z1;
-        @NonNull Integer x2;
-        @NonNull Integer y2;
+        @NonNull final Integer x2;
+        @NonNull final Integer y2;
         @NonNull Integer z2;
         String line;
 
 
-        Brick(String line) {
+        Brick(String line, int brickId) {
             this.line = line;
+            this.brickId = brickId;
             String[] splitLine = line.split("~");
             String point1 = splitLine[0];
             List<Integer> p1 = Arrays.stream(point1.split(",")).map(Integer::parseInt).collect(Collectors.toList());
@@ -82,6 +115,11 @@ public class Day22 {
             x2 = p2.get(0);
             y2 = p2.get(1);
             z2 = p2.get(2);
+
+        }
+
+        String getCurrentLocation() {
+            return x1 + "," + y1 + "," + z1 + "~" + x2 + "," + y2 + "," + z2;
         }
 
         public int lowestZ() {
@@ -109,7 +147,7 @@ public class Day22 {
 
         public boolean isSafeToDisintegrate() {
             for (Brick brickThisIsSupporting : supporting) {
-                if (brickThisIsSupporting.supportedBy.size() == 1) {
+                if (brickThisIsSupporting.supportedBy.equals(Set.of(this))) {
                     return false;
                 }
             }
@@ -125,20 +163,5 @@ public class Day22 {
             return !supportedBy.isEmpty();
         }
 
-        private void markAsSettled(Day22 day22) {
-            //unsettledBricks.remove(brick);
-            getCrossSection().forEach(pt -> {
-                day22.highestSettled[pt.x][pt.y] = this;
-            });
-        }
-
-        private void checkIfSupported(Day22 day22) {
-            getCrossSection().forEach(pt -> {
-                Brick highestSettledAtThisPoint = day22.highestSettled[pt.x][pt.y];
-                if (highestSettledAtThisPoint.highestZ() == lowestZ() - 1){
-                    markBrickIsSupportedBy(highestSettledAtThisPoint);
-                }
-            });
-        }
     }
 }
