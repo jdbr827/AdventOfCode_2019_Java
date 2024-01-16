@@ -59,32 +59,27 @@ public class Day22 {
 
     private void simulateBrickFalling(Brick brick) {
         Set<Brick> supporting; // invar: the set of bricks supporting this one at any point in its descent;
-        while ((supporting = getAllSupporting(brick)).isEmpty()) {
+        while ((supporting = getAllBricksCurrentlySupporting(brick)).isEmpty()) {
             brick.descend();
         }
         supporting.forEach(brick::markBrickIsSupportedBy);
-        markAsSettled(brick);
+        updateHighestSettled(brick);
     }
 
-    private void markAsSettled(Brick brick) {
+    private void updateHighestSettled(Brick brick) {
         brick.getXyCrossSection().forEach(pt -> highestSettled[pt.x][pt.y] = brick);
     }
 
-    private Set<Brick> getAllSupporting(Brick brick) {
-        Set<Brick> supporting = new HashSet<>();
-        brick.getXyCrossSection().forEach(pt -> {
-            Brick highestSettledAtThisPoint = highestSettled[pt.x][pt.y];
-            if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
-                supporting.add(highestSettledAtThisPoint);
-                //brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
-            }
-        });
-        return supporting;
+    private Set<Brick> getAllBricksCurrentlySupporting(Brick brick) {
+        return brick.getXyCrossSection().stream()
+                .map(pt -> highestSettled[pt.x][pt.y])
+                .filter(hs -> hs.highestZ() == brick.lowestZ() - 1)
+                .collect(Collectors.toSet());
     }
 
     public int getBiggestChainReactionNum() {
-        int total = 0;
         simulateBricksFalling();
+        int total = 0;
         for (Brick toDisintegrate : bricks) {
             falling = new HashSet<>();
             total += toDisintegrate.numOtherBricksThatFallIfDisintegrated();
@@ -107,7 +102,7 @@ public class Day22 {
 
 
         @Getter
-        Iterable<Point> xyCrossSection;
+        Collection<Point> xyCrossSection;
 
 
         Brick(String line, int brickId) {
@@ -163,10 +158,6 @@ public class Day22 {
         private void markBrickIsSupportedBy(Brick highestSettledAtThisPoint) {
             supportedBy.add(highestSettledAtThisPoint);
             highestSettledAtThisPoint.supporting.add(this);
-        }
-
-        private boolean isSupported() {
-            return !supportedBy.isEmpty();
         }
 
         public int numOtherBricksThatFallIfDisintegrated() {
