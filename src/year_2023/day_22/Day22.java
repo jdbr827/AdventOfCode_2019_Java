@@ -44,17 +44,9 @@ public class Day22 {
         List<Brick> unsettledBricks = bricks.stream().sorted(Comparator.comparing(Brick::lowestZ)).collect(Collectors.toList());
         while (!unsettledBricks.isEmpty()) {
             for (Brick brick : unsettledBricks) {
-                brick.getCrossSection().forEach(pt -> {
-                    Brick highestSettledAtThisPoint = highestSettled[pt.x][pt.y];
-                    if (highestSettledAtThisPoint.highestZ() == brick.lowestZ() - 1){
-                        brick.markBrickIsSupportedBy(highestSettledAtThisPoint);
-                    }
-                });
+                brick.checkIfSupported(this);
                 if (brick.isSupported()) {
-                    //unsettledBricks.remove(brick);
-                    brick.getCrossSection().forEach(pt -> {
-                        highestSettled[pt.x][pt.y] = brick;
-                    });
+                    brick.markAsSettled(this);
                 } else {
                     brick.descend();
                 }
@@ -131,6 +123,22 @@ public class Day22 {
 
         private boolean isSupported() {
             return !supportedBy.isEmpty();
+        }
+
+        private void markAsSettled(Day22 day22) {
+            //unsettledBricks.remove(brick);
+            getCrossSection().forEach(pt -> {
+                day22.highestSettled[pt.x][pt.y] = this;
+            });
+        }
+
+        private void checkIfSupported(Day22 day22) {
+            getCrossSection().forEach(pt -> {
+                Brick highestSettledAtThisPoint = day22.highestSettled[pt.x][pt.y];
+                if (highestSettledAtThisPoint.highestZ() == lowestZ() - 1){
+                    markBrickIsSupportedBy(highestSettledAtThisPoint);
+                }
+            });
         }
     }
 }
