@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 public class Day21Test {
 
     public static final String SMALL_INPUT = "src/year_2023/day_21/day_21_2023_small_input.txt";

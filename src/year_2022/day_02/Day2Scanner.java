@@ -1,6 +1,6 @@
 package year_2022.day_02;
 
-import javafx.util.Pair;
+import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 import utils.ReadIn;
 

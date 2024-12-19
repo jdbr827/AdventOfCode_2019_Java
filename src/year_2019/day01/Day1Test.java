@@ -27,7 +27,7 @@ public class Day1Test {
 
     @Test
     void testGetMetaFuelRequired() {
-        assertEquals(getMetaFuelRequired(0), 0);
+        assertEquals(0, getMetaFuelRequired(0));
         assertEquals(getMetaFuelRequired(14), 2);
         assertEquals(getMetaFuelRequired(1969), 966);
         assertEquals(getMetaFuelRequired(100756), 50346);

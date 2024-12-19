@@ -1,6 +1,5 @@
 package year_2019.day13;
 
-import javafx.util.Pair;
 import year_2019.IntCodeComputer.IntCode;
 
 import java.awt.*;

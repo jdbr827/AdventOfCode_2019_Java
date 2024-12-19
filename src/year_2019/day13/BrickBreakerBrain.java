@@ -1,6 +1,7 @@
 package year_2019.day13;
 
-import javafx.util.Pair;
+
+import org.testng.internal.collections.Pair;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;

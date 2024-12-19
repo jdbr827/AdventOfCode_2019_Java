@@ -1,6 +1,6 @@
 package year_2022.day_02;
 
-import javafx.util.Pair;
+import org.testng.internal.collections.Pair;
 import utils.ReadIn;
 
 import java.io.File;
@@ -44,8 +44,8 @@ public class Day2 {
         int totalScore = 0;
         Pair<RockPaperScissors, RockPaperScissors> pr;
         while ((pr = scanner.getNextOpponentAndStrategyPair()) != null){
-            RockPaperScissors theyPlay = pr.getKey();
-            RockPaperScissors strategy = pr.getValue();
+            RockPaperScissors theyPlay = pr.first();
+            RockPaperScissors strategy = pr.second();
 
             int thisScore = strategy.soloScore() + strategy.scoreVersus(theyPlay);
             totalScore += thisScore;

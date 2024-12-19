@@ -1,6 +1,6 @@
 package year_2019.day13;
 
-import javafx.util.Pair;
+import org.testng.internal.collections.Pair;
 import year_2019.IntCodeComputer.IntCodeAPI;
 
 import java.awt.*;
@@ -35,8 +35,8 @@ public class BrickBreakerController {
     }
 
     private void processOneOutput(Pair<Point, Integer> nxt) {
-        int obj_id = nxt.getValue();
-        Point p = nxt.getKey();
+        int obj_id = nxt.second();
+        Point p = nxt.first();
 
         if (Objects.equals(p, SCORE_OUTPUTS)) {
             setScore(obj_id);
@@ -63,8 +63,8 @@ public class BrickBreakerController {
         brain.startProgram();
         Optional<Pair<Point, Integer>> nxt;
         while ((nxt = brain.getNextOutput()).isPresent()) {
-            int obj_id = nxt.get().getValue();
-            Point p = nxt.get().getKey();
+            int obj_id = nxt.get().second();
+            Point p = nxt.get().first();
             gameGrid.put(new Point(p.y, p.x), obj_id);
         }
         return gameGrid;

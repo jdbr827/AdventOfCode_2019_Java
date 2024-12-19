@@ -1,6 +1,5 @@
 package year_2022.day_22;
 
-import org.checkerframework.checker.units.qual.C;
 import viewModelUtil.CartesianPoint;
 import year_2019.day15.model.CardinalDirection;
 
