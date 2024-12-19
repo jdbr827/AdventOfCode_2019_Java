@@ -17,4 +17,10 @@ public class Day1Test {
         assertEquals(11, new Day1(SMALL_INPUT_FILENAME).getDistanceSum());
         assertEquals(936063, new Day1(INPUT_FILENAME).getDistanceSum());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(31, new Day1(SMALL_INPUT_FILENAME).getSimilarityScore());
+        assertEquals(23150395, new Day1(INPUT_FILENAME).getSimilarityScore());
+    }
 }
