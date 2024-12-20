@@ -15,4 +15,10 @@ public class Day4Test {
         assertEquals(2500, new Day4(INPUT_FILENAME).timesXMASAppears());
     }
 
+    @Test
+    public void test_part2() {
+        assertEquals(9, new Day4(SMALL_INPUT_FILENAME).timesMASAppearsInAnX());
+        assertEquals(1933, new Day4(INPUT_FILENAME).timesMASAppearsInAnX());
+    }
+
 }

@@ -43,4 +43,22 @@ public class Day4 {
         }
         return appearances;
     }
+
+    public int timesMASAppearsInAnX() {
+        int appearances = 0;
+        for (int i=1; i<n-1; i++) {
+            for(int j=1; j<m-1; j++) {
+                if (grid[i][j] == 'A') {
+                    if (
+                            (
+                                    (grid[i-1][j-1] == 'M' && grid[i+1][j+1] == 'S') || (grid[i-1][j-1] == 'S' && grid[i+1][j+1] == 'M')
+                            ) && (
+                                    (grid[i-1][j+1] == 'M' && grid[i+1][j-1] == 'S') || (grid[i-1][j+1] == 'S' && grid[i+1][j-1] == 'M')
+                            )
+                    ) {appearances += 1;}
+                }
+            }
+        }
+        return appearances;
+    }
 }
