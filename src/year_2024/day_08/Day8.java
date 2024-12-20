@@ -45,6 +45,13 @@ public class Day8 {
     }
 
     private Pair<Integer, Integer> getAntiNodeLocation(Pair<Integer, Integer> closerAntenna, Pair<Integer, Integer> furtherAntenna) {
+        /*
+         let A be closer, B be further, P be desired point.
+         By definition, PB = 2 PA.
+         Because PAB Collinear, PB = PA + AB.
+         So 2PA = PB = PA + AB ===> PA = AB.
+         But obviously the vector is pointed in the wrong direction, so P = A - (B-A) = 2A - B
+         */
         return Pair.of((closerAntenna.first() * 2) - furtherAntenna.first(), (closerAntenna.second() * 2) - furtherAntenna.second());
     }
 
