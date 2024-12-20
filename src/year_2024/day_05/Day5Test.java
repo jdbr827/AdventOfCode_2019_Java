@@ -23,5 +23,11 @@ public class Day5Test {
         assertEquals(143, Day5.fromScanner(SMALL_INPUT_FILENAME).sumOfMiddlePagesOfCorrectlyOrderedUpdates());
         assertEquals(6051,Day5.fromScanner(INPUT_FILENAME).sumOfMiddlePagesOfCorrectlyOrderedUpdates());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(123, Day5.fromScanner(SMALL_INPUT_FILENAME).sumOfMiddlePagesOfCorrectedUpdates());
+        assertEquals(5093, Day5.fromScanner(INPUT_FILENAME).sumOfMiddlePagesOfCorrectedUpdates());
+    }
 }
 

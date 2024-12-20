@@ -6,7 +6,6 @@ import utils.AOCScanner;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day5Scanner extends AOCScanner  {
 
