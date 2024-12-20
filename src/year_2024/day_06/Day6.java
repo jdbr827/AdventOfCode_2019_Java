@@ -35,22 +35,23 @@ public class Day6 {
     }
 
     public int numLoopCreatingObstacleLocations() {
+        guard.trackPath();
         int tot = 0;
-        for (int i=0; i<grid.length; i++) {
-            for (int j=0; j<grid.length; j++) {
-                if (addingObstacleHereCreatesLoop(i, j)) {
-                    tot += 1;
-                }
+        for (CartesianPoint spacePatrolled : guard.spacesVisited) {
+            if (addingObstacleHereCreatesLoop(spacePatrolled)) {
+                tot += 1;
             }
         }
         return tot;
     }
 
-    private boolean addingObstacleHereCreatesLoop(int i, int j) {
+    private boolean addingObstacleHereCreatesLoop(CartesianPoint spacePatrolled) {
+        int i = grid.length - spacePatrolled.y - 1;
+        int j = spacePatrolled.x;
         if (grid[i][j] != '.') {return false;}
-        guard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
+        Guard alternateGuard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
         grid[i][j] = '#';
-        boolean ans = guard.getsStuckInLoop();
+        boolean ans = alternateGuard.getsStuckInLoop();
         grid[i][j] = '.';
         return ans;
     }
