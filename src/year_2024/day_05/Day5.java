@@ -46,6 +46,7 @@ public class Day5 {
     }
 
 
+    // Assuming I incorrect updates with average of E errors, part 2 becomes O(I*E*N^2)
     public int sumOfMiddlePagesOfCorrectedUpdates() {
         int tot = 0;
         for (List<Integer> update : proposedUpdates) {
@@ -53,9 +54,7 @@ public class Day5 {
             Pair<Integer, Integer> violation;
             if ((violation = getFirstViolatedRule(mutableUpdate)) != null) {
                 while (violation != null) {
-                    int i = violation.first();
-                    int j = violation.second();
-                    Collections.swap(mutableUpdate, i, j);
+                    Collections.swap(mutableUpdate, violation.first(), violation.second());
                     violation = getFirstViolatedRule(mutableUpdate);
                 }
                 tot += getMiddleElement(mutableUpdate);
