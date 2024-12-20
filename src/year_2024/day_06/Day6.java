@@ -8,21 +8,26 @@ import year_2019.day15.model.CardinalDirection;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class Day6 {
     Character[][] grid;
     Guard guard;
+    int N;
+    int M;
 
     public Day6(String inputFilename) {
         grid = new AOCScanner(inputFilename).scanAsChar2DArray();
+        N = grid.length;
+        M = grid[0].length;
         guard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
     }
 
     public CartesianPoint findGuardStartingPosition() {
-        for (int i=0; i<grid.length; i++) {
-            for (int j=0; j<grid[0].length; j++) {
+        for (int i=0; i<N; i++) {
+            for (int j=0; j<M; j++) {
                 if (grid[i][j] == '^') {
-                    return new CartesianPoint(j,grid.length-1-i);
+                    return new CartesianPoint(j,N-1-i);
                 }
             }
         }
@@ -46,7 +51,7 @@ public class Day6 {
     }
 
     private boolean addingObstacleHereCreatesLoop(CartesianPoint spacePatrolled) {
-        int i = grid.length - spacePatrolled.y - 1;
+        int i = N - spacePatrolled.y - 1;
         int j = spacePatrolled.x;
         if (grid[i][j] != '.') {return false;}
         Guard alternateGuard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
@@ -54,6 +59,10 @@ public class Day6 {
         boolean ans = alternateGuard.getsStuckInLoop();
         grid[i][j] = '.';
         return ans;
+    }
+
+    private boolean isObstacle(CartesianPoint position) {
+        return grid[N-1-position.y][position.x] == '#';
     }
 
     class Guard extends RotatingMovingRobot {
@@ -73,7 +82,7 @@ public class Day6 {
         }
 
         public void trackPath() {
-            while (position.isInBoundariesInclusive(0, grid[0].length-1, 0, grid.length)) {
+            while (position.isInBoundariesInclusive(0, M-1, 0, N-1)) {
                 if (isObstacle(position)) {
                     moveBackward();
                     rotateClockwise();
@@ -85,7 +94,7 @@ public class Day6 {
         }
 
         public boolean getsStuckInLoop() {
-            while (position.isInBoundariesInclusive(0, grid[0].length-1, 0, grid.length-1)) {
+            while (position.isInBoundariesInclusive(0, M-1, 0, N-1)) {
                 if (isObstacle(position)) {
                     moveBackward();
                     rotateClockwise();
@@ -97,9 +106,5 @@ public class Day6 {
             }
             return false;
         }
-    }
-
-    private boolean isObstacle(CartesianPoint position) {
-        return grid[grid.length-1-position.y][position.x] == '#';
     }
 }
