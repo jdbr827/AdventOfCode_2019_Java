@@ -19,5 +19,6 @@ public class Day2Test {
     @Test
     public void test_part2() {
         assertEquals(4, new Day2(SMALL_INPUT_FILENAME).numDampenableReports());
+        assertEquals(459, new Day2(INPUT_FILENAME).numDampenableReports());
     }
 }

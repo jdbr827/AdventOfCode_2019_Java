@@ -1,6 +1,8 @@
 package year_2024.day_02;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -40,6 +42,22 @@ public class Day2 {
     }
 
     private static boolean isReportDampenable(List<Integer> levels) {
+        if (isReportSafe(levels)) {
+            return true;
+        }
+
+        for (int removed_idx=0; removed_idx < levels.size(); removed_idx++) {
+            List<Integer> removed_levels = new LinkedList();
+            for (int i=0; i< levels.size(); i++) {
+                if (i != removed_idx) {
+                    removed_levels.add(levels.get(i));
+                }
+            }
+            if (isReportSafe(removed_levels)) {
+                return true;
+            }
+        }
+        return false;
         // TODO: O(n) solution
     }
 }
