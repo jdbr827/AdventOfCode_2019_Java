@@ -14,8 +14,7 @@ public class Day7Test {
     @Test
     public void test_part1() {
         assertEquals(3749, new Day7(SMALL_INPUT_FILENAME).totalCalibrationResult());
-        System.out.println(new Day7(INPUT_FILENAME).totalCalibrationResult());
-        //assertEquals(5208, new Day7(INPUT_FILENAME).totalCalibrationResult());
+        assertEquals(5512534574980L, new Day7(INPUT_FILENAME).totalCalibrationResult());
     }
 
 }
