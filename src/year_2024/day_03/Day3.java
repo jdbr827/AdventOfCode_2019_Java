@@ -4,9 +4,11 @@ import org.testng.internal.collections.Pair;
 
 import java.util.List;
 
+import static year_2024.day_03.Day3Scanner.DONT_OPERATION;
+import static year_2024.day_03.Day3Scanner.DO_OPERATION;
+
 public class Day3 {
-    static final Pair<Integer, Integer> DO_OPERATION = new Pair<>(-1, 1);
-    static final Pair<Integer, Integer> DONT_OPERATION = new Pair<>(-1, -1);
+
     List<Pair<Integer, Integer>> operations;
 
     public Day3(String smallInputFilename) {
