@@ -15,4 +15,10 @@ public class Day8Test {
         assertEquals(14, new Day8(SMALL_INPUT_FILENAME).numLocationsWithAntiNodes());
         assertEquals(336, new Day8(INPUT_FILENAME).numLocationsWithAntiNodes());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(34, new Day8(SMALL_INPUT_FILENAME).numLocationsWithHarmonicAntiNodes());
+        assertEquals(1131, new Day8(INPUT_FILENAME).numLocationsWithHarmonicAntiNodes());
+    }
 }
