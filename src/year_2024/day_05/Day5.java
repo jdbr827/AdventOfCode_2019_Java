@@ -6,17 +6,18 @@ import org.testng.internal.collections.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 public class Day5 {
-    List<Pair<Integer, Integer>> rules;
+    Set<Pair<Integer, Integer>> rules;
     List<List<Integer>> proposedUpdates;
 
     public static Day5 fromScanner(String inputFilename) {
         return new Day5Scanner(inputFilename).scan();
     }
 
-    // Overall Part 1 = O(N^2 * R * U). Yuck
+    // Overall Part 1 = O(N^2 * U).
     public int sumOfMiddlePagesOfCorrectlyOrderedUpdates() {
         return proposedUpdates.stream()
                 .filter(this::isUpdateCorrectlyOrdered) // O(U)
@@ -27,10 +28,8 @@ public class Day5 {
     private Pair<Integer, Integer> getFirstViolatedRule(List<Integer> proposedUpdate) {
         for (int i=0; i< proposedUpdate.size(); i++) { // O(N)
             for (int j=i+1; j< proposedUpdate.size(); j++) { // O(N)
-                for (Pair<Integer, Integer> rule : rules) { // O(R)
-                    if (rule.equals(Pair.of(proposedUpdate.get(j), proposedUpdate.get(i)))) {
+                if (rules.contains(Pair.of(proposedUpdate.get(j), proposedUpdate.get(i)))) { // O(1)
                         return Pair.of(i, j);
-                    }
                 }
             }
         }
@@ -45,6 +44,7 @@ public class Day5 {
         int n = proposedUpdate.size();
         return proposedUpdate.get((n-1)/ 2);
     }
+
 
     public int sumOfMiddlePagesOfCorrectedUpdates() {
         int tot = 0;

@@ -3,9 +3,7 @@ package year_2024.day_05;
 import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Day5Scanner extends AOCScanner  {
 
@@ -14,7 +12,7 @@ public class Day5Scanner extends AOCScanner  {
     }
 
     public Day5 scan() {
-        List<Pair<Integer, Integer>> rules = new LinkedList<>();
+        Set<Pair<Integer, Integer>> rules = new HashSet<>();
         List<List<Integer>> proposedUpdates = new LinkedList<>();
 
         String thisLine;
