@@ -13,6 +13,6 @@ public class Day8Test {
     @Test
     public void test_part1() {
         assertEquals(14, new Day8(SMALL_INPUT_FILENAME).numLocationsWithAntiNodes());
-        System.out.println(new Day8(INPUT_FILENAME).numLocationsWithAntiNodes());
+        assertEquals(336, new Day8(INPUT_FILENAME).numLocationsWithAntiNodes());
     }
 }

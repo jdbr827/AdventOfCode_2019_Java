@@ -23,7 +23,6 @@ public class Day8 {
                 }
             }
         }
-        System.out.println(antennaLocations.get('0'));
     }
 
     public int numLocationsWithAntiNodes() {
@@ -31,16 +30,13 @@ public class Day8 {
         for (List<Pair<Integer, Integer>> antennaGroup: antennaLocations.values()) {
             for(int i=0; i < antennaGroup.size(); i++) {
                 for (int j=i+1; j<antennaGroup.size(); j++) {
-                    for (Pair<Integer, Integer> antiNodeLocation : antiNodeLocations(antennaGroup.get(i), antennaGroup.get(j))) {
-                        Pair<Integer, Integer> antiNode = getAntiNodeLocation(antennaGroup.get(i), antennaGroup.get(j));
-                        if (isInBounds(antiNode)) {
-                            locationsWithAntiNodes.add(antiNode);
-                        }
-                        antiNode = getAntiNodeLocation(antennaGroup.get(j), antennaGroup.get(i));
-                        if (isInBounds(antiNode)) {
-                            locationsWithAntiNodes.add(antiNode);
-                        }
-
+                    Pair<Integer, Integer> antiNode = getAntiNodeLocation(antennaGroup.get(i), antennaGroup.get(j));
+                    if (isInBounds(antiNode)) {
+                        locationsWithAntiNodes.add(antiNode);
+                    }
+                    antiNode = getAntiNodeLocation(antennaGroup.get(j), antennaGroup.get(i));
+                    if (isInBounds(antiNode)) {
+                        locationsWithAntiNodes.add(antiNode);
                     }
                 }
             }
@@ -48,11 +44,12 @@ public class Day8 {
         return locationsWithAntiNodes.size();
     }
 
-    private Pair<Integer, Integer> getAntiNodeLocation(Pair<Integer, Integer> antenna1, Pair<Integer, Integer> antenna2) {
+    private Pair<Integer, Integer> getAntiNodeLocation(Pair<Integer, Integer> closerAntenna, Pair<Integer, Integer> furtherAntenna) {
+        return Pair.of((closerAntenna.first() * 2) - furtherAntenna.first(), (closerAntenna.second() * 2) - furtherAntenna.second());
     }
 
     private boolean isInBounds(Pair<Integer, Integer> antiNodeLocation) {
-        return antiNodeLocation.first() >= 0 && antiNodeLocation.first() < N && antiNodeLocation.second() >= 0 && antiNodeLocation.second() <= M;
+        return antiNodeLocation.first() >= 0 && antiNodeLocation.first() < N && antiNodeLocation.second() >= 0 && antiNodeLocation.second() < M;
     }
 
 }
