@@ -4,6 +4,8 @@ import org.testng.internal.collections.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class Day7 {
     Collection<Pair<Long, List<Long>>> equations;
@@ -18,23 +20,18 @@ public class Day7 {
     private boolean isSolvable(Pair<Long, List<Long>> longListPair) {
         long desiredResult = longListPair.first();
         List<Long> parameters = longListPair.second();
-        int numOps = parameters.size()-1;
-        for (long i=0; i<Math.pow(2, numOps); i++) {
+        int numOps = parameters.size() - 1;
+        return LongStream.range(0L, (long) Math.pow(2, numOps)).anyMatch(i -> {
             long tot = parameters.getFirst();
-            for (int j=0; j<numOps; j++) {
-                if ((((i>>j)&1) == 1)){
-                    tot *= parameters.get(j+1);
+            for (int j = 0; j < numOps; j++) {
+                if ((((i >> j) & 1) == 1)) {
+                    tot *= parameters.get(j + 1);
                 } else {
-                    tot += parameters.get(j+1);
+                    tot += parameters.get(j + 1);
                 }
             }
-            if (tot == desiredResult) {
-                return true;
-            }
-        }
-        return false;
-
-
+            return tot == desiredResult;
+        });
     }
 
     public long totalCalibrationResultWithConcat() {
