@@ -14,4 +14,10 @@ public class Day6Test {
         assertEquals(41, new Day6(SMALL_INPUT_FILENAME).numDistinctSpacesPatrolled());
         assertEquals(5208, new Day6(INPUT_FILENAME).numDistinctSpacesPatrolled());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(6, new Day6(SMALL_INPUT_FILENAME).numLoopCreatingObstacleLocations());
+        assertEquals(1972, new Day6(INPUT_FILENAME).numLoopCreatingObstacleLocations());
+    }
 }
