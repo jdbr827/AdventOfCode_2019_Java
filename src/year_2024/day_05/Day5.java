@@ -14,14 +14,25 @@ public class Day5 {
         return new Day5Scanner(inputFilename).scan();
     }
 
+    // Overall Part 1 = O(N^2 * R * U). Yuck
     public int sumOfMiddlePagesOfCorrectlyOrderedUpdates() {
         return proposedUpdates.stream()
-                .filter(this::isUpdateCorrectlyOrdered)
+                .filter(this::isUpdateCorrectlyOrdered) // O(U)
                 .map(this::getMiddleElement)
                 .reduce(0, Math::addExact);
     }
 
     private boolean isUpdateCorrectlyOrdered(List<Integer> proposedUpdate) {
+        for (int i=0; i< proposedUpdate.size(); i++) { // O(N)
+            for (int j=i+1; j< proposedUpdate.size(); j++) { // O(N)
+                for (Pair<Integer, Integer> rule : rules) { // O(R)
+                    if (rule.equals(Pair.of(proposedUpdate.get(j), proposedUpdate.get(i)))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private Integer getMiddleElement(List<Integer> proposedUpdate) {
