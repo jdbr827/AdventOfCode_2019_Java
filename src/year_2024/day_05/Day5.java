@@ -15,7 +15,17 @@ public class Day5 {
     }
 
     public int sumOfMiddlePagesOfCorrectlyOrderedUpdates() {
-        System.out.println(rules);
-        return 0;
+        return proposedUpdates.stream()
+                .filter(this::isUpdateCorrectlyOrdered)
+                .map(this::getMiddleElement)
+                .reduce(0, Math::addExact);
+    }
+
+    private boolean isUpdateCorrectlyOrdered(List<Integer> proposedUpdate) {
+    }
+
+    private Integer getMiddleElement(List<Integer> proposedUpdate) {
+        int n = proposedUpdate.size();
+        return proposedUpdate.get((n-1)/ 2);
     }
 }
