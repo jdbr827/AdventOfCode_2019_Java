@@ -23,7 +23,6 @@ public class Day3 {
     public int sumAllowedValidOps() {
         boolean enabled = true;
         int total = 0;
-        System.out.println(operations);
         for (Pair<Integer, Integer> operation : operations) {
             if (operation.equals(DO_OPERATION)) {
                 enabled = true;
