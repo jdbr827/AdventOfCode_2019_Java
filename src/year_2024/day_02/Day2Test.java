@@ -15,4 +15,9 @@ public class Day2Test {
         assertEquals(2, new Day2(SMALL_INPUT_FILENAME).numSafeReports());
         assertEquals(407, new Day2(INPUT_FILENAME).numSafeReports());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(4, new Day2(SMALL_INPUT_FILENAME).numDampenableReports());
+    }
 }

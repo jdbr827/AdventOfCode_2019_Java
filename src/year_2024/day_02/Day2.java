@@ -1,6 +1,8 @@
 package year_2024.day_02;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Day2 {
     List<List<Integer>> reports;
@@ -30,5 +32,14 @@ public class Day2 {
             }
         }
         return true;
+    }
+
+
+    public int numDampenableReports() {
+        return (int) reports.stream().filter(Day2::isReportDampenable).count();
+    }
+
+    private static boolean isReportDampenable(List<Integer> levels) {
+        // TODO: O(n) solution
     }
 }
