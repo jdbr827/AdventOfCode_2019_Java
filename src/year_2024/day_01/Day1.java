@@ -34,9 +34,10 @@ public class Day1 {
 
         // invar left: freqI = number of times list1.get(left) appears in list2
         int freqI = 0;
+
         int totalSimilarity = 0;
+
         for (int right=0; right<n; right++) {
-            //System.out.println(left + " " + right + " " + list1.get(left) + " " + list2.get(right));
             while (left < n && list1.get(left) < list2.get(right)) {
                 totalSimilarity += list1.get(left) * freqI;
                 left++;
