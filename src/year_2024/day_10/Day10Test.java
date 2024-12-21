@@ -16,4 +16,10 @@ public class Day10Test {
         assertEquals(472, new Day10(INPUT_FILENAME).trailheadScoreSum());
     }
 
+    @Test
+    public void test_part2() {
+        assertEquals(81, new Day10(SMALL_INPUT_FILENAME).trailheadRatingSum());
+        assertEquals(969,new Day10(INPUT_FILENAME).trailheadRatingSum());
+    }
+
 }
