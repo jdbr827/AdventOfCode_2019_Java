@@ -13,7 +13,7 @@ public class Day10Test {
     @Test
     public void test_part1() {
         assertEquals(36, new Day10(SMALL_INPUT_FILENAME).trailheadScoreSum());
-        System.out.println(new Day10(INPUT_FILENAME).trailheadScoreSum());
+        assertEquals(472, new Day10(INPUT_FILENAME).trailheadScoreSum());
     }
 
 }
