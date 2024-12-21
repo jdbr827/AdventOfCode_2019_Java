@@ -50,8 +50,6 @@ public class Day6 {
     }
 
     private boolean addingObstacleHereCreatesLoop(CartesianPoint spacePatrolled) {
-        int i = N - spacePatrolled.y - 1;
-        int j = spacePatrolled.x;
         Guard alternateGuard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
         obstacleLocations.add(spacePatrolled);
         boolean ans = alternateGuard.getsStuckInLoop();
