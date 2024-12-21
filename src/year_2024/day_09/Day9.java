@@ -1,0 +1,75 @@
+package year_2024.day_09;
+
+import lombok.AllArgsConstructor;
+import org.testng.internal.collections.Pair;
+import utils.AOCScanner;
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+import java.util.stream.Stream;
+
+public class Day9 {
+    List<Integer> initialFileSystem;
+
+    @AllArgsConstructor
+    class FileInfo {
+        int id;
+        int size;
+        int start;
+    }
+
+
+    public Day9(String inputFilename) {
+        // Idea : A queue of free space blocks, a stack of taken blocks, ends when stack is bigger than queue.
+
+        AOCScanner scanner = new AOCScanner(inputFilename);
+
+        char[] chars = scanner.nextLine().toCharArray();
+
+        initialFileSystem = new ArrayList<>();
+        for (char c : chars) {
+            initialFileSystem.add(Integer.parseInt(String.valueOf(c)));
+        }
+
+    }
+
+    public long resultingFilesystemChecksum() {
+        Deque<FileInfo> deque = new LinkedList<>();
+        int totalFileSystemSize = initialFileSystem.getFirst();
+        deque.add(new FileInfo(0, totalFileSystemSize, 0));
+        for (int id=1; id*2 < initialFileSystem.size(); id++) {
+            int freeSpaceBefore = initialFileSystem.get(id*2 - 1);
+            int size = initialFileSystem.get(id*2);
+            deque.add(new FileInfo(id, size, totalFileSystemSize + freeSpaceBefore));
+            totalFileSystemSize += freeSpaceBefore + size;
+        }
+
+        //System.out.println(totalFileSystemSize);
+
+        long total = 0L;
+        for (int i=0; i<totalFileSystemSize; i++) {
+            if (deque.isEmpty()) {
+                return total;
+            }
+            //System.out.println(i);
+            if (deque.getFirst().start == i) {
+                total += (long) i * deque.getFirst().id;
+                deque.getFirst().start += 1;
+                deque.getFirst().size -= 1;
+                if (deque.getFirst().size == 0) {
+                    deque.removeFirst();
+                }
+            } else {
+                total += (long) i * deque.getLast().id;
+                deque.getLast().size -= 1;
+                if (deque.getLast().size == 0) {
+                    deque.removeLast();
+                }
+            }
+        }
+        return total;
+
+    }
+}

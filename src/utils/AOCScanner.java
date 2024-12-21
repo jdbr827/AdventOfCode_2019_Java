@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class AOCScanner {
-    protected final Scanner scanner;
+    public final Scanner scanner;
 
     public AOCScanner(String fileName) {
         File file = new File(fileName);
