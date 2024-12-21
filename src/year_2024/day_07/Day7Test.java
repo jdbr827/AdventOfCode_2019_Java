@@ -20,7 +20,7 @@ public class Day7Test {
     @Test
     public void test_part2() {
         assertEquals(11387, new Day7(SMALL_INPUT_FILENAME).totalCalibrationResultWithConcat());
-        assertEquals(5512534574980L, new Day7(INPUT_FILENAME).totalCalibrationResultWithConcat());
+        assertEquals(328790210468594L, new Day7(INPUT_FILENAME).totalCalibrationResultWithConcat());
     }
 
 }
