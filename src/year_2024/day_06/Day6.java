@@ -8,23 +8,24 @@ import year_2019.day15.model.CardinalDirection;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class Day6 {
     Character[][] grid;
     Guard guard;
     int N;
     int M;
+    final CartesianPoint startPoint;
 
     public Day6(String inputFilename) {
         grid = new AOCScanner(inputFilename).scanAsChar2DArray();
         N = grid.length;
         M = grid[0].length;
-        guard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
+        startPoint = findStart();
+        guard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
     }
 
-    public CartesianPoint findGuardStartingPosition() {
-        for (int i=0; i<N; i++) {
+    private CartesianPoint findStart() {
+        for (int i = 0; i<N; i++) {
             for (int j=0; j<M; j++) {
                 if (grid[i][j] == '^') {
                     return new CartesianPoint(j,N-1-i);
@@ -54,7 +55,9 @@ public class Day6 {
         int i = N - spacePatrolled.y - 1;
         int j = spacePatrolled.x;
         if (grid[i][j] != '.') {return false;}
-        Guard alternateGuard = new Guard(findGuardStartingPosition(), CardinalDirection.NORTH);
+        System.out.println(startPoint);
+        System.out.println(findStart());
+        Guard alternateGuard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
         grid[i][j] = '#';
         boolean ans = alternateGuard.getsStuckInLoop();
         grid[i][j] = '.';
@@ -68,7 +71,6 @@ public class Day6 {
     class Guard extends RotatingMovingRobot {
         Set<CartesianPoint> spacesVisited = new HashSet<>();
         Set<Pair<CartesianPoint, CardinalDirection>> statesVisited = new HashSet<>();
-
         public Guard(CartesianPoint position, CardinalDirection facing) {
             super(position, facing);
         }
