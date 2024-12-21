@@ -1,6 +1,7 @@
 package year_2024.day_09;
 
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 
@@ -13,11 +14,22 @@ import java.util.stream.Stream;
 public class Day9 {
     List<Integer> initialFileSystem;
 
+
     @AllArgsConstructor
+    @ToString
     class FileInfo {
         int id;
         int size;
         int start;
+
+        public long getCheckSum() {
+            long tot = 0;
+            //System.out.println(id + " " + start);
+            for (int idx=start; idx<start+size; idx++) {
+                tot += (long) id * idx;
+            }
+            return tot;
+        }
     }
 
 
@@ -49,27 +61,59 @@ public class Day9 {
         //System.out.println(totalFileSystemSize);
 
         long total = 0L;
-        for (int i=0; i<totalFileSystemSize; i++) {
-            if (deque.isEmpty()) {
-                return total;
-            }
-            //System.out.println(i);
+        int i = 0;
+        while (!deque.isEmpty()) {
             if (deque.getFirst().start == i) {
-                total += (long) i * deque.getFirst().id;
-                deque.getFirst().start += 1;
-                deque.getFirst().size -= 1;
-                if (deque.getFirst().size == 0) {
-                    deque.removeFirst();
-                }
+                total += deque.getFirst().getCheckSum();
+                i += deque.getFirst().size;
+                deque.removeFirst();
             } else {
                 total += (long) i * deque.getLast().id;
                 deque.getLast().size -= 1;
                 if (deque.getLast().size == 0) {
                     deque.removeLast();
                 }
+                i++;
             }
         }
         return total;
+    }
 
+    @AllArgsConstructor
+    class AvailableBlock {
+        int size;
+        int start;
+    }
+
+    public long resultingFilesystemChecksumWithoutFragmentation() {
+        List<FileInfo> deque = new ArrayList<>();
+        List<AvailableBlock> availableBlocks = new ArrayList<>();
+        int totalFileSystemSize = initialFileSystem.getFirst();
+        deque.add(new FileInfo(0, totalFileSystemSize, 0));
+        for (int id=1; id*2 < initialFileSystem.size(); id++) {
+            int freeSpaceBefore = initialFileSystem.get(id*2 - 1);
+            int size = initialFileSystem.get(id*2);
+            deque.add(new FileInfo(id, size, totalFileSystemSize + freeSpaceBefore));
+            availableBlocks.add(new AvailableBlock(freeSpaceBefore, totalFileSystemSize));
+            totalFileSystemSize += freeSpaceBefore + size;
+        }
+
+        long total = 0L;
+        while (!deque.isEmpty()) {
+            for (AvailableBlock block : availableBlocks) {
+                if (block.start > deque.getLast().start) {
+                    break;
+                }
+                if (block.size >= deque.getLast().size) {
+                    deque.getLast().start = block.start;
+                    block.start += deque.getLast().size;
+                    block.size -= deque.getLast().size;
+                    break;
+                }
+            }
+            total += deque.getLast().getCheckSum();
+            deque.removeLast();
+        }
+        return total;
     }
 }

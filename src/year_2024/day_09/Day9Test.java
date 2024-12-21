@@ -14,4 +14,10 @@ public class Day9Test {
         assertEquals(1928, new Day9(SMALL_INPUT_FILENAME).resultingFilesystemChecksum());
         assertEquals(6200294120911L, new Day9(INPUT_FILENAME).resultingFilesystemChecksum());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(2858, new Day9(SMALL_INPUT_FILENAME).resultingFilesystemChecksumWithoutFragmentation());
+        assertEquals(6227018762750L, new Day9(INPUT_FILENAME).resultingFilesystemChecksumWithoutFragmentation());
+    }
 }
