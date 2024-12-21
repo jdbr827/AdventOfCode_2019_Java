@@ -2,14 +2,10 @@ package year_2024.day_09;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Day9 {
     List<Integer> initialFileSystem;
@@ -17,7 +13,7 @@ public class Day9 {
 
     @AllArgsConstructor
     @ToString
-    class FileInfo {
+    static class FileInfo {
         int id;
         int size;
         int start;
@@ -80,7 +76,7 @@ public class Day9 {
     }
 
     @AllArgsConstructor
-    class AvailableBlock {
+    static class AvailableBlock {
         int size;
         int start;
     }
