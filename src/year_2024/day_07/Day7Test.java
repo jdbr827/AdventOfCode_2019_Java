@@ -1,7 +1,6 @@
 package year_2024.day_07;
 
 import org.junit.jupiter.api.Test;
-import year_2024.day_06.Day6;
 
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -21,8 +20,7 @@ public class Day7Test {
     @Test
     public void test_part2() {
         assertEquals(11387, new Day7(SMALL_INPUT_FILENAME).totalCalibrationResultWithConcat());
-        System.out.println(new Day7(INPUT_FILENAME).totalCalibrationResultWithConcat());
-        //assertEquals(5512534574980L, new Day7(INPUT_FILENAME).totalCalibrationResultWithConcat());
+        assertEquals(5512534574980L, new Day7(INPUT_FILENAME).totalCalibrationResultWithConcat());
     }
 
 }
