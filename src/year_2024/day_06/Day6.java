@@ -6,33 +6,31 @@ import viewModelUtil.CartesianPoint;
 import year_2019.day11.RotatingMovingRobot;
 import year_2019.day15.model.CardinalDirection;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Day6 {
-    Character[][] grid;
     Guard guard;
     int N;
     int M;
-    final CartesianPoint startPoint;
+    CartesianPoint startPoint;
+    Collection<CartesianPoint> obstacleLocations = new HashSet<>();
 
     public Day6(String inputFilename) {
-        grid = new AOCScanner(inputFilename).scanAsChar2DArray();
+        Character[][] grid = new AOCScanner(inputFilename).scanAsChar2DArray();
         N = grid.length;
         M = grid[0].length;
-        startPoint = findStart();
-        guard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
-    }
-
-    private CartesianPoint findStart() {
         for (int i = 0; i<N; i++) {
             for (int j=0; j<M; j++) {
                 if (grid[i][j] == '^') {
-                    return new CartesianPoint(j,N-1-i);
+                    startPoint = new CartesianPoint(j,N-1-i);
+                } else if (grid[i][j] == '#') {
+                    obstacleLocations.add(new CartesianPoint(j, N-1-i));
                 }
             }
         }
-        return null;
+        guard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
     }
 
     public int numDistinctSpacesPatrolled() {
@@ -54,18 +52,15 @@ public class Day6 {
     private boolean addingObstacleHereCreatesLoop(CartesianPoint spacePatrolled) {
         int i = N - spacePatrolled.y - 1;
         int j = spacePatrolled.x;
-        if (grid[i][j] != '.') {return false;}
-        System.out.println(startPoint);
-        System.out.println(findStart());
         Guard alternateGuard = new Guard((CartesianPoint) startPoint.clone(), CardinalDirection.NORTH);
-        grid[i][j] = '#';
+        obstacleLocations.add(spacePatrolled);
         boolean ans = alternateGuard.getsStuckInLoop();
-        grid[i][j] = '.';
+        obstacleLocations.remove(spacePatrolled);
         return ans;
     }
 
     private boolean isObstacle(CartesianPoint position) {
-        return grid[N-1-position.y][position.x] == '#';
+        return obstacleLocations.contains(position);
     }
 
     class Guard extends RotatingMovingRobot {
