@@ -3,10 +3,7 @@ package year_2024.day_11;
 import org.jetbrains.annotations.NotNull;
 import utils.AOCScanner;
 import utils.FrequencyTableUtil;
-
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class Day11 {
 
