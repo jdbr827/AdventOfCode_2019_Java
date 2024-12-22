@@ -28,20 +28,25 @@ public class Day11 {
     }
 
     public static long numStonesAfterBlinkingNTimes(Long stone, int nTimes) {
-        if (nTimes == 0L) {
-            return 1L;
+        long tot = 1L;
+        //System.out.println(stone + " " + nTimes);
+        for (int i=0; i<nTimes; i++) {
+            if (stone == 0L) {
+                stone=1L;
+                continue;
+            }
+            String s = stone.toString();
+            if (s.length() % 2 == 0L) {
+                long leftNum = Long.parseLong(s.substring(0, s.length() / 2));
+                long rightNum = Long.parseLong(s.substring(s.length() / 2));
+                stone = leftNum;
+                tot += numStonesAfterBlinkingNTimes(rightNum, nTimes - i-1);
+            } else {
+                stone *= 2024;
+            }
         }
-        if (stone == 0L) {
-            return numStonesAfterBlinkingNTimes(1L, nTimes - 1);
-        }
-        String s = stone.toString();
-        if (s.length() % 2 == 0L) {
-            long left = numStonesAfterBlinkingNTimes(Long.parseLong(s.substring(0, s.length()/2)), nTimes - 1);
-            long right = numStonesAfterBlinkingNTimes(Long.parseLong(s.substring(s.length() / 2)), nTimes - 1);
-            return left + right;
-        } else {
-            return numStonesAfterBlinkingNTimes(stone * 2024, nTimes - 1);
-        }
+        //System.out.println(stone);
+        return tot;
     }
 
 

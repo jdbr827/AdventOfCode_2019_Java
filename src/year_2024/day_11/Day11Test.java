@@ -13,6 +13,11 @@ public class Day11Test {
 
     @Test
     public void test_part1() {
+        //assertEquals(7, Day11.numStonesAfterBlinkingNTimes(125L, 6));
+        assertEquals(1, Day11.numStonesAfterBlinkingNTimes(1L, 1));
+        assertEquals(6, Day11.numStonesAfterBlinkingNTimes(17L, 4));
+        assertEquals(8, Day11.numStonesAfterBlinkingNTimes(17L, 5));
+        assertEquals(15, Day11.numStonesAfterBlinkingNTimes(17L, 6));
         assertEquals(22, Day11.numStonesAfterBlinkingNTimes(Day11.readIn(SMALL_INPUT_FILENAME), 6));
         assertEquals(55312, Day11.numStonesAfterBlinkingNTimes(Day11.readIn(SMALL_INPUT_FILENAME), 25));
         assertEquals(187738, Day11.numStonesAfterBlinkingNTimes(Day11.readIn(INPUT_FILENAME), 25));
