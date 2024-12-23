@@ -15,9 +15,24 @@ public class Day13 {
 
     @AllArgsConstructor
     static class ClawMachine {
-        Point aPress;
-        Point bPress;
+        Point aButton;
+        Point bButton;
         Point prizeLocation;
+
+        public int fewestTokensToWinPrize() {
+            boolean foundAWay = false;
+            int minTokensNeeded = Integer.MAX_VALUE;
+
+            for (int aPresses=0; aPresses <=100; aPresses++) {
+                for (int bPresses=0; bPresses<=100; bPresses++) {
+                    if (new Point(aPresses * aButton.x + bPresses * bButton.x, aPresses * aButton.y + bPresses * bButton.y).equals(prizeLocation)) {
+                        minTokensNeeded = Math.min(minTokensNeeded, aPresses*3 + bPresses);
+                        foundAWay = true;
+                    }
+                }
+            }
+            return foundAWay ? minTokensNeeded : 0;
+        }
     }
 
     class Day13Scanner extends AOCScanner {
@@ -59,6 +74,6 @@ public class Day13 {
     }
 
     public int fewestTokensToWinAllPossiblePrizes() {
-        return 0;
+        return clawMachines.stream().map(ClawMachine::fewestTokensToWinPrize).reduce(0, Math::addExact);
     }
 }

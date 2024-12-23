@@ -12,7 +12,7 @@ public class Day13Test {
     @Test
     public void test_part1() {
         assertEquals(480, new Day13(SMALL_INPUT_FILENAME).fewestTokensToWinAllPossiblePrizes());
-        System.out.println(new Day13(INPUT_FILENAME).fewestTokensToWinAllPossiblePrizes());
+        assertEquals(29388, new Day13(INPUT_FILENAME).fewestTokensToWinAllPossiblePrizes());
 
     }
 
