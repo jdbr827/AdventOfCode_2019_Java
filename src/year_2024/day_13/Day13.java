@@ -5,6 +5,7 @@ import utils.AOCScanner;
 import utils.ReadIn;
 
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,7 @@ public class Day13 {
         Point prizeLocation;
     }
 
-    static class Day13Scanner extends AOCScanner {
+    class Day13Scanner extends AOCScanner {
         static final Pattern clawPattern = Pattern.compile(
                 "Button A: X\\+([\\d]*), Y\\+([\\d]*)[\\s]*" +
                         "Button B: X\\+([\\d]*), Y\\+([\\d]*)\n" +
@@ -41,14 +42,17 @@ public class Day13 {
             data += "\n" + scanner.nextLine();
             Matcher m = clawPattern.matcher(data);
             ReadIn.findOrElseThrow(m, "Could not understand matcher data " + data);
-            System.out.println(m.groupCount());
             if (scanner.hasNextLine()) {
                 scanner.nextLine(); // blank line;
             }
+            clawMachines.add(new ClawMachine(
+                    new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2))),
+                    new Point(Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))),
+                    new Point(Integer.parseInt(m.group(5)), Integer.parseInt(m.group(6)))));
         }
     }
 
-    List<ClawMachine> clawMachines;
+    List<ClawMachine> clawMachines = new LinkedList<>();
 
     public Day13(String inputFilename) {
         new Day13Scanner(inputFilename).scan();
