@@ -1,6 +1,7 @@
 package year_2024.day_14;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import utils.AOCScanner;
 import utils.ReadIn;
 import viewModelUtil.CartesianPoint;
@@ -20,6 +21,7 @@ public class Day14 {
     @AllArgsConstructor
     class BathroomSecurityRobot {
 
+        @Getter
         CartesianPoint position;
         CartesianPoint velocity;
 
