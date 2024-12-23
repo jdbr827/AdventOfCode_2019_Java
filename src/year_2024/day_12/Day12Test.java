@@ -19,4 +19,12 @@ public class Day12Test {
         assertEquals(1374934, new Day12(INPUT_FILENAME).totalFencingCost());
     }
 
+    @Test
+    public void test_part2() {
+        assertEquals(80, new Day12(MINI_INPUT_FILENAME).totalFencingCostBulk());
+        assertEquals(436, new Day12(SMALL_INPUT_FILENAME).totalFencingCostBulk());
+        assertEquals(1206, new Day12(MEDIUM_INPUT_FILENAME).totalFencingCostBulk());
+        assertEquals(841078, new Day12(INPUT_FILENAME).totalFencingCostBulk());
+    }
+
 }
