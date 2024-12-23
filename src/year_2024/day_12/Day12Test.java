@@ -16,7 +16,7 @@ public class Day12Test {
         assertEquals(140, new Day12(MINI_INPUT_FILENAME).totalFencingCost());
         assertEquals(772, new Day12(SMALL_INPUT_FILENAME).totalFencingCost());
         assertEquals(1930, new Day12(MEDIUM_INPUT_FILENAME).totalFencingCost());
-        System.out.println(new Day12(INPUT_FILENAME).totalFencingCost());
+        assertEquals(1374934, new Day12(INPUT_FILENAME).totalFencingCost());
     }
 
 }

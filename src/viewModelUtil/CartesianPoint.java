@@ -36,5 +36,4 @@ public class CartesianPoint extends Point {
         return new Point(x, y);
     }
 
-
 }
