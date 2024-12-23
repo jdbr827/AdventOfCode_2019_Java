@@ -20,18 +20,13 @@ public class Day13 {
         Point prizeLocation;
 
         public int fewestTokensToWinPrize() {
-            boolean foundAWay = false;
-            int minTokensNeeded = Integer.MAX_VALUE;
+            double bPresses = (double) (aButton.x * prizeLocation.y - prizeLocation.x * aButton.y) / (aButton.x*bButton.y- bButton.x*aButton.y);
+            double aPresses = (prizeLocation.x - (bPresses*bButton.x))/aButton.x;
 
-            for (int aPresses=0; aPresses <=100; aPresses++) {
-                for (int bPresses=0; bPresses<=100; bPresses++) {
-                    if (new Point(aPresses * aButton.x + bPresses * bButton.x, aPresses * aButton.y + bPresses * bButton.y).equals(prizeLocation)) {
-                        minTokensNeeded = Math.min(minTokensNeeded, aPresses*3 + bPresses);
-                        foundAWay = true;
-                    }
-                }
+            if ((int) aPresses == aPresses && (int) bPresses == bPresses) {
+                return (3 * (int)aPresses) + (int) bPresses;
             }
-            return foundAWay ? minTokensNeeded : 0;
+            return 0;
         }
     }
 
