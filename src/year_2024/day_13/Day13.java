@@ -5,9 +5,8 @@ import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 import utils.ReadIn;
 
-import java.awt.*;
+
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -49,9 +48,9 @@ public class Day13 {
 
     class Day13Scanner extends AOCScanner {
         static final Pattern clawPattern = Pattern.compile(
-                "Button A: X\\+([\\d]*), Y\\+([\\d]*)[\\s]*" +
-                        "Button B: X\\+([\\d]*), Y\\+([\\d]*)\n" +
-                        "Prize: X=([\\d]*), Y=([\\d]*)");
+                "Button A: X\\+(\\d*), Y\\+(\\d*)\n" +
+                        "Button B: X\\+(\\d*), Y\\+(\\d*)\n" +
+                        "Prize: X=(\\d*), Y=(\\d*)");
 
         public Day13Scanner(String fileName) {
             super(fileName);

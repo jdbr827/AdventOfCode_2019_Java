@@ -1,7 +1,6 @@
 package year_2024.day_13;
 
 import org.junit.jupiter.api.Test;
-import year_2024.day_12.Day12;
 
 import static org.testng.AssertJUnit.assertEquals;
 
