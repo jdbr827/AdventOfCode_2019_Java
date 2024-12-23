@@ -18,7 +18,6 @@ public class Day12 {
     int M;
     int[][] perimeter;
     Map<CartesianPoint, CartesianPoint> parent = new HashMap<>();
-    Map<CartesianPoint, Integer> area = new HashMap<>();
 
 
 
@@ -48,11 +47,6 @@ public class Day12 {
             }
         }
 
-        for (int i=0; i<N; i++) {
-            for (int j = 0; j < M; j++) {
-                findParent(new CartesianPoint(i, j));
-            }
-        }
         HashMap<CartesianPoint, Integer> area = new HashMap<>();
         HashMap<CartesianPoint, Integer> perimeterMap = new HashMap<>();
         for (int i=0; i<N; i++) {
@@ -63,12 +57,6 @@ public class Day12 {
             }
         }
 
-        //System.out.println(area);
-        //System.out.println(perimeterMap);
-
-//        for (CartesianPoint r: area.keySet()) {
-//            System.out.println("Region containing " + grid[r.x][r.y] +  " starting at " + r.toString() + " has area " + area.getOrDefault(r, 0) + " and perimeter " + perimeterMap.getOrDefault(r, 0));
-//        }
         return area.keySet().stream().map(r -> area.get(r) * perimeterMap.getOrDefault(r,0)).map(Long::valueOf).reduce(0L, Math::addExact);
     }
 
