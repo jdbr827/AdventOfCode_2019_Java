@@ -1,10 +1,13 @@
 package year_2024.day_13;
 
 import lombok.AllArgsConstructor;
+import org.testng.internal.collections.Pair;
 import utils.AOCScanner;
 import utils.ReadIn;
 
 import java.awt.*;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,19 +18,33 @@ public class Day13 {
 
     @AllArgsConstructor
     static class ClawMachine {
-        Point aButton;
-        Point bButton;
-        Point prizeLocation;
+        Pair<Long, Long> aButton;
+        Pair<Long, Long> bButton;
+        Pair<Long, Long> prizeLocation;
 
-        public int fewestTokensToWinPrize() {
-            double bPresses = (double) (aButton.x * prizeLocation.y - prizeLocation.x * aButton.y) / (aButton.x*bButton.y- bButton.x*aButton.y);
-            double aPresses = (prizeLocation.x - (bPresses*bButton.x))/aButton.x;
 
-            if ((int) aPresses == aPresses && (int) bPresses == bPresses) {
-                return (3 * (int)aPresses) + (int) bPresses;
+
+        public long fewestTokensToWinPrize() {
+
+
+            BigInteger[] bPresses = BigInteger.valueOf(aButton.first() * prizeLocation.second() - prizeLocation.first() * aButton.second())
+                    .divideAndRemainder(BigInteger.valueOf(aButton.first()*bButton.second()- bButton.first()*aButton.second()));
+            //System.out.println(Arrays.toString(bPresses));
+
+            if (bPresses[1].longValue() != 0) {
+                return 0;
             }
-            return 0;
+
+            BigInteger[] aPresses = BigInteger.valueOf(prizeLocation.first() - (bPresses[0].longValue()*bButton.first())).divideAndRemainder(BigInteger.valueOf(aButton.first()));
+
+            if (aPresses[1].longValue() != 0) {
+                return 0;
+            }
+
+            return 3*aPresses[0].longValue() + bPresses[0].longValue();
         }
+
+
     }
 
     class Day13Scanner extends AOCScanner {
@@ -56,9 +73,9 @@ public class Day13 {
                 scanner.nextLine(); // blank line;
             }
             clawMachines.add(new ClawMachine(
-                    new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2))),
-                    new Point(Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))),
-                    new Point(Integer.parseInt(m.group(5)), Integer.parseInt(m.group(6)))));
+                    Pair.of(Long.parseLong(m.group(1)), Long.parseLong(m.group(2))),
+                    Pair.of(Long.parseLong(m.group(3)), Long.parseLong(m.group(4))),
+                    Pair.of(Long.parseLong(m.group(5)), Long.parseLong(m.group(6)))));
         }
     }
 
@@ -68,7 +85,17 @@ public class Day13 {
         new Day13Scanner(inputFilename).scan();
     }
 
-    public int fewestTokensToWinAllPossiblePrizes() {
-        return clawMachines.stream().map(ClawMachine::fewestTokensToWinPrize).reduce(0, Math::addExact);
+    public long fewestTokensToWinAllPossiblePrizes() {
+        return clawMachines.stream().map(ClawMachine::fewestTokensToWinPrize).reduce(0L, Math::addExact);
+    }
+
+    public long fewestTokensToWinAllPossiblePrizesFar() {
+        for (ClawMachine clawMachine : clawMachines) {
+            clawMachine.prizeLocation = Pair.of(
+                    clawMachine.prizeLocation.first() + 10000000000000L,
+                    clawMachine.prizeLocation.second() + 10000000000000L
+            );
+        }
+        return fewestTokensToWinAllPossiblePrizes();
     }
 }
