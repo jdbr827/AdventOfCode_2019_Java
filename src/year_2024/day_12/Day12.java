@@ -33,7 +33,7 @@ public class Day12 {
         }
     }
 
-    public long totalFencingCost() {
+    public int totalFencingCost() {
         for (int i=0; i<N; i++) {
             for (int j = 0; j < M; j++) {
                 for (CardinalDirection dir : CardinalDirection.values()) {
@@ -52,12 +52,14 @@ public class Day12 {
         for (int i=0; i<N; i++) {
             for (int j=0; j<M; j++) {
                 CartesianPoint region = findParent(new CartesianPoint(i, j));
-                area.put(region, area.getOrDefault(region, 0) + 1);
-                perimeterMap.put(region, perimeterMap.getOrDefault(region, 0) + perimeter[i][j]);
+                area.merge(region, 1, Integer::sum);
+                perimeterMap.merge(region, perimeter[i][j], Integer::sum);
             }
         }
 
-        return area.keySet().stream().map(r -> area.get(r) * perimeterMap.getOrDefault(r,0)).map(Long::valueOf).reduce(0L, Math::addExact);
+        return area.keySet().stream()
+                .map(r -> area.get(r) * perimeterMap.getOrDefault(r,0))
+                .reduce(0, Math::addExact);
     }
 
     private void union(CartesianPoint p1, CartesianPoint p2) {
