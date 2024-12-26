@@ -19,6 +19,11 @@ public class Day15Test {
         assertEquals(1487337, new Day15(INPUT_FILENAME).sumOfGPSAfterMoving());
     }
 
+    @Test
+    public void test_part2() {
+        assertEquals(9021, new Day15(SMALL_INPUT_FILENAME).sumOfGPSAfterMovingScaledUp());
+    }
+
 
 
 }

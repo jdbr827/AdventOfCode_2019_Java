@@ -5,40 +5,92 @@ import viewModelUtil.CartesianPoint;
 import year_2019.day11.RotatingMovingRobot;
 import year_2019.day15.model.CardinalDirection;
 
-import javax.smartcardio.Card;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Day15 {
+class Warehouse {
     Character[][] grid;
-    RotatingMovingRobot robot;
-    List<CardinalDirection> instructions;
+    int Nrows;
+    int Ncols;
 
-    public Day15(String inputFilename) {
-        AOCScanner scanner = new AOCScanner(inputFilename);
+    boolean isBlank(CartesianPoint pt) {
+        return grid[pt.x][pt.y] == '.' || grid[pt.x][pt.y] == '@';
+    }
+
+    private boolean isWall(CartesianPoint pt) {
+        return grid[pt.x][pt.y] == '#';
+    }
+
+    boolean isBox(CartesianPoint pt) {
+        return grid[pt.x][pt.y] == 'O';
+    }
+
+    public void printGrid(CartesianPoint robotPosition) {
+        grid[robotPosition.x][robotPosition.y] = '@';
+        for (Character[] characters : grid) {
+            System.out.println(Arrays.toString(characters));
+        }
+        System.out.println(" ");
+        grid[robotPosition.x][robotPosition.y] = '.';
+    }
+
+    void scanInGrid(AOCScanner scanner) {
         List<Character[]> matrix = new java.util.ArrayList<>(List.of());
         String row;
         while (!(row = scanner.nextLine()).isEmpty()) {
             matrix.add(row.chars().mapToObj(c -> (char)c).toArray(Character[]::new));
         }
-        int Nrows = matrix.size();
-        int Ncols = matrix.get(0).length;
+        Nrows = matrix.size();
+        Ncols = matrix.get(0).length;
 
         Character[][] arr = new Character[Nrows][Ncols];
         for (int i=0; i<Nrows; i++) {
             arr[i] = matrix.get(i);
         }
         grid = arr;
+    }
 
-        for (int i=0; i<Nrows; i++) {
-            for (int j=0; j<Ncols; j++) {
+    CartesianPoint findRobotStartPosition() {
+        for (int i = 0; i < Nrows; i++) {
+            for (int j = 0; j < Ncols; j++) {
                 if (grid[i][j] == '@') {
-                    robot = new RotatingMovingRobot(new CartesianPoint(i, j), CardinalDirection.NORTH);
+                    return new CartesianPoint(i, j);
                 }
             }
         }
+        return null;
+    }
 
+    int getGPSSum() {
+        int tot = 0;
+        for (int i=0; i<grid.length; i++) {
+            for (int j=0; j<grid[0].length; j++) {
+                if (isBox(new CartesianPoint(i, j))) {
+                    tot += 100*i + j;
+                }
+            }
+        }
+        return tot;
+    }
+
+}
+
+public class Day15 {
+    Warehouse warehouse = new Warehouse();
+    RotatingMovingRobot robot;
+    List<CardinalDirection> instructions;
+
+    public Day15(String inputFilename) {
+        AOCScanner scanner = new AOCScanner(inputFilename);
+        warehouse.scanInGrid(scanner);
+        scanInInstructions(scanner);
+        robot = new RotatingMovingRobot(warehouse.findRobotStartPosition(), CardinalDirection.NORTH);
+        warehouse.grid[robot.getPosition().x][robot.getPosition().y] = '.';
+        //System.out.println(instructions);
+    }
+
+    private void scanInInstructions(AOCScanner scanner) {
         instructions = new LinkedList<>();
         while (scanner.hasNextLine()) {
             for (char c : scanner.nextLine().toCharArray()) {
@@ -60,18 +112,9 @@ public class Day15 {
                 }
             }
         }
-        grid[robot.getPosition().x][robot.getPosition().y] = '.';
-        //System.out.println(instructions);
     }
 
-    public void printGrid() {
-        grid[robot.getPosition().x][robot.getPosition().y] = '@';
-        for (Character[] characters : grid) {
-            System.out.println(Arrays.toString(characters));
-        }
-        System.out.println(" ");
-        grid[robot.getPosition().x][robot.getPosition().y] = '.';
-    }
+
 
 
 
@@ -81,46 +124,34 @@ public class Day15 {
             attemptMove(instruction);
             //printGrid();
         }
-        int tot = 0;
-        for (int i=0; i<grid.length; i++) {
-            for (int j=0; j<grid[0].length; j++) {
-                if (isBox(new CartesianPoint(i, j))) {
-                    tot += 100*i + j;
-                }
-            }
-        }
-        return tot;
+        return warehouse.getGPSSum();
     }
+
+
 
     private void attemptMove(CardinalDirection instruction) {
         robot.setFacing(instruction);
         CartesianPoint pt = robot.getPosition().add(instruction.velocity);
-        if (isBlank(pt)) {
+        if (warehouse.isBlank(pt)) {
             robot.moveForward();
             return;
         }
-        while (isBox(pt)) {
+        while (warehouse.isBox(pt)) {
             pt = pt.add(instruction.velocity);
         };
-        if (isBlank(pt)) {
+        if (warehouse.isBlank(pt)) {
             CartesianPoint initialPt = robot.getPosition().add(instruction.velocity);
-            grid[initialPt.x][initialPt.y] = '.';
-            grid[pt.x][pt.y] = 'O';
+            warehouse.grid[initialPt.x][initialPt.y] = '.';
+            warehouse.grid[pt.x][pt.y] = 'O';
             robot.moveForward();
         }
         // otherwise we have hit a wall and the move does not happen;
 
     }
 
-    private boolean isBlank(CartesianPoint pt) {
-        return grid[pt.x][pt.y] == '.' || grid[pt.x][pt.y] == '@';
-    }
 
-    private boolean isWall(CartesianPoint pt) {
-        return grid[pt.x][pt.y] == '#';
-    }
 
-    private boolean isBox(CartesianPoint pt) {
-        return grid[pt.x][pt.y] == 'O';
+    public int sumOfGPSAfterMovingScaledUp() {
+        return 0;
     }
 }
