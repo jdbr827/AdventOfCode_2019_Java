@@ -16,4 +16,11 @@ public class Day16Test {
         assertEquals(11048, new Day16(SMALL_INPUT_FILENAME).bestReindeerScore());
         assertEquals(88416, new Day16(INPUT_FILENAME).bestReindeerScore());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(45, new Day16(MINI_INPUT_FILENAME).numGoodSeats());
+        assertEquals(64, new Day16(SMALL_INPUT_FILENAME).numGoodSeats());
+        assertEquals(442, new Day16(INPUT_FILENAME).numGoodSeats());
+    }
 }
