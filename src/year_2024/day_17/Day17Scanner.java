@@ -37,7 +37,11 @@ public class Day17Scanner extends AOCScanner {
         Matcher programMatcher = programPattern.matcher(program);
         ReadIn.findOrElseThrow(programMatcher, "Could not read program Pattern: \"" + program + "\"");
 
-        return new Day17(Integer.parseInt(mA.group(1)), Integer.parseInt(mB.group(1)), Integer.parseInt(mC.group(1)),
+        //System.out.println(Arrays.stream(programMatcher.group(1).split(",")).map(Integer::parseInt).toList());
+        return new Day17(
+                Integer.parseInt(mA.group(1)),
+                Integer.parseInt(mB.group(1)),
+                Integer.parseInt(mC.group(1)),
                 Arrays.stream(programMatcher.group(1).split(",")).map(Integer::parseInt).toList());
     }
 }
