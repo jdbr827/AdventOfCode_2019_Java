@@ -1,5 +1,6 @@
 package year_2024.day_15;
 
+import lombok.AllArgsConstructor;
 import utils.AOCScanner;
 import viewModelUtil.CartesianPoint;
 import year_2019.day11.RotatingMovingRobot;
@@ -9,20 +10,21 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-class Warehouse {
+@AllArgsConstructor
+class Warehouse implements IWarehouse {
     Character[][] grid;
     int Nrows;
     int Ncols;
 
-    boolean isBlank(CartesianPoint pt) {
+    public boolean isBlank(CartesianPoint pt) {
         return grid[pt.x][pt.y] == '.' || grid[pt.x][pt.y] == '@';
     }
 
-    private boolean isWall(CartesianPoint pt) {
+    public boolean isWall(CartesianPoint pt) {
         return grid[pt.x][pt.y] == '#';
     }
 
-    boolean isBox(CartesianPoint pt) {
+    public boolean isBox(CartesianPoint pt) {
         return grid[pt.x][pt.y] == 'O';
     }
 
@@ -35,23 +37,23 @@ class Warehouse {
         grid[robotPosition.x][robotPosition.y] = '.';
     }
 
-    void scanInGrid(AOCScanner scanner) {
+    public static Warehouse scanInGrid(AOCScanner scanner) {
         List<Character[]> matrix = new java.util.ArrayList<>(List.of());
         String row;
         while (!(row = scanner.nextLine()).isEmpty()) {
             matrix.add(row.chars().mapToObj(c -> (char)c).toArray(Character[]::new));
         }
-        Nrows = matrix.size();
-        Ncols = matrix.get(0).length;
+        int Nrows = matrix.size();
+        int Ncols = matrix.getFirst().length;
 
         Character[][] arr = new Character[Nrows][Ncols];
         for (int i=0; i<Nrows; i++) {
             arr[i] = matrix.get(i);
         }
-        grid = arr;
+        return new Warehouse(arr, Nrows, Ncols);
     }
 
-    CartesianPoint findRobotStartPosition() {
+    public CartesianPoint findRobotStartPosition() {
         for (int i = 0; i < Nrows; i++) {
             for (int j = 0; j < Ncols; j++) {
                 if (grid[i][j] == '@') {
@@ -62,7 +64,7 @@ class Warehouse {
         return null;
     }
 
-    int getGPSSum() {
+    public int getGPSSum() {
         int tot = 0;
         for (int i=0; i<grid.length; i++) {
             for (int j=0; j<grid[0].length; j++) {
@@ -77,21 +79,21 @@ class Warehouse {
 }
 
 public class Day15 {
-    Warehouse warehouse = new Warehouse();
+    Warehouse warehouse;
     RotatingMovingRobot robot;
     List<CardinalDirection> instructions;
 
     public Day15(String inputFilename) {
         AOCScanner scanner = new AOCScanner(inputFilename);
-        warehouse.scanInGrid(scanner);
-        scanInInstructions(scanner);
+        warehouse = Warehouse.scanInGrid(scanner);
+        instructions = scanInInstructions(scanner);
         robot = new RotatingMovingRobot(warehouse.findRobotStartPosition(), CardinalDirection.NORTH);
         warehouse.grid[robot.getPosition().x][robot.getPosition().y] = '.';
         //System.out.println(instructions);
     }
 
-    private void scanInInstructions(AOCScanner scanner) {
-        instructions = new LinkedList<>();
+    private static List<CardinalDirection> scanInInstructions(AOCScanner scanner) {
+        List<CardinalDirection> instructions = new LinkedList<>();
         while (scanner.hasNextLine()) {
             for (char c : scanner.nextLine().toCharArray()) {
                 switch (c) {
@@ -112,21 +114,15 @@ public class Day15 {
                 }
             }
         }
+        return instructions;
     }
-
-
-
-
-
 
     public int sumOfGPSAfterMoving() {
         for (CardinalDirection instruction : instructions) {
             attemptMove(instruction);
-            //printGrid();
         }
         return warehouse.getGPSSum();
     }
-
 
 
     private void attemptMove(CardinalDirection instruction) {
@@ -138,7 +134,7 @@ public class Day15 {
         }
         while (warehouse.isBox(pt)) {
             pt = pt.add(instruction.velocity);
-        };
+        }
         if (warehouse.isBlank(pt)) {
             CartesianPoint initialPt = robot.getPosition().add(instruction.velocity);
             warehouse.grid[initialPt.x][initialPt.y] = '.';
@@ -146,7 +142,6 @@ public class Day15 {
             robot.moveForward();
         }
         // otherwise we have hit a wall and the move does not happen;
-
     }
 
 

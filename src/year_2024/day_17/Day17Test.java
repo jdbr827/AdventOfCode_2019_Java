@@ -14,4 +14,10 @@ public class Day17Test {
         assertEquals("4,6,3,5,6,3,5,2,1,0", Day17.fromFile(SMALL_INPUT_FILENAME).getOutputAfterRunning());
         assertEquals("2,1,0,4,6,2,4,2,0", Day17.fromFile(INPUT_FILENAME).getOutputAfterRunning());
     }
+
+    @Test
+    public void test_part2() {
+        assertEquals(117440, Day17.fromFile(SMALL_INPUT_FILENAME).lowestAToOutputCopy());
+        //System.out.println(Day17.fromFile(INPUT_FILENAME).lowestAToOutputCopy());
+    }
 }
